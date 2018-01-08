@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genandroid:AndroidProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:genandroid="http://genandroid/1.0" name="MobilePrivacyProfiler" packagePrefix="fr.inria.diverse.mobileprivacyprofiler">
+  <dataModel name="MobilePrivacyProfilerDB">
+    <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
+      <dataReferences name="logEntries" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.1"/>
+      <dataAttributes name="AppName" type="//@dataModel/@dataClasses.3"/>
+    </dataClasses>
+    <dataClasses xsi:type="genandroid:DataClass" name="ApplicationLogEntry">
+      <dataReferences name="application" lowerbound="1" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.0"/>
+      <dataAttributes name="date" type="//@dataModel/@dataClasses.3"/>
+      <dataAttributes name="actionDetails" type="//@dataModel/@dataClasses.3"/>
+    </dataClasses>
+    <dataClasses xsi:type="genandroid:DataClass" name="MobilePrivacyProfilerDB_metadata" documentation="données complémentaires sur la base de donnée">
+      <dataAttributes name="lastTransmissionDate" type="//@dataModel/@dataClasses.3"/>
+    </dataClasses>
+    <dataClasses xsi:type="genandroid:NativeDataClass" name="String" instanceClassName="java.lang.String"/>
+    <dataClasses xsi:type="genandroid:NativeDataClass" name="LongString" instanceClassName="java.lang.String" databaseType="com.j256.ormlite.field.DataType.LONG_STRING"/>
+    <dataClasses xsi:type="genandroid:NativeDataClass" name="Integer" instanceClassName="int"/>
+    <dataClasses xsi:type="genandroid:NativeDataClass" name="File" instanceClassName="java.io.File"/>
+    <dataClasses xsi:type="genandroid:NativeDataClass" name="Date" instanceClassName="java.util.Date"/>
+    <dataAssociations name="ApplicationHistory_ApplicationLogEntry" references="//@dataModel/@dataClasses.1/@dataReferences.0 //@dataModel/@dataClasses.0/@dataReferences.0"/>
+  </dataModel>
+</genandroid:AndroidProject>

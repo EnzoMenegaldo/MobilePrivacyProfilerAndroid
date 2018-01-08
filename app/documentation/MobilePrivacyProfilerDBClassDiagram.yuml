@@ -1,0 +1,7 @@
+[ApplicationHistory|AppName : String]		
+[ApplicationLogEntry|date : String;actionDetails : String]		
+[MobilePrivacyProfilerDB_metadata|lastTransmissionDate : String]		
+[ApplicationHistory]
+[ApplicationLogEntry]
+[MobilePrivacyProfilerDB_metadata]
+[ApplicationHistory]application 1-logEntries  0..*[ApplicationLogEntry]
