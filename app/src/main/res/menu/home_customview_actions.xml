@@ -3,13 +3,17 @@
 	
 	<!--Start of user code customView_menu for Home
 	-->
-	<!-- freely adapt here the desired layout for yourmenu -->
+	<!-- freely adapt here the desired layout for your menu -->
+	<item android:id="@+id/home_customview_action_manualscan"
+		android:icon="?attr/ic_action_manualscan"
+		android:title="@string/action_manualscan_text"
+		mobileprivacyprofiler:showAsAction="ifRoom" />
 	<!--End of user code
 	-->
 	<item android:id="@+id/home_customview_action_preference"
 	      android:icon="@android:drawable/ic_menu_preferences"
 	      android:title="@string/preferences_menu_title"
-	      android:showAsAction="never"  />
+	      mobileprivacyprofiler:showAsAction="never"  />
 </menu>
 
 

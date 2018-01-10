@@ -2,4 +2,5 @@
 (Preferences)-><PreferencesChoice>
 (Home)-><HomeChoice>
 (ApplicationHistoryList)-><ApplicationHistoryListChoice>
+(ManualScan)-><ManualScanChoice>
 <HomeChoice>->(ApplicationHistoryList)

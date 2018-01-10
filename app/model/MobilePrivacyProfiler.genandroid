@@ -21,9 +21,10 @@
     <dataAssociations name="ApplicationHistory_ApplicationLogEntry" references="//@dataModel/@dataClasses.1/@dataReferences.0 //@dataModel/@dataClasses.0/@dataReferences.0"/>
   </dataModel>
   <presentationModel preferenceView="//@presentationModel/@viewActivities.0" welcomeView="//@presentationModel/@viewActivities.1">
-    <viewActivities xsi:type="genandroid:PreferenceViewActivity" name="Preferences" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
-    <viewActivities xsi:type="genandroid:CustomViewActivity" name="Home" accessibleViews="//@presentationModel/@viewActivities.2"/>
-    <viewActivities xsi:type="genandroid:ClassListViewActivity" name="ApplicationHistoryList" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1" listedElement="//@dataModel/@dataClasses.0" presentedDetail="//@presentationModel/@classDetails.0"/>
+    <viewActivities xsi:type="genandroid:PreferenceViewActivity" name="Preferences" documentation="Preference page for various settings of the application" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
+    <viewActivities xsi:type="genandroid:CustomViewActivity" name="Home" documentation="Welcome page / home page of the application" accessibleViews="//@presentationModel/@viewActivities.2"/>
+    <viewActivities xsi:type="genandroid:ClassListViewActivity" name="ApplicationHistoryList" documentation="Page listing the applications detected in the device.&#xA;It gives acces to the application's history" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1" listedElement="//@dataModel/@dataClasses.0" presentedDetail="//@presentationModel/@classDetails.0"/>
+    <viewActivities xsi:type="genandroid:CustomViewActivity" name="ManualScan" documentation="Page used to manually launch the vairous scans of the device" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
     <classDetails mainAttributes="//@dataModel/@dataClasses.0/@dataAttributes.0" name="ApplicationHistoryDetail"/>
   </presentationModel>
 </genandroid:AndroidProject>
