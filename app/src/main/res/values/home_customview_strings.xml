@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resource Strings specific to home Custom View -->
+<resources>	
+	<!-- Start of user code customView_strings home
+	-->
+	<!-- freely add here the desired resource String for your custom view -->
+	<string name="home_customview_applicationhistorylist_btn_label">Historique des Applications</string>
+	<!-- End of user code
+	-->
+</resources>

@@ -1,0 +1,5 @@
+(start)->(Home)
+(Preferences)-><PreferencesChoice>
+(Home)-><HomeChoice>
+(ApplicationHistoryList)-><ApplicationHistoryListChoice>
+<HomeChoice>->(ApplicationHistoryList)

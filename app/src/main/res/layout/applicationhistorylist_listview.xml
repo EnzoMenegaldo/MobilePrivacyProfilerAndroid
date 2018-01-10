@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <!-- Search row -->
+    <LinearLayout
+        android:id="@+id/applicationhistorylist_listviewsearchrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <!-- Editext for Search -->
+
+        <!--<EditText
+            android:id="@+id/inputSearch_applicationhistorylist_listviewsearchrow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.67"
+            android:hint="@string/searchHint_applicationhistorylist_listviewsearchrow"
+            android:inputType="textVisiblePassword" />--> 
+	<!--	Start of user code protectedapplicationhistorylist_listviewsearchrow 
+      -->
+<!--        <Button
+            android:id="@+id/btnZoneGeo_applicationhistorylist_listviewsearchrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSearcBtn1"
+            android:text="@string/btnZoneGeo_applicationhistorylist_listviewsearchrow_btn_label" />
+
+        <Button
+            android:id="@+id/btnZone_applicationhistorylist_listviewsearchrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickSearcBtn2"
+            android:text="@string/btnZone_applicationhistorylist_listviewsearchrow_btn_label" />
+            -->
+	<!--	
+End of user code -->
+    </LinearLayout>
+	<ListView 
+	    android:id="@+id/applicationhistorylist_listview"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" >
+	</ListView>
+</LinearLayout>

@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mobileprivacyprofiler="http://schemas.android.com/apk/res-auto">
+	
+	<item android:id="@+id/applicationhistorylist_classlistview_action_search"
+	      android:icon="?attr/ic_action_search"
+	      android:title="@string/searchHint_applicationhistorylist_listviewsearchrow"
+	      mobileprivacyprofiler:showAsAction="ifRoom|collapseActionView"
+          mobileprivacyprofiler:actionViewClass="android.support.v7.widget.SearchView"/>
+	<!--Start of user code customView_menu for ApplicationHistoryList
+	-->
+	<!-- freely adapt here the desired layout for yourmenu -->
+	<!--End of user code
+	-->
+	<item android:id="@+id/applicationhistorylist_classlistview_action_preference"
+	      android:icon="@android:drawable/ic_menu_preferences"
+	      android:title="@string/preferences_menu_title"
+          mobileprivacyprofiler:showAsAction="never" />
+</menu>
+
+

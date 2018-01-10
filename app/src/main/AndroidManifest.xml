@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Start of user code zone 1
+      -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.inria.diverse.mobileprivacyprofiler">
-
+	
+		<uses-sdk android:minSdkVersion="10" />
+	   
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,16 +13,59 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<!--End of user code-->
+	
+		<activity  
+			android:name=".activities.Preferences_PreferenceViewActivity" 
+			android:parentActivityName=".activities.Home_CustomViewActivity"
+        	android:label="@string/app_name">
+			
+			<!-- Parent activity meta-data to support 4.0 and lower -->
+	        <meta-data
+	            android:name="android.support.PARENT_ACTIVITY"
+	            android:value=".activities.Home_CustomViewActivity" />
+		</activity>
+		<activity  android:theme="@style/AppTheme"
+			android:name=".activities.Home_CustomViewActivity" 
+        	android:label="@string/app_name">
+			
+			<intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+		</activity>
+		<activity  android:theme="@style/AppTheme"
+			android:name=".activities.ApplicationHistoryList_ClassListViewActivity" 
+			android:launchMode="singleTop"
+			android:parentActivityName=".activities.Home_CustomViewActivity"
+        	android:label="@string/app_name">
+			
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />				
+            	<category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+			<meta-data android:name="android.app.searchable"
+                   android:resource="@xml/applicationhistorylist_classlistview_searchable"/>
+			<!-- Parent activity meta-data to support 4.0 and lower -->
+	        <meta-data
+	            android:name="android.support.PARENT_ACTIVITY"
+	            android:value=".activities.Home_CustomViewActivity" />
+		</activity>
+<!--Start of user code zone 2
+      -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+         <!--   
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> 
+            -->
         </activity>
+<!--End of user code-->
     </application>
 
 </manifest>

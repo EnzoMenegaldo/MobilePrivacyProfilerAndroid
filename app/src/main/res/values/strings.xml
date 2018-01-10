@@ -1,4 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+	<!--Start of user code remove protected zone to rebuild all default values
+		-->
     <string name="app_name">Mobile Privacy Profiler</string>
+    <string name="edit_menu">Edit</string>
     <string name="action_settings">Settings</string>
+	<!--End of user code
+	  -->
 </resources>
