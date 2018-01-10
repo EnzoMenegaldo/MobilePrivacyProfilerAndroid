@@ -33,6 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanDeviceIntentService;
+
 //End of user code
 public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements ManualScan_CustomViewActivity
@@ -40,6 +43,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 {
 	
 	//Start of user code constants ManualScan_CustomViewActivity
+	private static final String TAG = ManualScan_CustomViewActivity.class.getSimpleName();
 	//End of user code
 
 	/** Called when the activity is first created. */
@@ -65,7 +69,16 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 	}
     //Start of user code additional code ManualScan_CustomViewActivity
 	public void onClickBtnApplicationHistoryManualScan(View view){
-		showToast("not implemented yet. \nPlease customize ;-)");
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_installed_applications));
+		ScanDeviceIntentService.startActionScanInstalledApplications(this);
+		/*final ApplicationHistory apphistory = new ApplicationHistory();
+		Log.d(TAG,"getApplicationHistoryDao().countOf() = "+getHelper().getApplicationHistoryDao().countOf());
+		apphistory.setAppName("MobilePrivacyProfiler");
+		Log.d(TAG,"new apphistory = "+apphistory);
+		getHelper().getApplicationHistoryDao().create(apphistory);
+		Log.d(TAG,"getApplicationHistoryDao().countOf() = "+getHelper().getApplicationHistoryDao().countOf());*/
     }
 	//End of user code
 

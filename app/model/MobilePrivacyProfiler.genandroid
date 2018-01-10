@@ -3,7 +3,8 @@
   <dataModel name="MobilePrivacyProfilerDB">
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
       <dataReferences name="logEntries" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.1"/>
-      <dataAttributes name="AppName" type="//@dataModel/@dataClasses.3"/>
+      <dataAttributes name="appName" type="//@dataModel/@dataClasses.3"/>
+      <dataAttributes name="packageName" type="//@dataModel/@dataClasses.3"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationLogEntry">
       <dataReferences name="application" lowerbound="1" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.0"/>
@@ -25,6 +26,6 @@
     <viewActivities xsi:type="genandroid:CustomViewActivity" name="Home" documentation="Welcome page / home page of the application" accessibleViews="//@presentationModel/@viewActivities.2"/>
     <viewActivities xsi:type="genandroid:ClassListViewActivity" name="ApplicationHistoryList" documentation="Page listing the applications detected in the device.&#xA;It gives acces to the application's history" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1" listedElement="//@dataModel/@dataClasses.0" presentedDetail="//@presentationModel/@classDetails.0"/>
     <viewActivities xsi:type="genandroid:CustomViewActivity" name="ManualScan" documentation="Page used to manually launch the vairous scans of the device" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
-    <classDetails mainAttributes="//@dataModel/@dataClasses.0/@dataAttributes.0" name="ApplicationHistoryDetail"/>
+    <classDetails mainAttributes="//@dataModel/@dataClasses.0/@dataAttributes.0" name="ApplicationHistoryDetail" secondaryAttributes="//@dataModel/@dataClasses.0/@dataAttributes.1"/>
   </presentationModel>
 </genandroid:AndroidProject>

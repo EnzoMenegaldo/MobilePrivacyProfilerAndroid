@@ -1,4 +1,4 @@
-[ApplicationHistory|AppName : String]		
+[ApplicationHistory|appName : String;packageName : String]		
 [ApplicationLogEntry|date : String;actionDetails : String]		
 [MobilePrivacyProfilerDB_metadata|lastTransmissionDate : String]		
 [ApplicationHistory]

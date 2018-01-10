@@ -47,8 +47,10 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS = "MOBILEPRIVACYPROFILERDB_METADATAS";
 	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA  = "MOBILEPRIVACYPROFILERDB_METADATA";
 
-	public static final String DATAATT_APPLICATIONHISTORY_AppName = "AppName";
+	public static final String DATAATT_APPLICATIONHISTORY_appName = "appName";
 	public static final String DATAATT_APPLICATIONHISTORY_APPNAME = "APPNAME";
+	public static final String DATAATT_APPLICATIONHISTORY_packageName = "packageName";
+	public static final String DATAATT_APPLICATIONHISTORY_PACKAGENAME = "PACKAGENAME";
 	public static final String DATAREF_APPLICATIONHISTORY_logEntries = "logEntries";
 	public static final String DATAATT_APPLICATIONLOGENTRY_date = "date";
 	public static final String DATAATT_APPLICATIONLOGENTRY_DATE = "DATE";
@@ -173,7 +175,8 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2ApplicationHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setAppName(parser.getAttributeValue(null, DATAATT_APPLICATIONHISTORY_AppName));
+		result.setAppName(parser.getAttributeValue(null, DATAATT_APPLICATIONHISTORY_appName));
+		result.setPackageName(parser.getAttributeValue(null, DATAATT_APPLICATIONHISTORY_packageName));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
