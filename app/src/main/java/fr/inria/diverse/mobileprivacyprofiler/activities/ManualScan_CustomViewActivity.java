@@ -73,12 +73,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_installed_applications));
 		ScanDeviceIntentService.startActionScanInstalledApplications(this);
-		/*final ApplicationHistory apphistory = new ApplicationHistory();
-		Log.d(TAG,"getApplicationHistoryDao().countOf() = "+getHelper().getApplicationHistoryDao().countOf());
-		apphistory.setAppName("MobilePrivacyProfiler");
-		Log.d(TAG,"new apphistory = "+apphistory);
-		getHelper().getApplicationHistoryDao().create(apphistory);
-		Log.d(TAG,"getApplicationHistoryDao().countOf() = "+getHelper().getApplicationHistoryDao().countOf());*/
+
     }
 	//End of user code
 

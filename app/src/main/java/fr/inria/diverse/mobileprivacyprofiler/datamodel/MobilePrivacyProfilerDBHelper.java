@@ -43,19 +43,43 @@ public class MobilePrivacyProfilerDBHelper {
 	}
 
 	//Start of user code additional methods for MobilePrivacyProfilerDBHelper
-	// find application in the base
+
+	/** find ApplicationHistory in the base using appName
+	 * @param appName
+	 * @return
+	 */
 	public ApplicationHistory queryApplicationHistoryByAppName(String appName) {
 		try {
 			ApplicationHistory queryApplicationHistory = new ApplicationHistory();
 			queryApplicationHistory.setAppName(appName);
 			List<ApplicationHistory> fichesDeLaBase = this.applicationHistoryDao.queryForMatching(queryApplicationHistory);
 			if(fichesDeLaBase.size() != 1){
-				Log.d(TAG,"Application "+queryApplicationHistory.getAppName()+ " doesn't exist in the base");
+				Log.d(TAG,"Application with appName "+queryApplicationHistory.getAppName()+ " doesn't exist in the base");
 				return null;
 			}
 			return fichesDeLaBase.get(0);
 		} catch (SQLException e) {
-			Log.e(TAG,"error while querying application  "+appName+ " in the base", e);
+			Log.e(TAG,"error while querying application with appName "+appName+ " in the base", e);
+		}
+		return null;
+	}
+
+	/** find ApplicationHistory in the base using appName
+	 * @param packageName
+	 * @return
+	 */
+	public ApplicationHistory queryApplicationHistoryByPackageName(String packageName) {
+		try {
+			ApplicationHistory queryApplicationHistory = new ApplicationHistory();
+			queryApplicationHistory.setPackageName(packageName);
+			List<ApplicationHistory> fichesDeLaBase = this.applicationHistoryDao.queryForMatching(queryApplicationHistory);
+			if(fichesDeLaBase.size() != 1){
+				Log.d(TAG,"Application with packageName "+queryApplicationHistory.getPackageName()+ " doesn't exist in the base");
+				return null;
+			}
+			return fichesDeLaBase.get(0);
+		} catch (SQLException e) {
+			Log.e(TAG,"error while querying application with packageName "+packageName+ " in the base", e);
 		}
 		return null;
 	}

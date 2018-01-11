@@ -105,7 +105,7 @@ public class ScanDeviceIntentService extends IntentService {
             Log.d(TAG, "Installed package :" + packageInfo.packageName);
             Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
             Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
-            ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByAppName(appName);
+            ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByPackageName(packageInfo.packageName);
             if(applicationHistory == null){
                 // create
                 applicationHistory = new ApplicationHistory(appName, packageInfo.packageName);
