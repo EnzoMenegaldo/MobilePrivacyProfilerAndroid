@@ -1,13 +1,13 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
-
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
+import invalid.datamodel.associations.DetectedWifi_AccessPoint;
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
 import android.util.Log;
@@ -27,6 +27,28 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<ApplicationLogEntry, Integer> applicationLogEntryDao;
 	public Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
 	//public RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
+	public Dao<Identity, Integer> identityDao;
+	//public RuntimeExceptionDao<Identity, Integer> identityDao;
+	public Dao<Contact, Integer> contactDao;
+	//public RuntimeExceptionDao<Contact, Integer> contactDao;
+	public Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao;
+	//public RuntimeExceptionDao<ContactPhoneNumber, Integer> contactPhoneNumberDao;
+	public Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao;
+	//public RuntimeExceptionDao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao;
+	public Dao<ContactEmail, Integer> contactEmailDao;
+	//public RuntimeExceptionDao<ContactEmail, Integer> contactEmailDao;
+	public Dao<KnownWifi, Integer> knownWifiDao;
+	//public RuntimeExceptionDao<KnownWifi, Integer> knownWifiDao;
+	public Dao<WifiAccessPoint, Integer> wifiAccessPointDao;
+	//public RuntimeExceptionDao<WifiAccessPoint, Integer> wifiAccessPointDao;
+	public Dao<DetectedWifi, Integer> detectedWifiDao;
+	//public RuntimeExceptionDao<DetectedWifi, Integer> detectedWifiDao;
+	public Dao<Geolocation, Integer> geolocationDao;
+	//public RuntimeExceptionDao<Geolocation, Integer> geolocationDao;
+	public Dao<CalendarEvent, Integer> calendarEventDao;
+	//public RuntimeExceptionDao<CalendarEvent, Integer> calendarEventDao;
+	public Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
+	//public RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 
 	
 	public MobilePrivacyProfilerDBHelper(){
@@ -35,11 +57,33 @@ public class MobilePrivacyProfilerDBHelper {
 	public MobilePrivacyProfilerDBHelper(
 		Dao<ApplicationHistory, Integer> applicationHistoryDao,
 		Dao<ApplicationLogEntry, Integer> applicationLogEntryDao,
-		Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao        
+		Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao,
+		Dao<Identity, Integer> identityDao,
+		Dao<Contact, Integer> contactDao,
+		Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao,
+		Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao,
+		Dao<ContactEmail, Integer> contactEmailDao,
+		Dao<KnownWifi, Integer> knownWifiDao,
+		Dao<WifiAccessPoint, Integer> wifiAccessPointDao,
+		Dao<DetectedWifi, Integer> detectedWifiDao,
+		Dao<Geolocation, Integer> geolocationDao,
+		Dao<CalendarEvent, Integer> calendarEventDao,
+        Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao
 	){
 		this.applicationHistoryDao = applicationHistoryDao;
 		this.applicationLogEntryDao = applicationLogEntryDao;
 		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
+		this.identityDao = identityDao;
+		this.contactDao = contactDao;
+		this.contactPhoneNumberDao = contactPhoneNumberDao;
+		this.contactPhysicalAddressDao = contactPhysicalAddressDao;
+		this.contactEmailDao = contactEmailDao;
+		this.knownWifiDao = knownWifiDao;
+		this.wifiAccessPointDao = wifiAccessPointDao;
+		this.detectedWifiDao = detectedWifiDao;
+		this.geolocationDao = geolocationDao;
+		this.calendarEventDao = calendarEventDao;
+		this.detectedWifi_AccessPointDao = detectedWifi_AccessPointDao;
 	}
 
 	//Start of user code additional methods for MobilePrivacyProfilerDBHelper

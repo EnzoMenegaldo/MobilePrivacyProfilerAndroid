@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resource Strings specific to applicationhistorydetail Element View and EditableElement View -->
+<resources>
+	<!--Start of user code protectedapplicationhistorydetail_elementview_strings.xml
+	-->	
+	<string name="applicationhistorydetail_elementview_appname_label">AppName : </string>
+	<string name="applicationhistorydetail_elementview_packagename_label">PackageName : </string>
+	<string name="applicationhistorydetail_elementview_appname_hint_text"></string>
+	<string name="applicationhistorydetail_elementview_packagename_hint_text"></string>
+	<!-- End of user code
+	-->
+</resources>

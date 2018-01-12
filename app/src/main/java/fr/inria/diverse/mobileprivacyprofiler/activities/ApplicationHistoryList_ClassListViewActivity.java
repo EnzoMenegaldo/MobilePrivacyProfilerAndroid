@@ -50,7 +50,7 @@ public class ApplicationHistoryList_ClassListViewActivity extends OrmLiteActionB
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 
 		ListView list = (ListView) findViewById(R.id.applicationhistorylist_listview);
-        list.setClickable(false);
+        list.setClickable(true);
 		//Start of user code onCreate ApplicationHistoryList_ClassListViewActivity adapter creation
         adapter = new ApplicationHistoryList_Adapter(this, getHelper().getMobilePrivacyProfilerDBHelper());		
 		//End of user code
@@ -105,9 +105,11 @@ public class ApplicationHistoryList_ClassListViewActivity extends OrmLiteActionB
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long index) {
-			//Start of user code onItemClick additions ApplicationHistoryList_ClassListViewActivity
-			showToast(view.toString() + ", "+ view.getId());
-			//End of user code		
+	        Intent toDetailView = new Intent(this, ApplicationHistoryDetail_ElementViewActivity.class);
+	        Bundle b = new Bundle();
+	        b.putInt("applicationHistoryId", ((ApplicationHistory)view.getTag()).getId());
+			toDetailView.putExtras(b);
+	        startActivity(toDetailView);
     }
 
 	//Start of user code additional  ApplicationHistoryList_ClassListViewActivity methods

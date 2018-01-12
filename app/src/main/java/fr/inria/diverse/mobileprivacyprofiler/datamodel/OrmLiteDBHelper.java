@@ -8,6 +8,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
+import invalid.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code protected additional OrmLiteDBHelper imports
 import com.j256.ormlite.table.TableUtils;
 // End of user code
@@ -36,7 +37,38 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// the DAO object we use to access the diveBudies table
 	// private Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao = null;
 	private RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<Identity, Integer> identityDao = null;
+	private RuntimeExceptionDao<Identity, Integer> identityRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<Contact, Integer> contactDao = null;
+	private RuntimeExceptionDao<Contact, Integer> contactRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao = null;
+	private RuntimeExceptionDao<ContactPhoneNumber, Integer> contactPhoneNumberRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao = null;
+	private RuntimeExceptionDao<ContactPhysicalAddress, Integer> contactPhysicalAddressRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<ContactEmail, Integer> contactEmailDao = null;
+	private RuntimeExceptionDao<ContactEmail, Integer> contactEmailRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<KnownWifi, Integer> knownWifiDao = null;
+	private RuntimeExceptionDao<KnownWifi, Integer> knownWifiRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<WifiAccessPoint, Integer> wifiAccessPointDao = null;
+	private RuntimeExceptionDao<WifiAccessPoint, Integer> wifiAccessPointRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<DetectedWifi, Integer> detectedWifiDao = null;
+	private RuntimeExceptionDao<DetectedWifi, Integer> detectedWifiRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<Geolocation, Integer> geolocationDao = null;
+	private RuntimeExceptionDao<Geolocation, Integer> geolocationRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<CalendarEvent, Integer> calendarEventDao = null;
+	private RuntimeExceptionDao<CalendarEvent, Integer> calendarEventRuntimeDao = null;
 	
+		private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
 
 	public OrmLiteDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -126,8 +158,128 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		return mobilePrivacyProfilerDB_metadataRuntimeDao;
 	}
 
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Identity class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<Identity, Integer> getIdentityDao() {
+		if (identityRuntimeDao == null) {
+			identityRuntimeDao = getRuntimeExceptionDao(Identity.class);
+		}
+		return identityRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Contact class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<Contact, Integer> getContactDao() {
+		if (contactRuntimeDao == null) {
+			contactRuntimeDao = getRuntimeExceptionDao(Contact.class);
+		}
+		return contactRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ContactPhoneNumber class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<ContactPhoneNumber, Integer> getContactPhoneNumberDao() {
+		if (contactPhoneNumberRuntimeDao == null) {
+			contactPhoneNumberRuntimeDao = getRuntimeExceptionDao(ContactPhoneNumber.class);
+		}
+		return contactPhoneNumberRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ContactPhysicalAddress class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<ContactPhysicalAddress, Integer> getContactPhysicalAddressDao() {
+		if (contactPhysicalAddressRuntimeDao == null) {
+			contactPhysicalAddressRuntimeDao = getRuntimeExceptionDao(ContactPhysicalAddress.class);
+		}
+		return contactPhysicalAddressRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ContactEmail class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<ContactEmail, Integer> getContactEmailDao() {
+		if (contactEmailRuntimeDao == null) {
+			contactEmailRuntimeDao = getRuntimeExceptionDao(ContactEmail.class);
+		}
+		return contactEmailRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our KnownWifi class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<KnownWifi, Integer> getKnownWifiDao() {
+		if (knownWifiRuntimeDao == null) {
+			knownWifiRuntimeDao = getRuntimeExceptionDao(KnownWifi.class);
+		}
+		return knownWifiRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our WifiAccessPoint class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<WifiAccessPoint, Integer> getWifiAccessPointDao() {
+		if (wifiAccessPointRuntimeDao == null) {
+			wifiAccessPointRuntimeDao = getRuntimeExceptionDao(WifiAccessPoint.class);
+		}
+		return wifiAccessPointRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our DetectedWifi class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<DetectedWifi, Integer> getDetectedWifiDao() {
+		if (detectedWifiRuntimeDao == null) {
+			detectedWifiRuntimeDao = getRuntimeExceptionDao(DetectedWifi.class);
+		}
+		return detectedWifiRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Geolocation class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<Geolocation, Integer> getGeolocationDao() {
+		if (geolocationRuntimeDao == null) {
+			geolocationRuntimeDao = getRuntimeExceptionDao(Geolocation.class);
+		}
+		return geolocationRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our CalendarEvent class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<CalendarEvent, Integer> getCalendarEventDao() {
+		if (calendarEventRuntimeDao == null) {
+			calendarEventRuntimeDao = getRuntimeExceptionDao(CalendarEvent.class);
+		}
+		return calendarEventRuntimeDao;
+	}
+
 	
 	
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our DetectedWifi_AccessPoint class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> getDetectedWifi_AccessPointDao() {
+		if (detectedWifi_AccessPointRuntimeDao == null) {
+			detectedWifi_AccessPointRuntimeDao = getRuntimeExceptionDao(DetectedWifi_AccessPoint.class);
+		}
+		return detectedWifi_AccessPointRuntimeDao;
+	}
 
 
 	/**
@@ -139,6 +291,17 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		applicationHistoryRuntimeDao = null;
 		applicationLogEntryRuntimeDao = null;
 		mobilePrivacyProfilerDB_metadataRuntimeDao = null;
+		identityRuntimeDao = null;
+		contactRuntimeDao = null;
+		contactPhoneNumberRuntimeDao = null;
+		contactPhysicalAddressRuntimeDao = null;
+		contactEmailRuntimeDao = null;
+		knownWifiRuntimeDao = null;
+		wifiAccessPointRuntimeDao = null;
+		detectedWifiRuntimeDao = null;
+		geolocationRuntimeDao = null;
+		calendarEventRuntimeDao = null;
+		detectedWifi_AccessPointRuntimeDao = null;
 	}
 
 	
@@ -151,6 +314,17 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.applicationHistoryDao = getDao(ApplicationHistory.class);
 			helper.applicationLogEntryDao = getDao(ApplicationLogEntry.class);
 			helper.mobilePrivacyProfilerDB_metadataDao = getDao(MobilePrivacyProfilerDB_metadata.class);
+			helper.identityDao = getDao(Identity.class);
+			helper.contactDao = getDao(Contact.class);
+			helper.contactPhoneNumberDao = getDao(ContactPhoneNumber.class);
+			helper.contactPhysicalAddressDao = getDao(ContactPhysicalAddress.class);
+			helper.contactEmailDao = getDao(ContactEmail.class);
+			helper.knownWifiDao = getDao(KnownWifi.class);
+			helper.wifiAccessPointDao = getDao(WifiAccessPoint.class);
+			helper.detectedWifiDao = getDao(DetectedWifi.class);
+			helper.geolocationDao = getDao(Geolocation.class);
+			helper.calendarEventDao = getDao(CalendarEvent.class);
+		helper.detectedWifi_AccessPointDao = getDao(DetectedWifi_AccessPoint.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't get ", e);
 		}

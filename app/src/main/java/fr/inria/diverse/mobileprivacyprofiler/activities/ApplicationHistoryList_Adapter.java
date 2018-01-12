@@ -109,6 +109,11 @@ public class ApplicationHistoryList_Adapter extends BaseAdapter   implements Fil
 		labelSB.append(" ");
         tvLabel.setText(labelSB.toString());
 
+		TextView tvSecondaryLine = (TextView) convertView.findViewById(R.id.applicationhistorylist_listviewrow_details);
+		StringBuilder secondaryLineSB = new StringBuilder();
+		secondaryLineSB.append(entry.getPackageName());
+		secondaryLineSB.append(" ");
+		tvSecondaryLine.setText(secondaryLineSB.toString());
 		// End of user code
 
         // assign the entry to the row in order to ease GUI interactions

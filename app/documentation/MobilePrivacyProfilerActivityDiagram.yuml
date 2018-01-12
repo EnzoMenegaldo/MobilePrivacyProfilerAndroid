@@ -3,4 +3,6 @@
 (Home)-><HomeChoice>
 (ApplicationHistoryList)-><ApplicationHistoryListChoice>
 (ManualScan)-><ManualScanChoice>
+(ApplicationHistoryDetail)-><ApplicationHistoryDetailChoice>
 <HomeChoice>->(ApplicationHistoryList)
+(ApplicationHistoryList)->(ApplicationHistoryDetail)		

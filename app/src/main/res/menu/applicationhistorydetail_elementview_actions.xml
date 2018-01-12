@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mobileprivacyprofiler="http://schemas.android.com/apk/res-auto">
+	
+	<!--Start of user code elementView_menu for ApplicationHistoryDetail
+	-->
+	<!-- freely adapt here the desired layout for yourmenu -->
+	<!--End of user code
+	-->
+	<item android:id="@+id/applicationhistorydetail_elementview_action_preference"
+	      android:icon="@android:drawable/ic_menu_preferences"
+	      android:title="@string/preferences_menu_title"
+	      mobileprivacyprofiler:showAsAction="never"   />
+</menu>
+
+
