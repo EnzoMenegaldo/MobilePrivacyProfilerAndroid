@@ -7,7 +7,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
-import invalid.datamodel.associations.DetectedWifi_AccessPoint;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
 import android.util.Log;
@@ -23,8 +23,8 @@ public class MobilePrivacyProfilerDBHelper {
 
 	public Dao<ApplicationHistory, Integer> applicationHistoryDao;
 	//public RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryDao;
-	public Dao<ApplicationLogEntry, Integer> applicationLogEntryDao;
-	//public RuntimeExceptionDao<ApplicationLogEntry, Integer> applicationLogEntryDao;
+	public Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao;
+	//public RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsDao;
 	public Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
 	//public RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
 	public Dao<Identity, Integer> identityDao;
@@ -56,7 +56,7 @@ public class MobilePrivacyProfilerDBHelper {
 
 	public MobilePrivacyProfilerDBHelper(
 		Dao<ApplicationHistory, Integer> applicationHistoryDao,
-		Dao<ApplicationLogEntry, Integer> applicationLogEntryDao,
+		Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao,
 		Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao,
 		Dao<Identity, Integer> identityDao,
 		Dao<Contact, Integer> contactDao,
@@ -71,7 +71,7 @@ public class MobilePrivacyProfilerDBHelper {
         Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao
 	){
 		this.applicationHistoryDao = applicationHistoryDao;
-		this.applicationLogEntryDao = applicationLogEntryDao;
+		this.applicationUsageStatsDao = applicationUsageStatsDao;
 		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
 		this.identityDao = identityDao;
 		this.contactDao = contactDao;

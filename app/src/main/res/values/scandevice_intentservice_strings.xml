@@ -3,5 +3,6 @@
 
     <string name="scandevice_intentservice_start_service">Démarrage du service</string>
     <string name="scandevice_intentservice_starting_scan_installed_applications">Inspection des applications installées</string>
+    <string name="scandevice_intentservice_starting_scan_month_app_usage">Inspection des stat mensuelles des applications</string>
 
 </resources>

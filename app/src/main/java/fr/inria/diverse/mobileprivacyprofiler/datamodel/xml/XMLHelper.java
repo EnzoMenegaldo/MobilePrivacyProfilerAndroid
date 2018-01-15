@@ -18,7 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xmlpull.v1.XmlPullParserException;
 
-import invalid.datamodel.associations.DetectedWifi_AccessPoint;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.*;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.xml.MobilePrivacyProfilerDBXMLParser.RefCommand;
 // Start of user code additional import
@@ -61,25 +61,25 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</APPLICATIONHISTORYS>\n");
-		sb.append("\n\t<APPLICATIONLOGENTRYS>");
+		sb.append("\n\t<APPLICATIONUSAGESTATSS>");
 		try {	
-			List<ApplicationLogEntry> applicationLogEntrys = dbContext.applicationLogEntryDao.queryForAll();
-			for(ApplicationLogEntry  applicationLogEntry : applicationLogEntrys){
+			List<ApplicationUsageStats> applicationUsageStatss = dbContext.applicationUsageStatsDao.queryForAll();
+			for(ApplicationUsageStats  applicationUsageStats : applicationUsageStatss){
 				// TODO find if contained by another element, if not put it there
 				boolean isContained = false;
-				if(applicationLogEntry.getApplication() != null){
+				if(applicationUsageStats.getApplication() != null){
 					isContained = true;
 				}
 				if(!isContained){
 					sb.append("\n");
-					sb.append(applicationLogEntry.toXML("\t\t", dbContext));
+					sb.append(applicationUsageStats.toXML("\t\t", dbContext));
 				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sb.append("\n\t</APPLICATIONLOGENTRYS>\n");
+		sb.append("\n\t</APPLICATIONUSAGESTATSS>\n");
 		sb.append("\n\t<MOBILEPRIVACYPROFILERDB_METADATAS>");
 		try {	
 			List<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatas = dbContext.mobilePrivacyProfilerDB_metadataDao.queryForAll();
@@ -267,12 +267,12 @@ public class XMLHelper {
 					log.error("cannot create ApplicationHistory "+e.getMessage(),e);
 				}
 			}
-			log.info("starting creation of ApplicationLogEntry...");
-			for(ApplicationLogEntry applicationLogEntry : parser.applicationLogEntrys){
+			log.info("starting creation of ApplicationUsageStats...");
+			for(ApplicationUsageStats applicationUsageStats : parser.applicationUsageStatss){
 				try {
-					dbContext.applicationLogEntryDao.create(applicationLogEntry);
+					dbContext.applicationUsageStatsDao.create(applicationUsageStats);
 				} catch (SQLException e) {
-					log.error("cannot create ApplicationLogEntry "+e.getMessage(),e);
+					log.error("cannot create ApplicationUsageStats "+e.getMessage(),e);
 				}
 			}
 			log.info("starting creation of MobilePrivacyProfilerDB_metadata...");
@@ -378,12 +378,12 @@ public class XMLHelper {
 					log.error("cannot update ApplicationHistory "+e.getMessage(),e);
 				}
 			}
-			log.info("starting update DB of ApplicationLogEntry...");
-			for(ApplicationLogEntry elem : parser.applicationLogEntrysToUpdate){
+			log.info("starting update DB of ApplicationUsageStats...");
+			for(ApplicationUsageStats elem : parser.applicationUsageStatssToUpdate){
 				try {
-					dbContext.applicationLogEntryDao.update(elem);
+					dbContext.applicationUsageStatsDao.update(elem);
 				} catch (SQLException e) {
-					log.error("cannot update ApplicationLogEntry "+e.getMessage(),e);
+					log.error("cannot update ApplicationUsageStats "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of MobilePrivacyProfilerDB_metadata...");

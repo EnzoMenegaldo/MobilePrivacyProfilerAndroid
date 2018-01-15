@@ -8,7 +8,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
-import invalid.datamodel.associations.DetectedWifi_AccessPoint;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code protected additional OrmLiteDBHelper imports
 import com.j256.ormlite.table.TableUtils;
 // End of user code
@@ -32,8 +32,8 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// private Dao<ApplicationHistory, Integer> applicationHistoryDao = null;
 	private RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryRuntimeDao = null;
 	// the DAO object we use to access the diveBudies table
-	// private Dao<ApplicationLogEntry, Integer> applicationLogEntryDao = null;
-	private RuntimeExceptionDao<ApplicationLogEntry, Integer> applicationLogEntryRuntimeDao = null;
+	// private Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao = null;
+	private RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsRuntimeDao = null;
 	// the DAO object we use to access the diveBudies table
 	// private Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao = null;
 	private RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataRuntimeDao = null;
@@ -84,7 +84,17 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		try {
 			Log.i(OrmLiteDBHelper.class.getName(), "onCreate");
 			TableUtils.createTable(connectionSource, ApplicationHistory.class);
-			TableUtils.createTable(connectionSource, ApplicationLogEntry.class);
+			TableUtils.createTable(connectionSource, ApplicationUsageStats.class);
+			TableUtils.createTable(connectionSource, CalendarEvent.class);
+			TableUtils.createTable(connectionSource, Contact.class);
+			TableUtils.createTable(connectionSource, ContactEmail.class);
+			TableUtils.createTable(connectionSource, ContactPhoneNumber.class);
+			TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
+			TableUtils.createTable(connectionSource, DetectedWifi.class);
+			TableUtils.createTable(connectionSource, Geolocation.class);
+			TableUtils.createTable(connectionSource, Identity.class);
+			TableUtils.createTable(connectionSource, KnownWifi.class);
+			TableUtils.createTable(connectionSource, WifiAccessPoint.class);
 			TableUtils.createTable(connectionSource, MobilePrivacyProfilerDB_metadata.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't create database", e);
@@ -114,7 +124,17 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		try {
 			Log.i(OrmLiteDBHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, ApplicationHistory.class, true);
-			TableUtils.dropTable(connectionSource, ApplicationLogEntry.class, true);
+			TableUtils.dropTable(connectionSource, ApplicationUsageStats.class, true);
+			TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
+			TableUtils.dropTable(connectionSource, Contact.class, true);
+			TableUtils.dropTable(connectionSource, ContactEmail.class, true);
+			TableUtils.dropTable(connectionSource, ContactPhoneNumber.class, true);
+			TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
+			TableUtils.dropTable(connectionSource, DetectedWifi.class, true);
+			TableUtils.dropTable(connectionSource, Geolocation.class, true);
+			TableUtils.dropTable(connectionSource, Identity.class, true);
+			TableUtils.dropTable(connectionSource, KnownWifi.class, true);
+			TableUtils.dropTable(connectionSource, WifiAccessPoint.class, true);
 			TableUtils.dropTable(connectionSource, MobilePrivacyProfilerDB_metadata.class, true);
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
@@ -137,14 +157,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	}
 
 	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ApplicationLogEntry class. It will
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ApplicationUsageStats class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<ApplicationLogEntry, Integer> getApplicationLogEntryDao() {
-		if (applicationLogEntryRuntimeDao == null) {
-			applicationLogEntryRuntimeDao = getRuntimeExceptionDao(ApplicationLogEntry.class);
+	public RuntimeExceptionDao<ApplicationUsageStats, Integer> getApplicationUsageStatsDao() {
+		if (applicationUsageStatsRuntimeDao == null) {
+			applicationUsageStatsRuntimeDao = getRuntimeExceptionDao(ApplicationUsageStats.class);
 		}
-		return applicationLogEntryRuntimeDao;
+		return applicationUsageStatsRuntimeDao;
 	}
 
 	/**
@@ -289,7 +309,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	public void close() {
 		super.close();
 		applicationHistoryRuntimeDao = null;
-		applicationLogEntryRuntimeDao = null;
+		applicationUsageStatsRuntimeDao = null;
 		mobilePrivacyProfilerDB_metadataRuntimeDao = null;
 		identityRuntimeDao = null;
 		contactRuntimeDao = null;
@@ -312,7 +332,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		MobilePrivacyProfilerDBHelper helper = new MobilePrivacyProfilerDBHelper();
 		try{
 			helper.applicationHistoryDao = getDao(ApplicationHistory.class);
-			helper.applicationLogEntryDao = getDao(ApplicationLogEntry.class);
+			helper.applicationUsageStatsDao = getDao(ApplicationUsageStats.class);
 			helper.mobilePrivacyProfilerDB_metadataDao = getDao(MobilePrivacyProfilerDB_metadata.class);
 			helper.identityDao = getDao(Identity.class);
 			helper.contactDao = getDao(Contact.class);

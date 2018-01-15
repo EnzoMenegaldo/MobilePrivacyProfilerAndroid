@@ -7,6 +7,7 @@
 	<string name="applicationhistorydetail_elementview_packagename_label">PackageName : </string>
 	<string name="applicationhistorydetail_elementview_appname_hint_text"></string>
 	<string name="applicationhistorydetail_elementview_packagename_hint_text"></string>
+	<string name="applicationhistorydetail_elementview_appstat_btn_label">Statistiques d\'utilisation</string>
 	<!-- End of user code
 	-->
 </resources>

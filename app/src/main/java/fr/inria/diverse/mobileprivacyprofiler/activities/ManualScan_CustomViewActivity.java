@@ -6,8 +6,10 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.AppOpsManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -44,6 +46,8 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 	
 	//Start of user code constants ManualScan_CustomViewActivity
 	private static final String TAG = ManualScan_CustomViewActivity.class.getSimpleName();
+
+	private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
 	//End of user code
 
 	/** Called when the activity is first created. */
@@ -73,8 +77,40 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_installed_applications));
 		ScanDeviceIntentService.startActionScanInstalledApplications(this);
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_month_app_usage));
+		ScanDeviceIntentService.startActionScanAppUsage(this);
 
     }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Log.d("MainActivity", "resultCode " + resultCode);
+		switch (requestCode){
+			case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
+				if (!hasPermission()){
+					requestPermission();
+				}
+				break;
+		}
+	}
+
+	private void requestPermission() {
+		Toast.makeText(this, "Need to request permission", Toast.LENGTH_SHORT).show();
+		startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+	}
+
+	private boolean hasPermission() {
+		AppOpsManager appOps = (AppOpsManager)
+				getSystemService(Context.APP_OPS_SERVICE);
+		int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+				android.os.Process.myUid(), getPackageName());
+		return mode == AppOpsManager.MODE_ALLOWED;
+//        return ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;
+	}
+
+
 	//End of user code
 
     /** refresh screen from data 
@@ -85,6 +121,10 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		sb.append("- - Debug - -\n");
 
 		((TextView) findViewById(R.id.manualscan_debug_text)).setText(sb.toString());
+
+		if (!hasPermission()){
+			requestPermission();
+		}
 		//End of user code
 	}
 
