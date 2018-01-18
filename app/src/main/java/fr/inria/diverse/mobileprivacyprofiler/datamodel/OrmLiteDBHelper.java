@@ -29,14 +29,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 
 
 	// the DAO object we use to access the diveBudies table
+	// private Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao = null;
+	private RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
 	// private Dao<ApplicationHistory, Integer> applicationHistoryDao = null;
 	private RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryRuntimeDao = null;
 	// the DAO object we use to access the diveBudies table
 	// private Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao = null;
 	private RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao = null;
-	private RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataRuntimeDao = null;
 	// the DAO object we use to access the diveBudies table
 	// private Dao<Identity, Integer> identityDao = null;
 	private RuntimeExceptionDao<Identity, Integer> identityRuntimeDao = null;
@@ -67,6 +67,30 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// the DAO object we use to access the diveBudies table
 	// private Dao<CalendarEvent, Integer> calendarEventDao = null;
 	private RuntimeExceptionDao<CalendarEvent, Integer> calendarEventRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<PhoneCallLog, Integer> phoneCallLogDao = null;
+	private RuntimeExceptionDao<PhoneCallLog, Integer> phoneCallLogRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<GSMCell, Integer> gSMCellDao = null;
+	private RuntimeExceptionDao<GSMCell, Integer> gSMCellRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<NeighboringCellHistory, Integer> neighboringCellHistoryDao = null;
+	private RuntimeExceptionDao<NeighboringCellHistory, Integer> neighboringCellHistoryRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<BluetoothDevice, Integer> bluetoothDeviceDao = null;
+	private RuntimeExceptionDao<BluetoothDevice, Integer> bluetoothDeviceRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<BluetoothLog, Integer> bluetoothLogDao = null;
+	private RuntimeExceptionDao<BluetoothLog, Integer> bluetoothLogRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<SMS, Integer> sMSDao = null;
+	private RuntimeExceptionDao<SMS, Integer> sMSRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<BatteryUsage, Integer> batteryUsageDao = null;
+	private RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageRuntimeDao = null;
+	// the DAO object we use to access the diveBudies table
+	// private Dao<WebHistory, Integer> webHistoryDao = null;
+	private RuntimeExceptionDao<WebHistory, Integer> webHistoryRuntimeDao = null;
 	
 		private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
 
@@ -146,6 +170,17 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	}
 
 	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our MobilePrivacyProfilerDB_metadata class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> getMobilePrivacyProfilerDB_metadataDao() {
+		if (mobilePrivacyProfilerDB_metadataRuntimeDao == null) {
+			mobilePrivacyProfilerDB_metadataRuntimeDao = getRuntimeExceptionDao(MobilePrivacyProfilerDB_metadata.class);
+		}
+		return mobilePrivacyProfilerDB_metadataRuntimeDao;
+	}
+
+	/**
 	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ApplicationHistory class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
@@ -165,17 +200,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			applicationUsageStatsRuntimeDao = getRuntimeExceptionDao(ApplicationUsageStats.class);
 		}
 		return applicationUsageStatsRuntimeDao;
-	}
-
-	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our MobilePrivacyProfilerDB_metadata class. It will
-	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
-	 */
-	public RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> getMobilePrivacyProfilerDB_metadataDao() {
-		if (mobilePrivacyProfilerDB_metadataRuntimeDao == null) {
-			mobilePrivacyProfilerDB_metadataRuntimeDao = getRuntimeExceptionDao(MobilePrivacyProfilerDB_metadata.class);
-		}
-		return mobilePrivacyProfilerDB_metadataRuntimeDao;
 	}
 
 	/**
@@ -288,6 +312,94 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		return calendarEventRuntimeDao;
 	}
 
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our PhoneCallLog class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<PhoneCallLog, Integer> getPhoneCallLogDao() {
+		if (phoneCallLogRuntimeDao == null) {
+			phoneCallLogRuntimeDao = getRuntimeExceptionDao(PhoneCallLog.class);
+		}
+		return phoneCallLogRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our GSMCell class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<GSMCell, Integer> getGSMCellDao() {
+		if (gSMCellRuntimeDao == null) {
+			gSMCellRuntimeDao = getRuntimeExceptionDao(GSMCell.class);
+		}
+		return gSMCellRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our NeighboringCellHistory class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<NeighboringCellHistory, Integer> getNeighboringCellHistoryDao() {
+		if (neighboringCellHistoryRuntimeDao == null) {
+			neighboringCellHistoryRuntimeDao = getRuntimeExceptionDao(NeighboringCellHistory.class);
+		}
+		return neighboringCellHistoryRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our BluetoothDevice class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<BluetoothDevice, Integer> getBluetoothDeviceDao() {
+		if (bluetoothDeviceRuntimeDao == null) {
+			bluetoothDeviceRuntimeDao = getRuntimeExceptionDao(BluetoothDevice.class);
+		}
+		return bluetoothDeviceRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our BluetoothLog class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<BluetoothLog, Integer> getBluetoothLogDao() {
+		if (bluetoothLogRuntimeDao == null) {
+			bluetoothLogRuntimeDao = getRuntimeExceptionDao(BluetoothLog.class);
+		}
+		return bluetoothLogRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our SMS class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<SMS, Integer> getSMSDao() {
+		if (sMSRuntimeDao == null) {
+			sMSRuntimeDao = getRuntimeExceptionDao(SMS.class);
+		}
+		return sMSRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our BatteryUsage class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<BatteryUsage, Integer> getBatteryUsageDao() {
+		if (batteryUsageRuntimeDao == null) {
+			batteryUsageRuntimeDao = getRuntimeExceptionDao(BatteryUsage.class);
+		}
+		return batteryUsageRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our WebHistory class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<WebHistory, Integer> getWebHistoryDao() {
+		if (webHistoryRuntimeDao == null) {
+			webHistoryRuntimeDao = getRuntimeExceptionDao(WebHistory.class);
+		}
+		return webHistoryRuntimeDao;
+	}
+
 	
 	
 	/**
@@ -308,9 +420,9 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	@Override
 	public void close() {
 		super.close();
+		mobilePrivacyProfilerDB_metadataRuntimeDao = null;
 		applicationHistoryRuntimeDao = null;
 		applicationUsageStatsRuntimeDao = null;
-		mobilePrivacyProfilerDB_metadataRuntimeDao = null;
 		identityRuntimeDao = null;
 		contactRuntimeDao = null;
 		contactPhoneNumberRuntimeDao = null;
@@ -321,6 +433,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		detectedWifiRuntimeDao = null;
 		geolocationRuntimeDao = null;
 		calendarEventRuntimeDao = null;
+		phoneCallLogRuntimeDao = null;
+		gSMCellRuntimeDao = null;
+		neighboringCellHistoryRuntimeDao = null;
+		bluetoothDeviceRuntimeDao = null;
+		bluetoothLogRuntimeDao = null;
+		sMSRuntimeDao = null;
+		batteryUsageRuntimeDao = null;
+		webHistoryRuntimeDao = null;
 		detectedWifi_AccessPointRuntimeDao = null;
 	}
 
@@ -331,9 +451,9 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	public MobilePrivacyProfilerDBHelper getMobilePrivacyProfilerDBHelper(){
 		MobilePrivacyProfilerDBHelper helper = new MobilePrivacyProfilerDBHelper();
 		try{
+			helper.mobilePrivacyProfilerDB_metadataDao = getDao(MobilePrivacyProfilerDB_metadata.class);
 			helper.applicationHistoryDao = getDao(ApplicationHistory.class);
 			helper.applicationUsageStatsDao = getDao(ApplicationUsageStats.class);
-			helper.mobilePrivacyProfilerDB_metadataDao = getDao(MobilePrivacyProfilerDB_metadata.class);
 			helper.identityDao = getDao(Identity.class);
 			helper.contactDao = getDao(Contact.class);
 			helper.contactPhoneNumberDao = getDao(ContactPhoneNumber.class);
@@ -344,6 +464,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.detectedWifiDao = getDao(DetectedWifi.class);
 			helper.geolocationDao = getDao(Geolocation.class);
 			helper.calendarEventDao = getDao(CalendarEvent.class);
+			helper.phoneCallLogDao = getDao(PhoneCallLog.class);
+			helper.gSMCellDao = getDao(GSMCell.class);
+			helper.neighboringCellHistoryDao = getDao(NeighboringCellHistory.class);
+			helper.bluetoothDeviceDao = getDao(BluetoothDevice.class);
+			helper.bluetoothLogDao = getDao(BluetoothLog.class);
+			helper.sMSDao = getDao(SMS.class);
+			helper.batteryUsageDao = getDao(BatteryUsage.class);
+			helper.webHistoryDao = getDao(WebHistory.class);
 		helper.detectedWifi_AccessPointDao = getDao(DetectedWifi_AccessPoint.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't get ", e);

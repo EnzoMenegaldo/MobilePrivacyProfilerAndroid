@@ -48,6 +48,19 @@ public class XMLHelper {
 	public static String generateXML4DB(MobilePrivacyProfilerDBHelper dbContext){
 		StringBuilder sb = new StringBuilder();
 		sb.append("<MOBILEPRIVACYPROFILERDB>");
+		sb.append("\n\t<MOBILEPRIVACYPROFILERDB_METADATAS>");
+		try {	
+			List<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatas = dbContext.mobilePrivacyProfilerDB_metadataDao.queryForAll();
+			for(MobilePrivacyProfilerDB_metadata  mobilePrivacyProfilerDB_metadata : mobilePrivacyProfilerDB_metadatas){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(mobilePrivacyProfilerDB_metadata.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</MOBILEPRIVACYPROFILERDB_METADATAS>\n");
 		sb.append("\n\t<APPLICATIONHISTORYS>");
 		try {	
 			List<ApplicationHistory> applicationHistorys = dbContext.applicationHistoryDao.queryForAll();
@@ -80,19 +93,6 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</APPLICATIONUSAGESTATSS>\n");
-		sb.append("\n\t<MOBILEPRIVACYPROFILERDB_METADATAS>");
-		try {	
-			List<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatas = dbContext.mobilePrivacyProfilerDB_metadataDao.queryForAll();
-			for(MobilePrivacyProfilerDB_metadata  mobilePrivacyProfilerDB_metadata : mobilePrivacyProfilerDB_metadatas){
-				// TODO find if contained by another element, if not put it there
-					sb.append("\n");
-					sb.append(mobilePrivacyProfilerDB_metadata.toXML("\t\t", dbContext));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		sb.append("\n\t</MOBILEPRIVACYPROFILERDB_METADATAS>\n");
 		sb.append("\n\t<IDENTITYS>");
 		try {	
 			List<Identity> identitys = dbContext.identityDao.queryForAll();
@@ -241,6 +241,110 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</CALENDAREVENTS>\n");
+		sb.append("\n\t<PHONECALLLOGS>");
+		try {	
+			List<PhoneCallLog> phoneCallLogs = dbContext.phoneCallLogDao.queryForAll();
+			for(PhoneCallLog  phoneCallLog : phoneCallLogs){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(phoneCallLog.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</PHONECALLLOGS>\n");
+		sb.append("\n\t<GSMCELLS>");
+		try {	
+			List<GSMCell> gSMCells = dbContext.gSMCellDao.queryForAll();
+			for(GSMCell  gSMCell : gSMCells){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(gSMCell.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</GSMCELLS>\n");
+		sb.append("\n\t<NEIGHBORINGCELLHISTORYS>");
+		try {	
+			List<NeighboringCellHistory> neighboringCellHistorys = dbContext.neighboringCellHistoryDao.queryForAll();
+			for(NeighboringCellHistory  neighboringCellHistory : neighboringCellHistorys){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(neighboringCellHistory.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</NEIGHBORINGCELLHISTORYS>\n");
+		sb.append("\n\t<BLUETOOTHDEVICES>");
+		try {	
+			List<BluetoothDevice> bluetoothDevices = dbContext.bluetoothDeviceDao.queryForAll();
+			for(BluetoothDevice  bluetoothDevice : bluetoothDevices){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(bluetoothDevice.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</BLUETOOTHDEVICES>\n");
+		sb.append("\n\t<BLUETOOTHLOGS>");
+		try {	
+			List<BluetoothLog> bluetoothLogs = dbContext.bluetoothLogDao.queryForAll();
+			for(BluetoothLog  bluetoothLog : bluetoothLogs){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(bluetoothLog.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</BLUETOOTHLOGS>\n");
+		sb.append("\n\t<SMSS>");
+		try {	
+			List<SMS> sMSs = dbContext.sMSDao.queryForAll();
+			for(SMS  sMS : sMSs){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(sMS.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</SMSS>\n");
+		sb.append("\n\t<BATTERYUSAGES>");
+		try {	
+			List<BatteryUsage> batteryUsages = dbContext.batteryUsageDao.queryForAll();
+			for(BatteryUsage  batteryUsage : batteryUsages){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(batteryUsage.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</BATTERYUSAGES>\n");
+		sb.append("\n\t<WEBHISTORYS>");
+		try {	
+			List<WebHistory> webHistorys = dbContext.webHistoryDao.queryForAll();
+			for(WebHistory  webHistory : webHistorys){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(webHistory.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</WEBHISTORYS>\n");
 		sb.append("\n</MOBILEPRIVACYPROFILERDB>");
 		return sb.toString();
 	}
@@ -259,6 +363,14 @@ public class XMLHelper {
 			log.info("starting parsing...");
 			parser.parse(inputStream);
 			// create the elements in the DB
+			log.info("starting creation of MobilePrivacyProfilerDB_metadata...");
+			for(MobilePrivacyProfilerDB_metadata mobilePrivacyProfilerDB_metadata : parser.mobilePrivacyProfilerDB_metadatas){
+				try {
+					dbContext.mobilePrivacyProfilerDB_metadataDao.create(mobilePrivacyProfilerDB_metadata);
+				} catch (SQLException e) {
+					log.error("cannot create MobilePrivacyProfilerDB_metadata "+e.getMessage(),e);
+				}
+			}
 			log.info("starting creation of ApplicationHistory...");
 			for(ApplicationHistory applicationHistory : parser.applicationHistorys){
 				try {
@@ -273,14 +385,6 @@ public class XMLHelper {
 					dbContext.applicationUsageStatsDao.create(applicationUsageStats);
 				} catch (SQLException e) {
 					log.error("cannot create ApplicationUsageStats "+e.getMessage(),e);
-				}
-			}
-			log.info("starting creation of MobilePrivacyProfilerDB_metadata...");
-			for(MobilePrivacyProfilerDB_metadata mobilePrivacyProfilerDB_metadata : parser.mobilePrivacyProfilerDB_metadatas){
-				try {
-					dbContext.mobilePrivacyProfilerDB_metadataDao.create(mobilePrivacyProfilerDB_metadata);
-				} catch (SQLException e) {
-					log.error("cannot create MobilePrivacyProfilerDB_metadata "+e.getMessage(),e);
 				}
 			}
 			log.info("starting creation of Identity...");
@@ -363,6 +467,70 @@ public class XMLHelper {
 					log.error("cannot create CalendarEvent "+e.getMessage(),e);
 				}
 			}
+			log.info("starting creation of PhoneCallLog...");
+			for(PhoneCallLog phoneCallLog : parser.phoneCallLogs){
+				try {
+					dbContext.phoneCallLogDao.create(phoneCallLog);
+				} catch (SQLException e) {
+					log.error("cannot create PhoneCallLog "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of GSMCell...");
+			for(GSMCell gSMCell : parser.gSMCells){
+				try {
+					dbContext.gSMCellDao.create(gSMCell);
+				} catch (SQLException e) {
+					log.error("cannot create GSMCell "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of NeighboringCellHistory...");
+			for(NeighboringCellHistory neighboringCellHistory : parser.neighboringCellHistorys){
+				try {
+					dbContext.neighboringCellHistoryDao.create(neighboringCellHistory);
+				} catch (SQLException e) {
+					log.error("cannot create NeighboringCellHistory "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of BluetoothDevice...");
+			for(BluetoothDevice bluetoothDevice : parser.bluetoothDevices){
+				try {
+					dbContext.bluetoothDeviceDao.create(bluetoothDevice);
+				} catch (SQLException e) {
+					log.error("cannot create BluetoothDevice "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of BluetoothLog...");
+			for(BluetoothLog bluetoothLog : parser.bluetoothLogs){
+				try {
+					dbContext.bluetoothLogDao.create(bluetoothLog);
+				} catch (SQLException e) {
+					log.error("cannot create BluetoothLog "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of SMS...");
+			for(SMS sMS : parser.sMSs){
+				try {
+					dbContext.sMSDao.create(sMS);
+				} catch (SQLException e) {
+					log.error("cannot create SMS "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of BatteryUsage...");
+			for(BatteryUsage batteryUsage : parser.batteryUsages){
+				try {
+					dbContext.batteryUsageDao.create(batteryUsage);
+				} catch (SQLException e) {
+					log.error("cannot create BatteryUsage "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of WebHistory...");
+			for(WebHistory webHistory : parser.webHistorys){
+				try {
+					dbContext.webHistoryDao.create(webHistory);
+				} catch (SQLException e) {
+					log.error("cannot create WebHistory "+e.getMessage(),e);
+				}
+			}
 			log.info("starting crossref...");
 			// proceed with cross ref
 			for (RefCommand command : parser.refCommands) {
@@ -370,6 +538,14 @@ public class XMLHelper {
 			}
 			
 			// update the DB
+			log.info("starting update DB of MobilePrivacyProfilerDB_metadata...");
+			for(MobilePrivacyProfilerDB_metadata elem : parser.mobilePrivacyProfilerDB_metadatasToUpdate){
+				try {
+					dbContext.mobilePrivacyProfilerDB_metadataDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update MobilePrivacyProfilerDB_metadata "+e.getMessage(),e);
+				}
+			}
 			log.info("starting update DB of ApplicationHistory...");
 			for(ApplicationHistory elem : parser.applicationHistorysToUpdate){
 				try {
@@ -384,14 +560,6 @@ public class XMLHelper {
 					dbContext.applicationUsageStatsDao.update(elem);
 				} catch (SQLException e) {
 					log.error("cannot update ApplicationUsageStats "+e.getMessage(),e);
-				}
-			}
-			log.info("starting update DB of MobilePrivacyProfilerDB_metadata...");
-			for(MobilePrivacyProfilerDB_metadata elem : parser.mobilePrivacyProfilerDB_metadatasToUpdate){
-				try {
-					dbContext.mobilePrivacyProfilerDB_metadataDao.update(elem);
-				} catch (SQLException e) {
-					log.error("cannot update MobilePrivacyProfilerDB_metadata "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of Identity...");
@@ -472,6 +640,70 @@ public class XMLHelper {
 					dbContext.calendarEventDao.update(elem);
 				} catch (SQLException e) {
 					log.error("cannot update CalendarEvent "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of PhoneCallLog...");
+			for(PhoneCallLog elem : parser.phoneCallLogsToUpdate){
+				try {
+					dbContext.phoneCallLogDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update PhoneCallLog "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of GSMCell...");
+			for(GSMCell elem : parser.gSMCellsToUpdate){
+				try {
+					dbContext.gSMCellDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update GSMCell "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of NeighboringCellHistory...");
+			for(NeighboringCellHistory elem : parser.neighboringCellHistorysToUpdate){
+				try {
+					dbContext.neighboringCellHistoryDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update NeighboringCellHistory "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of BluetoothDevice...");
+			for(BluetoothDevice elem : parser.bluetoothDevicesToUpdate){
+				try {
+					dbContext.bluetoothDeviceDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update BluetoothDevice "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of BluetoothLog...");
+			for(BluetoothLog elem : parser.bluetoothLogsToUpdate){
+				try {
+					dbContext.bluetoothLogDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update BluetoothLog "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of SMS...");
+			for(SMS elem : parser.sMSsToUpdate){
+				try {
+					dbContext.sMSDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update SMS "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of BatteryUsage...");
+			for(BatteryUsage elem : parser.batteryUsagesToUpdate){
+				try {
+					dbContext.batteryUsageDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update BatteryUsage "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of WebHistory...");
+			for(WebHistory elem : parser.webHistorysToUpdate){
+				try {
+					dbContext.webHistoryDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update WebHistory "+e.getMessage(),e);
 				}
 			}
 			log.info("DB filled from XML");

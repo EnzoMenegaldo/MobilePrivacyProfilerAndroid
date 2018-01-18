@@ -21,12 +21,12 @@ public class MobilePrivacyProfilerDBHelper {
 	private static final String TAG = MobilePrivacyProfilerDBHelper.class.getSimpleName();
 	//End of user code
 
+	public Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
+	//public RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
 	public Dao<ApplicationHistory, Integer> applicationHistoryDao;
 	//public RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryDao;
 	public Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao;
 	//public RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsDao;
-	public Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
-	//public RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao;
 	public Dao<Identity, Integer> identityDao;
 	//public RuntimeExceptionDao<Identity, Integer> identityDao;
 	public Dao<Contact, Integer> contactDao;
@@ -47,6 +47,22 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<Geolocation, Integer> geolocationDao;
 	public Dao<CalendarEvent, Integer> calendarEventDao;
 	//public RuntimeExceptionDao<CalendarEvent, Integer> calendarEventDao;
+	public Dao<PhoneCallLog, Integer> phoneCallLogDao;
+	//public RuntimeExceptionDao<PhoneCallLog, Integer> phoneCallLogDao;
+	public Dao<GSMCell, Integer> gSMCellDao;
+	//public RuntimeExceptionDao<GSMCell, Integer> gSMCellDao;
+	public Dao<NeighboringCellHistory, Integer> neighboringCellHistoryDao;
+	//public RuntimeExceptionDao<NeighboringCellHistory, Integer> neighboringCellHistoryDao;
+	public Dao<BluetoothDevice, Integer> bluetoothDeviceDao;
+	//public RuntimeExceptionDao<BluetoothDevice, Integer> bluetoothDeviceDao;
+	public Dao<BluetoothLog, Integer> bluetoothLogDao;
+	//public RuntimeExceptionDao<BluetoothLog, Integer> bluetoothLogDao;
+	public Dao<SMS, Integer> sMSDao;
+	//public RuntimeExceptionDao<SMS, Integer> sMSDao;
+	public Dao<BatteryUsage, Integer> batteryUsageDao;
+	//public RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageDao;
+	public Dao<WebHistory, Integer> webHistoryDao;
+	//public RuntimeExceptionDao<WebHistory, Integer> webHistoryDao;
 	public Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 	//public RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 
@@ -55,9 +71,9 @@ public class MobilePrivacyProfilerDBHelper {
 	}
 
 	public MobilePrivacyProfilerDBHelper(
+		Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao,
 		Dao<ApplicationHistory, Integer> applicationHistoryDao,
 		Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao,
-		Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao,
 		Dao<Identity, Integer> identityDao,
 		Dao<Contact, Integer> contactDao,
 		Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao,
@@ -68,11 +84,19 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<DetectedWifi, Integer> detectedWifiDao,
 		Dao<Geolocation, Integer> geolocationDao,
 		Dao<CalendarEvent, Integer> calendarEventDao,
+		Dao<PhoneCallLog, Integer> phoneCallLogDao,
+		Dao<GSMCell, Integer> gSMCellDao,
+		Dao<NeighboringCellHistory, Integer> neighboringCellHistoryDao,
+		Dao<BluetoothDevice, Integer> bluetoothDeviceDao,
+		Dao<BluetoothLog, Integer> bluetoothLogDao,
+		Dao<SMS, Integer> sMSDao,
+		Dao<BatteryUsage, Integer> batteryUsageDao,
+		Dao<WebHistory, Integer> webHistoryDao,
         Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao
 	){
+		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
 		this.applicationHistoryDao = applicationHistoryDao;
 		this.applicationUsageStatsDao = applicationUsageStatsDao;
-		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
 		this.identityDao = identityDao;
 		this.contactDao = contactDao;
 		this.contactPhoneNumberDao = contactPhoneNumberDao;
@@ -83,6 +107,14 @@ public class MobilePrivacyProfilerDBHelper {
 		this.detectedWifiDao = detectedWifiDao;
 		this.geolocationDao = geolocationDao;
 		this.calendarEventDao = calendarEventDao;
+		this.phoneCallLogDao = phoneCallLogDao;
+		this.gSMCellDao = gSMCellDao;
+		this.neighboringCellHistoryDao = neighboringCellHistoryDao;
+		this.bluetoothDeviceDao = bluetoothDeviceDao;
+		this.bluetoothLogDao = bluetoothLogDao;
+		this.sMSDao = sMSDao;
+		this.batteryUsageDao = batteryUsageDao;
+		this.webHistoryDao = webHistoryDao;
 		this.detectedWifi_AccessPointDao = detectedWifi_AccessPointDao;
 	}
 

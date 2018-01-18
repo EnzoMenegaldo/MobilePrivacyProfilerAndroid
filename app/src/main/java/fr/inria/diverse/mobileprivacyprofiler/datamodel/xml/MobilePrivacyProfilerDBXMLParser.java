@@ -27,9 +27,9 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 	List<RefCommand> refCommands = new ArrayList<RefCommand>();
 
+	List<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatas = new ArrayList<MobilePrivacyProfilerDB_metadata>();
 	List<ApplicationHistory> applicationHistorys = new ArrayList<ApplicationHistory>();
 	List<ApplicationUsageStats> applicationUsageStatss = new ArrayList<ApplicationUsageStats>();
-	List<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatas = new ArrayList<MobilePrivacyProfilerDB_metadata>();
 	List<Identity> identitys = new ArrayList<Identity>();
 	List<Contact> contacts = new ArrayList<Contact>();
 	List<ContactPhoneNumber> contactPhoneNumbers = new ArrayList<ContactPhoneNumber>();
@@ -40,9 +40,17 @@ public class MobilePrivacyProfilerDBXMLParser {
 	List<DetectedWifi> detectedWifis = new ArrayList<DetectedWifi>();
 	List<Geolocation> geolocations = new ArrayList<Geolocation>();
 	List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
+	List<PhoneCallLog> phoneCallLogs = new ArrayList<PhoneCallLog>();
+	List<GSMCell> gSMCells = new ArrayList<GSMCell>();
+	List<NeighboringCellHistory> neighboringCellHistorys = new ArrayList<NeighboringCellHistory>();
+	List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
+	List<BluetoothLog> bluetoothLogs = new ArrayList<BluetoothLog>();
+	List<SMS> sMSs = new ArrayList<SMS>();
+	List<BatteryUsage> batteryUsages = new ArrayList<BatteryUsage>();
+	List<WebHistory> webHistorys = new ArrayList<WebHistory>();
+	Set<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatasToUpdate = new HashSet<MobilePrivacyProfilerDB_metadata>();
 	Set<ApplicationHistory> applicationHistorysToUpdate = new HashSet<ApplicationHistory>();
 	Set<ApplicationUsageStats> applicationUsageStatssToUpdate = new HashSet<ApplicationUsageStats>();
-	Set<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatasToUpdate = new HashSet<MobilePrivacyProfilerDB_metadata>();
 	Set<Identity> identitysToUpdate = new HashSet<Identity>();
 	Set<Contact> contactsToUpdate = new HashSet<Contact>();
 	Set<ContactPhoneNumber> contactPhoneNumbersToUpdate = new HashSet<ContactPhoneNumber>();
@@ -53,9 +61,17 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Set<DetectedWifi> detectedWifisToUpdate = new HashSet<DetectedWifi>();
 	Set<Geolocation> geolocationsToUpdate = new HashSet<Geolocation>();
 	Set<CalendarEvent> calendarEventsToUpdate = new HashSet<CalendarEvent>();
+	Set<PhoneCallLog> phoneCallLogsToUpdate = new HashSet<PhoneCallLog>();
+	Set<GSMCell> gSMCellsToUpdate = new HashSet<GSMCell>();
+	Set<NeighboringCellHistory> neighboringCellHistorysToUpdate = new HashSet<NeighboringCellHistory>();
+	Set<BluetoothDevice> bluetoothDevicesToUpdate = new HashSet<BluetoothDevice>();
+	Set<BluetoothLog> bluetoothLogsToUpdate = new HashSet<BluetoothLog>();
+	Set<SMS> sMSsToUpdate = new HashSet<SMS>();
+	Set<BatteryUsage> batteryUsagesToUpdate = new HashSet<BatteryUsage>();
+	Set<WebHistory> webHistorysToUpdate = new HashSet<WebHistory>();
+	Hashtable<String, MobilePrivacyProfilerDB_metadata> xmlId2MobilePrivacyProfilerDB_metadata = new Hashtable<String, MobilePrivacyProfilerDB_metadata>();
 	Hashtable<String, ApplicationHistory> xmlId2ApplicationHistory = new Hashtable<String, ApplicationHistory>();
 	Hashtable<String, ApplicationUsageStats> xmlId2ApplicationUsageStats = new Hashtable<String, ApplicationUsageStats>();
-	Hashtable<String, MobilePrivacyProfilerDB_metadata> xmlId2MobilePrivacyProfilerDB_metadata = new Hashtable<String, MobilePrivacyProfilerDB_metadata>();
 	Hashtable<String, Identity> xmlId2Identity = new Hashtable<String, Identity>();
 	Hashtable<String, Contact> xmlId2Contact = new Hashtable<String, Contact>();
 	Hashtable<String, ContactPhoneNumber> xmlId2ContactPhoneNumber = new Hashtable<String, ContactPhoneNumber>();
@@ -66,16 +82,24 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, DetectedWifi> xmlId2DetectedWifi = new Hashtable<String, DetectedWifi>();
 	Hashtable<String, Geolocation> xmlId2Geolocation = new Hashtable<String, Geolocation>();
 	Hashtable<String, CalendarEvent> xmlId2CalendarEvent = new Hashtable<String, CalendarEvent>();
+	Hashtable<String, PhoneCallLog> xmlId2PhoneCallLog = new Hashtable<String, PhoneCallLog>();
+	Hashtable<String, GSMCell> xmlId2GSMCell = new Hashtable<String, GSMCell>();
+	Hashtable<String, NeighboringCellHistory> xmlId2NeighboringCellHistory = new Hashtable<String, NeighboringCellHistory>();
+	Hashtable<String, BluetoothDevice> xmlId2BluetoothDevice = new Hashtable<String, BluetoothDevice>();
+	Hashtable<String, BluetoothLog> xmlId2BluetoothLog = new Hashtable<String, BluetoothLog>();
+	Hashtable<String, SMS> xmlId2SMS = new Hashtable<String, SMS>();
+	Hashtable<String, BatteryUsage> xmlId2BatteryUsage = new Hashtable<String, BatteryUsage>();
+	Hashtable<String, WebHistory> xmlId2WebHistory = new Hashtable<String, WebHistory>();
 
 	// minimize memory footprint by using static Strings
     public static final String ID_STRING = "id";
 
+	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS = "MOBILEPRIVACYPROFILERDB_METADATAS";
+	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA  = "MOBILEPRIVACYPROFILERDB_METADATA";
 	public static final String DATACLASSIFIER_APPLICATIONHISTORYS = "APPLICATIONHISTORYS";
 	public static final String DATACLASSIFIER_APPLICATIONHISTORY  = "APPLICATIONHISTORY";
 	public static final String DATACLASSIFIER_APPLICATIONUSAGESTATSS = "APPLICATIONUSAGESTATSS";
 	public static final String DATACLASSIFIER_APPLICATIONUSAGESTATS  = "APPLICATIONUSAGESTATS";
-	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS = "MOBILEPRIVACYPROFILERDB_METADATAS";
-	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA  = "MOBILEPRIVACYPROFILERDB_METADATA";
 	public static final String DATACLASSIFIER_IDENTITYS = "IDENTITYS";
 	public static final String DATACLASSIFIER_IDENTITY  = "IDENTITY";
 	public static final String DATACLASSIFIER_CONTACTS = "CONTACTS";
@@ -96,7 +120,25 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATACLASSIFIER_GEOLOCATION  = "GEOLOCATION";
 	public static final String DATACLASSIFIER_CALENDAREVENTS = "CALENDAREVENTS";
 	public static final String DATACLASSIFIER_CALENDAREVENT  = "CALENDAREVENT";
+	public static final String DATACLASSIFIER_PHONECALLLOGS = "PHONECALLLOGS";
+	public static final String DATACLASSIFIER_PHONECALLLOG  = "PHONECALLLOG";
+	public static final String DATACLASSIFIER_GSMCELLS = "GSMCELLS";
+	public static final String DATACLASSIFIER_GSMCELL  = "GSMCELL";
+	public static final String DATACLASSIFIER_NEIGHBORINGCELLHISTORYS = "NEIGHBORINGCELLHISTORYS";
+	public static final String DATACLASSIFIER_NEIGHBORINGCELLHISTORY  = "NEIGHBORINGCELLHISTORY";
+	public static final String DATACLASSIFIER_BLUETOOTHDEVICES = "BLUETOOTHDEVICES";
+	public static final String DATACLASSIFIER_BLUETOOTHDEVICE  = "BLUETOOTHDEVICE";
+	public static final String DATACLASSIFIER_BLUETOOTHLOGS = "BLUETOOTHLOGS";
+	public static final String DATACLASSIFIER_BLUETOOTHLOG  = "BLUETOOTHLOG";
+	public static final String DATACLASSIFIER_SMSS = "SMSS";
+	public static final String DATACLASSIFIER_SMS  = "SMS";
+	public static final String DATACLASSIFIER_BATTERYUSAGES = "BATTERYUSAGES";
+	public static final String DATACLASSIFIER_BATTERYUSAGE  = "BATTERYUSAGE";
+	public static final String DATACLASSIFIER_WEBHISTORYS = "WEBHISTORYS";
+	public static final String DATACLASSIFIER_WEBHISTORY  = "WEBHISTORY";
 
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastTransmissionDate = "lastTransmissionDate";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTTRANSMISSIONDATE = "LASTTRANSMISSIONDATE";
 	public static final String DATAATT_APPLICATIONHISTORY_appName = "appName";
 	public static final String DATAATT_APPLICATIONHISTORY_APPNAME = "APPNAME";
 	public static final String DATAATT_APPLICATIONHISTORY_packageName = "packageName";
@@ -111,8 +153,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_APPLICATIONUSAGESTATS_lastTimeStamp = "lastTimeStamp";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_LASTTIMESTAMP = "LASTTIMESTAMP";
 	public static final String DATAREF_APPLICATIONUSAGESTATS_application = "application";
-	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastTransmissionDate = "lastTransmissionDate";
-	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTTRANSMISSIONDATE = "LASTTRANSMISSIONDATE";
 	public static final String DATAATT_IDENTITY_provider = "provider";
 	public static final String DATAATT_IDENTITY_PROVIDER = "PROVIDER";
 	public static final String DATAATT_IDENTITY_login = "login";
@@ -121,6 +161,10 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_IDENTITY_DISPLAYNAME = "DISPLAYNAME";
 	public static final String DATAATT_IDENTITY_associatedServices = "associatedServices";
 	public static final String DATAATT_IDENTITY_ASSOCIATEDSERVICES = "ASSOCIATEDSERVICES";
+	public static final String DATAATT_IDENTITY_PhoneNumber1 = "PhoneNumber1";
+	public static final String DATAATT_IDENTITY_PHONENUMBER1 = "PHONENUMBER1";
+	public static final String DATAATT_IDENTITY_PhoneNumber2 = "PhoneNumber2";
+	public static final String DATAATT_IDENTITY_PHONENUMBER2 = "PHONENUMBER2";
 	public static final String DATAATT_CONTACT_surname = "surname";
 	public static final String DATAATT_CONTACT_SURNAME = "SURNAME";
 	public static final String DATAATT_CONTACT_firstName = "firstName";
@@ -187,6 +231,54 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_CALENDAREVENT_PLACE = "PLACE";
 	public static final String DATAATT_CALENDAREVENT_participants = "participants";
 	public static final String DATAATT_CALENDAREVENT_PARTICIPANTS = "PARTICIPANTS";
+	public static final String DATAATT_PHONECALLLOG_phoneNumber = "phoneNumber";
+	public static final String DATAATT_PHONECALLLOG_PHONENUMBER = "PHONENUMBER";
+	public static final String DATAATT_PHONECALLLOG_date = "date";
+	public static final String DATAATT_PHONECALLLOG_DATE = "DATE";
+	public static final String DATAATT_PHONECALLLOG_duration = "duration";
+	public static final String DATAATT_PHONECALLLOG_DURATION = "DURATION";
+	public static final String DATAATT_PHONECALLLOG_callType = "callType";
+	public static final String DATAATT_PHONECALLLOG_CALLTYPE = "CALLTYPE";
+	public static final String DATAATT_GSMCELL_cellIdentity = "cellIdentity";
+	public static final String DATAATT_GSMCELL_CELLIDENTITY = "CELLIDENTITY";
+	public static final String DATAATT_GSMCELL_geolocation = "geolocation";
+	public static final String DATAATT_GSMCELL_GEOLOCATION = "GEOLOCATION";
+	public static final String DATAATT_NEIGHBORINGCELLHISTORY_date = "date";
+	public static final String DATAATT_NEIGHBORINGCELLHISTORY_DATE = "DATE";
+	public static final String DATAATT_NEIGHBORINGCELLHISTORY_strength = "strength";
+	public static final String DATAATT_NEIGHBORINGCELLHISTORY_STRENGTH = "STRENGTH";
+	public static final String DATAREF_NEIGHBORINGCELLHISTORY_cells = "cells";
+	public static final String DATAATT_BLUETOOTHDEVICE_mac = "mac";
+	public static final String DATAATT_BLUETOOTHDEVICE_MAC = "MAC";
+	public static final String DATAATT_BLUETOOTHDEVICE_name = "name";
+	public static final String DATAATT_BLUETOOTHDEVICE_NAME = "NAME";
+	public static final String DATAATT_BLUETOOTHDEVICE_type = "type";
+	public static final String DATAATT_BLUETOOTHDEVICE_TYPE = "TYPE";
+	public static final String DATAATT_BLUETOOTHLOG_date = "date";
+	public static final String DATAATT_BLUETOOTHLOG_DATE = "DATE";
+	public static final String DATAATT_BLUETOOTHLOG_connected = "connected";
+	public static final String DATAATT_BLUETOOTHLOG_CONNECTED = "CONNECTED";
+	public static final String DATAREF_BLUETOOTHLOG_device = "device";
+	public static final String DATAATT_SMS_date = "date";
+	public static final String DATAATT_SMS_DATE = "DATE";
+	public static final String DATAATT_SMS_phoneNumber = "phoneNumber";
+	public static final String DATAATT_SMS_PHONENUMBER = "PHONENUMBER";
+	public static final String DATAATT_SMS_type = "type";
+	public static final String DATAATT_SMS_TYPE = "TYPE";
+	public static final String DATAATT_BATTERYUSAGE_date = "date";
+	public static final String DATAATT_BATTERYUSAGE_DATE = "DATE";
+	public static final String DATAATT_BATTERYUSAGE_level = "level";
+	public static final String DATAATT_BATTERYUSAGE_LEVEL = "LEVEL";
+	public static final String DATAATT_BATTERYUSAGE_isUsbPlugged = "isUsbPlugged";
+	public static final String DATAATT_BATTERYUSAGE_ISUSBPLUGGED = "ISUSBPLUGGED";
+	public static final String DATAATT_BATTERYUSAGE_isAccPlugged = "isAccPlugged";
+	public static final String DATAATT_BATTERYUSAGE_ISACCPLUGGED = "ISACCPLUGGED";
+	public static final String DATAATT_WEBHISTORY_url = "url";
+	public static final String DATAATT_WEBHISTORY_URL = "URL";
+	public static final String DATAATT_WEBHISTORY_date = "date";
+	public static final String DATAATT_WEBHISTORY_DATE = "DATE";
+	public static final String DATAATT_WEBHISTORY_application = "application";
+	public static final String DATAATT_WEBHISTORY_APPLICATION = "APPLICATION";
 
 
 
@@ -216,6 +308,10 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        String name = parser.getName();
+		 	if (name.equals(DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS)) {
+				mobilePrivacyProfilerDB_metadatas = readMobilePrivacyProfilerDB_metadatas(parser,DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS);
+	            // mobilePrivacyProfilerDB_metadatas.addAll(readMobilePrivacyProfilerDB_metadatas(parser,DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS));
+	        } else 
 		 	if (name.equals(DATACLASSIFIER_APPLICATIONHISTORYS)) {
 				applicationHistorys = readApplicationHistorys(parser,DATACLASSIFIER_APPLICATIONHISTORYS);
 	            // applicationHistorys.addAll(readApplicationHistorys(parser,DATACLASSIFIER_APPLICATIONHISTORYS));
@@ -223,10 +319,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		 	if (name.equals(DATACLASSIFIER_APPLICATIONUSAGESTATSS)) {
 				applicationUsageStatss = readApplicationUsageStatss(parser,DATACLASSIFIER_APPLICATIONUSAGESTATSS);
 	            // applicationUsageStatss.addAll(readApplicationUsageStatss(parser,DATACLASSIFIER_APPLICATIONUSAGESTATSS));
-	        } else 
-		 	if (name.equals(DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS)) {
-				mobilePrivacyProfilerDB_metadatas = readMobilePrivacyProfilerDB_metadatas(parser,DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS);
-	            // mobilePrivacyProfilerDB_metadatas.addAll(readMobilePrivacyProfilerDB_metadatas(parser,DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS));
 	        } else 
 		 	if (name.equals(DATACLASSIFIER_IDENTITYS)) {
 				identitys = readIdentitys(parser,DATACLASSIFIER_IDENTITYS);
@@ -268,6 +360,38 @@ public class MobilePrivacyProfilerDBXMLParser {
 				calendarEvents = readCalendarEvents(parser,DATACLASSIFIER_CALENDAREVENTS);
 	            // calendarEvents.addAll(readCalendarEvents(parser,DATACLASSIFIER_CALENDAREVENTS));
 	        } else 
+		 	if (name.equals(DATACLASSIFIER_PHONECALLLOGS)) {
+				phoneCallLogs = readPhoneCallLogs(parser,DATACLASSIFIER_PHONECALLLOGS);
+	            // phoneCallLogs.addAll(readPhoneCallLogs(parser,DATACLASSIFIER_PHONECALLLOGS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_GSMCELLS)) {
+				gSMCells = readGSMCells(parser,DATACLASSIFIER_GSMCELLS);
+	            // gSMCells.addAll(readGSMCells(parser,DATACLASSIFIER_GSMCELLS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_NEIGHBORINGCELLHISTORYS)) {
+				neighboringCellHistorys = readNeighboringCellHistorys(parser,DATACLASSIFIER_NEIGHBORINGCELLHISTORYS);
+	            // neighboringCellHistorys.addAll(readNeighboringCellHistorys(parser,DATACLASSIFIER_NEIGHBORINGCELLHISTORYS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_BLUETOOTHDEVICES)) {
+				bluetoothDevices = readBluetoothDevices(parser,DATACLASSIFIER_BLUETOOTHDEVICES);
+	            // bluetoothDevices.addAll(readBluetoothDevices(parser,DATACLASSIFIER_BLUETOOTHDEVICES));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_BLUETOOTHLOGS)) {
+				bluetoothLogs = readBluetoothLogs(parser,DATACLASSIFIER_BLUETOOTHLOGS);
+	            // bluetoothLogs.addAll(readBluetoothLogs(parser,DATACLASSIFIER_BLUETOOTHLOGS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_SMSS)) {
+				sMSs = readSMSs(parser,DATACLASSIFIER_SMSS);
+	            // sMSs.addAll(readSMSs(parser,DATACLASSIFIER_SMSS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_BATTERYUSAGES)) {
+				batteryUsages = readBatteryUsages(parser,DATACLASSIFIER_BATTERYUSAGES);
+	            // batteryUsages.addAll(readBatteryUsages(parser,DATACLASSIFIER_BATTERYUSAGES));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_WEBHISTORYS)) {
+				webHistorys = readWebHistorys(parser,DATACLASSIFIER_WEBHISTORYS);
+	            // webHistorys.addAll(readWebHistorys(parser,DATACLASSIFIER_WEBHISTORYS));
+	        } else 
 			{
 	            skip(parser);
 	        }
@@ -275,6 +399,26 @@ public class MobilePrivacyProfilerDBXMLParser {
 		
 	}
 
+	/**
+     * parser for a group of MobilePrivacyProfilerDB_metadata
+     */
+	List<MobilePrivacyProfilerDB_metadata> readMobilePrivacyProfilerDB_metadatas(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<MobilePrivacyProfilerDB_metadata> entries = new ArrayList<MobilePrivacyProfilerDB_metadata>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA)) {
+	            entries.add(readMobilePrivacyProfilerDB_metadata(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
 	/**
      * parser for a group of ApplicationHistory
      */
@@ -308,26 +452,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	        String name = parser.getName();
 			if (name.equals(DATACLASSIFIER_APPLICATIONUSAGESTATS)) {
 	            entries.add(readApplicationUsageStats(parser));
-	        } else {
-	            skip(parser);
-	        }
-	    }
-		entries.trimToSize();
-		return entries;
-	}
-	/**
-     * parser for a group of MobilePrivacyProfilerDB_metadata
-     */
-	List<MobilePrivacyProfilerDB_metadata> readMobilePrivacyProfilerDB_metadatas(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
-		ArrayList<MobilePrivacyProfilerDB_metadata> entries = new ArrayList<MobilePrivacyProfilerDB_metadata>();
-		parser.require(XmlPullParser.START_TAG, ns, containingTag);
-	    while (parser.next() != XmlPullParser.END_TAG) {
-	        if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
-	        String name = parser.getName();
-			if (name.equals(DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA)) {
-	            entries.add(readMobilePrivacyProfilerDB_metadata(parser));
 	        } else {
 	            skip(parser);
 	        }
@@ -535,7 +659,187 @@ public class MobilePrivacyProfilerDBXMLParser {
 		entries.trimToSize();
 		return entries;
 	}
+	/**
+     * parser for a group of PhoneCallLog
+     */
+	List<PhoneCallLog> readPhoneCallLogs(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<PhoneCallLog> entries = new ArrayList<PhoneCallLog>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_PHONECALLLOG)) {
+	            entries.add(readPhoneCallLog(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of GSMCell
+     */
+	List<GSMCell> readGSMCells(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<GSMCell> entries = new ArrayList<GSMCell>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_GSMCELL)) {
+	            entries.add(readGSMCell(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of NeighboringCellHistory
+     */
+	List<NeighboringCellHistory> readNeighboringCellHistorys(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<NeighboringCellHistory> entries = new ArrayList<NeighboringCellHistory>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_NEIGHBORINGCELLHISTORY)) {
+	            entries.add(readNeighboringCellHistory(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of BluetoothDevice
+     */
+	List<BluetoothDevice> readBluetoothDevices(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<BluetoothDevice> entries = new ArrayList<BluetoothDevice>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_BLUETOOTHDEVICE)) {
+	            entries.add(readBluetoothDevice(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of BluetoothLog
+     */
+	List<BluetoothLog> readBluetoothLogs(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<BluetoothLog> entries = new ArrayList<BluetoothLog>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_BLUETOOTHLOG)) {
+	            entries.add(readBluetoothLog(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of SMS
+     */
+	List<SMS> readSMSs(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<SMS> entries = new ArrayList<SMS>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_SMS)) {
+	            entries.add(readSMS(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of BatteryUsage
+     */
+	List<BatteryUsage> readBatteryUsages(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<BatteryUsage> entries = new ArrayList<BatteryUsage>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_BATTERYUSAGE)) {
+	            entries.add(readBatteryUsage(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of WebHistory
+     */
+	List<WebHistory> readWebHistorys(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<WebHistory> entries = new ArrayList<WebHistory>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_WEBHISTORY)) {
+	            entries.add(readWebHistory(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
 
+	MobilePrivacyProfilerDB_metadata readMobilePrivacyProfilerDB_metadata(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		MobilePrivacyProfilerDB_metadata result = new MobilePrivacyProfilerDB_metadata();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2MobilePrivacyProfilerDB_metadata.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setLastTransmissionDate(parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastTransmissionDate));
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
 	ApplicationHistory readApplicationHistory(XmlPullParser parser)  throws XmlPullParserException, IOException{
 		ApplicationHistory result = new ApplicationHistory();
 
@@ -592,26 +896,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		return result;
 	}
-	MobilePrivacyProfilerDB_metadata readMobilePrivacyProfilerDB_metadata(XmlPullParser parser)  throws XmlPullParserException, IOException{
-		MobilePrivacyProfilerDB_metadata result = new MobilePrivacyProfilerDB_metadata();
-
-		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA);
-    	String currentTagName = parser.getName();
-    			
-    	xmlId2MobilePrivacyProfilerDB_metadata.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setLastTransmissionDate(parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastTransmissionDate));
-		while (parser.next() != XmlPullParser.END_TAG) {
-	        if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
-	        currentTagName = parser.getName();
-	        {
-	            skip(parser);
-	        }
-	    }
-
-		return result;
-	}
 	Identity readIdentity(XmlPullParser parser)  throws XmlPullParserException, IOException{
 		Identity result = new Identity();
 
@@ -623,6 +907,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setLogin(parser.getAttributeValue(null, DATAATT_IDENTITY_login));
 		result.setDisplayName(parser.getAttributeValue(null, DATAATT_IDENTITY_displayName));
 		result.setAssociatedServices(parser.getAttributeValue(null, DATAATT_IDENTITY_associatedServices));
+		result.setPhoneNumber1(parser.getAttributeValue(null, DATAATT_IDENTITY_PhoneNumber1));
+		result.setPhoneNumber2(parser.getAttributeValue(null, DATAATT_IDENTITY_PhoneNumber2));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -879,6 +1165,188 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		return result;
 	}
+	PhoneCallLog readPhoneCallLog(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		PhoneCallLog result = new PhoneCallLog();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_PHONECALLLOG);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2PhoneCallLog.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setPhoneNumber(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_phoneNumber));
+		result.setDate(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_date));
+		// TODO duration = parser.getAttributeValue(null, DATAATT_PHONECALLLOG_DURATION);
+		result.setCallType(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_callType));
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	GSMCell readGSMCell(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		GSMCell result = new GSMCell();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_GSMCELL);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2GSMCell.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setCellIdentity(parser.getAttributeValue(null, DATAATT_GSMCELL_cellIdentity));
+		result.setGeolocation(parser.getAttributeValue(null, DATAATT_GSMCELL_geolocation));
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	NeighboringCellHistory readNeighboringCellHistory(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		NeighboringCellHistory result = new NeighboringCellHistory();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_NEIGHBORINGCELLHISTORY);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2NeighboringCellHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setDate(parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_date));
+		// TODO strength = parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_STRENGTH);
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+					// TODO deal with ref cells
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	BluetoothDevice readBluetoothDevice(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		BluetoothDevice result = new BluetoothDevice();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_BLUETOOTHDEVICE);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2BluetoothDevice.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setMac(parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_mac));
+		result.setName(parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_name));
+		// TODO type = parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_TYPE);
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	BluetoothLog readBluetoothLog(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		BluetoothLog result = new BluetoothLog();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_BLUETOOTHLOG);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2BluetoothLog.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setDate(parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_date));
+		// TODO connected = parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_CONNECTED);
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+			if (currentTagName.equals(DATAREF_BLUETOOTHLOG_device)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_BLUETOOTHLOG_device);
+	            String id = readText(parser);
+				refCommands.add(new BluetoothLog_setDevice_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_BLUETOOTHLOG_device);	    
+	        } else
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	SMS readSMS(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		SMS result = new SMS();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_SMS);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2SMS.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setDate(parser.getAttributeValue(null, DATAATT_SMS_date));
+		result.setPhoneNumber(parser.getAttributeValue(null, DATAATT_SMS_phoneNumber));
+		result.setType(parser.getAttributeValue(null, DATAATT_SMS_type));
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	BatteryUsage readBatteryUsage(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		BatteryUsage result = new BatteryUsage();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_BATTERYUSAGE);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2BatteryUsage.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setDate(parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_date));
+		// TODO level = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_LEVEL);
+		// TODO isUsbPlugged = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_ISUSBPLUGGED);
+		// TODO isAccPlugged = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_ISACCPLUGGED);
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	WebHistory readWebHistory(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		WebHistory result = new WebHistory();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_WEBHISTORY);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2WebHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setUrl(parser.getAttributeValue(null, DATAATT_WEBHISTORY_url));
+		result.setDate(parser.getAttributeValue(null, DATAATT_WEBHISTORY_date));
+		result.setApplication(parser.getAttributeValue(null, DATAATT_WEBHISTORY_application));
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
 
    /**
     * abstract command for dealing with all task that must wait that the element have been created
@@ -1062,6 +1530,26 @@ public class MobilePrivacyProfilerDBXMLParser {
 		public void run() {
 			self.setKnownWifi(parser.xmlId2KnownWifi.get(referencedElementID));
 			detectedWifisToUpdate.add(self);
+		}
+	}
+	// class NeighboringCellHistory_addCells_RefCommand extends RefCommand{
+	class BluetoothLog_setDevice_RefCommand extends RefCommand{
+		BluetoothLog self;
+		String referencedElementID;
+		MobilePrivacyProfilerDBXMLParser parser;
+		
+		public BluetoothLog_setDevice_RefCommand(BluetoothLog self,
+				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+			super();
+			this.self = self;
+			this.referencedElementID = referencedElementID;
+			this.parser = parser;
+		}
+
+		@Override
+		public void run() {
+			self.setDevice(parser.xmlId2BluetoothDevice.get(referencedElementID));
+			bluetoothLogsToUpdate.add(self);
 		}
 	}
 
