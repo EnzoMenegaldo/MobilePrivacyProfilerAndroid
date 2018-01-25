@@ -2,8 +2,10 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +54,12 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         setContentView(R.layout.home_customview);
         //Start of user code onCreate Home_CustomViewActivity
+
+        // Display Debug info
+        ParametersUtils paramUtil = new ParametersUtils(this);
+        if (paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
+            ((ScrollView) findViewById(R.id.home_debug)).setVisibility(View.VISIBLE);
+        }
 		//End of user code
     }
     
@@ -72,6 +81,15 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
      */
     public void refreshScreenData() {
     	//Start of user code action when refreshing the screen Home_CustomViewActivity
+
+        ParametersUtils paramUtil = new ParametersUtils(this);
+        if(paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
+            // debug is set to true we can show some stuff here
+            StringBuilder sb = new StringBuilder();
+            sb.append("- - Debug - -\n");
+            debugText(sb);
+            ((TextView) findViewById(R.id.home_debug_text)).setText(sb.toString());
+        }
 		//End of user code
 	}
 
@@ -102,6 +120,14 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 			default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void debugText(StringBuilder sb) {
+        sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");
+        sb.append("Table "+getHelper().getApplicationUsageStatsDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getApplicationUsageStatsDao().countOf()+"\n");
+
     }
 
 }

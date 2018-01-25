@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
 
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.content.Context;
 
 import android.util.Log;
@@ -95,7 +96,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 	private void requestPermission() {
 		Toast.makeText(this, "Need to request permission", Toast.LENGTH_SHORT).show();
-		startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+		startActivityForResult(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
 	}
 
 	private boolean hasPermission() {
