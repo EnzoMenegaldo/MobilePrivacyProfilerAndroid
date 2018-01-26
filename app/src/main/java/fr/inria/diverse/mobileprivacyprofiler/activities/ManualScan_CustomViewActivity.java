@@ -116,14 +116,6 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
      */
     public void refreshScreenData() {
     	//Start of user code action when refreshing the screen ManualScan_CustomViewActivity
-		StringBuilder sb = new StringBuilder();
-		sb.append("- - Debug - -\n");
-
-		((TextView) findViewById(R.id.manualscan_debug_text)).setText(sb.toString());
-
-		if (!hasPermission()){
-			requestPermission();
-		}
 		//End of user code
 	}
 

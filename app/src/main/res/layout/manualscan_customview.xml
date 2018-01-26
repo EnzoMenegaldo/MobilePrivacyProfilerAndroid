@@ -15,19 +15,7 @@
 		android:onClick="onClickBtnApplicationHistoryManualScan"
 		android:text="@string/manualscan_customview_applicationhistorylist_btn_label" />
 
-	<ScrollView
-		android:id="@+id/manualscan_debug"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_weight="3"
-		android:background="#404040">
 
-		<TextView
-			android:id="@+id/manualscan_debug_text"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:padding="3dip" />
-	</ScrollView>
 </LinearLayout>
 <!--End of user code
 -->

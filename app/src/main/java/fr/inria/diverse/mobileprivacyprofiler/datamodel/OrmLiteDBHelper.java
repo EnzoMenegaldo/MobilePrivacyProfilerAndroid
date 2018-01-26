@@ -8,6 +8,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.GSMCell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code protected additional OrmLiteDBHelper imports
 import com.j256.ormlite.table.TableUtils;
@@ -92,6 +93,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// private Dao<WebHistory, Integer> webHistoryDao = null;
 	private RuntimeExceptionDao<WebHistory, Integer> webHistoryRuntimeDao = null;
 	
+		private RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryRuntimeDao = null;
 		private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
 
 	public OrmLiteDBHelper(Context context) {
@@ -109,15 +111,23 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			Log.i(OrmLiteDBHelper.class.getName(), "onCreate");
 			TableUtils.createTable(connectionSource, ApplicationHistory.class);
 			TableUtils.createTable(connectionSource, ApplicationUsageStats.class);
+			TableUtils.createTable(connectionSource, BatteryUsage.class);
+			TableUtils.createTable(connectionSource, BluetoothDevice.class);
+			TableUtils.createTable(connectionSource, BluetoothLog.class);
 			TableUtils.createTable(connectionSource, CalendarEvent.class);
 			TableUtils.createTable(connectionSource, Contact.class);
 			TableUtils.createTable(connectionSource, ContactEmail.class);
 			TableUtils.createTable(connectionSource, ContactPhoneNumber.class);
 			TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
 			TableUtils.createTable(connectionSource, DetectedWifi.class);
+			TableUtils.createTable(connectionSource, DetectedWifi_AccessPoint.class);
 			TableUtils.createTable(connectionSource, Geolocation.class);
+			TableUtils.createTable(connectionSource, GSMCell.class);
 			TableUtils.createTable(connectionSource, Identity.class);
 			TableUtils.createTable(connectionSource, KnownWifi.class);
+			TableUtils.createTable(connectionSource, NeighboringCellHistory.class);
+			TableUtils.createTable(connectionSource, SMS.class);
+			TableUtils.createTable(connectionSource, WebHistory.class);
 			TableUtils.createTable(connectionSource, WifiAccessPoint.class);
 			TableUtils.createTable(connectionSource, MobilePrivacyProfilerDB_metadata.class);
 		} catch (SQLException e) {
@@ -125,16 +135,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			throw new RuntimeException(e);
 		}
 
-		// here we try inserting data in the on-create as a test
-		/*RuntimeExceptionDao<DiveEntry, Integer> dao = getSimpleDataDao();
-		long millis = System.currentTimeMillis();
-		// create some entries in the onCreate
-		DiveEntry simple = new DiveEntry(millis);
-		dao.create(simple);
-		simple = new DiveEntry(millis + 1);
-		dao.create(simple);
-		Log.i(ORMLiteDBHelper.class.getName(), "created new entries in onCreate: " + millis);
-		*/
 	// End of user code
 	}
 
@@ -149,15 +149,23 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			Log.i(OrmLiteDBHelper.class.getName(), "onUpgrade");
 			TableUtils.dropTable(connectionSource, ApplicationHistory.class, true);
 			TableUtils.dropTable(connectionSource, ApplicationUsageStats.class, true);
+			TableUtils.dropTable(connectionSource, BatteryUsage.class, true);
+			TableUtils.dropTable(connectionSource, BluetoothDevice.class, true);
+			TableUtils.dropTable(connectionSource, BluetoothLog.class, true);
 			TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
 			TableUtils.dropTable(connectionSource, Contact.class, true);
 			TableUtils.dropTable(connectionSource, ContactEmail.class, true);
 			TableUtils.dropTable(connectionSource, ContactPhoneNumber.class, true);
 			TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
 			TableUtils.dropTable(connectionSource, DetectedWifi.class, true);
+			TableUtils.dropTable(connectionSource, DetectedWifi_AccessPoint.class, true);
 			TableUtils.dropTable(connectionSource, Geolocation.class, true);
+			TableUtils.dropTable(connectionSource, GSMCell.class, true);
 			TableUtils.dropTable(connectionSource, Identity.class, true);
 			TableUtils.dropTable(connectionSource, KnownWifi.class, true);
+			TableUtils.dropTable(connectionSource, NeighboringCellHistory.class, true);
+			TableUtils.dropTable(connectionSource, SMS.class, true);
+			TableUtils.dropTable(connectionSource, WebHistory.class, true);
 			TableUtils.dropTable(connectionSource, WifiAccessPoint.class, true);
 			TableUtils.dropTable(connectionSource, MobilePrivacyProfilerDB_metadata.class, true);
 			// after we drop the old databases, we create the new ones
@@ -403,6 +411,16 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	
 	
 	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our GSMCell_NeighboringCellHistory class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> getGSMCell_NeighboringCellHistoryDao() {
+		if (gSMCell_NeighboringCellHistoryRuntimeDao == null) {
+			gSMCell_NeighboringCellHistoryRuntimeDao = getRuntimeExceptionDao(GSMCell_NeighboringCellHistory.class);
+		}
+		return gSMCell_NeighboringCellHistoryRuntimeDao;
+	}
+	/**
 	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our DetectedWifi_AccessPoint class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
@@ -441,6 +459,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		sMSRuntimeDao = null;
 		batteryUsageRuntimeDao = null;
 		webHistoryRuntimeDao = null;
+		gSMCell_NeighboringCellHistoryRuntimeDao = null;
 		detectedWifi_AccessPointRuntimeDao = null;
 	}
 
@@ -472,6 +491,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.sMSDao = getDao(SMS.class);
 			helper.batteryUsageDao = getDao(BatteryUsage.class);
 			helper.webHistoryDao = getDao(WebHistory.class);
+		helper.gSMCell_NeighboringCellHistoryDao = getDao(GSMCell_NeighboringCellHistory.class);
 		helper.detectedWifi_AccessPointDao = getDao(DetectedWifi_AccessPoint.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't get ", e);

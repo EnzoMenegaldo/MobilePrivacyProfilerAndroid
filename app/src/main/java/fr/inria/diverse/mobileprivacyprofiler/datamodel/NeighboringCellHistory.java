@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.GSMCell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for NeighboringCellHistory
 // End of user code
@@ -58,8 +59,33 @@ public class NeighboringCellHistory {
 	
 
 	/** observed cells at that date */ 
-	@ForeignCollectionField(eager = false)
-	protected ForeignCollection<GSMCell> cells;
+	// work in progress, find association 
+	// Association many to many GSMCell_NeighboringCellHistory
+	@ForeignCollectionField(eager = false, foreignFieldName = "neighboringCellHistory")	
+	protected ForeignCollection<GSMCell_NeighboringCellHistory> gSMCell_NeighboringCellHistory;
+
+	/** observed cells at that date 
+	  * Attention, returned list is readonly
+      */
+	public List<GSMCell> getCells(){
+		List<GSMCell> result = new ArrayList<GSMCell>();
+		
+		for (GSMCell_NeighboringCellHistory aGSMCell_NeighboringCellHistory : gSMCell_NeighboringCellHistory) {
+			if(_contextDB != null) aGSMCell_NeighboringCellHistory.setContextDB(_contextDB);
+			result.add(aGSMCell_NeighboringCellHistory.getGSMCell());
+		}
+		return result;
+	}
+	public void addGSMCell(GSMCell gSMCell){
+		try {
+			_contextDB.gSMCell_NeighboringCellHistoryDao.create(new GSMCell_NeighboringCellHistory( gSMCell, this));		
+		} catch (SQLException e) {
+			log.error("Pb while adding association gSMCell_NeighboringCellHistory",e);
+		}
+	}
+	// end work in progress 	
+
+				
 
 	// Start of user code NeighboringCellHistory additional user properties
 	// End of user code
@@ -98,10 +124,6 @@ public class NeighboringCellHistory {
 		this.strength = strength;
 	}
 
-	/** observed cells at that date */
-	public Collection<GSMCell> getCells() {
-		return this.cells;
-	}					
 
 
 

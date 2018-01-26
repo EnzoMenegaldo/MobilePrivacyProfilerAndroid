@@ -2,10 +2,8 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -19,6 +17,7 @@ import android.preference.PreferenceManager;
 //Start of user code additional imports Home_CustomViewActivity
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
+import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -75,6 +74,72 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		showToast( this.getString(R.string.applicationhistorylist_classlistview_launch_toast));
         startActivity(new Intent(this, ApplicationHistoryList_ClassListViewActivity.class));
     }
+
+    private void debugText(StringBuilder sb) {
+        sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getApplicationUsageStatsDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getApplicationUsageStatsDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getBatteryUsageDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getBatteryUsageDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getBluetoothDeviceDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getBluetoothDeviceDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getBluetoothLogDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getBluetoothLogDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getCalendarEventDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getCalendarEventDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getContactDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getContactDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getContactEmailDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getContactEmailDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getContactPhoneNumberDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getContactPhoneNumberDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getContactPhysicalAddressDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getContactPhysicalAddressDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getDetectedWifiDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getDetectedWifiDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getDetectedWifi_AccessPointDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getDetectedWifi_AccessPointDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getGeolocationDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getGeolocationDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getGSMCellDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getGSMCellDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getIdentityDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getIdentityDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getKnownWifiDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getKnownWifiDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getNeighboringCellHistoryDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getNeighboringCellHistoryDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getPhoneCallLogDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getPhoneCallLogDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getSMSDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getSMSDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getWebHistoryDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getWebHistoryDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
+
+    }
 	//End of user code
 
     /** refresh screen from data 
@@ -120,14 +185,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 			default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void debugText(StringBuilder sb) {
-        sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
-        sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");
-        sb.append("Table "+getHelper().getApplicationUsageStatsDao().getDataClass().getSimpleName());
-        sb.append(" count="+ getHelper().getApplicationUsageStatsDao().countOf()+"\n");
-
     }
 
 }

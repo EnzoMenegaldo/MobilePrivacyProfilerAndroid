@@ -243,6 +243,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_GSMCELL_CELLIDENTITY = "CELLIDENTITY";
 	public static final String DATAATT_GSMCELL_geolocation = "geolocation";
 	public static final String DATAATT_GSMCELL_GEOLOCATION = "GEOLOCATION";
+	public static final String DATAREF_GSMCELL_history = "history";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_date = "date";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_DATE = "DATE";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_strength = "strength";
@@ -1202,6 +1203,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
+					// TODO deal with ref history
 	        {
 	            skip(parser);
 	        }
@@ -1532,6 +1534,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 			detectedWifisToUpdate.add(self);
 		}
 	}
+	// class GSMCell_addHistory_RefCommand extends RefCommand{
 	// class NeighboringCellHistory_addCells_RefCommand extends RefCommand{
 	class BluetoothLog_setDevice_RefCommand extends RefCommand{
 		BluetoothLog self;

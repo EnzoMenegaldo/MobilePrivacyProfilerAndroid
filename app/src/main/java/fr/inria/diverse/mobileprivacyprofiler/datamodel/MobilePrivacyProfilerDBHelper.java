@@ -7,6 +7,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.GSMCell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
@@ -63,6 +64,8 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageDao;
 	public Dao<WebHistory, Integer> webHistoryDao;
 	//public RuntimeExceptionDao<WebHistory, Integer> webHistoryDao;
+	public Dao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryDao;
+	//public RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryDao;
 	public Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 	//public RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 
@@ -92,7 +95,8 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<SMS, Integer> sMSDao,
 		Dao<BatteryUsage, Integer> batteryUsageDao,
 		Dao<WebHistory, Integer> webHistoryDao,
-        Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao
+        Dao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryDao,
+		Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao
 	){
 		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
 		this.applicationHistoryDao = applicationHistoryDao;
@@ -115,6 +119,7 @@ public class MobilePrivacyProfilerDBHelper {
 		this.sMSDao = sMSDao;
 		this.batteryUsageDao = batteryUsageDao;
 		this.webHistoryDao = webHistoryDao;
+		this.gSMCell_NeighboringCellHistoryDao = gSMCell_NeighboringCellHistoryDao;
 		this.detectedWifi_AccessPointDao = detectedWifi_AccessPointDao;
 	}
 
