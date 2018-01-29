@@ -29,72 +29,53 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// End of user code
 
 
-	// the DAO object we use to access the diveBudies table
-	// private Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao = null;
+	// the DAO object we use to access the MobilePrivacyProfilerDB_metadata table
 	private RuntimeExceptionDao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<ApplicationHistory, Integer> applicationHistoryDao = null;
+	// the DAO object we use to access the ApplicationHistory table
 	private RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao = null;
+	// the DAO object we use to access the ApplicationUsageStats table
 	private RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<Identity, Integer> identityDao = null;
+	// the DAO object we use to access the Identity table
 	private RuntimeExceptionDao<Identity, Integer> identityRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<Contact, Integer> contactDao = null;
+	// the DAO object we use to access the Contact table
 	private RuntimeExceptionDao<Contact, Integer> contactRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao = null;
+	// the DAO object we use to access the ContactPhoneNumber table
 	private RuntimeExceptionDao<ContactPhoneNumber, Integer> contactPhoneNumberRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao = null;
+	// the DAO object we use to access the ContactPhysicalAddress table
 	private RuntimeExceptionDao<ContactPhysicalAddress, Integer> contactPhysicalAddressRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<ContactEmail, Integer> contactEmailDao = null;
+	// the DAO object we use to access the ContactEmail table
 	private RuntimeExceptionDao<ContactEmail, Integer> contactEmailRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<KnownWifi, Integer> knownWifiDao = null;
+	// the DAO object we use to access the KnownWifi table
 	private RuntimeExceptionDao<KnownWifi, Integer> knownWifiRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<WifiAccessPoint, Integer> wifiAccessPointDao = null;
+	// the DAO object we use to access the WifiAccessPoint table
 	private RuntimeExceptionDao<WifiAccessPoint, Integer> wifiAccessPointRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<DetectedWifi, Integer> detectedWifiDao = null;
+	// the DAO object we use to access the DetectedWifi table
 	private RuntimeExceptionDao<DetectedWifi, Integer> detectedWifiRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<Geolocation, Integer> geolocationDao = null;
+	// the DAO object we use to access the Geolocation table
 	private RuntimeExceptionDao<Geolocation, Integer> geolocationRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<CalendarEvent, Integer> calendarEventDao = null;
+	// the DAO object we use to access the CalendarEvent table
 	private RuntimeExceptionDao<CalendarEvent, Integer> calendarEventRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<PhoneCallLog, Integer> phoneCallLogDao = null;
+	// the DAO object we use to access the PhoneCallLog table
 	private RuntimeExceptionDao<PhoneCallLog, Integer> phoneCallLogRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<GSMCell, Integer> gSMCellDao = null;
+	// the DAO object we use to access the GSMCell table
 	private RuntimeExceptionDao<GSMCell, Integer> gSMCellRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<NeighboringCellHistory, Integer> neighboringCellHistoryDao = null;
+	// the DAO object we use to access the NeighboringCellHistory table
 	private RuntimeExceptionDao<NeighboringCellHistory, Integer> neighboringCellHistoryRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<BluetoothDevice, Integer> bluetoothDeviceDao = null;
+	// the DAO object we use to access the BluetoothDevice table
 	private RuntimeExceptionDao<BluetoothDevice, Integer> bluetoothDeviceRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<BluetoothLog, Integer> bluetoothLogDao = null;
+	// the DAO object we use to access the BluetoothLog table
 	private RuntimeExceptionDao<BluetoothLog, Integer> bluetoothLogRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<SMS, Integer> sMSDao = null;
+	// the DAO object we use to access the SMS table
 	private RuntimeExceptionDao<SMS, Integer> sMSRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<BatteryUsage, Integer> batteryUsageDao = null;
+	// the DAO object we use to access the BatteryUsage table
 	private RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageRuntimeDao = null;
-	// the DAO object we use to access the diveBudies table
-	// private Dao<WebHistory, Integer> webHistoryDao = null;
+	// the DAO object we use to access the WebHistory table
 	private RuntimeExceptionDao<WebHistory, Integer> webHistoryRuntimeDao = null;
 	
-		private RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryRuntimeDao = null;
-		private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
+	// the DAO object we use to access the GSMCell_NeighboringCellHistory table implemeting the association
+	private RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryRuntimeDao = null;
+	// the DAO object we use to access the DetectedWifi_AccessPoint table implemeting the association
+	private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
 
 	public OrmLiteDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -109,33 +90,37 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// Start of user code OrmLiteDBHelper onCreate MobilePrivacyProfiler
 		try {
 			Log.i(OrmLiteDBHelper.class.getName(), "onCreate");
-			TableUtils.createTable(connectionSource, ApplicationHistory.class);
-			TableUtils.createTable(connectionSource, ApplicationUsageStats.class);
-			TableUtils.createTable(connectionSource, BatteryUsage.class);
-			TableUtils.createTable(connectionSource, BluetoothDevice.class);
-			TableUtils.createTable(connectionSource, BluetoothLog.class);
-			TableUtils.createTable(connectionSource, CalendarEvent.class);
-			TableUtils.createTable(connectionSource, Contact.class);
-			TableUtils.createTable(connectionSource, ContactEmail.class);
-			TableUtils.createTable(connectionSource, ContactPhoneNumber.class);
-			TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
-			TableUtils.createTable(connectionSource, DetectedWifi.class);
-			TableUtils.createTable(connectionSource, DetectedWifi_AccessPoint.class);
-			TableUtils.createTable(connectionSource, Geolocation.class);
-			TableUtils.createTable(connectionSource, GSMCell.class);
-			TableUtils.createTable(connectionSource, Identity.class);
-			TableUtils.createTable(connectionSource, KnownWifi.class);
-			TableUtils.createTable(connectionSource, NeighboringCellHistory.class);
-			TableUtils.createTable(connectionSource, SMS.class);
-			TableUtils.createTable(connectionSource, WebHistory.class);
-			TableUtils.createTable(connectionSource, WifiAccessPoint.class);
-			TableUtils.createTable(connectionSource, MobilePrivacyProfilerDB_metadata.class);
+			createAllTables(db);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
 		}
-
 	// End of user code
+	}
+	public void createAllTables(SQLiteDatabase db)  throws SQLException {
+		TableUtils.createTable(connectionSource, MobilePrivacyProfilerDB_metadata.class);
+		TableUtils.createTable(connectionSource, ApplicationHistory.class);
+		TableUtils.createTable(connectionSource, ApplicationUsageStats.class);
+		TableUtils.createTable(connectionSource, Identity.class);
+		TableUtils.createTable(connectionSource, Contact.class);
+		TableUtils.createTable(connectionSource, ContactPhoneNumber.class);
+		TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
+		TableUtils.createTable(connectionSource, ContactEmail.class);
+		TableUtils.createTable(connectionSource, KnownWifi.class);
+		TableUtils.createTable(connectionSource, WifiAccessPoint.class);
+		TableUtils.createTable(connectionSource, DetectedWifi.class);
+		TableUtils.createTable(connectionSource, Geolocation.class);
+		TableUtils.createTable(connectionSource, CalendarEvent.class);
+		TableUtils.createTable(connectionSource, PhoneCallLog.class);
+		TableUtils.createTable(connectionSource, GSMCell.class);
+		TableUtils.createTable(connectionSource, NeighboringCellHistory.class);
+		TableUtils.createTable(connectionSource, BluetoothDevice.class);
+		TableUtils.createTable(connectionSource, BluetoothLog.class);
+		TableUtils.createTable(connectionSource, SMS.class);
+		TableUtils.createTable(connectionSource, BatteryUsage.class);
+		TableUtils.createTable(connectionSource, WebHistory.class);
+		TableUtils.createTable(connectionSource, GSMCell_NeighboringCellHistory.class);
+		TableUtils.createTable(connectionSource, DetectedWifi_AccessPoint.class);
 	}
 
 	/**
@@ -147,27 +132,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// Start of user code OrmLiteDBHelper onUpgrade MobilePrivacyProfiler
 		try {
 			Log.i(OrmLiteDBHelper.class.getName(), "onUpgrade");
-			TableUtils.dropTable(connectionSource, ApplicationHistory.class, true);
-			TableUtils.dropTable(connectionSource, ApplicationUsageStats.class, true);
-			TableUtils.dropTable(connectionSource, BatteryUsage.class, true);
-			TableUtils.dropTable(connectionSource, BluetoothDevice.class, true);
-			TableUtils.dropTable(connectionSource, BluetoothLog.class, true);
-			TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
-			TableUtils.dropTable(connectionSource, Contact.class, true);
-			TableUtils.dropTable(connectionSource, ContactEmail.class, true);
-			TableUtils.dropTable(connectionSource, ContactPhoneNumber.class, true);
-			TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
-			TableUtils.dropTable(connectionSource, DetectedWifi.class, true);
-			TableUtils.dropTable(connectionSource, DetectedWifi_AccessPoint.class, true);
-			TableUtils.dropTable(connectionSource, Geolocation.class, true);
-			TableUtils.dropTable(connectionSource, GSMCell.class, true);
-			TableUtils.dropTable(connectionSource, Identity.class, true);
-			TableUtils.dropTable(connectionSource, KnownWifi.class, true);
-			TableUtils.dropTable(connectionSource, NeighboringCellHistory.class, true);
-			TableUtils.dropTable(connectionSource, SMS.class, true);
-			TableUtils.dropTable(connectionSource, WebHistory.class, true);
-			TableUtils.dropTable(connectionSource, WifiAccessPoint.class, true);
-			TableUtils.dropTable(connectionSource, MobilePrivacyProfilerDB_metadata.class, true);
+			dropAllTables(db);
 			// after we drop the old databases, we create the new ones
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {
@@ -175,6 +140,31 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			throw new RuntimeException(e);
 		}
 	// End of user code
+	}
+	public void dropAllTables(SQLiteDatabase db)  throws SQLException {
+		TableUtils.dropTable(connectionSource, MobilePrivacyProfilerDB_metadata.class, true);
+		TableUtils.dropTable(connectionSource, ApplicationHistory.class, true);
+		TableUtils.dropTable(connectionSource, ApplicationUsageStats.class, true);
+		TableUtils.dropTable(connectionSource, Identity.class, true);
+		TableUtils.dropTable(connectionSource, Contact.class, true);
+		TableUtils.dropTable(connectionSource, ContactPhoneNumber.class, true);
+		TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
+		TableUtils.dropTable(connectionSource, ContactEmail.class, true);
+		TableUtils.dropTable(connectionSource, KnownWifi.class, true);
+		TableUtils.dropTable(connectionSource, WifiAccessPoint.class, true);
+		TableUtils.dropTable(connectionSource, DetectedWifi.class, true);
+		TableUtils.dropTable(connectionSource, Geolocation.class, true);
+		TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
+		TableUtils.dropTable(connectionSource, PhoneCallLog.class, true);
+		TableUtils.dropTable(connectionSource, GSMCell.class, true);
+		TableUtils.dropTable(connectionSource, NeighboringCellHistory.class, true);
+		TableUtils.dropTable(connectionSource, BluetoothDevice.class, true);
+		TableUtils.dropTable(connectionSource, BluetoothLog.class, true);
+		TableUtils.dropTable(connectionSource, SMS.class, true);
+		TableUtils.dropTable(connectionSource, BatteryUsage.class, true);
+		TableUtils.dropTable(connectionSource, WebHistory.class, true);
+		TableUtils.dropTable(connectionSource, GSMCell_NeighboringCellHistory.class, true);
+		TableUtils.dropTable(connectionSource, DetectedWifi_AccessPoint.class, true);
 	}
 
 	/**
