@@ -16,12 +16,16 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
+import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
@@ -155,16 +159,55 @@ public class ScanDeviceIntentService extends IntentService {
 
 
             UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
 
             Log.d(TAG,"got usageStatsManager "+usageStatsManager.toString());
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, -1);
-            long start = calendar.getTimeInMillis();
-            long end = System.currentTimeMillis();
-            Map<String, UsageStats> stats = usageStatsManager.queryAndAggregateUsageStats(start, end);
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            Calendar startDate = DateUtils.firstDayOfLastWeek(calendar);
+           // startDate.add(Calendar.MONTH, -1);
+            long start = startDate.getTimeInMillis();
+            long end = DateUtils.lastDayOfLastWeek(calendar).getTimeInMillis();
+            Log.d(TAG,"   Stat period required "+ DateUtils.printDate(start) +
+                    " - "+ DateUtils.printDate(end));
+            //Map<String, UsageStats> stats = usageStatsManager.queryAndAggregateUsageStats(start, end);
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY,start, end);
             Log.d(TAG,"usageStatsManager query returned "+stats.size()+" elements; hasPermission= "+hasPermission());
-            for(Map.Entry<String, UsageStats> appUsageStatsentry : stats.entrySet()){
-                Log.d(TAG,"stats for "+appUsageStatsentry.getValue().getPackageName());
+            for(UsageStats appUsageStatsentry : stats){
+                Log.d(TAG,"stats for "+appUsageStatsentry.getPackageName());
+                ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().
+                        queryApplicationHistoryByPackageName(appUsageStatsentry.getPackageName());
+                if(applicationHistory != null){
+                    // search for equivalent stat to update
+                    String statStartDate = DateUtils.printDate(appUsageStatsentry.getFirstTimeStamp());
+                    Log.d(TAG,"   stats for "+ statStartDate +
+                            " - "+ DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
+                    ApplicationUsageStats equivalentExistingStat = null;
+                    for (ApplicationUsageStats existingStat : applicationHistory.getUsageStats()){
+                         if(existingStat.getFirstTimeStamp().equals(statStartDate)) {
+                             equivalentExistingStat =  existingStat;
+                         }
+                    }
+                    if (equivalentExistingStat != null) {
+                        // update existing 
+                        Log.d(TAG,"   updating... ");
+                        equivalentExistingStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
+                        equivalentExistingStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
+                        equivalentExistingStat.setTotalTimeInForeground(""+appUsageStatsentry.getTotalTimeInForeground());
+                        getDBHelper().getApplicationUsageStatsDao().update(equivalentExistingStat);
+                    } else {
+                        // create new entry
+                        Log.d(TAG,"   creating new entry... ");
+                        ApplicationUsageStats appStat = new ApplicationUsageStats();
+                        appStat.setFirstTimeStamp(statStartDate);
+                        appStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
+                        appStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
+                        appStat.setTotalTimeInForeground(""+appUsageStatsentry.getTotalTimeInForeground());
+                        appStat.setApplication(applicationHistory);
+                        getDBHelper().getApplicationUsageStatsDao().create(appStat);
+                    }
+                }
             }
         }
     }

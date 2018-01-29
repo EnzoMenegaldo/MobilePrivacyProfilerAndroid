@@ -20,6 +20,7 @@ import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
 import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.content.Context;
 
 import android.util.Log;
@@ -41,6 +42,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 {
 	
 	//Start of user code constants Home_CustomViewActivity
+    private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
+    private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
 	//End of user code
 
 	/** Called when the activity is first created. */
@@ -59,6 +62,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         if (paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
             ((ScrollView) findViewById(R.id.home_debug)).setVisibility(View.VISIBLE);
         }
+        if (!hasPermission()){
+            requestPermission();
+        }
 		//End of user code
     }
     
@@ -75,7 +81,37 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         startActivity(new Intent(this, ApplicationHistoryList_ClassListViewActivity.class));
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Log.d("MainActivity", "resultCode " + resultCode);
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
+               // if (!hasPermission()){
+                    requestPermission();
+               // }
+                break;
+        }
+    }
+
+    private void requestPermission() {
+        Toast.makeText(this, "Need to grant App usage stat permission", Toast.LENGTH_SHORT).show();
+        startActivityForResult(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
+    }
+
+    private boolean hasPermission() {
+        AppOpsManager appOps = (AppOpsManager)
+                getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(), getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
+//        return ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;
+    }
+
     private void debugText(StringBuilder sb) {
+	    sb.append("Has usage access permission = "+hasPermission()+"\n");
+        sb.append(" - - - -\n");
         sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");
 

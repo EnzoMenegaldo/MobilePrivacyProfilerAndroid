@@ -46,7 +46,6 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 	//Start of user code constants ManualScan_CustomViewActivity
 	private static final String TAG = ManualScan_CustomViewActivity.class.getSimpleName();
 
-	private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
 	//End of user code
 
 	/** Called when the activity is first created. */
@@ -82,33 +81,6 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		ScanDeviceIntentService.startActionScanAppUsage(this);
 
     }
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		//Log.d("MainActivity", "resultCode " + resultCode);
-		switch (requestCode){
-			case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
-				if (!hasPermission()){
-					requestPermission();
-				}
-				break;
-		}
-	}
-
-	private void requestPermission() {
-		Toast.makeText(this, "Need to request permission", Toast.LENGTH_SHORT).show();
-		startActivityForResult(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
-	}
-
-	private boolean hasPermission() {
-		AppOpsManager appOps = (AppOpsManager)
-				getSystemService(Context.APP_OPS_SERVICE);
-		int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-				android.os.Process.myUid(), getPackageName());
-		return mode == AppOpsManager.MODE_ALLOWED;
-//        return ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;
-	}
-
 
 	//End of user code
 
