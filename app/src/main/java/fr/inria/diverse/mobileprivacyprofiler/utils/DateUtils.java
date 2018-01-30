@@ -31,6 +31,34 @@ public class DateUtils {
         }
     }
 
+    public static Calendar firstDayOfLastMonth(Calendar c)
+    {
+        c = (Calendar) c.clone();
+        // last month
+        c.add(Calendar.MONTH, -1);
+        // first day
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c;
+    }
+
+    public static Calendar lastDayOfLastMonth(Calendar c)
+    {
+        c = (Calendar) c.clone();
+        // first day of this month
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        // last day/milllis of previous month
+        c.add(Calendar.MILLISECOND, -1);
+        return c;
+    }
+
     public static Calendar firstDayOfLastWeek(Calendar c)
     {
         c = (Calendar) c.clone();
@@ -55,6 +83,31 @@ public class DateUtils {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         // last day/milllis of previous week
+        c.add(Calendar.MILLISECOND, -1);
+        return c;
+    }
+
+    public static Calendar yesterdayStart(Calendar c)
+    {
+        c = (Calendar) c.clone();
+        // yesterday
+        c.add(Calendar.DAY_OF_WEEK, -1);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c;
+    }
+
+    public static Calendar yesterdayEnd(Calendar c)
+    {
+        c = (Calendar) c.clone();
+        // today
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        // last milllis of yesterday
         c.add(Calendar.MILLISECOND, -1);
         return c;
     }

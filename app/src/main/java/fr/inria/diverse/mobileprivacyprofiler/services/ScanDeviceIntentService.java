@@ -154,25 +154,34 @@ public class ScanDeviceIntentService extends IntentService {
      */
     private void handleActionScanAppUsage() {
         Log.d(TAG,"handleActionScanAppUsage");
+        scanAppUsageForLastPeriod(UsageStatsManager.INTERVAL_WEEKLY);
+        scanAppUsageForLastPeriod(UsageStatsManager.INTERVAL_DAILY);
+    }
+
+    private void scanAppUsageForLastPeriod(int periodType) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-
-
             UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-
-
-            Log.d(TAG,"got usageStatsManager "+usageStatsManager.toString());
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            Calendar startDate = DateUtils.firstDayOfLastWeek(calendar);
-           // startDate.add(Calendar.MONTH, -1);
+            //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            Calendar startDate;
+            Calendar endDate;
+            switch (periodType) {
+                case UsageStatsManager.INTERVAL_WEEKLY:
+                    startDate = DateUtils.firstDayOfLastWeek(calendar);
+                    endDate = DateUtils.lastDayOfLastWeek(calendar);
+                break;
+                default: // default to daily period
+                    startDate = DateUtils.yesterdayStart(calendar);
+                    endDate = DateUtils.yesterdayEnd(calendar);
+                    break;
+            }
+
+            // startDate.add(Calendar.MONTH, -1);
             long start = startDate.getTimeInMillis();
-            long end = DateUtils.lastDayOfLastWeek(calendar).getTimeInMillis();
+            long end = endDate.getTimeInMillis();
             Log.d(TAG,"   Stat period required "+ DateUtils.printDate(start) +
                     " - "+ DateUtils.printDate(end));
-            //Map<String, UsageStats> stats = usageStatsManager.queryAndAggregateUsageStats(start, end);
-            List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY,start, end);
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType,start, end);
             Log.d(TAG,"usageStatsManager query returned "+stats.size()+" elements; hasPermission= "+hasPermission());
             for(UsageStats appUsageStatsentry : stats){
                 Log.d(TAG,"stats for "+appUsageStatsentry.getPackageName());
@@ -185,16 +194,17 @@ public class ScanDeviceIntentService extends IntentService {
                             " - "+ DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                     ApplicationUsageStats equivalentExistingStat = null;
                     for (ApplicationUsageStats existingStat : applicationHistory.getUsageStats()){
-                         if(existingStat.getFirstTimeStamp().equals(statStartDate)) {
-                             equivalentExistingStat =  existingStat;
-                         }
+                        if(existingStat.getRequestedInterval() ==  periodType &&
+                                existingStat.getFirstTimeStamp().equals(statStartDate)) {
+                            equivalentExistingStat =  existingStat;
+                        }
                     }
                     if (equivalentExistingStat != null) {
-                        // update existing 
+                        // update existing
                         Log.d(TAG,"   updating... ");
                         equivalentExistingStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                         equivalentExistingStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
-                        equivalentExistingStat.setTotalTimeInForeground(""+appUsageStatsentry.getTotalTimeInForeground());
+                        equivalentExistingStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
                         getDBHelper().getApplicationUsageStatsDao().update(equivalentExistingStat);
                     } else {
                         // create new entry
@@ -203,7 +213,8 @@ public class ScanDeviceIntentService extends IntentService {
                         appStat.setFirstTimeStamp(statStartDate);
                         appStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                         appStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
-                        appStat.setTotalTimeInForeground(""+appUsageStatsentry.getTotalTimeInForeground());
+                        appStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
+                        appStat.setRequestedInterval(periodType);
                         appStat.setApplication(applicationHistory);
                         getDBHelper().getApplicationUsageStatsDao().create(appStat);
                     }

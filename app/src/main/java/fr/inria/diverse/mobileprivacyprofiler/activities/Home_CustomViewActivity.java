@@ -87,15 +87,15 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         //Log.d("MainActivity", "resultCode " + resultCode);
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
-               // if (!hasPermission()){
+               if (!hasPermission()){
                     requestPermission();
-               // }
+                }
                 break;
         }
     }
 
     private void requestPermission() {
-        Toast.makeText(this, "Need to grant App usage stat permission", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please grant App usage stat permission to Mobiel Privacy Profiler", Toast.LENGTH_SHORT).show();
         startActivityForResult(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
     }
 

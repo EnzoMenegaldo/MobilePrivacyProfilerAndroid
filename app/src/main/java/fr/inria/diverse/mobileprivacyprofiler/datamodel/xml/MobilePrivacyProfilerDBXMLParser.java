@@ -152,6 +152,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_APPLICATIONUSAGESTATS_FIRSTTIMESTAMP = "FIRSTTIMESTAMP";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_lastTimeStamp = "lastTimeStamp";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_LASTTIMESTAMP = "LASTTIMESTAMP";
+	public static final String DATAATT_APPLICATIONUSAGESTATS_requestedInterval = "requestedInterval";
+	public static final String DATAATT_APPLICATIONUSAGESTATS_REQUESTEDINTERVAL = "REQUESTEDINTERVAL";
 	public static final String DATAREF_APPLICATIONUSAGESTATS_application = "application";
 	public static final String DATAATT_IDENTITY_provider = "provider";
 	public static final String DATAATT_IDENTITY_PROVIDER = "PROVIDER";
@@ -875,10 +877,11 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2ApplicationUsageStats.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setTotalTimeInForeground(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_totalTimeInForeground));
+		// TODO totalTimeInForeground = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_TOTALTIMEINFOREGROUND);
 		result.setLastTimeUsed(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_lastTimeUsed));
 		result.setFirstTimeStamp(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_firstTimeStamp));
 		result.setLastTimeStamp(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_lastTimeStamp));
+		// TODO requestedInterval = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_REQUESTEDINTERVAL);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;

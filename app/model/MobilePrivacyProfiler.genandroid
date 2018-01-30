@@ -11,10 +11,11 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationUsageStats">
       <dataReferences name="application" lowerbound="1" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.1"/>
-      <dataAttributes name="totalTimeInForeground" type="//@dataModel/@dataClasses.22"/>
+      <dataAttributes name="totalTimeInForeground" documentation="Get the total time this package spent in the foreground, measured in milliseconds. " type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="lastTimeUsed" type="//@dataModel/@dataClasses.22"/>
       <dataAttributes name="firstTimeStamp" documentation="Get the beginning of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.22"/>
       <dataAttributes name="lastTimeStamp" documentation="Get the end of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.22"/>
+      <dataAttributes name="requestedInterval" documentation="Daily, weekly, monthly, yearly as defined in https://developer.android.com/reference/android/app/usage/UsageStatsManager.html" type="//@dataModel/@dataClasses.21"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Identity" documentation="Identity known on the device">
       <dataAttributes name="provider" documentation="Service or web site that provides this identity" type="//@dataModel/@dataClasses.22"/>
