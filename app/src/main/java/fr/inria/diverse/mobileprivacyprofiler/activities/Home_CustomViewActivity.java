@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -34,7 +35,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Set;
+
 //End of user code
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Home_CustomViewActivity
@@ -65,6 +75,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         if (!hasPermission()){
             requestPermission();
         }
+        JobManager.create(this.getApplicationContext());
 		//End of user code
     }
     
@@ -110,7 +121,16 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     }
 
     private void debugText(StringBuilder sb) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 	    sb.append("Has usage access permission = "+hasPermission()+"\n");
+        sb.append(" - - - -\n");
+
+        sb.append("Running Job status:\n");
+        Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequests();
+        for (JobRequest jr : jobRequests ) {
+            sb.append("  "+jr.getTag()+"("+jr.getJobId()+") IntervalMs="+jr.getIntervalMs()+
+                    ",  ScheduledAt="+ dateFormat.format(new Date(jr.getScheduledAt()))+"\n");
+        }
         sb.append(" - - - -\n");
         sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");

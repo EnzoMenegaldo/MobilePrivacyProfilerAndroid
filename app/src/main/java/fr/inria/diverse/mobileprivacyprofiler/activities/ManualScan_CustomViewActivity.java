@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -33,6 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.evernote.android.job.JobRequest;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanDeviceIntentService;
@@ -79,7 +81,16 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_month_app_usage));
 		ScanDeviceIntentService.startActionScanAppUsage(this);
-
+/*
+		new JobRequest.Builder(ScanAppUsageJob.TAG)
+				.startNow()
+				//.setRequiresBatteryNotLow(true)
+				//.setRequiresStorageNotLow(true)
+				//.setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
+				//.setRequiresCharging(true)
+				//.setRequirementsEnforced(true)
+				.build()
+				.schedule();*/
     }
 
 	//End of user code
