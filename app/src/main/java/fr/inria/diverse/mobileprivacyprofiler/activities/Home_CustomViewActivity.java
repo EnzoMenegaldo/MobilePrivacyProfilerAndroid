@@ -2,9 +2,9 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -123,14 +123,19 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     private void debugText(StringBuilder sb) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 	    sb.append("Has usage access permission = "+hasPermission()+"\n");
-        sb.append(" - - - -\n");
 
-        sb.append("Running Job status:\n");
+        sb.append(" - - Running Job status: - -\n");
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequests();
         for (JobRequest jr : jobRequests ) {
             sb.append("  "+jr.getTag()+"("+jr.getJobId()+") IntervalMs="+jr.getIntervalMs()+
                     ",  ScheduledAt="+ dateFormat.format(new Date(jr.getScheduledAt()))+"\n");
         }
+
+        sb.append(" - - last bg task run - -\n");
+        MobilePrivacyProfilerDB_metadata metadata = getHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        sb.append("ScanInstalledApp: "+(metadata.getLastScanInstalledApplications()!=null ? dateFormat.format(metadata.getLastScanInstalledApplications()):"never")+"\n");
+        sb.append("ScanAppUsage: "+(metadata.getLastScanAppUsage()!=null ? dateFormat.format(metadata.getLastScanAppUsage()):"never")+"\n");
+
         sb.append(" - - - -\n");
         sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");

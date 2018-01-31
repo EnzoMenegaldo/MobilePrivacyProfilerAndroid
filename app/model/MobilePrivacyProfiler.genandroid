@@ -2,7 +2,9 @@
 <genandroid:AndroidProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:genandroid="http://genandroid/1.0" name="MobilePrivacyProfiler" packagePrefix="fr.inria.diverse.mobileprivacyprofiler">
   <dataModel name="MobilePrivacyProfilerDB">
     <dataClasses xsi:type="genandroid:DataClass" name="MobilePrivacyProfilerDB_metadata" documentation="données complémentaires sur la base de donnée">
-      <dataAttributes name="lastTransmissionDate" type="//@dataModel/@dataClasses.22"/>
+      <dataAttributes name="lastTransmissionDate" type="//@dataModel/@dataClasses.25"/>
+      <dataAttributes name="lastScanInstalledApplications" type="//@dataModel/@dataClasses.25"/>
+      <dataAttributes name="lastScanAppUsage" type="//@dataModel/@dataClasses.25"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
       <dataReferences name="usageStats" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.2"/>

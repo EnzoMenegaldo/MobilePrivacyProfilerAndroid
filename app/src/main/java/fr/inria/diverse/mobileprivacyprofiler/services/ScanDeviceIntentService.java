@@ -18,12 +18,14 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
@@ -123,7 +125,10 @@ public class ScanDeviceIntentService extends IntentService {
      * parameters.
      */
     private void handleActionScanInstalledApplications() {
-
+        // store in DB the last scan date
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        metadata.setLastScanInstalledApplications(new Date());
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
         // get list of installed applications
         // https://stackoverflow.com/questions/2695746/how-to-get-a-list-of-installed-android-applications-and-pick-one-to-run
         final PackageManager pm = getPackageManager();
@@ -154,6 +159,11 @@ public class ScanDeviceIntentService extends IntentService {
      */
     private void handleActionScanAppUsage() {
         Log.d(TAG,"handleActionScanAppUsage");
+        // store in DB the last scan date
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        metadata.setLastScanAppUsage(new Date());
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        // do the work for both weekly and daily data
         scanAppUsageForLastPeriod(UsageStatsManager.INTERVAL_WEEKLY);
         scanAppUsageForLastPeriod(UsageStatsManager.INTERVAL_DAILY);
     }

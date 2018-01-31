@@ -1,6 +1,7 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -163,6 +164,27 @@ public class MobilePrivacyProfilerDBHelper {
 			Log.e(TAG,"error while querying application with packageName "+packageName+ " in the base", e);
 		}
 		return null;
+	}
+
+	/**
+	 * On the device this table contains a single entry
+	 * @return
+	 */
+	public MobilePrivacyProfilerDB_metadata getDeviceDBMetadata() {
+		MobilePrivacyProfilerDB_metadata metadata;
+		CloseableIterator<MobilePrivacyProfilerDB_metadata> it = this.mobilePrivacyProfilerDB_metadataDao.iterator();
+		if(it.hasNext()){
+			metadata = it.next();
+			it.closeQuietly();
+		} else {
+			metadata = new MobilePrivacyProfilerDB_metadata();
+			try {
+				this.mobilePrivacyProfilerDB_metadataDao.create(metadata);
+			} catch (SQLException e) {
+				Log.e(TAG,"error while creating MobilePrivacyProfilerDB_metadata", e);
+			}
+		}
+		return metadata;
 	}
 	//End of user code
 
