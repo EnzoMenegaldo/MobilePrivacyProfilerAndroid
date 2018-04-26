@@ -1,5 +1,6 @@
 package fr.inria.diverse.mobileprivacyprofiler.services;
 
+import android.Manifest;
 import android.app.AppOpsManager;
 import android.app.IntentService;
 import android.app.usage.UsageStats;
@@ -9,9 +10,21 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
+import android.provider.Telephony;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.CellInfo;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+
+import android.os.Parcelable;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -25,8 +38,10 @@ import java.util.Map;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
@@ -45,7 +60,10 @@ public class ScanDeviceIntentService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SCAN_INSTALLED_APPLICATIONS = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_INSTALLED_APPLICATIONS";
-    private static final String ACTION_SCAN_APP_USAGE ="fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_APP_USAGE";
+    private static final String ACTION_SCAN_APP_USAGE = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_APP_USAGE";
+    private static final String ACTION_SCAN_BATTERY_USAGE = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_BATTERY_USAGE";
+    private static final String ACTION_SCAN_CELL_INFO = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_NEAR_CELL_INFO";
+    private static final String ACTION_SCAN_SMS = "fr.inria.diverse.mobileprivacyprofiler.services.action.SMS_SCAN";
     private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.services.action.BAZ";
 
     // TODO: Rename parameters
@@ -86,6 +104,42 @@ public class ScanDeviceIntentService extends IntentService {
     }
 
     /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanBatteryUsage(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction(ACTION_SCAN_BATTERY_USAGE);
+        context.startService(intent);
+    }
+
+    /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanSms(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction(ACTION_SCAN_SMS);
+        context.startService(intent);
+    }
+
+    /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanCellInfo(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction(ACTION_SCAN_CELL_INFO);
+        context.startService(intent);
+    }
+
+    /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
@@ -110,6 +164,12 @@ public class ScanDeviceIntentService extends IntentService {
                 handleActionScanInstalledApplications();
             } else if (ACTION_SCAN_APP_USAGE.equals(action)) {
                 handleActionScanAppUsage();
+            } else if (ACTION_SCAN_BATTERY_USAGE.equals(action)) {
+                handleActionScanBatteryUsage(intent);
+            } else if (ACTION_SCAN_SMS.equals(action)) {
+                handleActionScanSms();
+            } else if (ACTION_SCAN_CELL_INFO.equals(this,action)) {
+                handleActionScanCellInfo(intent);
             } else if (ACTION_BAZ.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
@@ -117,7 +177,6 @@ public class ScanDeviceIntentService extends IntentService {
             }
         }
     }
-
 
 
     /**
@@ -142,7 +201,7 @@ public class ScanDeviceIntentService extends IntentService {
             Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
             Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
             ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByPackageName(packageInfo.packageName);
-            if(applicationHistory == null){
+            if (applicationHistory == null) {
                 // create
                 applicationHistory = new ApplicationHistory(appName, packageInfo.packageName);
                 getDBHelper().getApplicationHistoryDao().create(applicationHistory);
@@ -158,7 +217,7 @@ public class ScanDeviceIntentService extends IntentService {
      * https://medium.com/@quiro91/show-app-usage-with-usagestatsmanager-d47294537dab
      */
     private void handleActionScanAppUsage() {
-        Log.d(TAG,"handleActionScanAppUsage");
+        Log.d(TAG, "handleActionScanAppUsage");
         // store in DB the last scan date
         MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         metadata.setLastScanAppUsage(new Date());
@@ -179,7 +238,7 @@ public class ScanDeviceIntentService extends IntentService {
                 case UsageStatsManager.INTERVAL_WEEKLY:
                     startDate = DateUtils.firstDayOfLastWeek(calendar);
                     endDate = DateUtils.lastDayOfLastWeek(calendar);
-                break;
+                    break;
                 default: // default to daily period
                     startDate = DateUtils.yesterdayStart(calendar);
                     endDate = DateUtils.yesterdayEnd(calendar);
@@ -189,36 +248,36 @@ public class ScanDeviceIntentService extends IntentService {
             // startDate.add(Calendar.MONTH, -1);
             long start = startDate.getTimeInMillis();
             long end = endDate.getTimeInMillis();
-            Log.d(TAG,"   Stat period required "+ DateUtils.printDate(start) +
-                    " - "+ DateUtils.printDate(end));
-            List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType,start, end);
-            Log.d(TAG,"usageStatsManager query returned "+stats.size()+" elements; hasPermission= "+hasPermission());
-            for(UsageStats appUsageStatsentry : stats){
-                Log.d(TAG,"stats for "+appUsageStatsentry.getPackageName());
+            Log.d(TAG, "   Stat period required " + DateUtils.printDate(start) +
+                    " - " + DateUtils.printDate(end));
+            List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType, start, end);
+            Log.d(TAG, "usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + hasPermission());
+            for (UsageStats appUsageStatsentry : stats) {
+                Log.d(TAG, "stats for " + appUsageStatsentry.getPackageName());
                 ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().
                         queryApplicationHistoryByPackageName(appUsageStatsentry.getPackageName());
-                if(applicationHistory != null){
+                if (applicationHistory != null) {
                     // search for equivalent stat to update
                     String statStartDate = DateUtils.printDate(appUsageStatsentry.getFirstTimeStamp());
-                    Log.d(TAG,"   stats for "+ statStartDate +
-                            " - "+ DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
+                    Log.d(TAG, "   stats for " + statStartDate +
+                            " - " + DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                     ApplicationUsageStats equivalentExistingStat = null;
-                    for (ApplicationUsageStats existingStat : applicationHistory.getUsageStats()){
-                        if(existingStat.getRequestedInterval() ==  periodType &&
+                    for (ApplicationUsageStats existingStat : applicationHistory.getUsageStats()) {
+                        if (existingStat.getRequestedInterval() == periodType &&
                                 existingStat.getFirstTimeStamp().equals(statStartDate)) {
-                            equivalentExistingStat =  existingStat;
+                            equivalentExistingStat = existingStat;
                         }
                     }
                     if (equivalentExistingStat != null) {
                         // update existing
-                        Log.d(TAG,"   updating... ");
+                        Log.d(TAG, "   updating... ");
                         equivalentExistingStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                         equivalentExistingStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
                         equivalentExistingStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
                         getDBHelper().getApplicationUsageStatsDao().update(equivalentExistingStat);
                     } else {
                         // create new entry
-                        Log.d(TAG,"   creating new entry... ");
+                        Log.d(TAG, "   creating new entry... ");
                         ApplicationUsageStats appStat = new ApplicationUsageStats();
                         appStat.setFirstTimeStamp(statStartDate);
                         appStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
@@ -234,9 +293,126 @@ public class ScanDeviceIntentService extends IntentService {
     }
 
     /**
-     * Handle action Baz in the provided background thread with the provided
+     * Handle action ScanBatteryUsage in the provided background thread with the provided
      * parameters.
      */
+
+    private void handleActionScanBatteryUsage(Intent intent) {
+
+        //entry date
+        String time = new Date().toString();
+
+        //connexion check
+        int chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
+        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+        boolean wireLessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+        String plugType = "";
+
+        Boolean isPlugged;
+
+        if (usbCharge) {
+            isPlugged = true;
+            plugType = "BATTERY_PLUGGED_USB";
+        } else if (acCharge) {
+            isPlugged = true;
+            plugType = "BATTERY_PLUGGED_AC";
+        } else if (wireLessCharge) {
+            isPlugged = true;
+            plugType = "BATTERY_PLUGGED_WIRELESS";
+        } else {
+            isPlugged = false;
+            plugType = "BATTERY_NOT_PLUGGED";
+        }
+
+        //get the battery lvl
+        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        float batteryPct = (level / (float) scale) * 100f;
+        Integer batteryLvl = new Integer((int) batteryPct);
+
+        //new entry in DB
+        Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl
+                + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
+        //TODO
+        // BatteryUsage batState = new BatteryUsage(time, batteryLvl,isPlugged, plugType);
+        // getDBHelper().getBatteryUsageDao().create(batState);
+    }
+
+
+    /**
+     * Handle action ScanSms in the provided background thread with the provided
+     * parameters.
+     */
+
+    private void handleActionScanSms() {/*
+        //list sms sources
+        String[] sources ={"content://sms/inbox","content://sms/sent"};
+        //get the last update if it exist(else expecting = null)
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        Date lastScan = metadata.getLastSmsScan();
+
+        String displayLastScan;
+        if(null==lastScan){displayLastScan="none";}else{displayLastScan=lastScan.toString();}
+        Log.d(TAG,"   Starting new SmsScan : time of last scan "+ displayLastScan);
+
+        //fetch sms from each sources
+        for(String source:sources) {
+            Cursor cursor=null;
+            Uri mSmsQueryUri = Uri.parse(source);
+            String columns[] = new String[]{"person", "address", "body", "date", "status"};
+            //if not 1st scan
+            if(null!=lastScan) {
+                Log.d(TAG,"Fetching messages up to last scan");
+                String lastScanString=""+lastScan.getTime();
+                 String[] arguments={lastScanString};
+                 cursor = getContentResolver().query(mSmsQueryUri, columns, "date > ?", arguments, null);
+            }
+            //if 1st scan
+            else{
+                Log.d(TAG,"Fetching all messages");
+                cursor = getContentResolver().query(mSmsQueryUri, columns, null, null, null);
+            }
+            while(cursor.moveToNext()) {
+                String date = cursor.getString(3);
+                String phoneNumber = cursor.getString(1);
+                String type = cursor.getString(4);
+                SMS sms = new SMS(date, phoneNumber, type);
+                getDBHelper().getSMSDao().create(sms);
+            }
+        }
+        Log.d(TAG,"Updating last SMS scan");
+        metadata.setLastSmsScan(new Date());
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+*/
+    }
+
+    /**
+     * Handle action ScanCellInfo in the provided background thread with the provided
+     * parameters.
+     */
+    private void handleActionScanCellInfo(Intent intent) {
+        // TODO
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();
+
+    }
+
+        /**
+         * Handle action Baz in the provided background thread with the provided
+         * parameters.
+         */
     private void handleActionBaz(String param1, String param2) {
         // TODO: Handle action Baz
         throw new UnsupportedOperationException("Not yet implemented");
@@ -256,4 +432,7 @@ public class ScanDeviceIntentService extends IntentService {
                 android.os.Process.myUid(), getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
     }
+
+
+
 }

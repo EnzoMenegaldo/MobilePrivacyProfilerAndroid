@@ -76,10 +76,16 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_installed_applications));
 		ScanDeviceIntentService.startActionScanInstalledApplications(this);
+
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_month_app_usage));
 		ScanDeviceIntentService.startActionScanAppUsage(this);
+
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_battery));
+		ScanDeviceIntentService.startActionScanBatteryUsage(this);
 /*
 		new JobRequest.Builder(ScanAppUsageJob.TAG)
 				.startNow()

@@ -66,6 +66,7 @@ public class BatteryUsage {
 	
 
 	// Start of user code BatteryUsage additional user properties
+
 	// End of user code
 	
 	public BatteryUsage() {} // needed by ormlite

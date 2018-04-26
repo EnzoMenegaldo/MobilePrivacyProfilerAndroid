@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
@@ -186,6 +187,23 @@ public class MobilePrivacyProfilerDBHelper {
 		}
 		return metadata;
 	}
+	/**
+	 * Get the last battery entry
+	 * @return last BatteryUsage
+	 */
+	public BatteryUsage getLastBatteryUsage () {
+		//TODO
+		/* PreparedQuery<BatteryUsage> queryLastBatteryUsage;
+		BatteryUsage lastBatteryUsage=null;
+
+		queryLastBatteryUsage=
+
+		lastBatteryUsage=this.queryForFirst(queryLastBatteryUsage);
+		//Query for and return the first item in the object table which matches the PreparedQuery.
+*/
+		return null;
+	}
+
 	//End of user code
 
 }

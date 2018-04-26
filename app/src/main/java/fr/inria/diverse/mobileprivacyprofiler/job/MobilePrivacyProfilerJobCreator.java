@@ -8,6 +8,7 @@ import com.evernote.android.job.JobCreator;
 
 /**
  * Created by dvojtise on 30/01/18.
+ * Edit by gohier   on 24/04/18.
  */
 
 public class MobilePrivacyProfilerJobCreator implements JobCreator {
@@ -18,6 +19,8 @@ public class MobilePrivacyProfilerJobCreator implements JobCreator {
         switch (tag) {
             case ScanAppUsageJob.TAG:
                 return new ScanAppUsageJob();
+            case ScanBatteryJob.TAG:
+                return new ScanBatteryJob();
             default:
                 return null;
         }
