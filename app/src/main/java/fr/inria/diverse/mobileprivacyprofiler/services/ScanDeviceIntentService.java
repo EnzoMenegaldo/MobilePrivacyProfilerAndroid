@@ -44,9 +44,13 @@ import java.util.Map;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.OtherCell;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.OtherCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
@@ -306,7 +310,7 @@ public class ScanDeviceIntentService extends IntentService {
     private void handleActionScanBatteryUsage(Intent intent) {
 
         //entry date
-        String time = new Date().toString();
+        Date time = new Date();
 
         //connexion check
         int chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
@@ -462,22 +466,22 @@ public class ScanDeviceIntentService extends IntentService {
                         CdmaCellData cdmaCellData = new CdmaCellData();
                         cdmaCellData.setLongitude(longitude);
                         cdmaCellData.setLatitude(latitude);
-                        cdmaCellData.setCell(newCell);
+                        cdmaCellData.setIdentity(newCell);
                         getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
                     }
                     else{
-                        OtherCellData otherCellData = new OtherCellData();
-                        otherCellData.setLacTac(lacTac);
-                        otherCellData.setType(cellType);
-                        otherCellData.setCell(newCell);
-                        getDBHelper().getOtherCellDataDao().create(otherCellData);
+                        OtherCellData otherCell = new OtherCellData();
+                        otherCell.setLacTac(lacTac);
+                        otherCell.setType(cellType);
+                        otherCell.setIdentity(newCell);
+                        getDBHelper().getOtherCellDataDao().create(otherCell);
                     }
                 }
                 Log.d(TAG,"New Cell history :"+strength+" dBm, "+date.toString());
                 NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
                 neighboringCellHistory.setStrength(strength);
                 neighboringCellHistory.setDate(date);
-                neighboringCellHistory.setCell(cell);
+                neighboringCellHistory.setCells(cell);
                 getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
             }
         }//end of cell scanning

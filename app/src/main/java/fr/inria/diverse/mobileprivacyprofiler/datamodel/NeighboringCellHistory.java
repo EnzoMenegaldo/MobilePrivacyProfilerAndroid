@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.Cell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for NeighboringCellHistory
 // End of user code
@@ -49,6 +48,7 @@ public class NeighboringCellHistory {
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
+	public boolean cells_mayNeedDBRefresh = true;
 	
 
 	@DatabaseField
@@ -59,6 +59,8 @@ public class NeighboringCellHistory {
 	
 
 	/** observed cells at that date */ 
+	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	protected Cell cells;
 
 	// Start of user code NeighboringCellHistory additional user properties
 	// End of user code
@@ -97,6 +99,24 @@ public class NeighboringCellHistory {
 		this.strength = strength;
 	}
 
+	/** observed cells at that date */ 
+	public Cell getCells() {
+		try {
+			if(cells_mayNeedDBRefresh && _contextDB != null){
+				_contextDB.cellDao.refresh(this.cells);
+				cells_mayNeedDBRefresh = false;
+			}
+		} catch (SQLException e) {
+			log.error(e.getMessage(),e);
+		}
+		if(_contextDB==null && this.cells == null){
+			log.warn("NeighboringCellHistory may not be properly refreshed from DB (_id="+_id+")");
+		}
+		return this.cells;
+	}
+	public void setCells(Cell cells) {
+		this.cells = cells;
+	}			
 
 
 

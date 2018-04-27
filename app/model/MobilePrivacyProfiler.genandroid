@@ -96,10 +96,10 @@
       <dataReferences name="otherPosition" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.15"/>
       <dataAttributes name="cellId" type="//@dataModel/@dataClasses.23"/>
     </dataClasses>
-    <dataClasses xsi:type="genandroid:DataClass" name="OtherCell">
+    <dataClasses xsi:type="genandroid:DataClass" name="OtherCellData">
       <dataReferences name="identity" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.14"/>
-      <dataAttributes/>
-      <dataAttributes/>
+      <dataAttributes name="lacTac" type="//@dataModel/@dataClasses.23"/>
+      <dataAttributes name="type" type="//@dataModel/@dataClasses.24"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="CdmaCellData">
       <dataReferences name="identity" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.14"/>
@@ -107,7 +107,7 @@
       <dataAttributes name="latitude" type="//@dataModel/@dataClasses.23"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="NeighboringCellHistory">
-      <dataReferences name="cells" documentation="observed cells at that date" upperBound="-1" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.14"/>
+      <dataReferences name="cells" documentation="observed cells at that date" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.14"/>
       <dataAttributes name="date" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="strength" type="//@dataModel/@dataClasses.23"/>
     </dataClasses>
@@ -145,7 +145,7 @@
     <dataClasses xsi:type="genandroid:NativeDataClass" name="Long" instanceClassName="long"/>
     <dataAssociations name="ApplicationHistory_ApplicationUsageStats" references="//@dataModel/@dataClasses.1/@dataReferences.0 //@dataModel/@dataClasses.2/@dataReferences.0"/>
     <dataAssociations name="Cell_CdmaCellData" references="//@dataModel/@dataClasses.14/@dataReferences.0 //@dataModel/@dataClasses.16/@dataReferences.0 //@dataModel/@dataClasses.14/@dataReferences.1"/>
-    <dataAssociations name="Cell_OtherCell" references="//@dataModel/@dataClasses.14/@dataReferences.2 //@dataModel/@dataClasses.15/@dataReferences.0"/>
+    <dataAssociations name="Cell_OtherCellData" references="//@dataModel/@dataClasses.14/@dataReferences.2 //@dataModel/@dataClasses.15/@dataReferences.0"/>
     <dataAssociations name="Cell_NeighboringCellHistory" references="//@dataModel/@dataClasses.17/@dataReferences.0"/>
     <dataAssociations name="Contact_PhoneNumber" references="//@dataModel/@dataClasses.4/@dataReferences.0 //@dataModel/@dataClasses.5/@dataReferences.0"/>
     <dataAssociations name="Contact_PhysicalAddress" references="//@dataModel/@dataClasses.6/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.1"/>

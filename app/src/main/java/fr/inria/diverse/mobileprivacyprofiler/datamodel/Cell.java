@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.Cell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for Cell
 // End of user code
@@ -65,7 +64,7 @@ public class Cell {
 	protected CdmaCellData cdmaposition;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected OtherCell otherPosition;
+	protected OtherCellData otherPosition;
 
 	// Start of user code Cell additional user properties
 	// End of user code
@@ -117,10 +116,10 @@ public class Cell {
 	public void setCdmaposition(CdmaCellData cdmaposition) {
 		this.cdmaposition = cdmaposition;
 	}			
-	public OtherCell getOtherPosition() {
+	public OtherCellData getOtherPosition() {
 		try {
 			if(otherPosition_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.otherCellDao.refresh(this.otherPosition);
+				_contextDB.otherCellDataDao.refresh(this.otherPosition);
 				otherPosition_mayNeedDBRefresh = false;
 			}
 		} catch (SQLException e) {
@@ -131,7 +130,7 @@ public class Cell {
 		}
 		return this.otherPosition;
 	}
-	public void setOtherPosition(OtherCell otherPosition) {
+	public void setOtherPosition(OtherCellData otherPosition) {
 		this.otherPosition = otherPosition;
 	}			
 

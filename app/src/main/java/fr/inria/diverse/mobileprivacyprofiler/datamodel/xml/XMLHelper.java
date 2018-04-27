@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xmlpull.v1.XmlPullParserException;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.Cell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.*;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.xml.MobilePrivacyProfilerDBXMLParser.RefCommand;
@@ -268,19 +267,19 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</CELLS>\n");
-		sb.append("\n\t<OTHERCELLS>");
+		sb.append("\n\t<OTHERCELLDATAS>");
 		try {	
-			List<OtherCell> otherCells = dbContext.otherCellDao.queryForAll();
-			for(OtherCell  otherCell : otherCells){
+			List<OtherCellData> otherCellDatas = dbContext.otherCellDataDao.queryForAll();
+			for(OtherCellData  otherCellData : otherCellDatas){
 				// TODO find if contained by another element, if not put it there
 					sb.append("\n");
-					sb.append(otherCell.toXML("\t\t", dbContext));
+					sb.append(otherCellData.toXML("\t\t", dbContext));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sb.append("\n\t</OTHERCELLS>\n");
+		sb.append("\n\t</OTHERCELLDATAS>\n");
 		sb.append("\n\t<CDMACELLDATAS>");
 		try {	
 			List<CdmaCellData> cdmaCellDatas = dbContext.cdmaCellDataDao.queryForAll();
@@ -510,12 +509,12 @@ public class XMLHelper {
 					log.error("cannot create Cell "+e.getMessage(),e);
 				}
 			}
-			log.info("starting creation of OtherCell...");
-			for(OtherCell otherCell : parser.otherCells){
+			log.info("starting creation of OtherCellData...");
+			for(OtherCellData otherCellData : parser.otherCellDatas){
 				try {
-					dbContext.otherCellDao.create(otherCell);
+					dbContext.otherCellDataDao.create(otherCellData);
 				} catch (SQLException e) {
-					log.error("cannot create OtherCell "+e.getMessage(),e);
+					log.error("cannot create OtherCellData "+e.getMessage(),e);
 				}
 			}
 			log.info("starting creation of CdmaCellData...");
@@ -701,12 +700,12 @@ public class XMLHelper {
 					log.error("cannot update Cell "+e.getMessage(),e);
 				}
 			}
-			log.info("starting update DB of OtherCell...");
-			for(OtherCell elem : parser.otherCellsToUpdate){
+			log.info("starting update DB of OtherCellData...");
+			for(OtherCellData elem : parser.otherCellDatasToUpdate){
 				try {
-					dbContext.otherCellDao.update(elem);
+					dbContext.otherCellDataDao.update(elem);
 				} catch (SQLException e) {
-					log.error("cannot update OtherCell "+e.getMessage(),e);
+					log.error("cannot update OtherCellData "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of CdmaCellData...");

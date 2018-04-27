@@ -42,7 +42,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
 	List<PhoneCallLog> phoneCallLogs = new ArrayList<PhoneCallLog>();
 	List<Cell> cells = new ArrayList<Cell>();
-	List<OtherCell> otherCells = new ArrayList<OtherCell>();
+	List<OtherCellData> otherCellDatas = new ArrayList<OtherCellData>();
 	List<CdmaCellData> cdmaCellDatas = new ArrayList<CdmaCellData>();
 	List<NeighboringCellHistory> neighboringCellHistorys = new ArrayList<NeighboringCellHistory>();
 	List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
@@ -65,7 +65,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Set<CalendarEvent> calendarEventsToUpdate = new HashSet<CalendarEvent>();
 	Set<PhoneCallLog> phoneCallLogsToUpdate = new HashSet<PhoneCallLog>();
 	Set<Cell> cellsToUpdate = new HashSet<Cell>();
-	Set<OtherCell> otherCellsToUpdate = new HashSet<OtherCell>();
+	Set<OtherCellData> otherCellDatasToUpdate = new HashSet<OtherCellData>();
 	Set<CdmaCellData> cdmaCellDatasToUpdate = new HashSet<CdmaCellData>();
 	Set<NeighboringCellHistory> neighboringCellHistorysToUpdate = new HashSet<NeighboringCellHistory>();
 	Set<BluetoothDevice> bluetoothDevicesToUpdate = new HashSet<BluetoothDevice>();
@@ -88,7 +88,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, CalendarEvent> xmlId2CalendarEvent = new Hashtable<String, CalendarEvent>();
 	Hashtable<String, PhoneCallLog> xmlId2PhoneCallLog = new Hashtable<String, PhoneCallLog>();
 	Hashtable<String, Cell> xmlId2Cell = new Hashtable<String, Cell>();
-	Hashtable<String, OtherCell> xmlId2OtherCell = new Hashtable<String, OtherCell>();
+	Hashtable<String, OtherCellData> xmlId2OtherCellData = new Hashtable<String, OtherCellData>();
 	Hashtable<String, CdmaCellData> xmlId2CdmaCellData = new Hashtable<String, CdmaCellData>();
 	Hashtable<String, NeighboringCellHistory> xmlId2NeighboringCellHistory = new Hashtable<String, NeighboringCellHistory>();
 	Hashtable<String, BluetoothDevice> xmlId2BluetoothDevice = new Hashtable<String, BluetoothDevice>();
@@ -130,8 +130,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATACLASSIFIER_PHONECALLLOG  = "PHONECALLLOG";
 	public static final String DATACLASSIFIER_CELLS = "CELLS";
 	public static final String DATACLASSIFIER_CELL  = "CELL";
-	public static final String DATACLASSIFIER_OTHERCELLS = "OTHERCELLS";
-	public static final String DATACLASSIFIER_OTHERCELL  = "OTHERCELL";
+	public static final String DATACLASSIFIER_OTHERCELLDATAS = "OTHERCELLDATAS";
+	public static final String DATACLASSIFIER_OTHERCELLDATA  = "OTHERCELLDATA";
 	public static final String DATACLASSIFIER_CDMACELLDATAS = "CDMACELLDATAS";
 	public static final String DATACLASSIFIER_CDMACELLDATA  = "CDMACELLDATA";
 	public static final String DATACLASSIFIER_NEIGHBORINGCELLHISTORYS = "NEIGHBORINGCELLHISTORYS";
@@ -262,11 +262,11 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAREF_CELL_history = "history";
 	public static final String DATAREF_CELL_cdmaposition = "cdmaposition";
 	public static final String DATAREF_CELL_otherPosition = "otherPosition";
-	public static final String DATAATT_OTHERCELL_ = "";
-	public static final String DATAATT_OTHERCELL_invalid = "invalid";
-	public static final String DATAATT_OTHERCELL_ = "";
-	public static final String DATAATT_OTHERCELL_invalid = "invalid";
-	public static final String DATAREF_OTHERCELL_identity = "identity";
+	public static final String DATAATT_OTHERCELLDATA_lacTac = "lacTac";
+	public static final String DATAATT_OTHERCELLDATA_LACTAC = "LACTAC";
+	public static final String DATAATT_OTHERCELLDATA_type = "type";
+	public static final String DATAATT_OTHERCELLDATA_TYPE = "TYPE";
+	public static final String DATAREF_OTHERCELLDATA_identity = "identity";
 	public static final String DATAATT_CDMACELLDATA_longitude = "longitude";
 	public static final String DATAATT_CDMACELLDATA_LONGITUDE = "LONGITUDE";
 	public static final String DATAATT_CDMACELLDATA_latitude = "latitude";
@@ -397,9 +397,9 @@ public class MobilePrivacyProfilerDBXMLParser {
 				cells = readCells(parser,DATACLASSIFIER_CELLS);
 	            // cells.addAll(readCells(parser,DATACLASSIFIER_CELLS));
 	        } else 
-		 	if (name.equals(DATACLASSIFIER_OTHERCELLS)) {
-				otherCells = readOtherCells(parser,DATACLASSIFIER_OTHERCELLS);
-	            // otherCells.addAll(readOtherCells(parser,DATACLASSIFIER_OTHERCELLS));
+		 	if (name.equals(DATACLASSIFIER_OTHERCELLDATAS)) {
+				otherCellDatas = readOtherCellDatas(parser,DATACLASSIFIER_OTHERCELLDATAS);
+	            // otherCellDatas.addAll(readOtherCellDatas(parser,DATACLASSIFIER_OTHERCELLDATAS));
 	        } else 
 		 	if (name.equals(DATACLASSIFIER_CDMACELLDATAS)) {
 				cdmaCellDatas = readCdmaCellDatas(parser,DATACLASSIFIER_CDMACELLDATAS);
@@ -737,18 +737,18 @@ public class MobilePrivacyProfilerDBXMLParser {
 		return entries;
 	}
 	/**
-     * parser for a group of OtherCell
+     * parser for a group of OtherCellData
      */
-	List<OtherCell> readOtherCells(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
-		ArrayList<OtherCell> entries = new ArrayList<OtherCell>();
+	List<OtherCellData> readOtherCellDatas(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<OtherCellData> entries = new ArrayList<OtherCellData>();
 		parser.require(XmlPullParser.START_TAG, ns, containingTag);
 	    while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        String name = parser.getName();
-			if (name.equals(DATACLASSIFIER_OTHERCELL)) {
-	            entries.add(readOtherCell(parser));
+			if (name.equals(DATACLASSIFIER_OTHERCELLDATA)) {
+	            entries.add(readOtherCellData(parser));
 	        } else {
 	            skip(parser);
 	        }
@@ -1302,23 +1302,25 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		return result;
 	}
-	OtherCell readOtherCell(XmlPullParser parser)  throws XmlPullParserException, IOException{
-		OtherCell result = new OtherCell();
+	OtherCellData readOtherCellData(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		OtherCellData result = new OtherCellData();
 
-		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_OTHERCELL);
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_OTHERCELLDATA);
     	String currentTagName = parser.getName();
     			
-    	xmlId2OtherCell.put(parser.getAttributeValue(null, ID_STRING),result);		
+    	xmlId2OtherCellData.put(parser.getAttributeValue(null, ID_STRING),result);		
+		// TODO lacTac = parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_LACTAC);
+		result.setType(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_type));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_OTHERCELL_identity)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_OTHERCELL_identity);
+			if (currentTagName.equals(DATAREF_OTHERCELLDATA_identity)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_OTHERCELLDATA_identity);
 	            String id = readText(parser);
-				refCommands.add(new OtherCell_setIdentity_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_OTHERCELL_identity);	    
+				refCommands.add(new OtherCellData_setIdentity_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_OTHERCELLDATA_identity);	    
 	        } else
 	        {
 	            skip(parser);
@@ -1368,7 +1370,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-					// TODO deal with ref cells
+			if (currentTagName.equals(DATAREF_NEIGHBORINGCELLHISTORY_cells)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_NEIGHBORINGCELLHISTORY_cells);
+	            String id = readText(parser);
+				refCommands.add(new NeighboringCellHistory_setCells_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_NEIGHBORINGCELLHISTORY_cells);	    
+	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1712,16 +1719,16 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		@Override
 		public void run() {
-			self.setOtherPosition(parser.xmlId2OtherCell.get(referencedElementID));
+			self.setOtherPosition(parser.xmlId2OtherCellData.get(referencedElementID));
 			cellsToUpdate.add(self);
 		}
 	}
-	class OtherCell_setIdentity_RefCommand extends RefCommand{
-		OtherCell self;
+	class OtherCellData_setIdentity_RefCommand extends RefCommand{
+		OtherCellData self;
 		String referencedElementID;
 		MobilePrivacyProfilerDBXMLParser parser;
 		
-		public OtherCell_setIdentity_RefCommand(OtherCell self,
+		public OtherCellData_setIdentity_RefCommand(OtherCellData self,
 				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
 			super();
 			this.self = self;
@@ -1732,7 +1739,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		@Override
 		public void run() {
 			self.setIdentity(parser.xmlId2Cell.get(referencedElementID));
-			otherCellsToUpdate.add(self);
+			otherCellDatasToUpdate.add(self);
 		}
 	}
 	class CdmaCellData_setIdentity_RefCommand extends RefCommand{
@@ -1754,7 +1761,25 @@ public class MobilePrivacyProfilerDBXMLParser {
 			cdmaCellDatasToUpdate.add(self);
 		}
 	}
-	// class NeighboringCellHistory_addCells_RefCommand extends RefCommand{
+	class NeighboringCellHistory_setCells_RefCommand extends RefCommand{
+		NeighboringCellHistory self;
+		String referencedElementID;
+		MobilePrivacyProfilerDBXMLParser parser;
+		
+		public NeighboringCellHistory_setCells_RefCommand(NeighboringCellHistory self,
+				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+			super();
+			this.self = self;
+			this.referencedElementID = referencedElementID;
+			this.parser = parser;
+		}
+
+		@Override
+		public void run() {
+			self.setCells(parser.xmlId2Cell.get(referencedElementID));
+			neighboringCellHistorysToUpdate.add(self);
+		}
+	}
 	class BluetoothLog_setDevice_RefCommand extends RefCommand{
 		BluetoothLog self;
 		String referencedElementID;
