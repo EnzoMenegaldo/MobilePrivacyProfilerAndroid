@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="/home/src-reloc/agohier/git/mobile-privacy-profiler-android" />
+            <option value="/home/src-reloc/agohier/git/mobile-privacy-profiler-android/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -5,6 +5,7 @@
       <dataAttributes name="lastTransmissionDate" type="//@dataModel/@dataClasses.25"/>
       <dataAttributes name="lastScanInstalledApplications" type="//@dataModel/@dataClasses.25"/>
       <dataAttributes name="lastScanAppUsage" type="//@dataModel/@dataClasses.25"/>
+      <dataAttributes name="lastSmsScan" type="//@dataModel/@dataClasses.25"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
       <dataReferences name="usageStats" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.2"/>

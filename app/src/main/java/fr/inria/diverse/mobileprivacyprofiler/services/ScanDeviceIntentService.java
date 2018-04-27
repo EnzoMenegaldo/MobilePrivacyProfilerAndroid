@@ -1,6 +1,7 @@
 package fr.inria.diverse.mobileprivacyprofiler.services;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
 import android.app.IntentService;
 import android.app.usage.UsageStats;
@@ -18,6 +19,10 @@ import android.provider.Telephony;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
+import android.telephony.CellInfoCdma;
+import android.telephony.CellInfoGsm;
+import android.telephony.CellInfoLte;
+import android.telephony.CellInfoWcdma;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -40,6 +45,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
@@ -168,7 +174,7 @@ public class ScanDeviceIntentService extends IntentService {
                 handleActionScanBatteryUsage(intent);
             } else if (ACTION_SCAN_SMS.equals(action)) {
                 handleActionScanSms();
-            } else if (ACTION_SCAN_CELL_INFO.equals(this,action)) {
+            } else if (ACTION_SCAN_CELL_INFO.equals(action)) {
                 handleActionScanCellInfo(intent);
             } else if (ACTION_BAZ.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
@@ -309,19 +315,19 @@ public class ScanDeviceIntentService extends IntentService {
         boolean wireLessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
         String plugType = "";
 
-        Boolean isPlugged;
+        int isPlugged;
 
         if (usbCharge) {
-            isPlugged = true;
+            isPlugged = 1;
             plugType = "BATTERY_PLUGGED_USB";
         } else if (acCharge) {
-            isPlugged = true;
+            isPlugged = 1;
             plugType = "BATTERY_PLUGGED_AC";
         } else if (wireLessCharge) {
-            isPlugged = true;
+            isPlugged = 1;
             plugType = "BATTERY_PLUGGED_WIRELESS";
         } else {
-            isPlugged = false;
+            isPlugged = 0;
             plugType = "BATTERY_NOT_PLUGGED";
         }
 
@@ -335,9 +341,9 @@ public class ScanDeviceIntentService extends IntentService {
         //new entry in DB
         Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl
                 + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
-        //TODO
-        // BatteryUsage batState = new BatteryUsage(time, batteryLvl,isPlugged, plugType);
-        // getDBHelper().getBatteryUsageDao().create(batState);
+
+        BatteryUsage batState = new BatteryUsage(time, batteryLvl,isPlugged, plugType);
+        getDBHelper().getBatteryUsageDao().create(batState);
     }
 
 
@@ -346,7 +352,7 @@ public class ScanDeviceIntentService extends IntentService {
      * parameters.
      */
 
-    private void handleActionScanSms() {/*
+    private void handleActionScanSms() {
         //list sms sources
         String[] sources ={"content://sms/inbox","content://sms/sent"};
         //get the last update if it exist(else expecting = null)
@@ -385,27 +391,96 @@ public class ScanDeviceIntentService extends IntentService {
         Log.d(TAG,"Updating last SMS scan");
         metadata.setLastSmsScan(new Date());
         getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
-*/
     }
 
     /**
      * Handle action ScanCellInfo in the provided background thread with the provided
      * parameters.
      */
+    @SuppressLint("MissingPermission")
     private void handleActionScanCellInfo(Intent intent) {
-        // TODO
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
+
+        //set up the manager
+        Log.d(TAG,"Requesting CellInfo");
         TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();
+        List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();// get a collection of the cells of the neighborhood
+        Log.d(TAG,"Finding "+cellInfos.size()+" cells");
+        //setting up args to fill DAOs
+        String  cellType    = "";
+        Date    date        = new Date();
+        Integer cellId      = null;
+        Integer longitude   = null;
+        Integer latitude    = null;
+        Integer lacTac        = null;
+        Integer strength     = 0;
+
+        boolean isCell=false;
+        //dealing with datas to add
+        for(CellInfo cellInfo:cellInfos){ // fetching info depending of the cell type
+            if (cellInfo instanceof CellInfoCdma) {
+                isCell=true;
+                CellInfoCdma cell =(CellInfoCdma) cellInfo;
+                cellType = "Cdma";
+                cellId = cell.getCellIdentity().getBasestationId();
+                longitude = cell.getCellIdentity().getLongitude();
+                latitude = cell.getCellIdentity().getLatitude();
+                strength = cell.getCellSignalStrength().getDbm();
+            }
+            if (cellInfo instanceof CellInfoGsm) {
+                isCell=true;
+                CellInfoGsm cell = (CellInfoGsm) cellInfo;
+                cellType = "Gsm";
+                cellId = cell.getCellIdentity().getCid();
+                lacTac = cell.getCellIdentity().getLac();
+                strength = cell.getCellSignalStrength().getDbm();
+            }
+            if (cellInfo instanceof CellInfoLte) {
+                isCell=true;
+                CellInfoLte cell =  (CellInfoLte) cellInfo;
+                cellType = "Lte";
+                cellId = cell.getCellIdentity().getCi();
+                lacTac = cell.getCellIdentity().getTac();
+                strength = cell.getCellSignalStrength().getDbm();
+            }
+            if (cellInfo instanceof CellInfoWcdma) {
+                isCell=true;
+                CellInfoWcdma cell = (CellInfoWcdma) cellInfo;
+                cellType = "Wcdma";
+                cellId = cell.getCellIdentity().getCid();
+                lacTac = cell.getCellIdentity().getLac();
+                strength = cell.getCellSignalStrength().getDbm();
+            }
+            if(isCell) {//isCell true if the cell as been recognised
+                Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
+                if(null==cell){// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
+                    Log.d(TAG,"Adding a new "+cellType+" Cell");
+                    Cell newCell = new Cell();
+                    newCell.setCellId(cellId);
+                    getDBHelper().getCellDao().create(newCell);
+                    cell=newCell;
+                    if("Cdma"==cellType){
+                        CdmaCellData cdmaCellData = new CdmaCellData();
+                        cdmaCellData.setLongitude(longitude);
+                        cdmaCellData.setLatitude(latitude);
+                        cdmaCellData.setCell(newCell);
+                        getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
+                    }
+                    else{
+                        OtherCellData otherCellData = new OtherCellData();
+                        otherCellData.setLacTac(lacTac);
+                        otherCellData.setType(cellType);
+                        otherCellData.setCell(newCell);
+                        getDBHelper().getOtherCellDataDao().create(otherCellData);
+                    }
+                }
+                Log.d(TAG,"New Cell history :"+strength+" dBm, "+date.toString());
+                NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
+                neighboringCellHistory.setStrength(strength);
+                neighboringCellHistory.setDate(date);
+                neighboringCellHistory.setCell(cell);
+                getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
+            }
+        }//end of cell scanning
 
     }
 

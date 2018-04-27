@@ -143,6 +143,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANINSTALLEDAPPLICATIONS = "LASTSCANINSTALLEDAPPLICATIONS";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastScanAppUsage = "lastScanAppUsage";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANAPPUSAGE = "LASTSCANAPPUSAGE";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastSmsScan = "lastSmsScan";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSMSSCAN = "LASTSMSSCAN";
 	public static final String DATAATT_APPLICATIONHISTORY_appName = "appName";
 	public static final String DATAATT_APPLICATIONHISTORY_APPNAME = "APPNAME";
 	public static final String DATAATT_APPLICATIONHISTORY_packageName = "packageName";
@@ -837,6 +839,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		// TODO lastTransmissionDate = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTTRANSMISSIONDATE);
 		// TODO lastScanInstalledApplications = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANINSTALLEDAPPLICATIONS);
 		// TODO lastScanAppUsage = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANAPPUSAGE);
+		// TODO lastSmsScan = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSMSSCAN);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
