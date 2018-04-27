@@ -8,7 +8,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.GSMCell_NeighboringCellHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.Cell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code protected additional OrmLiteDBHelper imports
 import com.j256.ormlite.table.TableUtils;
@@ -57,8 +57,12 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	private RuntimeExceptionDao<CalendarEvent, Integer> calendarEventRuntimeDao = null;
 	// the DAO object we use to access the PhoneCallLog table
 	private RuntimeExceptionDao<PhoneCallLog, Integer> phoneCallLogRuntimeDao = null;
-	// the DAO object we use to access the GSMCell table
-	private RuntimeExceptionDao<GSMCell, Integer> gSMCellRuntimeDao = null;
+	// the DAO object we use to access the Cell table
+	private RuntimeExceptionDao<Cell, Integer> cellRuntimeDao = null;
+	// the DAO object we use to access the OtherCell table
+	private RuntimeExceptionDao<OtherCell, Integer> otherCellRuntimeDao = null;
+	// the DAO object we use to access the CdmaCellData table
+	private RuntimeExceptionDao<CdmaCellData, Integer> cdmaCellDataRuntimeDao = null;
 	// the DAO object we use to access the NeighboringCellHistory table
 	private RuntimeExceptionDao<NeighboringCellHistory, Integer> neighboringCellHistoryRuntimeDao = null;
 	// the DAO object we use to access the BluetoothDevice table
@@ -72,8 +76,8 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// the DAO object we use to access the WebHistory table
 	private RuntimeExceptionDao<WebHistory, Integer> webHistoryRuntimeDao = null;
 	
-	// the DAO object we use to access the GSMCell_NeighboringCellHistory table implemeting the association
-	private RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryRuntimeDao = null;
+	// the DAO object we use to access the Cell_NeighboringCellHistory table implemeting the association
+	private RuntimeExceptionDao<Cell_NeighboringCellHistory, Integer> cell_NeighboringCellHistoryRuntimeDao = null;
 	// the DAO object we use to access the DetectedWifi_AccessPoint table implemeting the association
 	private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
 
@@ -112,14 +116,16 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, Geolocation.class);
 		TableUtils.createTable(connectionSource, CalendarEvent.class);
 		TableUtils.createTable(connectionSource, PhoneCallLog.class);
-		TableUtils.createTable(connectionSource, GSMCell.class);
+		TableUtils.createTable(connectionSource, Cell.class);
+		TableUtils.createTable(connectionSource, OtherCell.class);
+		TableUtils.createTable(connectionSource, CdmaCellData.class);
 		TableUtils.createTable(connectionSource, NeighboringCellHistory.class);
 		TableUtils.createTable(connectionSource, BluetoothDevice.class);
 		TableUtils.createTable(connectionSource, BluetoothLog.class);
 		TableUtils.createTable(connectionSource, SMS.class);
 		TableUtils.createTable(connectionSource, BatteryUsage.class);
 		TableUtils.createTable(connectionSource, WebHistory.class);
-		TableUtils.createTable(connectionSource, GSMCell_NeighboringCellHistory.class);
+		TableUtils.createTable(connectionSource, Cell_NeighboringCellHistory.class);
 		TableUtils.createTable(connectionSource, DetectedWifi_AccessPoint.class);
 	}
 
@@ -156,14 +162,16 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, Geolocation.class, true);
 		TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
 		TableUtils.dropTable(connectionSource, PhoneCallLog.class, true);
-		TableUtils.dropTable(connectionSource, GSMCell.class, true);
+		TableUtils.dropTable(connectionSource, Cell.class, true);
+		TableUtils.dropTable(connectionSource, OtherCell.class, true);
+		TableUtils.dropTable(connectionSource, CdmaCellData.class, true);
 		TableUtils.dropTable(connectionSource, NeighboringCellHistory.class, true);
 		TableUtils.dropTable(connectionSource, BluetoothDevice.class, true);
 		TableUtils.dropTable(connectionSource, BluetoothLog.class, true);
 		TableUtils.dropTable(connectionSource, SMS.class, true);
 		TableUtils.dropTable(connectionSource, BatteryUsage.class, true);
 		TableUtils.dropTable(connectionSource, WebHistory.class, true);
-		TableUtils.dropTable(connectionSource, GSMCell_NeighboringCellHistory.class, true);
+		TableUtils.dropTable(connectionSource, Cell_NeighboringCellHistory.class, true);
 		TableUtils.dropTable(connectionSource, DetectedWifi_AccessPoint.class, true);
 	}
 
@@ -322,14 +330,36 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	}
 
 	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our GSMCell class. It will
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Cell class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<GSMCell, Integer> getGSMCellDao() {
-		if (gSMCellRuntimeDao == null) {
-			gSMCellRuntimeDao = getRuntimeExceptionDao(GSMCell.class);
+	public RuntimeExceptionDao<Cell, Integer> getCellDao() {
+		if (cellRuntimeDao == null) {
+			cellRuntimeDao = getRuntimeExceptionDao(Cell.class);
 		}
-		return gSMCellRuntimeDao;
+		return cellRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our OtherCell class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<OtherCell, Integer> getOtherCellDao() {
+		if (otherCellRuntimeDao == null) {
+			otherCellRuntimeDao = getRuntimeExceptionDao(OtherCell.class);
+		}
+		return otherCellRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our CdmaCellData class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<CdmaCellData, Integer> getCdmaCellDataDao() {
+		if (cdmaCellDataRuntimeDao == null) {
+			cdmaCellDataRuntimeDao = getRuntimeExceptionDao(CdmaCellData.class);
+		}
+		return cdmaCellDataRuntimeDao;
 	}
 
 	/**
@@ -401,14 +431,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	
 	
 	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our GSMCell_NeighboringCellHistory class. It will
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Cell_NeighboringCellHistory class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> getGSMCell_NeighboringCellHistoryDao() {
-		if (gSMCell_NeighboringCellHistoryRuntimeDao == null) {
-			gSMCell_NeighboringCellHistoryRuntimeDao = getRuntimeExceptionDao(GSMCell_NeighboringCellHistory.class);
+	public RuntimeExceptionDao<Cell_NeighboringCellHistory, Integer> getCell_NeighboringCellHistoryDao() {
+		if (cell_NeighboringCellHistoryRuntimeDao == null) {
+			cell_NeighboringCellHistoryRuntimeDao = getRuntimeExceptionDao(Cell_NeighboringCellHistory.class);
 		}
-		return gSMCell_NeighboringCellHistoryRuntimeDao;
+		return cell_NeighboringCellHistoryRuntimeDao;
 	}
 	/**
 	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our DetectedWifi_AccessPoint class. It will
@@ -442,14 +472,16 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		geolocationRuntimeDao = null;
 		calendarEventRuntimeDao = null;
 		phoneCallLogRuntimeDao = null;
-		gSMCellRuntimeDao = null;
+		cellRuntimeDao = null;
+		otherCellRuntimeDao = null;
+		cdmaCellDataRuntimeDao = null;
 		neighboringCellHistoryRuntimeDao = null;
 		bluetoothDeviceRuntimeDao = null;
 		bluetoothLogRuntimeDao = null;
 		sMSRuntimeDao = null;
 		batteryUsageRuntimeDao = null;
 		webHistoryRuntimeDao = null;
-		gSMCell_NeighboringCellHistoryRuntimeDao = null;
+		cell_NeighboringCellHistoryRuntimeDao = null;
 		detectedWifi_AccessPointRuntimeDao = null;
 	}
 
@@ -474,14 +506,16 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.geolocationDao = getDao(Geolocation.class);
 			helper.calendarEventDao = getDao(CalendarEvent.class);
 			helper.phoneCallLogDao = getDao(PhoneCallLog.class);
-			helper.gSMCellDao = getDao(GSMCell.class);
+			helper.cellDao = getDao(Cell.class);
+			helper.otherCellDao = getDao(OtherCell.class);
+			helper.cdmaCellDataDao = getDao(CdmaCellData.class);
 			helper.neighboringCellHistoryDao = getDao(NeighboringCellHistory.class);
 			helper.bluetoothDeviceDao = getDao(BluetoothDevice.class);
 			helper.bluetoothLogDao = getDao(BluetoothLog.class);
 			helper.sMSDao = getDao(SMS.class);
 			helper.batteryUsageDao = getDao(BatteryUsage.class);
 			helper.webHistoryDao = getDao(WebHistory.class);
-		helper.gSMCell_NeighboringCellHistoryDao = getDao(GSMCell_NeighboringCellHistory.class);
+		helper.cell_NeighboringCellHistoryDao = getDao(Cell_NeighboringCellHistory.class);
 		helper.detectedWifi_AccessPointDao = getDao(DetectedWifi_AccessPoint.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't get ", e);

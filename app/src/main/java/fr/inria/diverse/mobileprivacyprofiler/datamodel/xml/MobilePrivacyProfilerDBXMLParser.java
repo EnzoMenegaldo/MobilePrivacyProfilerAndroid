@@ -41,7 +41,9 @@ public class MobilePrivacyProfilerDBXMLParser {
 	List<Geolocation> geolocations = new ArrayList<Geolocation>();
 	List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
 	List<PhoneCallLog> phoneCallLogs = new ArrayList<PhoneCallLog>();
-	List<GSMCell> gSMCells = new ArrayList<GSMCell>();
+	List<Cell> cells = new ArrayList<Cell>();
+	List<OtherCell> otherCells = new ArrayList<OtherCell>();
+	List<CdmaCellData> cdmaCellDatas = new ArrayList<CdmaCellData>();
 	List<NeighboringCellHistory> neighboringCellHistorys = new ArrayList<NeighboringCellHistory>();
 	List<BluetoothDevice> bluetoothDevices = new ArrayList<BluetoothDevice>();
 	List<BluetoothLog> bluetoothLogs = new ArrayList<BluetoothLog>();
@@ -62,7 +64,9 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Set<Geolocation> geolocationsToUpdate = new HashSet<Geolocation>();
 	Set<CalendarEvent> calendarEventsToUpdate = new HashSet<CalendarEvent>();
 	Set<PhoneCallLog> phoneCallLogsToUpdate = new HashSet<PhoneCallLog>();
-	Set<GSMCell> gSMCellsToUpdate = new HashSet<GSMCell>();
+	Set<Cell> cellsToUpdate = new HashSet<Cell>();
+	Set<OtherCell> otherCellsToUpdate = new HashSet<OtherCell>();
+	Set<CdmaCellData> cdmaCellDatasToUpdate = new HashSet<CdmaCellData>();
 	Set<NeighboringCellHistory> neighboringCellHistorysToUpdate = new HashSet<NeighboringCellHistory>();
 	Set<BluetoothDevice> bluetoothDevicesToUpdate = new HashSet<BluetoothDevice>();
 	Set<BluetoothLog> bluetoothLogsToUpdate = new HashSet<BluetoothLog>();
@@ -83,7 +87,9 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, Geolocation> xmlId2Geolocation = new Hashtable<String, Geolocation>();
 	Hashtable<String, CalendarEvent> xmlId2CalendarEvent = new Hashtable<String, CalendarEvent>();
 	Hashtable<String, PhoneCallLog> xmlId2PhoneCallLog = new Hashtable<String, PhoneCallLog>();
-	Hashtable<String, GSMCell> xmlId2GSMCell = new Hashtable<String, GSMCell>();
+	Hashtable<String, Cell> xmlId2Cell = new Hashtable<String, Cell>();
+	Hashtable<String, OtherCell> xmlId2OtherCell = new Hashtable<String, OtherCell>();
+	Hashtable<String, CdmaCellData> xmlId2CdmaCellData = new Hashtable<String, CdmaCellData>();
 	Hashtable<String, NeighboringCellHistory> xmlId2NeighboringCellHistory = new Hashtable<String, NeighboringCellHistory>();
 	Hashtable<String, BluetoothDevice> xmlId2BluetoothDevice = new Hashtable<String, BluetoothDevice>();
 	Hashtable<String, BluetoothLog> xmlId2BluetoothLog = new Hashtable<String, BluetoothLog>();
@@ -122,8 +128,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATACLASSIFIER_CALENDAREVENT  = "CALENDAREVENT";
 	public static final String DATACLASSIFIER_PHONECALLLOGS = "PHONECALLLOGS";
 	public static final String DATACLASSIFIER_PHONECALLLOG  = "PHONECALLLOG";
-	public static final String DATACLASSIFIER_GSMCELLS = "GSMCELLS";
-	public static final String DATACLASSIFIER_GSMCELL  = "GSMCELL";
+	public static final String DATACLASSIFIER_CELLS = "CELLS";
+	public static final String DATACLASSIFIER_CELL  = "CELL";
+	public static final String DATACLASSIFIER_OTHERCELLS = "OTHERCELLS";
+	public static final String DATACLASSIFIER_OTHERCELL  = "OTHERCELL";
+	public static final String DATACLASSIFIER_CDMACELLDATAS = "CDMACELLDATAS";
+	public static final String DATACLASSIFIER_CDMACELLDATA  = "CDMACELLDATA";
 	public static final String DATACLASSIFIER_NEIGHBORINGCELLHISTORYS = "NEIGHBORINGCELLHISTORYS";
 	public static final String DATACLASSIFIER_NEIGHBORINGCELLHISTORY  = "NEIGHBORINGCELLHISTORY";
 	public static final String DATACLASSIFIER_BLUETOOTHDEVICES = "BLUETOOTHDEVICES";
@@ -247,11 +257,21 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_PHONECALLLOG_DURATION = "DURATION";
 	public static final String DATAATT_PHONECALLLOG_callType = "callType";
 	public static final String DATAATT_PHONECALLLOG_CALLTYPE = "CALLTYPE";
-	public static final String DATAATT_GSMCELL_cellIdentity = "cellIdentity";
-	public static final String DATAATT_GSMCELL_CELLIDENTITY = "CELLIDENTITY";
-	public static final String DATAATT_GSMCELL_geolocation = "geolocation";
-	public static final String DATAATT_GSMCELL_GEOLOCATION = "GEOLOCATION";
-	public static final String DATAREF_GSMCELL_history = "history";
+	public static final String DATAATT_CELL_cellId = "cellId";
+	public static final String DATAATT_CELL_CELLID = "CELLID";
+	public static final String DATAREF_CELL_history = "history";
+	public static final String DATAREF_CELL_cdmaposition = "cdmaposition";
+	public static final String DATAREF_CELL_otherPosition = "otherPosition";
+	public static final String DATAATT_OTHERCELL_ = "";
+	public static final String DATAATT_OTHERCELL_invalid = "invalid";
+	public static final String DATAATT_OTHERCELL_ = "";
+	public static final String DATAATT_OTHERCELL_invalid = "invalid";
+	public static final String DATAREF_OTHERCELL_identity = "identity";
+	public static final String DATAATT_CDMACELLDATA_longitude = "longitude";
+	public static final String DATAATT_CDMACELLDATA_LONGITUDE = "LONGITUDE";
+	public static final String DATAATT_CDMACELLDATA_latitude = "latitude";
+	public static final String DATAATT_CDMACELLDATA_LATITUDE = "LATITUDE";
+	public static final String DATAREF_CDMACELLDATA_identity = "identity";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_date = "date";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_DATE = "DATE";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_strength = "strength";
@@ -278,10 +298,10 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_BATTERYUSAGE_DATE = "DATE";
 	public static final String DATAATT_BATTERYUSAGE_level = "level";
 	public static final String DATAATT_BATTERYUSAGE_LEVEL = "LEVEL";
-	public static final String DATAATT_BATTERYUSAGE_isUsbPlugged = "isUsbPlugged";
-	public static final String DATAATT_BATTERYUSAGE_ISUSBPLUGGED = "ISUSBPLUGGED";
-	public static final String DATAATT_BATTERYUSAGE_isAccPlugged = "isAccPlugged";
-	public static final String DATAATT_BATTERYUSAGE_ISACCPLUGGED = "ISACCPLUGGED";
+	public static final String DATAATT_BATTERYUSAGE_isPugged = "isPugged";
+	public static final String DATAATT_BATTERYUSAGE_ISPUGGED = "ISPUGGED";
+	public static final String DATAATT_BATTERYUSAGE_plugType = "plugType";
+	public static final String DATAATT_BATTERYUSAGE_PLUGTYPE = "PLUGTYPE";
 	public static final String DATAATT_WEBHISTORY_url = "url";
 	public static final String DATAATT_WEBHISTORY_URL = "URL";
 	public static final String DATAATT_WEBHISTORY_date = "date";
@@ -373,9 +393,17 @@ public class MobilePrivacyProfilerDBXMLParser {
 				phoneCallLogs = readPhoneCallLogs(parser,DATACLASSIFIER_PHONECALLLOGS);
 	            // phoneCallLogs.addAll(readPhoneCallLogs(parser,DATACLASSIFIER_PHONECALLLOGS));
 	        } else 
-		 	if (name.equals(DATACLASSIFIER_GSMCELLS)) {
-				gSMCells = readGSMCells(parser,DATACLASSIFIER_GSMCELLS);
-	            // gSMCells.addAll(readGSMCells(parser,DATACLASSIFIER_GSMCELLS));
+		 	if (name.equals(DATACLASSIFIER_CELLS)) {
+				cells = readCells(parser,DATACLASSIFIER_CELLS);
+	            // cells.addAll(readCells(parser,DATACLASSIFIER_CELLS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_OTHERCELLS)) {
+				otherCells = readOtherCells(parser,DATACLASSIFIER_OTHERCELLS);
+	            // otherCells.addAll(readOtherCells(parser,DATACLASSIFIER_OTHERCELLS));
+	        } else 
+		 	if (name.equals(DATACLASSIFIER_CDMACELLDATAS)) {
+				cdmaCellDatas = readCdmaCellDatas(parser,DATACLASSIFIER_CDMACELLDATAS);
+	            // cdmaCellDatas.addAll(readCdmaCellDatas(parser,DATACLASSIFIER_CDMACELLDATAS));
 	        } else 
 		 	if (name.equals(DATACLASSIFIER_NEIGHBORINGCELLHISTORYS)) {
 				neighboringCellHistorys = readNeighboringCellHistorys(parser,DATACLASSIFIER_NEIGHBORINGCELLHISTORYS);
@@ -689,18 +717,58 @@ public class MobilePrivacyProfilerDBXMLParser {
 		return entries;
 	}
 	/**
-     * parser for a group of GSMCell
+     * parser for a group of Cell
      */
-	List<GSMCell> readGSMCells(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
-		ArrayList<GSMCell> entries = new ArrayList<GSMCell>();
+	List<Cell> readCells(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<Cell> entries = new ArrayList<Cell>();
 		parser.require(XmlPullParser.START_TAG, ns, containingTag);
 	    while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        String name = parser.getName();
-			if (name.equals(DATACLASSIFIER_GSMCELL)) {
-	            entries.add(readGSMCell(parser));
+			if (name.equals(DATACLASSIFIER_CELL)) {
+	            entries.add(readCell(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of OtherCell
+     */
+	List<OtherCell> readOtherCells(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<OtherCell> entries = new ArrayList<OtherCell>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_OTHERCELL)) {
+	            entries.add(readOtherCell(parser));
+	        } else {
+	            skip(parser);
+	        }
+	    }
+		entries.trimToSize();
+		return entries;
+	}
+	/**
+     * parser for a group of CdmaCellData
+     */
+	List<CdmaCellData> readCdmaCellDatas(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<CdmaCellData> entries = new ArrayList<CdmaCellData>();
+		parser.require(XmlPullParser.START_TAG, ns, containingTag);
+	    while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        String name = parser.getName();
+			if (name.equals(DATACLASSIFIER_CDMACELLDATA)) {
+	            entries.add(readCdmaCellData(parser));
 	        } else {
 	            skip(parser);
 	        }
@@ -1201,21 +1269,84 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		return result;
 	}
-	GSMCell readGSMCell(XmlPullParser parser)  throws XmlPullParserException, IOException{
-		GSMCell result = new GSMCell();
+	Cell readCell(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		Cell result = new Cell();
 
-		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_GSMCELL);
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_CELL);
     	String currentTagName = parser.getName();
     			
-    	xmlId2GSMCell.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setCellIdentity(parser.getAttributeValue(null, DATAATT_GSMCELL_cellIdentity));
-		result.setGeolocation(parser.getAttributeValue(null, DATAATT_GSMCELL_geolocation));
+    	xmlId2Cell.put(parser.getAttributeValue(null, ID_STRING),result);		
+		// TODO cellId = parser.getAttributeValue(null, DATAATT_CELL_CELLID);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
 					// TODO deal with ref history
+			if (currentTagName.equals(DATAREF_CELL_cdmaposition)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CELL_cdmaposition);
+	            String id = readText(parser);
+				refCommands.add(new Cell_setCdmaposition_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CELL_cdmaposition);	    
+	        } else
+			if (currentTagName.equals(DATAREF_CELL_otherPosition)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CELL_otherPosition);
+	            String id = readText(parser);
+				refCommands.add(new Cell_setOtherPosition_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CELL_otherPosition);	    
+	        } else
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	OtherCell readOtherCell(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		OtherCell result = new OtherCell();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_OTHERCELL);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2OtherCell.put(parser.getAttributeValue(null, ID_STRING),result);		
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+			if (currentTagName.equals(DATAREF_OTHERCELL_identity)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_OTHERCELL_identity);
+	            String id = readText(parser);
+				refCommands.add(new OtherCell_setIdentity_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_OTHERCELL_identity);	    
+	        } else
+	        {
+	            skip(parser);
+	        }
+	    }
+
+		return result;
+	}
+	CdmaCellData readCdmaCellData(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		CdmaCellData result = new CdmaCellData();
+
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_CDMACELLDATA);
+    	String currentTagName = parser.getName();
+    			
+    	xmlId2CdmaCellData.put(parser.getAttributeValue(null, ID_STRING),result);		
+		// TODO longitude = parser.getAttributeValue(null, DATAATT_CDMACELLDATA_LONGITUDE);
+		// TODO latitude = parser.getAttributeValue(null, DATAATT_CDMACELLDATA_LATITUDE);
+		while (parser.next() != XmlPullParser.END_TAG) {
+	        if (parser.getEventType() != XmlPullParser.START_TAG) {
+	            continue;
+	        }
+	        currentTagName = parser.getName();
+			if (currentTagName.equals(DATAREF_CDMACELLDATA_identity)) {	
+				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CDMACELLDATA_identity);
+	            String id = readText(parser);
+				refCommands.add(new CdmaCellData_setIdentity_RefCommand(result,id, this));
+				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CDMACELLDATA_identity);	    
+	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1230,7 +1361,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2NeighboringCellHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setDate(parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_date));
+		// TODO date = parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_DATE);
 		// TODO strength = parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_STRENGTH);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -1323,10 +1454,10 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2BatteryUsage.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setDate(parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_date));
+		// TODO date = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_DATE);
 		// TODO level = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_LEVEL);
-		// TODO isUsbPlugged = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_ISUSBPLUGGED);
-		// TODO isAccPlugged = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_ISACCPLUGGED);
+		// TODO isPugged = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_ISPUGGED);
+		result.setPlugType(parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_plugType));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1546,7 +1677,83 @@ public class MobilePrivacyProfilerDBXMLParser {
 			detectedWifisToUpdate.add(self);
 		}
 	}
-	// class GSMCell_addHistory_RefCommand extends RefCommand{
+	// class Cell_addHistory_RefCommand extends RefCommand{
+	class Cell_setCdmaposition_RefCommand extends RefCommand{
+		Cell self;
+		String referencedElementID;
+		MobilePrivacyProfilerDBXMLParser parser;
+		
+		public Cell_setCdmaposition_RefCommand(Cell self,
+				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+			super();
+			this.self = self;
+			this.referencedElementID = referencedElementID;
+			this.parser = parser;
+		}
+
+		@Override
+		public void run() {
+			self.setCdmaposition(parser.xmlId2CdmaCellData.get(referencedElementID));
+			cellsToUpdate.add(self);
+		}
+	}
+	class Cell_setOtherPosition_RefCommand extends RefCommand{
+		Cell self;
+		String referencedElementID;
+		MobilePrivacyProfilerDBXMLParser parser;
+		
+		public Cell_setOtherPosition_RefCommand(Cell self,
+				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+			super();
+			this.self = self;
+			this.referencedElementID = referencedElementID;
+			this.parser = parser;
+		}
+
+		@Override
+		public void run() {
+			self.setOtherPosition(parser.xmlId2OtherCell.get(referencedElementID));
+			cellsToUpdate.add(self);
+		}
+	}
+	class OtherCell_setIdentity_RefCommand extends RefCommand{
+		OtherCell self;
+		String referencedElementID;
+		MobilePrivacyProfilerDBXMLParser parser;
+		
+		public OtherCell_setIdentity_RefCommand(OtherCell self,
+				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+			super();
+			this.self = self;
+			this.referencedElementID = referencedElementID;
+			this.parser = parser;
+		}
+
+		@Override
+		public void run() {
+			self.setIdentity(parser.xmlId2Cell.get(referencedElementID));
+			otherCellsToUpdate.add(self);
+		}
+	}
+	class CdmaCellData_setIdentity_RefCommand extends RefCommand{
+		CdmaCellData self;
+		String referencedElementID;
+		MobilePrivacyProfilerDBXMLParser parser;
+		
+		public CdmaCellData_setIdentity_RefCommand(CdmaCellData self,
+				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+			super();
+			this.self = self;
+			this.referencedElementID = referencedElementID;
+			this.parser = parser;
+		}
+
+		@Override
+		public void run() {
+			self.setIdentity(parser.xmlId2Cell.get(referencedElementID));
+			cdmaCellDatasToUpdate.add(self);
+		}
+	}
 	// class NeighboringCellHistory_addCells_RefCommand extends RefCommand{
 	class BluetoothLog_setDevice_RefCommand extends RefCommand{
 		BluetoothLog self;

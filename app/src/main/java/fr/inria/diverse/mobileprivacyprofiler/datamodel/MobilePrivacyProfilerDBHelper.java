@@ -7,7 +7,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.GSMCell_NeighboringCellHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.Cell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
@@ -50,8 +50,12 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<CalendarEvent, Integer> calendarEventDao;
 	public Dao<PhoneCallLog, Integer> phoneCallLogDao;
 	//public RuntimeExceptionDao<PhoneCallLog, Integer> phoneCallLogDao;
-	public Dao<GSMCell, Integer> gSMCellDao;
-	//public RuntimeExceptionDao<GSMCell, Integer> gSMCellDao;
+	public Dao<Cell, Integer> cellDao;
+	//public RuntimeExceptionDao<Cell, Integer> cellDao;
+	public Dao<OtherCell, Integer> otherCellDao;
+	//public RuntimeExceptionDao<OtherCell, Integer> otherCellDao;
+	public Dao<CdmaCellData, Integer> cdmaCellDataDao;
+	//public RuntimeExceptionDao<CdmaCellData, Integer> cdmaCellDataDao;
 	public Dao<NeighboringCellHistory, Integer> neighboringCellHistoryDao;
 	//public RuntimeExceptionDao<NeighboringCellHistory, Integer> neighboringCellHistoryDao;
 	public Dao<BluetoothDevice, Integer> bluetoothDeviceDao;
@@ -64,8 +68,8 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageDao;
 	public Dao<WebHistory, Integer> webHistoryDao;
 	//public RuntimeExceptionDao<WebHistory, Integer> webHistoryDao;
-	public Dao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryDao;
-	//public RuntimeExceptionDao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryDao;
+	public Dao<Cell_NeighboringCellHistory, Integer> cell_NeighboringCellHistoryDao;
+	//public RuntimeExceptionDao<Cell_NeighboringCellHistory, Integer> cell_NeighboringCellHistoryDao;
 	public Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 	//public RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao;
 
@@ -88,14 +92,16 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<Geolocation, Integer> geolocationDao,
 		Dao<CalendarEvent, Integer> calendarEventDao,
 		Dao<PhoneCallLog, Integer> phoneCallLogDao,
-		Dao<GSMCell, Integer> gSMCellDao,
+		Dao<Cell, Integer> cellDao,
+		Dao<OtherCell, Integer> otherCellDao,
+		Dao<CdmaCellData, Integer> cdmaCellDataDao,
 		Dao<NeighboringCellHistory, Integer> neighboringCellHistoryDao,
 		Dao<BluetoothDevice, Integer> bluetoothDeviceDao,
 		Dao<BluetoothLog, Integer> bluetoothLogDao,
 		Dao<SMS, Integer> sMSDao,
 		Dao<BatteryUsage, Integer> batteryUsageDao,
 		Dao<WebHistory, Integer> webHistoryDao,
-        Dao<GSMCell_NeighboringCellHistory, Integer> gSMCell_NeighboringCellHistoryDao,
+        Dao<Cell_NeighboringCellHistory, Integer> cell_NeighboringCellHistoryDao,
 		Dao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointDao
 	){
 		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
@@ -112,14 +118,16 @@ public class MobilePrivacyProfilerDBHelper {
 		this.geolocationDao = geolocationDao;
 		this.calendarEventDao = calendarEventDao;
 		this.phoneCallLogDao = phoneCallLogDao;
-		this.gSMCellDao = gSMCellDao;
+		this.cellDao = cellDao;
+		this.otherCellDao = otherCellDao;
+		this.cdmaCellDataDao = cdmaCellDataDao;
 		this.neighboringCellHistoryDao = neighboringCellHistoryDao;
 		this.bluetoothDeviceDao = bluetoothDeviceDao;
 		this.bluetoothLogDao = bluetoothLogDao;
 		this.sMSDao = sMSDao;
 		this.batteryUsageDao = batteryUsageDao;
 		this.webHistoryDao = webHistoryDao;
-		this.gSMCell_NeighboringCellHistoryDao = gSMCell_NeighboringCellHistoryDao;
+		this.cell_NeighboringCellHistoryDao = cell_NeighboringCellHistoryDao;
 		this.detectedWifi_AccessPointDao = detectedWifi_AccessPointDao;
 	}
 

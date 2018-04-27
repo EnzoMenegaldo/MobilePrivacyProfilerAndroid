@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.GSMCell_NeighboringCellHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.Cell_NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for NeighboringCellHistory
 // End of user code
@@ -52,46 +52,19 @@ public class NeighboringCellHistory {
 	
 
 	@DatabaseField
-	protected java.lang.String date;
+	protected java.util.Date date;
 
 	@DatabaseField
 	protected int strength;
 	
 
 	/** observed cells at that date */ 
-	// work in progress, find association 
-	// Association many to many GSMCell_NeighboringCellHistory
-	@ForeignCollectionField(eager = false, foreignFieldName = "neighboringCellHistory")	
-	protected ForeignCollection<GSMCell_NeighboringCellHistory> gSMCell_NeighboringCellHistory;
-
-	/** observed cells at that date 
-	  * Attention, returned list is readonly
-      */
-	public List<GSMCell> getCells(){
-		List<GSMCell> result = new ArrayList<GSMCell>();
-		
-		for (GSMCell_NeighboringCellHistory aGSMCell_NeighboringCellHistory : gSMCell_NeighboringCellHistory) {
-			if(_contextDB != null) aGSMCell_NeighboringCellHistory.setContextDB(_contextDB);
-			result.add(aGSMCell_NeighboringCellHistory.getGSMCell());
-		}
-		return result;
-	}
-	public void addGSMCell(GSMCell gSMCell){
-		try {
-			_contextDB.gSMCell_NeighboringCellHistoryDao.create(new GSMCell_NeighboringCellHistory( gSMCell, this));		
-		} catch (SQLException e) {
-			log.error("Pb while adding association gSMCell_NeighboringCellHistory",e);
-		}
-	}
-	// end work in progress 	
-
-				
 
 	// Start of user code NeighboringCellHistory additional user properties
 	// End of user code
 	
 	public NeighboringCellHistory() {} // needed by ormlite
-	public NeighboringCellHistory(java.lang.String date, int strength) {
+	public NeighboringCellHistory(java.util.Date date, int strength) {
 		super();
 		this.date = date;
 		this.strength = strength;
@@ -111,10 +84,10 @@ public class NeighboringCellHistory {
 		this._contextDB = contextDB;
 	}
 
-	public java.lang.String getDate() {
+	public java.util.Date getDate() {
 		return this.date;
 	}
-	public void setDate(java.lang.String date) {
+	public void setDate(java.util.Date date) {
 		this.date = date;
 	}
 	public int getStrength() {
@@ -137,7 +110,7 @@ public class NeighboringCellHistory {
 		sb.append(" ");
     	sb.append(XML_ATT_DATE);
     	sb.append("=\"");
-		sb.append(StringEscapeUtils.escapeXml(this.date));
+		sb.append(this.date);
     	sb.append("\" ");
 		sb.append(" ");
     	sb.append(XML_ATT_STRENGTH);
@@ -147,14 +120,6 @@ public class NeighboringCellHistory {
     	sb.append(">");
 
 
-		
-		for(GSMCell ref : this.getCells()){
-    		sb.append("\n"+indent+"\t<"+XML_REF_CELLS+" id=\"");
-    		sb.append(ref._id);
-        	sb.append("\"/>");
-			
-    	}
-			
 		// TODO deal with other case
 
 		sb.append("</"+XML_NEIGHBORINGCELLHISTORY+">");
