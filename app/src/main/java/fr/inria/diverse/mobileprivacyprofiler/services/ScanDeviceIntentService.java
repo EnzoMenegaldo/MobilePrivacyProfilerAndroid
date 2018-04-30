@@ -9,6 +9,7 @@ import android.app.AppOpsManager;
 import android.app.IntentService;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -18,6 +19,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.provider.CallLog;
 import android.provider.Telephony;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -56,6 +58,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OtherCell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OtherCellData;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.PhoneCallLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
@@ -81,6 +84,7 @@ public class ScanDeviceIntentService extends IntentService {
     private static final String ACTION_SCAN_SMS = "fr.inria.diverse.mobileprivacyprofiler.services.action.SMS_SCAN";
     private static final String ACTION_RECORD_LOCATION = "fr.inria.diverse.mobileprivacyprofiler.services.action.RECORD_LOCATION";
     private static final String ACTION_SCAN_AUTHENTICATORS = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_AUTHENTICATORS";
+    private static final String ACTION_SCAN_CALL_HISTORY = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_CALL_HISTORY";
     private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.services.action.BAZ";
 
     // TODO: Rename parameters
@@ -181,6 +185,18 @@ public class ScanDeviceIntentService extends IntentService {
     }
 
     /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanCallHistory(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction(ACTION_SCAN_CALL_HISTORY);
+        context.startService(intent);
+    }
+
+    /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
@@ -215,6 +231,8 @@ public class ScanDeviceIntentService extends IntentService {
                 handleActionRecordLocation(intent);
             } else if (ACTION_SCAN_AUTHENTICATORS.equals(action)) {
                 handleActionScanAuthenticators(intent);
+            } else if (ACTION_SCAN_CALL_HISTORY.equals(action)) {
+                handleActionScanCallHistory(intent);
             } else if (ACTION_BAZ.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
@@ -571,6 +589,61 @@ public class ScanDeviceIntentService extends IntentService {
             }
         }
     }
+
+    /**
+     * Handle action ScanCallHistory in the provided background thread with the provided
+     * parameters.
+     */
+    @SuppressLint("MissingPermission")
+    private void handleActionScanCallHistory(Intent intent) {
+        //making a cursor out of the CallLog's data
+        ContentResolver contentResolver = getContentResolver();
+        Cursor callLogCursor = contentResolver.query(android.provider.CallLog.Calls.CONTENT_URI, /*uri*/
+                null,
+                null,
+                null,
+                android.provider.CallLog.Calls.DEFAULT_SORT_ORDER /*sort by*/);
+
+        //get the last update if it exist(else expecting = null)
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        Date lastScan = metadata.getLastCallScan();
+
+        String displayLastScan;
+        if(null==lastScan){displayLastScan="none";}else{displayLastScan=lastScan.toString();}
+        Log.d(TAG,"   Starting new Call History Scan : time of last scan "+ displayLastScan);
+
+
+        //TODO
+        if(null!=callLogCursor) {
+            while (callLogCursor.moveToNext()) {//processing call log entries
+
+                Date date =new Date(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DATE)) );
+
+                if(date.after(lastScan)) {
+
+                    String phoneNumber = callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.NUMBER));
+
+                    long duration =new Float(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DURATION))*0.001).longValue();
+
+                    int callTypeCode = callLogCursor.getInt(callLogCursor.getColumnIndex(CallLog.Calls.TYPE));
+                    String[] typeArray = {"INCOMING","OUTGOING","MISSED","VOICEMAIL","REJECTED","BLOCKED","ANSWERED_EXTERNALLY"};
+                    String callType = typeArray[callTypeCode-1];
+
+                    PhoneCallLog CallLog = new PhoneCallLog(phoneNumber, date, duration, callType);
+                    getDBHelper().getPhoneCallLogDao().create(CallLog);
+                }
+
+
+            }
+        }
+        callLogCursor.close();
+
+        Log.d(TAG,"Updating last Call History Scan");
+        metadata.setLastCallScan(new Date());
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+
+    }
+
 
         /**
          * Handle action Baz in the provided background thread with the provided

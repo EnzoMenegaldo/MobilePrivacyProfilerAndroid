@@ -155,6 +155,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANAPPUSAGE = "LASTSCANAPPUSAGE";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastSmsScan = "lastSmsScan";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSMSSCAN = "LASTSMSSCAN";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastCallScan = "lastCallScan";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTCALLSCAN = "LASTCALLSCAN";
 	public static final String DATAATT_APPLICATIONHISTORY_appName = "appName";
 	public static final String DATAATT_APPLICATIONHISTORY_APPNAME = "APPNAME";
 	public static final String DATAATT_APPLICATIONHISTORY_packageName = "packageName";
@@ -902,6 +904,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		// TODO lastScanInstalledApplications = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANINSTALLEDAPPLICATIONS);
 		// TODO lastScanAppUsage = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSCANAPPUSAGE);
 		// TODO lastSmsScan = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTSMSSCAN);
+		// TODO lastCallScan = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTCALLSCAN);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1245,7 +1248,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     			
     	xmlId2PhoneCallLog.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setPhoneNumber(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_phoneNumber));
-		result.setDate(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_date));
+		// TODO date = parser.getAttributeValue(null, DATAATT_PHONECALLLOG_DATE);
 		// TODO duration = parser.getAttributeValue(null, DATAATT_PHONECALLLOG_DURATION);
 		result.setCallType(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_callType));
 		while (parser.next() != XmlPullParser.END_TAG) {

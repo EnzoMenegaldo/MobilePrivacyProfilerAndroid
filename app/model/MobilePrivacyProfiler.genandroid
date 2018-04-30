@@ -6,6 +6,7 @@
       <dataAttributes name="lastScanInstalledApplications" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="lastScanAppUsage" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="lastSmsScan" type="//@dataModel/@dataClasses.27"/>
+      <dataAttributes name="lastCallScan" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
       <dataReferences name="usageStats" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.2"/>
@@ -83,8 +84,8 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="PhoneCallLog">
       <dataAttributes name="phoneNumber" documentation="phone number or unknown" type="//@dataModel/@dataClasses.24"/>
-      <dataAttributes name="date" type="//@dataModel/@dataClasses.24"/>
-      <dataAttributes name="duration" documentation="duration of the call in ms" type="//@dataModel/@dataClasses.23"/>
+      <dataAttributes name="date" documentation="" type="//@dataModel/@dataClasses.27"/>
+      <dataAttributes name="duration" documentation="duration of the call in s" type="//@dataModel/@dataClasses.28"/>
       <dataAttributes name="callType" documentation="missed, rejected, outgoing, incoming, blocked, voicemail" type="//@dataModel/@dataClasses.24"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Cell">

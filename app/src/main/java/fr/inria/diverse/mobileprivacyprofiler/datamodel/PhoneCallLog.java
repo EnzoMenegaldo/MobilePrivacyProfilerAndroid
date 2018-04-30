@@ -55,12 +55,13 @@ public class PhoneCallLog {
 	@DatabaseField
 	protected java.lang.String phoneNumber;
 
+	/**  */ 
 	@DatabaseField
-	protected java.lang.String date;
+	protected java.util.Date date;
 
-	/** duration of the call in ms */ 
+	/** duration of the call in s */ 
 	@DatabaseField
-	protected int duration;
+	protected long duration;
 
 	/** missed, rejected, outgoing, incoming, blocked, voicemail */ 
 	@DatabaseField
@@ -71,7 +72,7 @@ public class PhoneCallLog {
 	// End of user code
 	
 	public PhoneCallLog() {} // needed by ormlite
-	public PhoneCallLog(java.lang.String phoneNumber, java.lang.String date, int duration, java.lang.String callType) {
+	public PhoneCallLog(java.lang.String phoneNumber, java.util.Date date, long duration, java.lang.String callType) {
 		super();
 		this.phoneNumber = phoneNumber;
 		this.date = date;
@@ -99,16 +100,16 @@ public class PhoneCallLog {
 	public void setPhoneNumber(java.lang.String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public java.lang.String getDate() {
+	public java.util.Date getDate() {
 		return this.date;
 	}
-	public void setDate(java.lang.String date) {
+	public void setDate(java.util.Date date) {
 		this.date = date;
 	}
-	public int getDuration() {
+	public long getDuration() {
 		return this.duration;
 	}
-	public void setDuration(int duration) {
+	public void setDuration(long duration) {
 		this.duration = duration;
 	}
 	public java.lang.String getCallType() {
@@ -136,7 +137,7 @@ public class PhoneCallLog {
 		sb.append(" ");
     	sb.append(XML_ATT_DATE);
     	sb.append("=\"");
-		sb.append(StringEscapeUtils.escapeXml(this.date));
+		sb.append(this.date);
     	sb.append("\" ");
 		sb.append(" ");
     	sb.append(XML_ATT_DURATION);
