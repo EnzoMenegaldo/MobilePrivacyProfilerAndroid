@@ -1,6 +1,9 @@
 package fr.inria.diverse.mobileprivacyprofiler.services;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AuthenticatorDescription;
 import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
 import android.app.IntentService;
@@ -34,6 +37,7 @@ import android.os.Parcelable;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
+import java.net.Authenticator;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +47,7 @@ import java.util.Map;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.Authentification;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
@@ -74,6 +79,8 @@ public class ScanDeviceIntentService extends IntentService {
     private static final String ACTION_SCAN_BATTERY_USAGE = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_BATTERY_USAGE";
     private static final String ACTION_SCAN_CELL_INFO = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_NEAR_CELL_INFO";
     private static final String ACTION_SCAN_SMS = "fr.inria.diverse.mobileprivacyprofiler.services.action.SMS_SCAN";
+    private static final String ACTION_RECORD_LOCATION = "fr.inria.diverse.mobileprivacyprofiler.services.action.RECORD_LOCATION";
+    private static final String ACTION_SCAN_AUTHENTICATORS = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_AUTHENTICATORS";
     private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.services.action.BAZ";
 
     // TODO: Rename parameters
@@ -150,6 +157,30 @@ public class ScanDeviceIntentService extends IntentService {
     }
 
     /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionRecordLocation(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction(ACTION_RECORD_LOCATION);
+        context.startService(intent);
+    }
+
+    /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanAuthenticators(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction(ACTION_SCAN_AUTHENTICATORS);
+        context.startService(intent);
+    }
+
+    /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
@@ -180,6 +211,10 @@ public class ScanDeviceIntentService extends IntentService {
                 handleActionScanSms();
             } else if (ACTION_SCAN_CELL_INFO.equals(action)) {
                 handleActionScanCellInfo(intent);
+            } else if (ACTION_RECORD_LOCATION.equals(action)) {
+                handleActionRecordLocation(intent);
+            } else if (ACTION_SCAN_AUTHENTICATORS.equals(action)) {
+                handleActionScanAuthenticators(intent);
             } else if (ACTION_BAZ.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
@@ -317,7 +352,7 @@ public class ScanDeviceIntentService extends IntentService {
         boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
         boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
         boolean wireLessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
-        String plugType = "";
+        String plugType;
 
         int isPlugged;
 
@@ -403,7 +438,6 @@ public class ScanDeviceIntentService extends IntentService {
      */
     @SuppressLint("MissingPermission")
     private void handleActionScanCellInfo(Intent intent) {
-
         //set up the manager
         Log.d(TAG,"Requesting CellInfo");
         TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -420,7 +454,7 @@ public class ScanDeviceIntentService extends IntentService {
 
         boolean isCell=false;
         //dealing with datas to add
-        for(CellInfo cellInfo:cellInfos){ // fetching info depending of the cell type
+        for(CellInfo cellInfo:cellInfos){ // fetching info regarding of the cell type
             if (cellInfo instanceof CellInfoCdma) {
                 isCell=true;
                 CellInfoCdma cell =(CellInfoCdma) cellInfo;
@@ -477,6 +511,7 @@ public class ScanDeviceIntentService extends IntentService {
                         getDBHelper().getOtherCellDataDao().create(otherCell);
                     }
                 }
+                //then add the history log
                 Log.d(TAG,"New Cell history :"+strength+" dBm, "+date.toString());
                 NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
                 neighboringCellHistory.setStrength(strength);
@@ -484,8 +519,57 @@ public class ScanDeviceIntentService extends IntentService {
                 neighboringCellHistory.setCells(cell);
                 getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
             }
-        }//end of cell scanning
+        }//end for (processing the cells in neighbouring)
+    }
 
+    /**
+     * Handle action RecordLocation in the provided background thread with the provided
+     * parameters.
+     * @param intent
+     */
+    private void handleActionRecordLocation(Intent intent) {
+        // TODO: Handle action RecordLocation
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /**
+     * Handle action ScanAuthenticators in the provided background thread with the provided
+     * parameters.
+     * @param intent
+     */
+    @SuppressLint("MissingPermission")
+    private void handleActionScanAuthenticators(Intent intent) {
+        // TODO: Handle action RecordLocation
+        //set up the manager
+        Log.d(TAG,"Scanning authenticators");
+        AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
+
+        Account[] accounts = accountManager.getAccounts();// get a collection of Accounts and Descriptors
+        AuthenticatorDescription[] authDescriptions = accountManager.getAuthenticatorTypes();
+
+        List<String> RegistredAuthType = getDBHelper().getMobilePrivacyProfilerDBHelper().queryAllAuthentificationType();
+
+        for(AuthenticatorDescription authDesc :authDescriptions){
+            if(!RegistredAuthType.contains(authDesc.type)){//check is the authenticator is already registered
+                //add a new entry
+                Log.d(TAG,"New Authentification :"+authDesc.type);
+                //fetching parameters
+                String packageName = authDesc.packageName;
+                String type = authDesc.type;
+                String name = "";
+                Boolean trouve = false;
+
+                for(int i=0;!trouve&&i<accounts.length;i++){
+                if(type==accounts[i].type){trouve=true;name=accounts[i].name;}
+                }
+
+                Authentification auth = new Authentification();
+                auth.setPackageName(packageName);
+                auth.setName(name);
+                auth.setType(type);
+                getDBHelper().getAuthentificationDao().create(auth);
+            }
+        }
     }
 
         /**

@@ -93,19 +93,19 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</APPLICATIONUSAGESTATSS>\n");
-		sb.append("\n\t<IDENTITYS>");
+		sb.append("\n\t<AUTHENTIFICATIONS>");
 		try {	
-			List<Identity> identitys = dbContext.identityDao.queryForAll();
-			for(Identity  identity : identitys){
+			List<Authentification> authentifications = dbContext.authentificationDao.queryForAll();
+			for(Authentification  authentification : authentifications){
 				// TODO find if contained by another element, if not put it there
 					sb.append("\n");
-					sb.append(identity.toXML("\t\t", dbContext));
+					sb.append(authentification.toXML("\t\t", dbContext));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sb.append("\n\t</IDENTITYS>\n");
+		sb.append("\n\t</AUTHENTIFICATIONS>\n");
 		sb.append("\n\t<CONTACTS>");
 		try {	
 			List<Contact> contacts = dbContext.contactDao.queryForAll();
@@ -413,12 +413,12 @@ public class XMLHelper {
 					log.error("cannot create ApplicationUsageStats "+e.getMessage(),e);
 				}
 			}
-			log.info("starting creation of Identity...");
-			for(Identity identity : parser.identitys){
+			log.info("starting creation of Authentification...");
+			for(Authentification authentification : parser.authentifications){
 				try {
-					dbContext.identityDao.create(identity);
+					dbContext.authentificationDao.create(authentification);
 				} catch (SQLException e) {
-					log.error("cannot create Identity "+e.getMessage(),e);
+					log.error("cannot create Authentification "+e.getMessage(),e);
 				}
 			}
 			log.info("starting creation of Contact...");
@@ -604,12 +604,12 @@ public class XMLHelper {
 					log.error("cannot update ApplicationUsageStats "+e.getMessage(),e);
 				}
 			}
-			log.info("starting update DB of Identity...");
-			for(Identity elem : parser.identitysToUpdate){
+			log.info("starting update DB of Authentification...");
+			for(Authentification elem : parser.authentificationsToUpdate){
 				try {
-					dbContext.identityDao.update(elem);
+					dbContext.authentificationDao.update(elem);
 				} catch (SQLException e) {
-					log.error("cannot update Identity "+e.getMessage(),e);
+					log.error("cannot update Authentification "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of Contact...");

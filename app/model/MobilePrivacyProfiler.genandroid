@@ -20,13 +20,10 @@
       <dataAttributes name="lastTimeStamp" documentation="Get the end of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.24"/>
       <dataAttributes name="requestedInterval" documentation="Daily, weekly, monthly, yearly as defined in https://developer.android.com/reference/android/app/usage/UsageStatsManager.html" type="//@dataModel/@dataClasses.23"/>
     </dataClasses>
-    <dataClasses xsi:type="genandroid:DataClass" name="Identity" documentation="Identity known on the device">
-      <dataAttributes name="provider" documentation="Service or web site that provides this identity" type="//@dataModel/@dataClasses.24"/>
-      <dataAttributes name="login" documentation="login or id used for this identity" type="//@dataModel/@dataClasses.24"/>
-      <dataAttributes name="displayName" documentation="Displayable name for this identity" type="//@dataModel/@dataClasses.24"/>
-      <dataAttributes name="associatedServices" documentation="known services that uses this identity&#xA;(currently just a formated string that lists the services)" type="//@dataModel/@dataClasses.25"/>
-      <dataAttributes name="PhoneNumber1" documentation="Phone number associated to this device&#xA;first number in case of multiple SIM cards" type="//@dataModel/@dataClasses.24"/>
-      <dataAttributes name="PhoneNumber2" documentation="Second Phone number associated to this device (SIM card)" type="//@dataModel/@dataClasses.24"/>
+    <dataClasses xsi:type="genandroid:DataClass" name="Authentification" documentation="Identity known on the device">
+      <dataAttributes name="packageName" documentation="pachageName related to this Autenticator&#xA;" type="//@dataModel/@dataClasses.24"/>
+      <dataAttributes name="name" documentation="name related to this Authenticator" type="//@dataModel/@dataClasses.24"/>
+      <dataAttributes name="type" documentation="type is a unique string that identify an authenticator" type="//@dataModel/@dataClasses.24"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Contact" documentation="Contact in the device">
       <dataReferences name="phoneNumbers" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.4" type="//@dataModel/@dataClasses.5"/>

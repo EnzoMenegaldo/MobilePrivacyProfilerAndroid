@@ -30,7 +30,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	List<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatas = new ArrayList<MobilePrivacyProfilerDB_metadata>();
 	List<ApplicationHistory> applicationHistorys = new ArrayList<ApplicationHistory>();
 	List<ApplicationUsageStats> applicationUsageStatss = new ArrayList<ApplicationUsageStats>();
-	List<Identity> identitys = new ArrayList<Identity>();
+	List<Authentification> authentifications = new ArrayList<Authentification>();
 	List<Contact> contacts = new ArrayList<Contact>();
 	List<ContactPhoneNumber> contactPhoneNumbers = new ArrayList<ContactPhoneNumber>();
 	List<ContactPhysicalAddress> contactPhysicalAddresss = new ArrayList<ContactPhysicalAddress>();
@@ -53,7 +53,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Set<MobilePrivacyProfilerDB_metadata> mobilePrivacyProfilerDB_metadatasToUpdate = new HashSet<MobilePrivacyProfilerDB_metadata>();
 	Set<ApplicationHistory> applicationHistorysToUpdate = new HashSet<ApplicationHistory>();
 	Set<ApplicationUsageStats> applicationUsageStatssToUpdate = new HashSet<ApplicationUsageStats>();
-	Set<Identity> identitysToUpdate = new HashSet<Identity>();
+	Set<Authentification> authentificationsToUpdate = new HashSet<Authentification>();
 	Set<Contact> contactsToUpdate = new HashSet<Contact>();
 	Set<ContactPhoneNumber> contactPhoneNumbersToUpdate = new HashSet<ContactPhoneNumber>();
 	Set<ContactPhysicalAddress> contactPhysicalAddresssToUpdate = new HashSet<ContactPhysicalAddress>();
@@ -76,7 +76,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, MobilePrivacyProfilerDB_metadata> xmlId2MobilePrivacyProfilerDB_metadata = new Hashtable<String, MobilePrivacyProfilerDB_metadata>();
 	Hashtable<String, ApplicationHistory> xmlId2ApplicationHistory = new Hashtable<String, ApplicationHistory>();
 	Hashtable<String, ApplicationUsageStats> xmlId2ApplicationUsageStats = new Hashtable<String, ApplicationUsageStats>();
-	Hashtable<String, Identity> xmlId2Identity = new Hashtable<String, Identity>();
+	Hashtable<String, Authentification> xmlId2Authentification = new Hashtable<String, Authentification>();
 	Hashtable<String, Contact> xmlId2Contact = new Hashtable<String, Contact>();
 	Hashtable<String, ContactPhoneNumber> xmlId2ContactPhoneNumber = new Hashtable<String, ContactPhoneNumber>();
 	Hashtable<String, ContactPhysicalAddress> xmlId2ContactPhysicalAddress = new Hashtable<String, ContactPhysicalAddress>();
@@ -106,8 +106,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATACLASSIFIER_APPLICATIONHISTORY  = "APPLICATIONHISTORY";
 	public static final String DATACLASSIFIER_APPLICATIONUSAGESTATSS = "APPLICATIONUSAGESTATSS";
 	public static final String DATACLASSIFIER_APPLICATIONUSAGESTATS  = "APPLICATIONUSAGESTATS";
-	public static final String DATACLASSIFIER_IDENTITYS = "IDENTITYS";
-	public static final String DATACLASSIFIER_IDENTITY  = "IDENTITY";
+	public static final String DATACLASSIFIER_AUTHENTIFICATIONS = "AUTHENTIFICATIONS";
+	public static final String DATACLASSIFIER_AUTHENTIFICATION  = "AUTHENTIFICATION";
 	public static final String DATACLASSIFIER_CONTACTS = "CONTACTS";
 	public static final String DATACLASSIFIER_CONTACT  = "CONTACT";
 	public static final String DATACLASSIFIER_CONTACTPHONENUMBERS = "CONTACTPHONENUMBERS";
@@ -171,18 +171,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_APPLICATIONUSAGESTATS_requestedInterval = "requestedInterval";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_REQUESTEDINTERVAL = "REQUESTEDINTERVAL";
 	public static final String DATAREF_APPLICATIONUSAGESTATS_application = "application";
-	public static final String DATAATT_IDENTITY_provider = "provider";
-	public static final String DATAATT_IDENTITY_PROVIDER = "PROVIDER";
-	public static final String DATAATT_IDENTITY_login = "login";
-	public static final String DATAATT_IDENTITY_LOGIN = "LOGIN";
-	public static final String DATAATT_IDENTITY_displayName = "displayName";
-	public static final String DATAATT_IDENTITY_DISPLAYNAME = "DISPLAYNAME";
-	public static final String DATAATT_IDENTITY_associatedServices = "associatedServices";
-	public static final String DATAATT_IDENTITY_ASSOCIATEDSERVICES = "ASSOCIATEDSERVICES";
-	public static final String DATAATT_IDENTITY_PhoneNumber1 = "PhoneNumber1";
-	public static final String DATAATT_IDENTITY_PHONENUMBER1 = "PHONENUMBER1";
-	public static final String DATAATT_IDENTITY_PhoneNumber2 = "PhoneNumber2";
-	public static final String DATAATT_IDENTITY_PHONENUMBER2 = "PHONENUMBER2";
+	public static final String DATAATT_AUTHENTIFICATION_packageName = "packageName";
+	public static final String DATAATT_AUTHENTIFICATION_PACKAGENAME = "PACKAGENAME";
+	public static final String DATAATT_AUTHENTIFICATION_name = "name";
+	public static final String DATAATT_AUTHENTIFICATION_NAME = "NAME";
+	public static final String DATAATT_AUTHENTIFICATION_type = "type";
+	public static final String DATAATT_AUTHENTIFICATION_TYPE = "TYPE";
 	public static final String DATAATT_CONTACT_surname = "surname";
 	public static final String DATAATT_CONTACT_SURNAME = "SURNAME";
 	public static final String DATAATT_CONTACT_firstName = "firstName";
@@ -349,9 +343,9 @@ public class MobilePrivacyProfilerDBXMLParser {
 				applicationUsageStatss = readApplicationUsageStatss(parser,DATACLASSIFIER_APPLICATIONUSAGESTATSS);
 	            // applicationUsageStatss.addAll(readApplicationUsageStatss(parser,DATACLASSIFIER_APPLICATIONUSAGESTATSS));
 	        } else 
-		 	if (name.equals(DATACLASSIFIER_IDENTITYS)) {
-				identitys = readIdentitys(parser,DATACLASSIFIER_IDENTITYS);
-	            // identitys.addAll(readIdentitys(parser,DATACLASSIFIER_IDENTITYS));
+		 	if (name.equals(DATACLASSIFIER_AUTHENTIFICATIONS)) {
+				authentifications = readAuthentifications(parser,DATACLASSIFIER_AUTHENTIFICATIONS);
+	            // authentifications.addAll(readAuthentifications(parser,DATACLASSIFIER_AUTHENTIFICATIONS));
 	        } else 
 		 	if (name.equals(DATACLASSIFIER_CONTACTS)) {
 				contacts = readContacts(parser,DATACLASSIFIER_CONTACTS);
@@ -497,18 +491,18 @@ public class MobilePrivacyProfilerDBXMLParser {
 		return entries;
 	}
 	/**
-     * parser for a group of Identity
+     * parser for a group of Authentification
      */
-	List<Identity> readIdentitys(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
-		ArrayList<Identity> entries = new ArrayList<Identity>();
+	List<Authentification> readAuthentifications(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
+		ArrayList<Authentification> entries = new ArrayList<Authentification>();
 		parser.require(XmlPullParser.START_TAG, ns, containingTag);
 	    while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        String name = parser.getName();
-			if (name.equals(DATACLASSIFIER_IDENTITY)) {
-	            entries.add(readIdentity(parser));
+			if (name.equals(DATACLASSIFIER_AUTHENTIFICATION)) {
+	            entries.add(readAuthentification(parser));
 	        } else {
 	            skip(parser);
 	        }
@@ -977,19 +971,16 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		return result;
 	}
-	Identity readIdentity(XmlPullParser parser)  throws XmlPullParserException, IOException{
-		Identity result = new Identity();
+	Authentification readAuthentification(XmlPullParser parser)  throws XmlPullParserException, IOException{
+		Authentification result = new Authentification();
 
-		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_IDENTITY);
+		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_AUTHENTIFICATION);
     	String currentTagName = parser.getName();
     			
-    	xmlId2Identity.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setProvider(parser.getAttributeValue(null, DATAATT_IDENTITY_provider));
-		result.setLogin(parser.getAttributeValue(null, DATAATT_IDENTITY_login));
-		result.setDisplayName(parser.getAttributeValue(null, DATAATT_IDENTITY_displayName));
-		result.setAssociatedServices(parser.getAttributeValue(null, DATAATT_IDENTITY_associatedServices));
-		result.setPhoneNumber1(parser.getAttributeValue(null, DATAATT_IDENTITY_PhoneNumber1));
-		result.setPhoneNumber2(parser.getAttributeValue(null, DATAATT_IDENTITY_PhoneNumber2));
+    	xmlId2Authentification.put(parser.getAttributeValue(null, ID_STRING),result);		
+		result.setPackageName(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_packageName));
+		result.setName(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_name));
+		result.setType(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_type));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;

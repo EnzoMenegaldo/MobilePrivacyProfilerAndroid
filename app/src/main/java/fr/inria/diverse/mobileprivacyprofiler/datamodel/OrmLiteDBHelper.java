@@ -34,8 +34,8 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	private RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryRuntimeDao = null;
 	// the DAO object we use to access the ApplicationUsageStats table
 	private RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsRuntimeDao = null;
-	// the DAO object we use to access the Identity table
-	private RuntimeExceptionDao<Identity, Integer> identityRuntimeDao = null;
+	// the DAO object we use to access the Authentification table
+	private RuntimeExceptionDao<Authentification, Integer> authentificationRuntimeDao = null;
 	// the DAO object we use to access the Contact table
 	private RuntimeExceptionDao<Contact, Integer> contactRuntimeDao = null;
 	// the DAO object we use to access the ContactPhoneNumber table
@@ -102,7 +102,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, MobilePrivacyProfilerDB_metadata.class);
 		TableUtils.createTable(connectionSource, ApplicationHistory.class);
 		TableUtils.createTable(connectionSource, ApplicationUsageStats.class);
-		TableUtils.createTable(connectionSource, Identity.class);
+		TableUtils.createTable(connectionSource, Authentification.class);
 		TableUtils.createTable(connectionSource, Contact.class);
 		TableUtils.createTable(connectionSource, ContactPhoneNumber.class);
 		TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
@@ -147,7 +147,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, MobilePrivacyProfilerDB_metadata.class, true);
 		TableUtils.dropTable(connectionSource, ApplicationHistory.class, true);
 		TableUtils.dropTable(connectionSource, ApplicationUsageStats.class, true);
-		TableUtils.dropTable(connectionSource, Identity.class, true);
+		TableUtils.dropTable(connectionSource, Authentification.class, true);
 		TableUtils.dropTable(connectionSource, Contact.class, true);
 		TableUtils.dropTable(connectionSource, ContactPhoneNumber.class, true);
 		TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
@@ -204,14 +204,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	}
 
 	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Identity class. It will
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our Authentification class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<Identity, Integer> getIdentityDao() {
-		if (identityRuntimeDao == null) {
-			identityRuntimeDao = getRuntimeExceptionDao(Identity.class);
+	public RuntimeExceptionDao<Authentification, Integer> getAuthentificationDao() {
+		if (authentificationRuntimeDao == null) {
+			authentificationRuntimeDao = getRuntimeExceptionDao(Authentification.class);
 		}
-		return identityRuntimeDao;
+		return authentificationRuntimeDao;
 	}
 
 	/**
@@ -446,7 +446,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		mobilePrivacyProfilerDB_metadataRuntimeDao = null;
 		applicationHistoryRuntimeDao = null;
 		applicationUsageStatsRuntimeDao = null;
-		identityRuntimeDao = null;
+		authentificationRuntimeDao = null;
 		contactRuntimeDao = null;
 		contactPhoneNumberRuntimeDao = null;
 		contactPhysicalAddressRuntimeDao = null;
@@ -479,7 +479,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.mobilePrivacyProfilerDB_metadataDao = getDao(MobilePrivacyProfilerDB_metadata.class);
 			helper.applicationHistoryDao = getDao(ApplicationHistory.class);
 			helper.applicationUsageStatsDao = getDao(ApplicationUsageStats.class);
-			helper.identityDao = getDao(Identity.class);
+			helper.authentificationDao = getDao(Authentification.class);
 			helper.contactDao = getDao(Contact.class);
 			helper.contactPhoneNumberDao = getDao(ContactPhoneNumber.class);
 			helper.contactPhysicalAddressDao = getDao(ContactPhysicalAddress.class);

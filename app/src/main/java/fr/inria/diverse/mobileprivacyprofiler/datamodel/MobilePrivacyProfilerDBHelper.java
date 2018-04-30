@@ -1,6 +1,7 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -27,8 +28,8 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<ApplicationHistory, Integer> applicationHistoryDao;
 	public Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao;
 	//public RuntimeExceptionDao<ApplicationUsageStats, Integer> applicationUsageStatsDao;
-	public Dao<Identity, Integer> identityDao;
-	//public RuntimeExceptionDao<Identity, Integer> identityDao;
+	public Dao<Authentification, Integer> authentificationDao;
+	//public RuntimeExceptionDao<Authentification, Integer> authentificationDao;
 	public Dao<Contact, Integer> contactDao;
 	//public RuntimeExceptionDao<Contact, Integer> contactDao;
 	public Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao;
@@ -78,7 +79,7 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<MobilePrivacyProfilerDB_metadata, Integer> mobilePrivacyProfilerDB_metadataDao,
 		Dao<ApplicationHistory, Integer> applicationHistoryDao,
 		Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao,
-		Dao<Identity, Integer> identityDao,
+		Dao<Authentification, Integer> authentificationDao,
 		Dao<Contact, Integer> contactDao,
 		Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao,
 		Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao,
@@ -103,7 +104,7 @@ public class MobilePrivacyProfilerDBHelper {
 		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
 		this.applicationHistoryDao = applicationHistoryDao;
 		this.applicationUsageStatsDao = applicationUsageStatsDao;
-		this.identityDao = identityDao;
+		this.authentificationDao = authentificationDao;
 		this.contactDao = contactDao;
 		this.contactPhoneNumberDao = contactPhoneNumberDao;
 		this.contactPhysicalAddressDao = contactPhysicalAddressDao;
@@ -168,6 +169,49 @@ public class MobilePrivacyProfilerDBHelper {
 		return null;
 	}
 
+	/** find Cell in the base using cellId
+	 * @param cellId
+	 * @return Cell with the cellId Identity
+	 */
+	public Cell queryCellByCellId(int cellId){
+		try {
+			Cell queryCell = new Cell();
+			queryCell.setId(cellId);
+			List<Cell> queryOutput = this.cellDao.queryForMatching(queryCell);
+			if(1 != queryOutput.size()){
+				Log.d(TAG,"Cell with cellId "+queryCell.getCellId()+ " doesn't exist in the base");
+				return null;
+			}
+			return queryOutput.get(0);
+		} catch (SQLException e) {
+			Log.e(TAG,"error while querying cell with cellId "+cellId+ " in the base", e);
+		}
+		return null;
+	}
+
+	/** find Cell in the base using cellId
+	 * @param
+	 * @return A list of String types
+	 */
+	public List<String> queryAllAuthentificationType(){
+		List<String> result=null;
+
+		Authentification queryAuth = new Authentification();
+		List<Authentification> queryOutput=null;
+		try {
+			queryOutput = this.authentificationDao.queryForMatching(queryAuth);
+		} catch (SQLException e) {
+			Log.e(TAG,"error while querying Authentification types in the base", e);
+			}
+
+
+		for(Authentification auth :queryOutput){
+			result.add(auth.getType());
+		}
+
+		return result;
+	}
+
 	/**
 	 * On the device this table contains a single entry
 	 * @return
@@ -188,22 +232,7 @@ public class MobilePrivacyProfilerDBHelper {
 		}
 		return metadata;
 	}
-	/**
-	 * Get the last battery entry
-	 * @return last BatteryUsage
-	 */
-	public BatteryUsage getLastBatteryUsage () {
-		//TODO
-		/* PreparedQuery<BatteryUsage> queryLastBatteryUsage;
-		BatteryUsage lastBatteryUsage=null;
 
-		queryLastBatteryUsage=
-
-		lastBatteryUsage=this.queryForFirst(queryLastBatteryUsage);
-		//Query for and return the first item in the object table which matches the PreparedQuery.
-*/
-		return null;
-	}
 
 	//End of user code
 
