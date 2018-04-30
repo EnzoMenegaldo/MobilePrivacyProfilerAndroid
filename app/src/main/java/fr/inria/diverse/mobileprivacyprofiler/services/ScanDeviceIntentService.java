@@ -444,6 +444,7 @@ public class ScanDeviceIntentService extends IntentService {
                 SMS sms = new SMS(date, phoneNumber, type);
                 getDBHelper().getSMSDao().create(sms);
             }
+        cursor.close();
         }
         Log.d(TAG,"Updating last SMS scan");
         metadata.setLastSmsScan(new Date());
@@ -619,7 +620,7 @@ public class ScanDeviceIntentService extends IntentService {
 
                 Date date =new Date(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DATE)) );
 
-                if(date.after(lastScan)) {
+                if(date.after(lastScan)) {//if the log has been registered since last scan
 
                     String phoneNumber = callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.NUMBER));
 
@@ -632,8 +633,6 @@ public class ScanDeviceIntentService extends IntentService {
                     PhoneCallLog CallLog = new PhoneCallLog(phoneNumber, date, duration, callType);
                     getDBHelper().getPhoneCallLogDao().create(CallLog);
                 }
-
-
             }
         }
         callLogCursor.close();
