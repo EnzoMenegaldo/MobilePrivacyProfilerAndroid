@@ -174,13 +174,13 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         sb.append("Table "+getHelper().getGeolocationDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getGeolocationDao().countOf()+"\n");
-
+/*
         sb.append("Table "+getHelper().getGSMCellDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getGSMCellDao().countOf()+"\n");
 
         sb.append("Table "+getHelper().getIdentityDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getIdentityDao().countOf()+"\n");
-
+*/
         sb.append("Table "+getHelper().getKnownWifiDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getKnownWifiDao().countOf()+"\n");
 

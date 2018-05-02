@@ -90,8 +90,8 @@
       <dataAttributes name="callType" documentation="missed, rejected, outgoing, incoming, blocked, voicemail" type="//@dataModel/@dataClasses.24"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Cell">
-      <dataReferences name="history" upperBound="-1" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.17"/>
-      <dataReferences name="cdmaposition" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.16"/>
+      <dataReferences name="history" upperBound="-1" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.17"/>
+      <dataReferences name="cdmaposition" type="//@dataModel/@dataClasses.16"/>
       <dataReferences name="otherPosition" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.15"/>
       <dataAttributes name="cellId" type="//@dataModel/@dataClasses.23"/>
     </dataClasses>
@@ -143,9 +143,9 @@
     <dataClasses xsi:type="genandroid:NativeDataClass" name="Date" instanceClassName="java.util.Date"/>
     <dataClasses xsi:type="genandroid:NativeDataClass" name="Long" instanceClassName="long"/>
     <dataAssociations name="ApplicationHistory_ApplicationUsageStats" references="//@dataModel/@dataClasses.1/@dataReferences.0 //@dataModel/@dataClasses.2/@dataReferences.0"/>
-    <dataAssociations name="Cell_CdmaCellData" references="//@dataModel/@dataClasses.14/@dataReferences.0 //@dataModel/@dataClasses.16/@dataReferences.0 //@dataModel/@dataClasses.14/@dataReferences.1"/>
+    <dataAssociations name="Cell_CdmaCellData" references="//@dataModel/@dataClasses.16/@dataReferences.0"/>
     <dataAssociations name="Cell_OtherCellData" references="//@dataModel/@dataClasses.14/@dataReferences.2 //@dataModel/@dataClasses.15/@dataReferences.0"/>
-    <dataAssociations name="Cell_NeighboringCellHistory" references="//@dataModel/@dataClasses.17/@dataReferences.0"/>
+    <dataAssociations name="Cell_NeighboringCellHistory" references="//@dataModel/@dataClasses.17/@dataReferences.0 //@dataModel/@dataClasses.14/@dataReferences.0"/>
     <dataAssociations name="Contact_PhoneNumber" references="//@dataModel/@dataClasses.4/@dataReferences.0 //@dataModel/@dataClasses.5/@dataReferences.0"/>
     <dataAssociations name="Contact_PhysicalAddress" references="//@dataModel/@dataClasses.6/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.1"/>
     <dataAssociations name="Contact_Email" references="//@dataModel/@dataClasses.7/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.2"/>

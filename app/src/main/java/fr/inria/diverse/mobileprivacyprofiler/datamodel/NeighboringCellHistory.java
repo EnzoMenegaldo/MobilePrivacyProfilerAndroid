@@ -140,6 +140,11 @@ public class NeighboringCellHistory {
     	sb.append(">");
 
 
+		if(this.cells!= null){
+			sb.append("\n"+indent+"\t<"+XML_REF_CELLS+">");
+			sb.append(this.cells.getId());
+	    	sb.append("</"+XML_REF_CELLS+">");
+		}
 		// TODO deal with other case
 
 		sb.append("</"+XML_NEIGHBORINGCELLHISTORY+">");

@@ -1,6 +1,5 @@
 package fr.inria.diverse.mobileprivacyprofiler.services;
 
-import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorDescription;
@@ -14,7 +13,6 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.BatteryManager;
@@ -26,25 +24,14 @@ import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
-import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
-
-import android.os.Parcelable;
-
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.stmt.PreparedQuery;
 
-import java.net.Authenticator;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
@@ -56,13 +43,10 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.OtherCell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OtherCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.PhoneCallLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
-
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in

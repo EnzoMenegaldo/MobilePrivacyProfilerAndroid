@@ -57,10 +57,10 @@ public class Cell {
 	protected int cellId;
 	
 
-	@ForeignCollectionField(eager = false, foreignFieldName = "identity")
+	@ForeignCollectionField(eager = false, foreignFieldName = "cells")
 	protected ForeignCollection<NeighboringCellHistory> history;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	@DatabaseField(foreign = true)
 	protected CdmaCellData cdmaposition;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
