@@ -245,6 +245,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_CALENDAREVENT_PLACE = "PLACE";
 	public static final String DATAATT_CALENDAREVENT_participants = "participants";
 	public static final String DATAATT_CALENDAREVENT_PARTICIPANTS = "PARTICIPANTS";
+	public static final String DATAATT_CALENDAREVENT_eventId = "eventId";
+	public static final String DATAATT_CALENDAREVENT_EVENTID = "EVENTID";
 	public static final String DATAATT_PHONECALLLOG_phoneNumber = "phoneNumber";
 	public static final String DATAATT_PHONECALLLOG_PHONENUMBER = "PHONENUMBER";
 	public static final String DATAATT_PHONECALLLOG_date = "date";
@@ -1228,6 +1230,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setEndDate(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_endDate));
 		result.setPlace(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_place));
 		result.setParticipants(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_participants));
+		// TODO eventId = parser.getAttributeValue(null, DATAATT_CALENDAREVENT_EVENTID);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
+import com.j256.ormlite.dao.CloseableIterator;
 import android.util.Log;
 import java.util.List;
 //End of user code
@@ -203,12 +204,29 @@ public class MobilePrivacyProfilerDBHelper {
 			Log.e(TAG,"error while querying Authentification types in the base", e);
 			}
 
-
 		for(Authentification auth :queryOutput){
 			result.add(auth.getType());
 		}
 
 		return result;
+	}
+
+	/** find Cell in the base using cellId
+	 * @param eventID
+	 * @return the corresponding CalendarEvent or null if not found
+	 */
+	public CalendarEvent queryCalendarEvent(long eventID){
+		CalendarEvent queryCalendarEvent = new CalendarEvent();
+		queryCalendarEvent.setEventId(eventID);
+		List<CalendarEvent> queryOutput= null;
+		try {
+			queryOutput = this.calendarEventDao.queryForMatching(queryCalendarEvent);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		if(null!=queryOutput) {return queryOutput.get(0);}
+		else { return null; }
 	}
 
 	/**

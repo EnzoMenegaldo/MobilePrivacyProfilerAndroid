@@ -81,6 +81,7 @@
       <dataAttributes name="endDate" type="//@dataModel/@dataClasses.24"/>
       <dataAttributes name="place" documentation="place where the event is supposed to occur" type="//@dataModel/@dataClasses.24"/>
       <dataAttributes name="participants" documentation="list of participants (raw string for the moment)" type="//@dataModel/@dataClasses.25"/>
+      <dataAttributes name="eventId" type="//@dataModel/@dataClasses.28"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="PhoneCallLog">
       <dataAttributes name="phoneNumber" documentation="phone number or unknown" type="//@dataModel/@dataClasses.24"/>

@@ -10,7 +10,7 @@
 [WifiAccessPoint|ssid : String;Location : String]		
 [DetectedWifi|startDetectionDate : String;endDetectionDate : String;hasConnected : Integer;ssid : String]		
 [Geolocation|date : String;position : String;precision : Integer;altitude : Integer]		
-[CalendarEvent|EventLabel : String;startDate : String;endDate : String;place : String;participants : LongString]		
+[CalendarEvent|EventLabel : String;startDate : String;endDate : String;place : String;participants : LongString;eventId : Long]		
 [PhoneCallLog|phoneNumber : String;date : Date;duration : Long;callType : String]		
 [Cell|cellId : Integer]		
 [OtherCellData|lacTac : Integer;type : String]		

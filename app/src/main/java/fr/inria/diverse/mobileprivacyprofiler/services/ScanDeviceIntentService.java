@@ -19,10 +19,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.provider.CalendarContract;
 import android.provider.CallLog;
-import android.provider.Telephony;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
@@ -38,6 +36,7 @@ import android.os.Parcelable;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.stmt.PreparedQuery;
 
 import java.net.Authenticator;
 import java.text.SimpleDateFormat;
@@ -51,6 +50,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Authentification;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.CalendarEvent;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
@@ -85,6 +85,7 @@ public class ScanDeviceIntentService extends IntentService {
     private static final String ACTION_RECORD_LOCATION = "fr.inria.diverse.mobileprivacyprofiler.services.action.RECORD_LOCATION";
     private static final String ACTION_SCAN_AUTHENTICATORS = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_AUTHENTICATORS";
     private static final String ACTION_SCAN_CALL_HISTORY = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_CALL_HISTORY";
+    private static final String ACTION_SCAN_CALENDAR_EVENT = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_CALENDAR_EVENT";
     private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.services.action.BAZ";
 
     // TODO: Rename parameters
@@ -197,6 +198,18 @@ public class ScanDeviceIntentService extends IntentService {
     }
 
     /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanCalendarEvent(Context context) {
+        Intent intent = new Intent(context, ScanDeviceIntentService.class);
+        intent.setAction( ACTION_SCAN_CALENDAR_EVENT);
+        context.startService(intent);
+    }
+
+    /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
@@ -233,6 +246,8 @@ public class ScanDeviceIntentService extends IntentService {
                 handleActionScanAuthenticators(intent);
             } else if (ACTION_SCAN_CALL_HISTORY.equals(action)) {
                 handleActionScanCallHistory(intent);
+            } else if (ACTION_SCAN_CALENDAR_EVENT.equals(action)) {
+                handleActionScanCalendarEvent(intent);
             } else if (ACTION_BAZ.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
@@ -558,7 +573,6 @@ public class ScanDeviceIntentService extends IntentService {
      */
     @SuppressLint("MissingPermission")
     private void handleActionScanAuthenticators(Intent intent) {
-        // TODO: Handle action RecordLocation
         //set up the manager
         Log.d(TAG,"Scanning authenticators");
         AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
@@ -614,7 +628,6 @@ public class ScanDeviceIntentService extends IntentService {
         Log.d(TAG,"   Starting new Call History Scan : time of last scan "+ displayLastScan);
 
 
-        //TODO
         if(null!=callLogCursor) {
             while (callLogCursor.moveToNext()) {//processing call log entries
 
@@ -640,6 +653,91 @@ public class ScanDeviceIntentService extends IntentService {
         Log.d(TAG,"Updating last Call History Scan");
         metadata.setLastCallScan(new Date());
         getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+
+    }
+    /**
+     * Handle action ScanCalendarEvent in the provided background thread with the provided
+     * parameters.
+     */
+    @SuppressLint("MissingPermission")
+    private void
+    handleActionScanCalendarEvent(Intent intent){
+        // Projection array. Creating indices for this array
+         String[] EVENT_PROJECTION = new String[] {
+                 CalendarContract.Events._ID,                        // 0
+                 CalendarContract.Events.ORGANIZER,                  // 1
+                 CalendarContract.Events.TITLE,                      // 2
+                 CalendarContract.Events.EVENT_LOCATION,             // 3
+                 CalendarContract.Events.DTSTART,                    // 4
+                 CalendarContract.Events.DTEND                       // 5
+        };
+
+        // The indices for the projection array above.
+         int PROJECTION_ID_INDEX             = 0;
+         int PROJECTION_OrganizerMail_INDEX  = 1;
+         int PROJECTION_TITLE_INDEX          = 2;
+         int PROJECTION_EVENT_LOCATION_INDEX = 3;
+         int PROJECTION_DTSTART_INDEX        = 4;
+         int PROJECTION_DTEND_INDEX          = 5;
+
+        Cursor queryEventOutput = null;
+
+        ContentResolver cr = getContentResolver();
+        Uri uri = CalendarContract.Events.CONTENT_URI;
+        // Submit the query and get a Cursor object back.
+        queryEventOutput = cr.query(uri, EVENT_PROJECTION, null, null, null);
+
+        while (queryEventOutput.moveToNext()) {
+            long eventID = 0;
+            String eventLabel = null;
+            String place = null;
+            String startDate = null;
+            String endDate = null;
+
+            // Get the field values
+            eventID = queryEventOutput.getLong(PROJECTION_ID_INDEX);
+            eventLabel = queryEventOutput.getString(PROJECTION_TITLE_INDEX);
+            place = queryEventOutput.getString(PROJECTION_EVENT_LOCATION_INDEX);
+            startDate = queryEventOutput.getString(PROJECTION_DTSTART_INDEX);
+            endDate = queryEventOutput.getString(PROJECTION_DTEND_INDEX);
+
+            // Preparing the gathering on participant's information
+            String participants = null;
+
+            String[] ATTENDEE_PROJECTION = new String[] {CalendarContract.Attendees.ATTENDEE_NAME};
+
+            Cursor queryAttendeeOuput = null;
+
+            uri = CalendarContract.Attendees.CONTENT_URI;
+            String[] arg ={ ""+eventID};
+            queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
+
+            while (queryAttendeeOuput.moveToNext()){
+                participants+= queryAttendeeOuput.getString(0);
+            }
+            //Stocking data
+            CalendarEvent RegistredEvent = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
+            if(null!=RegistredEvent)
+            {
+                // edit event
+                RegistredEvent.setStartDate(startDate);
+                RegistredEvent.setEndDate(endDate);
+                RegistredEvent.setPlace(place);
+                RegistredEvent.setParticipants(participants);
+                getDBHelper().getCalendarEventDao().update(RegistredEvent);
+            }
+            else
+            {
+                // add new event
+                CalendarEvent calendarEvent = new CalendarEvent();
+                calendarEvent.setEventId(eventID);
+                calendarEvent.setStartDate(startDate);
+                calendarEvent.setEndDate(endDate);
+                calendarEvent.setPlace(place);
+                calendarEvent.setParticipants(participants);
+                getDBHelper().getCalendarEventDao().create(calendarEvent);
+            }
+            }
 
     }
 
