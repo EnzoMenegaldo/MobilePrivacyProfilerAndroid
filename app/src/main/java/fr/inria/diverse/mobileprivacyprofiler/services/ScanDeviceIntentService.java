@@ -693,7 +693,7 @@ public class ScanDeviceIntentService extends IntentService {
             Cursor queryAttendeeOuput = null;
 
             uri = CalendarContract.Attendees.CONTENT_URI;
-            String[] arg ={ ""+eventID};
+            String[] arg ={""+eventID};
             queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
 
             while (queryAttendeeOuput.moveToNext()){
@@ -701,20 +701,18 @@ public class ScanDeviceIntentService extends IntentService {
             }
             //Stocking data
             CalendarEvent RegistredEvent = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
-            if(null!=RegistredEvent)
-            {
-                // edit event
+            if(null!=RegistredEvent) {   // edit event
+                RegistredEvent.setEventLabel(eventLabel);
                 RegistredEvent.setStartDate(startDate);
                 RegistredEvent.setEndDate(endDate);
                 RegistredEvent.setPlace(place);
                 RegistredEvent.setParticipants(participants);
                 getDBHelper().getCalendarEventDao().update(RegistredEvent);
             }
-            else
-            {
-                // add new event
+            else {   // add new event
                 CalendarEvent calendarEvent = new CalendarEvent();
                 calendarEvent.setEventId(eventID);
+                RegistredEvent.setEventLabel(eventLabel);
                 calendarEvent.setStartDate(startDate);
                 calendarEvent.setEndDate(endDate);
                 calendarEvent.setPlace(place);
@@ -722,9 +720,7 @@ public class ScanDeviceIntentService extends IntentService {
                 getDBHelper().getCalendarEventDao().create(calendarEvent);
             }
             }
-
     }
-
 
         /**
          * Handle action Baz in the provided background thread with the provided

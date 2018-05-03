@@ -42,5 +42,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    compile files('lib/jackson-core-2.9.5-javadoc.jar')
+    compile files(
+            'lib/jackson-core-2.9.5-javadoc.jar',
+            'lib/jackson-databind-2.9.5.jar'
+    )
 }
