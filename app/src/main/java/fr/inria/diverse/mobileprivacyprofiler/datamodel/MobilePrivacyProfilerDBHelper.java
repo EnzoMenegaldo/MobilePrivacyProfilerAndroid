@@ -250,6 +250,19 @@ public class MobilePrivacyProfilerDBHelper {
 		return metadata;
 	}
 
+	/**
+	 * Get a list of all entries in ApplicationHistory
+	 * @return List<ApplicationHistory>
+	 */
+	public List<ApplicationHistory> getAllApplicationHistory() {
+		List<ApplicationHistory> result=null;
+		CloseableIterator<ApplicationHistory> it = this.applicationHistoryDao.iterator();
+
+		while(it.hasNext()){ result.add(it.next());}
+
+		it.closeQuietly();
+		return result;
+	}
 
 	//End of user code
 
