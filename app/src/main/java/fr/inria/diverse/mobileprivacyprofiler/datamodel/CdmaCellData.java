@@ -138,6 +138,11 @@ public class CdmaCellData {
     	sb.append(">");
 
 
+		if(this.identity!= null){
+			sb.append("\n"+indent+"\t<"+XML_REF_IDENTITY+">");
+			sb.append(this.identity.getId());
+	    	sb.append("</"+XML_REF_IDENTITY+">");
+		}
 		// TODO deal with other case
 
 		sb.append("</"+XML_CDMACELLDATA+">");
