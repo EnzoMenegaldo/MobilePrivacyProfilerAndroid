@@ -63,7 +63,12 @@ public class MobilePrivacyRestClient {
         List<ApplicationHistory> appHistToExport= getDBHelper(context).getMobilePrivacyProfilerDBHelper().getAllApplicationHistory();
         //translation of the collection into Json
         ObjectMapper mapper = new ObjectMapper();
-        String jsonList = mapper.writeValueAsString(appHistToExport);
+        String jsonList = null;
+        try {
+            jsonList = mapper.writeValueAsString(appHistToExport);
+        } catch (Exception jsonProcessingException) {
+            jsonProcessingException.printStackTrace();
+        }
 
         try {
             //Map<String, List<ApplicationHistory>> postData = new HashMap<>();

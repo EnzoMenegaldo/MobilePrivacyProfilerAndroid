@@ -5,6 +5,12 @@
 	-->
 	<!-- freely add here the desired resource String for your custom view -->
 	<string name="manualscan_customview_applicationhistorylist_btn_label">Scan historique des applications</string>
+	<string name="manualscan_customview_batteryusage_btn_label">Scan utilisation de la batterie</string>
+	<string name="manualscan_customview_sms_btn_label">Scan SMS</string>
+	<string name="manualscan_customview_neighboringcellhistory_btn_label">Scan des cellules approchées</string>
+	<string name="manualscan_customview_phonecalllog_btn_label">Scan des statistiques des appels</string>
+	<string name="manualscan_customview_calendarevent_btn_label">Scan des évènements du calendrier</string>
+	<string name="manualscan_customview_identity_btn_label">Scan des profils application</string>
 	<!-- End of user code
 	-->
 </resources>

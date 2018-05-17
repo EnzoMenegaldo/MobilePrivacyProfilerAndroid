@@ -81,11 +81,6 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_month_app_usage));
 		ScanDeviceIntentService.startActionScanAppUsage(this);
-
-		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
-				"\n"+
-				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_battery));
-		ScanDeviceIntentService.startActionScanBatteryUsage(this);
 /*
 		new JobRequest.Builder(ScanAppUsageJob.TAG)
 				.startNow()
@@ -97,6 +92,43 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				.build()
 				.schedule();*/
     }
+    //-------> methods to trigger actions from button click <-------
+	public void onClickBtnBatteryUsage(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_battery));
+		ScanDeviceIntentService.startActionScanBatteryUsage(this);
+	}
+	public void onClickBtnSMS(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_sms));
+		ScanDeviceIntentService.startActionScanSms(this);
+	}
+	public void onClickBtnNeihgboringCellHistory(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_neighboring_cell_history));
+		ScanDeviceIntentService.startActionScanCellInfo(this);
+	}
+	public void onClickBtnPhoneCallLog(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_phone_call_log));
+		ScanDeviceIntentService.startActionScanCallHistory(this);
+	}
+	public void onClickBtnAuthentification(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_authentification));
+		ScanDeviceIntentService.startActionScanAuthenticators(this);
+	}
+	public void onClickBtnCalendarEvent(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_calendar_event));
+		ScanDeviceIntentService.startActionScanCalendarEvent(this);
+	}
 
 	//End of user code
 

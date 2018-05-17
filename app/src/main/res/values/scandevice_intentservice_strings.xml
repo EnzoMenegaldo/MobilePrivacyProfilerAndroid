@@ -3,7 +3,12 @@
 
     <string name="scandevice_intentservice_start_service">Démarrage du service</string>
     <string name="scandevice_intentservice_starting_scan_installed_applications">Inspection des applications installées</string>
-    <string name="scandevice_intentservice_starting_scan_month_app_usage">Inspection des stat mensuelles des applications</string>
-    <string name="scandevice_intentservice_starting_scan_battery">Inspection des stat de l\'usage de votre batterie</string>
+    <string name="scandevice_intentservice_starting_scan_month_app_usage">Inspection des stats mensuelles des applications</string>
+    <string name="scandevice_intentservice_starting_scan_sms">Inspection des messages text</string>
+    <string name="scandevice_intentservice_starting_scan_neighboring_cell_history">Inspection cellules rencontéres</string>
+    <string name="scandevice_intentservice_starting_scan_phone_call_log">Inspection des stats des appels</string>
+    <string name="scandevice_intentservice_starting_scan_calendar_event">Inspection des évènements du calendrier</string>
+    <string name="scandevice_intentservice_starting_scan_authentification">Inspection profils des applications</string>
+    <string name="scandevice_intentservice_starting_scan_battery">Inspection des usages de la batterie</string>
 
 </resources>

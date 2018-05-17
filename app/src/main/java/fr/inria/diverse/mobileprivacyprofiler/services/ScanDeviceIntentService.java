@@ -1,5 +1,6 @@
 package fr.inria.diverse.mobileprivacyprofiler.services;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorDescription;
@@ -19,6 +20,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.provider.CallLog;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
@@ -189,7 +191,7 @@ public class ScanDeviceIntentService extends IntentService {
      */
     public static void startActionScanCalendarEvent(Context context) {
         Intent intent = new Intent(context, ScanDeviceIntentService.class);
-        intent.setAction( ACTION_SCAN_CALENDAR_EVENT);
+        intent.setAction(ACTION_SCAN_CALENDAR_EVENT);
         context.startService(intent);
     }
 
@@ -270,6 +272,7 @@ public class ScanDeviceIntentService extends IntentService {
             } else {
                 // update
                 // TODO
+                //getDBHelper().getApplicationHistoryDao().update(applicationHistory);
             }
         }
 
@@ -398,7 +401,7 @@ public class ScanDeviceIntentService extends IntentService {
         Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl
                 + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
 
-        BatteryUsage batState = new BatteryUsage(time, batteryLvl,isPlugged, plugType);
+        BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType);
         getDBHelper().getBatteryUsageDao().create(batState);
     }
 
@@ -410,42 +413,46 @@ public class ScanDeviceIntentService extends IntentService {
 
     private void handleActionScanSms() {
         //list sms sources
-        String[] sources ={"content://sms/inbox","content://sms/sent"};
+        String[] sources = {"content://sms/inbox", "content://sms/sent"};
         //get the last update if it exist(else expecting = null)
         MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         Date lastScan = metadata.getLastSmsScan();
 
         String displayLastScan;
-        if(null==lastScan){displayLastScan="none";}else{displayLastScan=lastScan.toString();}
-        Log.d(TAG,"   Starting new SmsScan : time of last scan "+ displayLastScan);
+        if (null == lastScan) {
+            displayLastScan = "none";
+        } else {
+            displayLastScan = lastScan.toString();
+        }
+        Log.d(TAG, "   Starting new SmsScan : time of last scan " + displayLastScan);
 
         //fetch sms from each sources
-        for(String source:sources) {
-            Cursor cursor=null;
+        for (String source : sources) {
+            Cursor cursor = null;
             Uri mSmsQueryUri = Uri.parse(source);
             String columns[] = new String[]{"person", "address", "body", "date", "status"};
             //if not 1st scan
-            if(null!=lastScan) {
-                Log.d(TAG,"Fetching messages up to last scan");
-                String lastScanString=""+lastScan.getTime();
-                 String[] arguments={lastScanString};
-                 cursor = getContentResolver().query(mSmsQueryUri, columns, "date > ?", arguments, null);
+            if (null != lastScan) {
+                Log.d(TAG, "Fetching messages up to last scan");
+                String lastScanString = "" + lastScan.getTime();
+                String[] arguments = {lastScanString};
+                cursor = getContentResolver().query(mSmsQueryUri, columns, "date > ?", arguments, null);
             }
             //if 1st scan
-            else{
-                Log.d(TAG,"Fetching all messages");
+            else {
+                Log.d(TAG, "Fetching all messages");
                 cursor = getContentResolver().query(mSmsQueryUri, columns, null, null, null);
             }
-            while(cursor.moveToNext()) {
+            while (cursor.moveToNext()) {
                 String date = cursor.getString(3);
                 String phoneNumber = cursor.getString(1);
                 String type = cursor.getString(4);
                 SMS sms = new SMS(date, phoneNumber, type);
                 getDBHelper().getSMSDao().create(sms);
             }
-        cursor.close();
+            cursor.close();
         }
-        Log.d(TAG,"Updating last SMS scan");
+        Log.d(TAG, "Updating last SMS scan");
         metadata.setLastSmsScan(new Date());
         getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
     }
@@ -454,28 +461,38 @@ public class ScanDeviceIntentService extends IntentService {
      * Handle action ScanCellInfo in the provided background thread with the provided
      * parameters.
      */
-    @SuppressLint("MissingPermission")
+
     private void handleActionScanCellInfo(Intent intent) {
         //set up the manager
-        Log.d(TAG,"Requesting CellInfo");
+        Log.d(TAG, "Requesting CellInfo");
         TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();// get a collection of the cells of the neighborhood
-        Log.d(TAG,"Finding "+cellInfos.size()+" cells");
+        Log.d(TAG, "Finding " + cellInfos.size() + " cells");
         //setting up args to fill DAOs
-        String  cellType    = "";
-        Date    date        = new Date();
-        Integer cellId      = null;
-        Integer longitude   = null;
-        Integer latitude    = null;
-        Integer lacTac        = null;
-        Integer strength     = 0;
+        String cellType = "";
+        Date date = new Date();
+        Integer cellId = null;
+        Integer longitude = null;
+        Integer latitude = null;
+        Integer lacTac = null;
+        Integer strength = 0;
 
-        boolean isCell=false;
+        boolean isCell = false;
         //dealing with datas to add
-        for(CellInfo cellInfo:cellInfos){ // fetching info regarding of the cell type
+        for (CellInfo cellInfo : cellInfos) { // fetching info regarding of the cell type
             if (cellInfo instanceof CellInfoCdma) {
-                isCell=true;
-                CellInfoCdma cell =(CellInfoCdma) cellInfo;
+                isCell = true;
+                CellInfoCdma cell = (CellInfoCdma) cellInfo;
                 cellType = "Cdma";
                 cellId = cell.getCellIdentity().getBasestationId();
                 longitude = cell.getCellIdentity().getLongitude();
@@ -483,7 +500,7 @@ public class ScanDeviceIntentService extends IntentService {
                 strength = cell.getCellSignalStrength().getDbm();
             }
             if (cellInfo instanceof CellInfoGsm) {
-                isCell=true;
+                isCell = true;
                 CellInfoGsm cell = (CellInfoGsm) cellInfo;
                 cellType = "Gsm";
                 cellId = cell.getCellIdentity().getCid();
@@ -491,37 +508,36 @@ public class ScanDeviceIntentService extends IntentService {
                 strength = cell.getCellSignalStrength().getDbm();
             }
             if (cellInfo instanceof CellInfoLte) {
-                isCell=true;
-                CellInfoLte cell =  (CellInfoLte) cellInfo;
+                isCell = true;
+                CellInfoLte cell = (CellInfoLte) cellInfo;
                 cellType = "Lte";
                 cellId = cell.getCellIdentity().getCi();
                 lacTac = cell.getCellIdentity().getTac();
                 strength = cell.getCellSignalStrength().getDbm();
             }
             if (cellInfo instanceof CellInfoWcdma) {
-                isCell=true;
+                isCell = true;
                 CellInfoWcdma cell = (CellInfoWcdma) cellInfo;
                 cellType = "Wcdma";
                 cellId = cell.getCellIdentity().getCid();
                 lacTac = cell.getCellIdentity().getLac();
                 strength = cell.getCellSignalStrength().getDbm();
             }
-            if(isCell) {//isCell true if the cell as been recognised
+            if (isCell) {//isCell true if the cell as been recognised
                 Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
-                if(null==cell){// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
-                    Log.d(TAG,"Adding a new "+cellType+" Cell");
+                if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
+                    Log.d(TAG, "Adding a new " + cellType + " Cell");
                     Cell newCell = new Cell();
                     newCell.setCellId(cellId);
                     getDBHelper().getCellDao().create(newCell);
-                    cell=newCell;
-                    if("Cdma"==cellType){
+                    cell = newCell;
+                    if ("Cdma" == cellType) {
                         CdmaCellData cdmaCellData = new CdmaCellData();
                         cdmaCellData.setLongitude(longitude);
                         cdmaCellData.setLatitude(latitude);
                         cdmaCellData.setIdentity(newCell);
                         getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
-                    }
-                    else{
+                    } else {
                         OtherCellData otherCell = new OtherCellData();
                         otherCell.setLacTac(lacTac);
                         otherCell.setType(cellType);
@@ -530,7 +546,7 @@ public class ScanDeviceIntentService extends IntentService {
                     }
                 }
                 //then add the history log
-                Log.d(TAG,"New Cell history :"+strength+" dBm, "+date.toString());
+                Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString());
                 NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
                 neighboringCellHistory.setStrength(strength);
                 neighboringCellHistory.setDate(date);
@@ -555,10 +571,10 @@ public class ScanDeviceIntentService extends IntentService {
      * parameters.
      * @param intent
      */
-    @SuppressLint("MissingPermission")
+
     private void handleActionScanAuthenticators(Intent intent) {
         //set up the manager
-        Log.d(TAG,"Scanning authenticators");
+        Log.d(TAG, "Scanning authenticators");
         AccountManager accountManager = (AccountManager) this.getSystemService(Context.ACCOUNT_SERVICE);
 
         Account[] accounts = accountManager.getAccounts();// get a collection of Accounts and Descriptors
@@ -566,18 +582,21 @@ public class ScanDeviceIntentService extends IntentService {
 
         List<String> RegistredAuthType = getDBHelper().getMobilePrivacyProfilerDBHelper().queryAllAuthentificationType();
 
-        for(AuthenticatorDescription authDesc :authDescriptions){
-            if(!RegistredAuthType.contains(authDesc.type)){//check is the authenticator is already registered
+        for (AuthenticatorDescription authDesc : authDescriptions) {
+            if (!RegistredAuthType.contains(authDesc.type)) {//check is the authenticator is already registered
                 //add a new entry
-                Log.d(TAG,"New Authentification :"+authDesc.type);
+                Log.d(TAG, "New Authentification :" + authDesc.type);
                 //fetching parameters
                 String packageName = authDesc.packageName;
                 String type = authDesc.type;
                 String name = "";
                 Boolean trouve = false;
 
-                for(int i=0;!trouve&&i<accounts.length;i++){
-                if(type==accounts[i].type){trouve=true;name=accounts[i].name;}
+                for (int i = 0; !trouve && i < accounts.length; i++) {
+                    if (type == accounts[i].type) {
+                        trouve = true;
+                        name = accounts[i].name;
+                    }
                 }
 
                 Authentification auth = new Authentification();
@@ -593,10 +612,20 @@ public class ScanDeviceIntentService extends IntentService {
      * Handle action ScanCallHistory in the provided background thread with the provided
      * parameters.
      */
-    @SuppressLint("MissingPermission")
+
     private void handleActionScanCallHistory(Intent intent) {
         //making a cursor out of the CallLog's data
         ContentResolver contentResolver = getContentResolver();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         Cursor callLogCursor = contentResolver.query(android.provider.CallLog.Calls.CONTENT_URI, /*uri*/
                 null,
                 null,
@@ -608,24 +637,28 @@ public class ScanDeviceIntentService extends IntentService {
         Date lastScan = metadata.getLastCallScan();
 
         String displayLastScan;
-        if(null==lastScan){displayLastScan="none";}else{displayLastScan=lastScan.toString();}
-        Log.d(TAG,"   Starting new Call History Scan : time of last scan "+ displayLastScan);
+        if (null == lastScan) {
+            displayLastScan = "none";
+        } else {
+            displayLastScan = lastScan.toString();
+        }
+        Log.d(TAG, "   Starting new Call History Scan : time of last scan " + displayLastScan);
 
 
-        if(null!=callLogCursor) {
+        if (null != callLogCursor) {
             while (callLogCursor.moveToNext()) {//processing call log entries
 
-                Date date =new Date(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DATE)) );
+                Date date = new Date(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DATE)));
 
-                if(date.after(lastScan)) {//if the log has been registered since last scan
+                if (date.after(lastScan)) {//if the log has been registered since last scan
 
                     String phoneNumber = callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.NUMBER));
 
-                    long duration =new Float(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DURATION))*0.001).longValue();
+                    long duration = new Float(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DURATION)) * 0.001).longValue();
 
                     int callTypeCode = callLogCursor.getInt(callLogCursor.getColumnIndex(CallLog.Calls.TYPE));
-                    String[] typeArray = {"INCOMING","OUTGOING","MISSED","VOICEMAIL","REJECTED","BLOCKED","ANSWERED_EXTERNALLY"};
-                    String callType = typeArray[callTypeCode-1];
+                    String[] typeArray = {"INCOMING", "OUTGOING", "MISSED", "VOICEMAIL", "REJECTED", "BLOCKED", "ANSWERED_EXTERNALLY"};
+                    String callType = typeArray[callTypeCode - 1];
 
                     PhoneCallLog CallLog = new PhoneCallLog(phoneNumber, date, duration, callType);
                     getDBHelper().getPhoneCallLogDao().create(CallLog);
@@ -634,7 +667,7 @@ public class ScanDeviceIntentService extends IntentService {
         }
         callLogCursor.close();
 
-        Log.d(TAG,"Updating last Call History Scan");
+        Log.d(TAG, "Updating last Call History Scan");
         metadata.setLastCallScan(new Date());
         getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
@@ -643,32 +676,42 @@ public class ScanDeviceIntentService extends IntentService {
      * Handle action ScanCalendarEvent in the provided background thread with the provided
      * parameters.
      */
-    @SuppressLint("MissingPermission")
+
     private void
-    handleActionScanCalendarEvent(Intent intent){
+    handleActionScanCalendarEvent(Intent intent) {
         // Projection array. Creating indices for this array
-         String[] EVENT_PROJECTION = new String[] {
-                 CalendarContract.Events._ID,                        // 0
-                 CalendarContract.Events.ORGANIZER,                  // 1
-                 CalendarContract.Events.TITLE,                      // 2
-                 CalendarContract.Events.EVENT_LOCATION,             // 3
-                 CalendarContract.Events.DTSTART,                    // 4
-                 CalendarContract.Events.DTEND                       // 5
+        String[] EVENT_PROJECTION = new String[]{
+                CalendarContract.Events._ID,                        // 0
+                CalendarContract.Events.ORGANIZER,                  // 1
+                CalendarContract.Events.TITLE,                      // 2
+                CalendarContract.Events.EVENT_LOCATION,             // 3
+                CalendarContract.Events.DTSTART,                    // 4
+                CalendarContract.Events.DTEND                       // 5
         };
 
         // The indices for the projection array above.
-         int PROJECTION_ID_INDEX             = 0;
-         int PROJECTION_OrganizerMail_INDEX  = 1;
-         int PROJECTION_TITLE_INDEX          = 2;
-         int PROJECTION_EVENT_LOCATION_INDEX = 3;
-         int PROJECTION_DTSTART_INDEX        = 4;
-         int PROJECTION_DTEND_INDEX          = 5;
+        int PROJECTION_ID_INDEX = 0;
+        int PROJECTION_OrganizerMail_INDEX = 1;
+        int PROJECTION_TITLE_INDEX = 2;
+        int PROJECTION_EVENT_LOCATION_INDEX = 3;
+        int PROJECTION_DTSTART_INDEX = 4;
+        int PROJECTION_DTEND_INDEX = 5;
 
         Cursor queryEventOutput = null;
 
         ContentResolver cr = getContentResolver();
         Uri uri = CalendarContract.Events.CONTENT_URI;
         // Submit the query and get a Cursor object back.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         queryEventOutput = cr.query(uri, EVENT_PROJECTION, null, null, null);
 
         while (queryEventOutput.moveToNext()) {

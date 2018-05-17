@@ -15,6 +15,48 @@
 		android:onClick="onClickBtnApplicationHistoryManualScan"
 		android:text="@string/manualscan_customview_applicationhistorylist_btn_label" />
 
+	<Button
+		android:id="@+id/btnSMS"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnSMS"
+		android:text="@string/manualscan_customview_sms_btn_label" />
+
+	<Button
+		android:id="@+id/btnNeihgboringCellHistory"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnNeihgboringCellHistory"
+		android:text="@string/manualscan_customview_neighboringcellhistory_btn_label" />
+
+	<Button
+		android:id="@+id/btnPhoneCallLog"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnPhoneCallLog"
+		android:text="@string/manualscan_customview_phonecalllog_btn_label" />
+
+	<Button
+		android:id="@+id/btnAuthentification"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnAuthentification"
+		android:text="@string/manualscan_customview_identity_btn_label" />
+
+	<Button
+		android:id="@+id/btnBatteryUsage"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnBatteryUsage"
+		android:text="@string/manualscan_customview_batteryusage_btn_label" />
+
+	<Button
+		android:id="@+id/btnCalendarEvent"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnCalendarEvent"
+		android:text="@string/manualscan_customview_calendarevent_btn_label" />
+
 
 </LinearLayout>
 <!--End of user code
