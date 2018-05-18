@@ -12,6 +12,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWif
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
 import com.j256.ormlite.dao.CloseableIterator;
 import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.List;
 //End of user code
 /**
@@ -194,7 +196,7 @@ public class MobilePrivacyProfilerDBHelper {
 	 * @return A list of String types
 	 */
 	public List<String> queryAllAuthentificationType(){
-		List<String> result=null;
+		List<String> result=new ArrayList<String>();
 
 		Authentification queryAuth = new Authentification();
 		List<Authentification> queryOutput=null;
@@ -225,7 +227,7 @@ public class MobilePrivacyProfilerDBHelper {
 			e.printStackTrace();
 		}
 
-		if(null!=queryOutput) {return queryOutput.get(0);}
+		if(0!=queryOutput.size()) {return queryOutput.get(0);}
 		else { return null; }
 	}
 

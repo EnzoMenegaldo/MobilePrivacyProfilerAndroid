@@ -10,5 +10,6 @@
     <string name="scandevice_intentservice_starting_scan_calendar_event">Inspection des évènements du calendrier</string>
     <string name="scandevice_intentservice_starting_scan_authentification">Inspection profils des applications</string>
     <string name="scandevice_intentservice_starting_scan_battery">Inspection des usages de la batterie</string>
+    <string name="scandevice_intentservice_starting_scan_app_usage_stat">Inspection des utilisations des applications</string>
 
 </resources>

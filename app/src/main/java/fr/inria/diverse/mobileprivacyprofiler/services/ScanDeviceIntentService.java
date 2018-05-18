@@ -7,11 +7,13 @@ import android.accounts.AuthenticatorDescription;
 import android.annotation.SuppressLint;
 import android.app.AppOpsManager;
 import android.app.IntentService;
+import android.app.usage.UsageEvents;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -31,6 +33,7 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -221,7 +224,7 @@ public class ScanDeviceIntentService extends IntentService {
             } else if (ACTION_SCAN_APP_USAGE.equals(action)) {
                 handleActionScanAppUsage();
             } else if (ACTION_SCAN_BATTERY_USAGE.equals(action)) {
-                handleActionScanBatteryUsage(intent);
+                handleActionScanBatteryUsage();
             } else if (ACTION_SCAN_SMS.equals(action)) {
                 handleActionScanSms();
             } else if (ACTION_SCAN_CELL_INFO.equals(action)) {
@@ -293,7 +296,10 @@ public class ScanDeviceIntentService extends IntentService {
     }
 
     private void scanAppUsageForLastPeriod(int periodType) {
+        Log.d(TAG, "Adding new AppUse : preSDK test");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.d(TAG, "Adding new AppUse");
+
             UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
             Calendar calendar = Calendar.getInstance();
             //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -313,10 +319,11 @@ public class ScanDeviceIntentService extends IntentService {
             // startDate.add(Calendar.MONTH, -1);
             long start = startDate.getTimeInMillis();
             long end = endDate.getTimeInMillis();
-            Log.d(TAG, "   Stat period required " + DateUtils.printDate(start) +
+            Log.d(TAG, " Stat period required " + DateUtils.printDate(start) +
                     " - " + DateUtils.printDate(end));
+            //TODO query doesn't bring anything
             List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType, start, end);
-            Log.d(TAG, "usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + hasPermission());
+            Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + hasPermission());
             for (UsageStats appUsageStatsentry : stats) {
                 Log.d(TAG, "stats for " + appUsageStatsentry.getPackageName());
                 ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().
@@ -354,21 +361,24 @@ public class ScanDeviceIntentService extends IntentService {
                     }
                 }
             }
-        }
-    }
+        }//end ifSdk check
+    }//end method
 
     /**
      * Handle action ScanBatteryUsage in the provided background thread with the provided
      * parameters.
      */
 
-    private void handleActionScanBatteryUsage(Intent intent) {
+    private void handleActionScanBatteryUsage() {
 
         //entry date
         Date time = new Date();
 
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = registerReceiver(null, ifilter);
+
         //connexion check
-        int chargePlug = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
         boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
         boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
         boolean wireLessCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
@@ -391,15 +401,14 @@ public class ScanDeviceIntentService extends IntentService {
         }
 
         //get the battery lvl
-        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
         float batteryPct = (level / (float) scale) * 100f;
         Integer batteryLvl = new Integer((int) batteryPct);
 
         //new entry in DB
-        Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl
-                + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
+        Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
 
         BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType);
         getDBHelper().getBatteryUsageDao().create(batState);
@@ -430,7 +439,7 @@ public class ScanDeviceIntentService extends IntentService {
         for (String source : sources) {
             Cursor cursor = null;
             Uri mSmsQueryUri = Uri.parse(source);
-            String columns[] = new String[]{"person", "address", "body", "date", "status"};
+            String columns[] = new String[]{"person", "address", "body", "date", "status"/*,"body"*/};
             //if not 1st scan
             if (null != lastScan) {
                 Log.d(TAG, "Fetching messages up to last scan");
@@ -446,9 +455,12 @@ public class ScanDeviceIntentService extends IntentService {
             while (cursor.moveToNext()) {
                 String date = cursor.getString(3);
                 String phoneNumber = cursor.getString(1);
-                String type = cursor.getString(4);
+                String type="";
+                if("content://sms/inbox"==source){ type = "inbox";}
+                if("content://sms/sent"==source){ type = "sent";}
                 SMS sms = new SMS(date, phoneNumber, type);
                 getDBHelper().getSMSDao().create(sms);
+                Log.d(TAG,"date : "+date+",phone number : "+phoneNumber+",type :"+type/*+",body : "+cursor.getString(5)*/);
             }
             cursor.close();
         }
@@ -465,7 +477,7 @@ public class ScanDeviceIntentService extends IntentService {
     private void handleActionScanCellInfo(Intent intent) {
         //set up the manager
         Log.d(TAG, "Requesting CellInfo");
-        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -476,6 +488,7 @@ public class ScanDeviceIntentService extends IntentService {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();// get a collection of the cells of the neighborhood
         Log.d(TAG, "Finding " + cellInfos.size() + " cells");
         //setting up args to fill DAOs
@@ -546,7 +559,7 @@ public class ScanDeviceIntentService extends IntentService {
                     }
                 }
                 //then add the history log
-                Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString());
+                Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString()+", LAC/TAC : "+lacTac);
                 NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
                 neighboringCellHistory.setStrength(strength);
                 neighboringCellHistory.setDate(date);
@@ -580,30 +593,35 @@ public class ScanDeviceIntentService extends IntentService {
         Account[] accounts = accountManager.getAccounts();// get a collection of Accounts and Descriptors
         AuthenticatorDescription[] authDescriptions = accountManager.getAuthenticatorTypes();
 
-        List<String> RegistredAuthType = getDBHelper().getMobilePrivacyProfilerDBHelper().queryAllAuthentificationType();
+        List<String> registredAuthType = getDBHelper().getMobilePrivacyProfilerDBHelper().queryAllAuthentificationType();
+        boolean noRegistredAuthType = false;
+        if(0==registredAuthType.size()){noRegistredAuthType=true;}
+        Log.d(TAG,authDescriptions.length+" authDescriptions to record");
+        if (noRegistredAuthType||null!=authDescriptions) {
+            for (AuthenticatorDescription authDesc : authDescriptions) {
+                if (!registredAuthType.contains(authDesc.type)) {//check is the authenticator is already registered
+                    //add a new entry
 
-        for (AuthenticatorDescription authDesc : authDescriptions) {
-            if (!RegistredAuthType.contains(authDesc.type)) {//check is the authenticator is already registered
-                //add a new entry
-                Log.d(TAG, "New Authentification :" + authDesc.type);
-                //fetching parameters
-                String packageName = authDesc.packageName;
-                String type = authDesc.type;
-                String name = "";
-                Boolean trouve = false;
+                    //fetching parameters
+                    String packageName = authDesc.packageName;
+                    String type = authDesc.type;
+                    String name = "";
+                    Boolean trouve = false;
 
-                for (int i = 0; !trouve && i < accounts.length; i++) {
-                    if (type == accounts[i].type) {
-                        trouve = true;
-                        name = accounts[i].name;
+                    for (int i = 0; !trouve && i < accounts.length; i++) {
+                        if (type == accounts[i].type) {
+                            trouve = true;
+                            name += ", "+accounts[i].name;
+                        }
                     }
-                }
 
-                Authentification auth = new Authentification();
-                auth.setPackageName(packageName);
-                auth.setName(name);
-                auth.setType(type);
-                getDBHelper().getAuthentificationDao().create(auth);
+                    Authentification auth = new Authentification();
+                    auth.setPackageName(packageName);
+                    auth.setName(name);
+                    auth.setType(type);
+                    getDBHelper().getAuthentificationDao().create(auth);
+                    Log.d(TAG, "New Authentification :" + authDesc.type+", names : "+name+", packageName : "+packageName);
+                }
             }
         }
     }
@@ -616,6 +634,7 @@ public class ScanDeviceIntentService extends IntentService {
     private void handleActionScanCallHistory(Intent intent) {
         //making a cursor out of the CallLog's data
         ContentResolver contentResolver = getContentResolver();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -639,10 +658,11 @@ public class ScanDeviceIntentService extends IntentService {
         String displayLastScan;
         if (null == lastScan) {
             displayLastScan = "none";
+            lastScan = new Date(0);
         } else {
             displayLastScan = lastScan.toString();
         }
-        Log.d(TAG, "   Starting new Call History Scan : time of last scan " + displayLastScan);
+        Log.d(TAG, " Starting new Call History Scan : time of last scan " + displayLastScan);
 
 
         if (null != callLogCursor) {
@@ -654,7 +674,8 @@ public class ScanDeviceIntentService extends IntentService {
 
                     String phoneNumber = callLogCursor.getString(callLogCursor.getColumnIndex(CallLog.Calls.NUMBER));
 
-                    long duration = new Float(callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DURATION)) * 0.001).longValue();
+                    long local = callLogCursor.getLong(callLogCursor.getColumnIndex(CallLog.Calls.DURATION));
+                    long duration = new Float( local).longValue();
 
                     int callTypeCode = callLogCursor.getInt(callLogCursor.getColumnIndex(CallLog.Calls.TYPE));
                     String[] typeArray = {"INCOMING", "OUTGOING", "MISSED", "VOICEMAIL", "REJECTED", "BLOCKED", "ANSWERED_EXTERNALLY"};
@@ -662,12 +683,13 @@ public class ScanDeviceIntentService extends IntentService {
 
                     PhoneCallLog CallLog = new PhoneCallLog(phoneNumber, date, duration, callType);
                     getDBHelper().getPhoneCallLogDao().create(CallLog);
+                    Log.d(TAG,"phoneNumber : "+phoneNumber+", date : "+date+", duration : "+duration+", callType : "+callType);
                 }
             }
         }
         callLogCursor.close();
 
-        Log.d(TAG, "Updating last Call History Scan");
+        Log.d(TAG, " Updating last Call History Scan");
         metadata.setLastCallScan(new Date());
         getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
@@ -713,7 +735,7 @@ public class ScanDeviceIntentService extends IntentService {
             return;
         }
         queryEventOutput = cr.query(uri, EVENT_PROJECTION, null, null, null);
-
+        Log.d(TAG,"Number of event to record : "+queryEventOutput.getCount());
         while (queryEventOutput.moveToNext()) {
             long eventID = 0;
             String eventLabel = null;
@@ -737,7 +759,8 @@ public class ScanDeviceIntentService extends IntentService {
 
             uri = CalendarContract.Attendees.CONTENT_URI;
             String[] arg ={""+eventID};
-            queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
+            //queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
+            queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,null,null,null );
 
             while (queryAttendeeOuput.moveToNext()){
                 participants+= queryAttendeeOuput.getString(0);
@@ -751,16 +774,21 @@ public class ScanDeviceIntentService extends IntentService {
                 RegistredEvent.setPlace(place);
                 RegistredEvent.setParticipants(participants);
                 getDBHelper().getCalendarEventDao().update(RegistredEvent);
+                Log.d(TAG,"Event edited : \n "+
+                        "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
+
             }
             else {   // add new event
                 CalendarEvent calendarEvent = new CalendarEvent();
                 calendarEvent.setEventId(eventID);
-                RegistredEvent.setEventLabel(eventLabel);
+                calendarEvent.setEventLabel(eventLabel);
                 calendarEvent.setStartDate(startDate);
                 calendarEvent.setEndDate(endDate);
                 calendarEvent.setPlace(place);
                 calendarEvent.setParticipants(participants);
                 getDBHelper().getCalendarEventDao().create(calendarEvent);
+                Log.d(TAG,"New event : \n "+
+                        "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
             }
             }
     }

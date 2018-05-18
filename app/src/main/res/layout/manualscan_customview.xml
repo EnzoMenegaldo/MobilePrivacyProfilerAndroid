@@ -57,6 +57,12 @@
 		android:onClick="onClickBtnCalendarEvent"
 		android:text="@string/manualscan_customview_calendarevent_btn_label" />
 
+	<Button
+		android:id="@+id/btnAppUsageStat"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnAppUsageStat"
+		android:text="@string/manualscan_customview_appusagestat_btn_label" />
 
 </LinearLayout>
 <!--End of user code
