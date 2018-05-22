@@ -22,6 +22,7 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.provider.CallLog;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
@@ -30,6 +31,9 @@ import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import android.content.pm.ResolveInfo;
+import android.support.annotation.RequiresApi;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -299,7 +303,6 @@ public class ScanDeviceIntentService extends IntentService {
         Log.d(TAG, "Adding new AppUse : preSDK test");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.d(TAG, "Adding new AppUse");
-
             UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(USAGE_STATS_SERVICE);
             Calendar calendar = Calendar.getInstance();
             //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
