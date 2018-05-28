@@ -20,7 +20,8 @@ import android.preference.PreferenceManager;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
 import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
-
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.ResetDBService;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
