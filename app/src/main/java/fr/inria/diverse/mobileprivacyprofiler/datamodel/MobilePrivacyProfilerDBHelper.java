@@ -34,6 +34,12 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<Authentification, Integer> authentificationDao;
 	public Dao<Contact, Integer> contactDao;
 	//public RuntimeExceptionDao<Contact, Integer> contactDao;
+	public Dao<ContactOrganisation, Integer> contactOrganisationDao;
+	//public RuntimeExceptionDao<ContactOrganisation, Integer> contactOrganisationDao;
+	public Dao<ContactIM, Integer> contactIMDao;
+	//public RuntimeExceptionDao<ContactIM, Integer> contactIMDao;
+	public Dao<ContactEvent, Integer> contactEventDao;
+	//public RuntimeExceptionDao<ContactEvent, Integer> contactEventDao;
 	public Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao;
 	//public RuntimeExceptionDao<ContactPhoneNumber, Integer> contactPhoneNumberDao;
 	public Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao;
@@ -83,6 +89,9 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<ApplicationUsageStats, Integer> applicationUsageStatsDao,
 		Dao<Authentification, Integer> authentificationDao,
 		Dao<Contact, Integer> contactDao,
+		Dao<ContactOrganisation, Integer> contactOrganisationDao,
+		Dao<ContactIM, Integer> contactIMDao,
+		Dao<ContactEvent, Integer> contactEventDao,
 		Dao<ContactPhoneNumber, Integer> contactPhoneNumberDao,
 		Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao,
 		Dao<ContactEmail, Integer> contactEmailDao,
@@ -108,6 +117,9 @@ public class MobilePrivacyProfilerDBHelper {
 		this.applicationUsageStatsDao = applicationUsageStatsDao;
 		this.authentificationDao = authentificationDao;
 		this.contactDao = contactDao;
+		this.contactOrganisationDao = contactOrganisationDao;
+		this.contactIMDao = contactIMDao;
+		this.contactEventDao = contactEventDao;
 		this.contactPhoneNumberDao = contactPhoneNumberDao;
 		this.contactPhysicalAddressDao = contactPhysicalAddressDao;
 		this.contactEmailDao = contactEmailDao;
@@ -199,7 +211,7 @@ public class MobilePrivacyProfilerDBHelper {
 		List<String> result=new ArrayList<String>();
 
 		Authentification queryAuth = new Authentification();
-		List<Authentification> queryOutput=null;
+		List<Authentification> queryOutput=new ArrayList<>();
 		try {
 			queryOutput = this.authentificationDao.queryForMatching(queryAuth);
 		} catch (SQLException e) {
@@ -256,14 +268,61 @@ public class MobilePrivacyProfilerDBHelper {
 	 * Get a list of all entries in ApplicationHistory
 	 * @return List<ApplicationHistory>
 	 */
-	public List<ApplicationHistory> getAllApplicationHistory() {
+	public List<ApplicationHistory> getAllApplicationHistory() throws SQLException {
 		List<ApplicationHistory> result=null;
-		CloseableIterator<ApplicationHistory> it = this.applicationHistoryDao.iterator();
+		List<ApplicationHistory> it = this.applicationHistoryDao.queryForAll();
 
-		while(it.hasNext()){ result.add(it.next());}
+		return it;
+	}
 
-		it.closeQuietly();
-		return result;
+	/**
+	 * drop all data from Contact, ContactPhoneNumber, ContactIM, ContactOrganisation, ContactEvent,
+	 * ContactEmail, ContactPhysicalAddress
+	 */
+	public void flushContactDataSet(){
+
+		List<ContactPhoneNumber> queryContactPhoneNumberOutput=new ArrayList<>();
+		try {
+			queryContactPhoneNumberOutput = this.contactPhoneNumberDao.queryForAll();
+			this.contactPhoneNumberDao.delete(queryContactPhoneNumberOutput);
+		} catch (SQLException e) { Log.e(TAG,"error while flushing ContactPhoneNumbers from previous scan the base", e); }
+
+		List<ContactIM> queryContactIMOutput=new ArrayList<>();
+		try {
+			queryContactIMOutput = this.contactIMDao.queryForAll();
+			this.contactIMDao.delete(queryContactIMOutput);
+		} catch (SQLException e) { Log.e(TAG,"error while flushing ContactInstantMessengers from previous scan the base", e); }
+
+		List<ContactOrganisation> queryContactOrganisationOutput=new ArrayList<>();
+		try {
+			queryContactOrganisationOutput = this.contactOrganisationDao.queryForAll();
+			this.contactOrganisationDao.delete(queryContactOrganisationOutput);
+		}catch (SQLException e) { Log.e(TAG,"error while flushing ContactOrganisations from previous scan the base", e); }
+
+		List<ContactEvent> queryContactEventOutput=new ArrayList<>();
+		try {
+			queryContactEventOutput = this.contactEventDao.queryForAll();
+			this.contactEventDao.delete(queryContactEventOutput);
+		} catch (SQLException e) { Log.e(TAG,"error while flushing ContactEvents from previous scan the base", e); }
+
+		List<ContactEmail> queryContactEmailOutput=new ArrayList<>();
+		try {
+			queryContactEmailOutput = this.contactEmailDao.queryForAll();
+			this.contactEmailDao.delete(queryContactEmailOutput);
+		} catch (SQLException e) { Log.e(TAG,"error while flushing ContactEmails from previous scan the base", e); }
+
+		List<ContactPhysicalAddress> queryContactPhysicalAddressOutput=new ArrayList<>();
+		try {
+			queryContactPhysicalAddressOutput = this.contactPhysicalAddressDao.queryForAll();
+			this.contactPhysicalAddressDao.delete(queryContactPhysicalAddressOutput);
+		} catch (SQLException e) { Log.e(TAG,"error while flushing ContactPhysicalAddresses from previous scan the base", e); }
+
+		List<Contact> queryContactOutput=new ArrayList<>();
+		try {
+			queryContactOutput = this.contactDao.queryForAll();
+			this.contactDao.delete(queryContactOutput);
+		} catch (SQLException e) { Log.e(TAG,"error while flushing Contacts from previous scan the base", e); }
+
 	}
 
 	//End of user code

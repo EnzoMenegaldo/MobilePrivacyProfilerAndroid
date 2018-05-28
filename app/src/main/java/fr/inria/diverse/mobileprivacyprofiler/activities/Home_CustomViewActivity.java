@@ -4,6 +4,8 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.ResetDBService;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -39,6 +41,7 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -86,11 +89,21 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
 	}
     //Start of user code additional code Home_CustomViewActivity
+
 	public void onClickBtnApplicationHistory(View view){
 		showToast( this.getString(R.string.applicationhistorylist_classlistview_launch_toast));
         startActivity(new Intent(this, ApplicationHistoryList_ClassListViewActivity.class));
     }
 
+    public void onClickBtnExportDB (View view) throws SQLException {
+        showToast( this.getString(R.string.export_db_launch_toast));
+        MobilePrivacyRestClient.getMobilePrivacyRestClient().exportDB(this);
+    }
+
+    public void onClickBtnResetDB (View view){
+        showToast( this.getString(R.string.reset_db_launch_toast));
+        ResetDBService.startActionResetDB(this);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

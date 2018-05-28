@@ -6,6 +6,7 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class MobilePrivacyRestClient {
      * Export the local DB to the server
      * @return true if no problems occurred during operation
      */
-    public boolean exportDB(Context context){
+    public boolean exportDB(Context context) throws SQLException {
         boolean noExecProblem = true;
         boolean tempResponse = false;
 
@@ -58,7 +59,7 @@ public class MobilePrivacyRestClient {
      *
      * @return true if the request answer is conform
      */
-    private boolean exportApplicationHistory(Context context){//TODO
+    private boolean exportApplicationHistory(Context context) throws SQLException {//TODO
         //query all ApplicationHistory entries
         List<ApplicationHistory> appHistToExport= getDBHelper(context).getMobilePrivacyProfilerDBHelper().getAllApplicationHistory();
         //translation of the collection into Json

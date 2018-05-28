@@ -5,6 +5,8 @@
 	-->
 	<!-- freely add here the desired resource String for your custom view -->
 	<string name="home_customview_applicationhistorylist_btn_label">Historique des Applications</string>
+	<string name="home_customview_export_db_btn_label">Export data</string>
+	<string name="home_customview_reset_db_btn_label">Reset DB</string>
 	<!-- End of user code
 	-->
 </resources>

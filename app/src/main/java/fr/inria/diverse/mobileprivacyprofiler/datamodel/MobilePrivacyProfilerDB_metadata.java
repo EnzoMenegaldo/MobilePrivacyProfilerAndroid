@@ -38,6 +38,7 @@ public class MobilePrivacyProfilerDB_metadata {
 	public static final String XML_ATT_LASTSMSSCAN = "lastSmsScan";
 	public static final String XML_ATT_LASTCALLSCAN = "lastCallScan";
 	public static final String XML_ATT_USERID = "userId";
+	public static final String XML_ATT_LASTCONTACTSCAN = "lastContactScan";
 	public static final String XML_REF_USERAPPLICATIONHISTORY = "userApplicationHistory";
 	public static final String XML_REF_USERAUTHENTIFICATION = "userAuthentification";
 	public static final String XML_REF_USERCONTACT = "userContact";
@@ -94,6 +95,9 @@ public class MobilePrivacyProfilerDB_metadata {
 
 	@DatabaseField
 	protected java.lang.String userId;
+
+	@DatabaseField
+	protected java.util.Date lastContactScan;
 	
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
@@ -136,7 +140,7 @@ public class MobilePrivacyProfilerDB_metadata {
 	// End of user code
 	
 	public MobilePrivacyProfilerDB_metadata() {} // needed by ormlite
-	public MobilePrivacyProfilerDB_metadata(java.util.Date lastTransmissionDate, java.util.Date lastScanInstalledApplications, java.util.Date lastScanAppUsage, java.util.Date lastSmsScan, java.util.Date lastCallScan, java.lang.String userId) {
+	public MobilePrivacyProfilerDB_metadata(java.util.Date lastTransmissionDate, java.util.Date lastScanInstalledApplications, java.util.Date lastScanAppUsage, java.util.Date lastSmsScan, java.util.Date lastCallScan, java.lang.String userId, java.util.Date lastContactScan) {
 		super();
 		this.lastTransmissionDate = lastTransmissionDate;
 		this.lastScanInstalledApplications = lastScanInstalledApplications;
@@ -144,6 +148,7 @@ public class MobilePrivacyProfilerDB_metadata {
 		this.lastSmsScan = lastSmsScan;
 		this.lastCallScan = lastCallScan;
 		this.userId = userId;
+		this.lastContactScan = lastContactScan;
 	} 
 
 	public int getId() {
@@ -195,6 +200,12 @@ public class MobilePrivacyProfilerDB_metadata {
 	}
 	public void setUserId(java.lang.String userId) {
 		this.userId = userId;
+	}
+	public java.util.Date getLastContactScan() {
+		return this.lastContactScan;
+	}
+	public void setLastContactScan(java.util.Date lastContactScan) {
+		this.lastContactScan = lastContactScan;
 	}
 
 	public ApplicationHistory getUserApplicationHistory() {
@@ -440,6 +451,11 @@ public class MobilePrivacyProfilerDB_metadata {
     	sb.append(XML_ATT_USERID);
     	sb.append("=\"");
 		sb.append(StringEscapeUtils.escapeXml(this.userId));
+    	sb.append("\" ");
+		sb.append(" ");
+    	sb.append(XML_ATT_LASTCONTACTSCAN);
+    	sb.append("=\"");
+		sb.append(this.lastContactScan);
     	sb.append("\" ");
     	sb.append(">");
 

@@ -12,6 +12,7 @@
 	<string name="manualscan_customview_calendarevent_btn_label">Scan des évènements du calendrier</string>
 	<string name="manualscan_customview_identity_btn_label">Scan des profils application</string>
 	<string name="manualscan_customview_appusagestat_btn_label">Scan des utilisations des applications</string>
+	<string name="manualscan_customview_contact_btn_label">Scan des contacts</string>
 	<!-- End of user code
 	-->
 </resources>

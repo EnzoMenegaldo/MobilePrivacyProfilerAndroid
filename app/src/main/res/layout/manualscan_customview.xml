@@ -64,6 +64,13 @@
 		android:onClick="onClickBtnAppUsageStat"
 		android:text="@string/manualscan_customview_appusagestat_btn_label" />
 
+	<Button
+		android:id="@+id/btnContact"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnContact"
+		android:text="@string/manualscan_customview_contact_btn_label" />
+
 </LinearLayout>
 <!--End of user code
 -->

@@ -52,6 +52,9 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Contact;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactEmail;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactEvent;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactIM;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactOrganisation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhoneNumber;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhysicalAddress;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
@@ -295,6 +298,7 @@ public class ScanDeviceIntentService extends IntentService {
             if (applicationHistory == null) {
                 // create
                 applicationHistory = new ApplicationHistory(appName, packageInfo.packageName);
+                applicationHistory.setUserMetaData(getDeviceDBMetadata());
                 getDBHelper().getApplicationHistoryDao().create(applicationHistory);
             } else {
                 // update
@@ -344,7 +348,6 @@ public class ScanDeviceIntentService extends IntentService {
             long end = endDate.getTimeInMillis();
             Log.d(TAG, " Stat period required " + DateUtils.printDate(start) +
                     " - " + DateUtils.printDate(end));
-            //TODO query doesn't bring anything
             List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType, start, end);
             Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + hasPermission());
             for (UsageStats appUsageStatsentry : stats) {
@@ -434,6 +437,7 @@ public class ScanDeviceIntentService extends IntentService {
         Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
 
         BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType);
+        batState.setUserMetaData(getDeviceDBMetadata());
         getDBHelper().getBatteryUsageDao().create(batState);
     }
 
@@ -482,6 +486,7 @@ public class ScanDeviceIntentService extends IntentService {
                 if("content://sms/inbox"==source){ type = "inbox";}
                 if("content://sms/sent"==source){ type = "sent";}
                 SMS sms = new SMS(date, phoneNumber, type);
+                sms.setUserMetaData(getDeviceDBMetadata());
                 getDBHelper().getSMSDao().create(sms);
                 Log.d(TAG,"date : "+date+",phone number : "+phoneNumber+",type :"+type/*+",body : "+smsQueryOutput.getString(5)*/);
             }
@@ -565,6 +570,7 @@ public class ScanDeviceIntentService extends IntentService {
                     Log.d(TAG, "Adding a new " + cellType + " Cell");
                     Cell newCell = new Cell();
                     newCell.setCellId(cellId);
+                    newCell.setUserMetaData(getDeviceDBMetadata());
                     getDBHelper().getCellDao().create(newCell);
                     cell = newCell;
                     if ("Cdma" == cellType) {
@@ -642,6 +648,7 @@ public class ScanDeviceIntentService extends IntentService {
                     auth.setPackageName(packageName);
                     auth.setName(name);
                     auth.setType(type);
+                    auth.setUserMetaData(getDeviceDBMetadata());
                     getDBHelper().getAuthentificationDao().create(auth);
                     Log.d(TAG, "New Authentification :" + authDesc.type+", names : "+name+", packageName : "+packageName);
                 }
@@ -704,8 +711,9 @@ public class ScanDeviceIntentService extends IntentService {
                     String[] typeArray = {"INCOMING", "OUTGOING", "MISSED", "VOICEMAIL", "REJECTED", "BLOCKED", "ANSWERED_EXTERNALLY"};
                     String callType = typeArray[callTypeCode - 1];
 
-                    PhoneCallLog CallLog = new PhoneCallLog(phoneNumber, date, duration, callType);
-                    getDBHelper().getPhoneCallLogDao().create(CallLog);
+                    PhoneCallLog callLog = new PhoneCallLog(phoneNumber, date, duration, callType);
+                    callLog.setUserMetaData(getDeviceDBMetadata());
+                    getDBHelper().getPhoneCallLogDao().create(callLog);
                     Log.d(TAG,"phoneNumber : "+phoneNumber+", date : "+date+", duration : "+duration+", callType : "+callType);
                 }
             }
@@ -789,14 +797,14 @@ public class ScanDeviceIntentService extends IntentService {
                 participants+= queryAttendeeOuput.getString(0);
             }
             //Stocking data
-            CalendarEvent RegistredEvent = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
-            if(null!=RegistredEvent) {   // edit event
-                RegistredEvent.setEventLabel(eventLabel);
-                RegistredEvent.setStartDate(startDate);
-                RegistredEvent.setEndDate(endDate);
-                RegistredEvent.setPlace(place);
-                RegistredEvent.setParticipants(participants);
-                getDBHelper().getCalendarEventDao().update(RegistredEvent);
+            CalendarEvent registredEvent = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
+            if(null!=registredEvent) {   // edit event
+                registredEvent.setEventLabel(eventLabel);
+                registredEvent.setStartDate(startDate);
+                registredEvent.setEndDate(endDate);
+                registredEvent.setPlace(place);
+                registredEvent.setParticipants(participants);
+                getDBHelper().getCalendarEventDao().update(registredEvent);
                 Log.d(TAG,"Event edited : \n "+
                         "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
 
@@ -809,6 +817,7 @@ public class ScanDeviceIntentService extends IntentService {
                 calendarEvent.setEndDate(endDate);
                 calendarEvent.setPlace(place);
                 calendarEvent.setParticipants(participants);
+                calendarEvent.setUserMetaData(getDeviceDBMetadata());
                 getDBHelper().getCalendarEventDao().create(calendarEvent);
                 Log.d(TAG,"New event : \n "+
                         "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
@@ -824,6 +833,11 @@ public class ScanDeviceIntentService extends IntentService {
         List<Integer> rawContactIdList = new ArrayList<Integer>();
 
         ContentResolver contentResolver = getContentResolver();
+
+        //update last ContactScan and flushing previous contact set
+        Date scanTimeStamp = new Date();
+        getDBHelper().getMobilePrivacyProfilerDBHelper().flushContactDataSet();
+        getDeviceDBMetadata().setLastContactScan(scanTimeStamp);
 
         // Row contacts content uri( access raw_contacts table. ).
         Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI;
@@ -912,7 +926,7 @@ public class ScanDeviceIntentService extends IntentService {
                 //Creation of data structure to collect details from a contact
                 Contact contact = new Contact();
                 List<ContactEmail> emailList = new ArrayList();
-                ContactOrganisation organisation = new ConactOrganisation();
+                ContactOrganisation organisation = new ContactOrganisation();
                 List<ContactPhoneNumber> phoneNumberList = new ArrayList();
                 List<ContactPhysicalAddress> physicalAddressList = new ArrayList();
                 List<ContactIM> imList = new ArrayList();
@@ -929,7 +943,7 @@ public class ScanDeviceIntentService extends IntentService {
 
                     Log.d(TAG, "reformating details to objects");
                     switch (dataValueList.get(0)){
-                        //TODO use prepared string lists to generate DB entries and change the List<String> to a Map
+                        //TODO change the List<String> to a Map
                         case "EMAIL":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
                             ContactEmail contactEmail = new ContactEmail(dataValueList.get(1),dataValueList.get(2));
@@ -946,7 +960,7 @@ public class ScanDeviceIntentService extends IntentService {
                             break;
                         case "ORGANISATION":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            organisation = new ConactOrganisation(dataValueList.get(1),dataValueList.get(2));
+                            organisation = new ContactOrganisation(dataValueList.get(1),dataValueList.get(2));
                             break;
                         case "PHONE_NUMBER":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
@@ -955,12 +969,13 @@ public class ScanDeviceIntentService extends IntentService {
                             break;
                         case "NAME":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2)+" : "+dataValueList.get(3)+" : "+dataValueList.get(4)+" : "+dataValueList.get(5)+" : "+dataValueList.get(6));
-                            contact.setNamePrefix(dataValueList.get(1));
-                            contact.setDisplayName(dataValueList.get(2));
+                            contact.setDisplayName(dataValueList.get(1));
+                            contact.setNamePrefix(dataValueList.get(2));
                             contact.setFirstName(dataValueList.get(3));
                             contact.setMiddleName(dataValueList.get(4));
                             contact.setLastName(dataValueList.get(5));
                             contact.setNameSuffix(dataValueList.get(6));
+                            contact.setScanTimeStamp(scanTimeStamp);
                             break;
                         case "PHYSICAL_ADDRESS":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
@@ -1000,34 +1015,42 @@ public class ScanDeviceIntentService extends IntentService {
                 // feeding the DB from the collected data
                 //TODO check for redundant pre add
                 try {
-                    getDBHelper().getContactDao().createOrUpdate(contact);
-                    Log.d(TAG, "Added a new contact : "+contact.getDisplayName());
+                    //add a new contact
+                        contact.setUserMetaData(getDeviceDBMetadata());
+                        getDBHelper().getContactDao().create(contact);
+                        Log.d(TAG, "Added a new contact : " + contact.getDisplayName());
 
                     for(ContactEmail contactEmail: emailList){
                         contactEmail.setContact(contact);
                         getDBHelper().getContactEmailDao().create(contactEmail);
-                        Log.d(TAG, "Added a new email : "+contactEmail.getEmail());
+                        Log.d(TAG, "Added a new email : " + contactEmail.getEmail());
+                        }
+                    if(null!=organisation.getCompany()) {
+                        organisation.setReferencedContact(contact);
+                        getDBHelper().getContactOrganisationDao().create(organisation);
+                        Log.d(TAG, "Added a new organisation : " + organisation.getCompany());
                     }
 
-                    getDBHelper().getContactOrganisationDao().create(organisation);
-                    Log.d(TAG, "Added a new organisation : "+organisation.getCompany());
-
                     for(ContactPhoneNumber contactPhoneNumber : phoneNumberList){
+                        contactPhoneNumber.setContact(contact);
                         getDBHelper().getContactPhoneNumberDao().create(contactPhoneNumber);
                         Log.d(TAG, "Added a new phoneNumber : "+contactPhoneNumber.getPhoneNumber());
                     }
 
                     for(ContactPhysicalAddress contactPhysicalAddress : physicalAddressList){
+                        contactPhysicalAddress.setContact(contact);
                         getDBHelper().getContactPhysicalAddressDao().create(contactPhysicalAddress);
                         Log.d(TAG, "Added a new physicalAddress : "+contactPhysicalAddress.getAddress());
                     }
 
                     for(ContactIM contactIM : imList){
+                        contactIM.setContact(contact);
                         getDBHelper().getContactIMDao().create(contactIM);
-                        Log.d(TAG, "Added a new instant messenger : "+contactIM.getIMID());
+                        Log.d(TAG, "Added a new instant messenger : "+contactIM.getImId());
                     }
 
                     for(ContactEvent contactEvent : eventList){
+                        contactEvent.setContact(contact);
                         getDBHelper().getContactEventDao().create(contactEvent);
                         Log.d(TAG, "Added a new contactEvent : "+contactEvent.getType()+" : "+contactEvent.getStartDate());
                     }
@@ -1049,7 +1072,7 @@ public class ScanDeviceIntentService extends IntentService {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public OrmLiteDBHelper getDBHelper(){
+    private OrmLiteDBHelper getDBHelper(){
         if(dbHelper == null){
             dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
         }
@@ -1190,7 +1213,7 @@ public class ScanDeviceIntentService extends IntentService {
 
 
                 toReturn.add("PHYSICAL_ADDRESS");
-                toReturn.add("Country : "+country+", City : "+city+", Region : "+region+"Street : "+street+"Postcode : "+postcode);
+                toReturn.add("Country : "+country+", City : "+city+", Region : "+region+",Street : "+street+",Postcode : "+postcode);
                 if("Custom"!=postTypeStr)  {toReturn.add(postTypeStr);}
                 else                       {
                     // Email.LABEL == data3 (if type = custom then read the label)
@@ -1228,6 +1251,7 @@ public class ScanDeviceIntentService extends IntentService {
                 String eventTypeString = getEventTypeString(cursor,eventType);
 
                 toReturn.add("EVENT");
+                toReturn.add(startDate);
                 toReturn.add(eventTypeString);
                 break;
 
@@ -1369,5 +1393,8 @@ public class ScanDeviceIntentService extends IntentService {
         }//end switch
         return toReturn;
     }
+
+    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
+    return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 
 }//end class

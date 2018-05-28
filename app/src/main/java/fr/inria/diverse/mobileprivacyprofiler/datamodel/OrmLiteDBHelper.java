@@ -38,6 +38,12 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	private RuntimeExceptionDao<Authentification, Integer> authentificationRuntimeDao = null;
 	// the DAO object we use to access the Contact table
 	private RuntimeExceptionDao<Contact, Integer> contactRuntimeDao = null;
+	// the DAO object we use to access the ContactOrganisation table
+	private RuntimeExceptionDao<ContactOrganisation, Integer> contactOrganisationRuntimeDao = null;
+	// the DAO object we use to access the ContactIM table
+	private RuntimeExceptionDao<ContactIM, Integer> contactIMRuntimeDao = null;
+	// the DAO object we use to access the ContactEvent table
+	private RuntimeExceptionDao<ContactEvent, Integer> contactEventRuntimeDao = null;
 	// the DAO object we use to access the ContactPhoneNumber table
 	private RuntimeExceptionDao<ContactPhoneNumber, Integer> contactPhoneNumberRuntimeDao = null;
 	// the DAO object we use to access the ContactPhysicalAddress table
@@ -104,6 +110,9 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, ApplicationUsageStats.class);
 		TableUtils.createTable(connectionSource, Authentification.class);
 		TableUtils.createTable(connectionSource, Contact.class);
+		TableUtils.createTable(connectionSource, ContactOrganisation.class);
+		TableUtils.createTable(connectionSource, ContactIM.class);
+		TableUtils.createTable(connectionSource, ContactEvent.class);
 		TableUtils.createTable(connectionSource, ContactPhoneNumber.class);
 		TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
 		TableUtils.createTable(connectionSource, ContactEmail.class);
@@ -149,6 +158,9 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, ApplicationUsageStats.class, true);
 		TableUtils.dropTable(connectionSource, Authentification.class, true);
 		TableUtils.dropTable(connectionSource, Contact.class, true);
+		TableUtils.dropTable(connectionSource, ContactOrganisation.class, true);
+		TableUtils.dropTable(connectionSource, ContactIM.class, true);
+		TableUtils.dropTable(connectionSource, ContactEvent.class, true);
 		TableUtils.dropTable(connectionSource, ContactPhoneNumber.class, true);
 		TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
 		TableUtils.dropTable(connectionSource, ContactEmail.class, true);
@@ -223,6 +235,39 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			contactRuntimeDao = getRuntimeExceptionDao(Contact.class);
 		}
 		return contactRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ContactOrganisation class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<ContactOrganisation, Integer> getContactOrganisationDao() {
+		if (contactOrganisationRuntimeDao == null) {
+			contactOrganisationRuntimeDao = getRuntimeExceptionDao(ContactOrganisation.class);
+		}
+		return contactOrganisationRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ContactIM class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<ContactIM, Integer> getContactIMDao() {
+		if (contactIMRuntimeDao == null) {
+			contactIMRuntimeDao = getRuntimeExceptionDao(ContactIM.class);
+		}
+		return contactIMRuntimeDao;
+	}
+
+	/**
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our ContactEvent class. It will
+	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
+	 */
+	public RuntimeExceptionDao<ContactEvent, Integer> getContactEventDao() {
+		if (contactEventRuntimeDao == null) {
+			contactEventRuntimeDao = getRuntimeExceptionDao(ContactEvent.class);
+		}
+		return contactEventRuntimeDao;
 	}
 
 	/**
@@ -448,6 +493,9 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		applicationUsageStatsRuntimeDao = null;
 		authentificationRuntimeDao = null;
 		contactRuntimeDao = null;
+		contactOrganisationRuntimeDao = null;
+		contactIMRuntimeDao = null;
+		contactEventRuntimeDao = null;
 		contactPhoneNumberRuntimeDao = null;
 		contactPhysicalAddressRuntimeDao = null;
 		contactEmailRuntimeDao = null;
@@ -481,6 +529,9 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.applicationUsageStatsDao = getDao(ApplicationUsageStats.class);
 			helper.authentificationDao = getDao(Authentification.class);
 			helper.contactDao = getDao(Contact.class);
+			helper.contactOrganisationDao = getDao(ContactOrganisation.class);
+			helper.contactIMDao = getDao(ContactIM.class);
+			helper.contactEventDao = getDao(ContactEvent.class);
 			helper.contactPhoneNumberDao = getDao(ContactPhoneNumber.class);
 			helper.contactPhysicalAddressDao = getDao(ContactPhysicalAddress.class);
 			helper.contactEmailDao = getDao(ContactEmail.class);

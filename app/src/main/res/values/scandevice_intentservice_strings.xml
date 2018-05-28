@@ -11,5 +11,5 @@
     <string name="scandevice_intentservice_starting_scan_authentification">Inspection profils des applications</string>
     <string name="scandevice_intentservice_starting_scan_battery">Inspection des usages de la batterie</string>
     <string name="scandevice_intentservice_starting_scan_app_usage_stat">Inspection des utilisations des applications</string>
-
+    <string name="scandevice_intentservice_starting_scan_contacts">Inspection contacts</string>
 </resources>

@@ -119,6 +119,45 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</CONTACTS>\n");
+		sb.append("\n\t<CONTACTORGANISATIONS>");
+		try {	
+			List<ContactOrganisation> contactOrganisations = dbContext.contactOrganisationDao.queryForAll();
+			for(ContactOrganisation  contactOrganisation : contactOrganisations){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(contactOrganisation.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</CONTACTORGANISATIONS>\n");
+		sb.append("\n\t<CONTACTIMS>");
+		try {	
+			List<ContactIM> contactIMs = dbContext.contactIMDao.queryForAll();
+			for(ContactIM  contactIM : contactIMs){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(contactIM.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</CONTACTIMS>\n");
+		sb.append("\n\t<CONTACTEVENTS>");
+		try {	
+			List<ContactEvent> contactEvents = dbContext.contactEventDao.queryForAll();
+			for(ContactEvent  contactEvent : contactEvents){
+				// TODO find if contained by another element, if not put it there
+					sb.append("\n");
+					sb.append(contactEvent.toXML("\t\t", dbContext));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sb.append("\n\t</CONTACTEVENTS>\n");
 		sb.append("\n\t<CONTACTPHONENUMBERS>");
 		try {	
 			List<ContactPhoneNumber> contactPhoneNumbers = dbContext.contactPhoneNumberDao.queryForAll();
@@ -429,6 +468,30 @@ public class XMLHelper {
 					log.error("cannot create Contact "+e.getMessage(),e);
 				}
 			}
+			log.info("starting creation of ContactOrganisation...");
+			for(ContactOrganisation contactOrganisation : parser.contactOrganisations){
+				try {
+					dbContext.contactOrganisationDao.create(contactOrganisation);
+				} catch (SQLException e) {
+					log.error("cannot create ContactOrganisation "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of ContactIM...");
+			for(ContactIM contactIM : parser.contactIMs){
+				try {
+					dbContext.contactIMDao.create(contactIM);
+				} catch (SQLException e) {
+					log.error("cannot create ContactIM "+e.getMessage(),e);
+				}
+			}
+			log.info("starting creation of ContactEvent...");
+			for(ContactEvent contactEvent : parser.contactEvents){
+				try {
+					dbContext.contactEventDao.create(contactEvent);
+				} catch (SQLException e) {
+					log.error("cannot create ContactEvent "+e.getMessage(),e);
+				}
+			}
 			log.info("starting creation of ContactPhoneNumber...");
 			for(ContactPhoneNumber contactPhoneNumber : parser.contactPhoneNumbers){
 				try {
@@ -618,6 +681,30 @@ public class XMLHelper {
 					dbContext.contactDao.update(elem);
 				} catch (SQLException e) {
 					log.error("cannot update Contact "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of ContactOrganisation...");
+			for(ContactOrganisation elem : parser.contactOrganisationsToUpdate){
+				try {
+					dbContext.contactOrganisationDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update ContactOrganisation "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of ContactIM...");
+			for(ContactIM elem : parser.contactIMsToUpdate){
+				try {
+					dbContext.contactIMDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update ContactIM "+e.getMessage(),e);
+				}
+			}
+			log.info("starting update DB of ContactEvent...");
+			for(ContactEvent elem : parser.contactEventsToUpdate){
+				try {
+					dbContext.contactEventDao.update(elem);
+				} catch (SQLException e) {
+					log.error("cannot update ContactEvent "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of ContactPhoneNumber...");

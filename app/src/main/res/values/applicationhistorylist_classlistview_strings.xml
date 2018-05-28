@@ -5,6 +5,8 @@
 	<string name="searchHint_applicationhistorylist_classlistview">Chercher application\u00A0\u2026</string>
 
 
+	<string name="reset_db_launch_toast">Effacement de la base de donnée en cours</string>
+	<string name="export_db_launch_toast">Export de la base de donnée en cours</string>
 	<string name="applicationhistorylist_classlistview_launch_toast">Liste des applications détectées.</string>
 	<string name="applicationhistorylist_classlistview_titre">Applications</string>
 	<string name="applicationhistorylist_classlistview_no_result">Aucune application ne correspond à votre recherche.</string>
