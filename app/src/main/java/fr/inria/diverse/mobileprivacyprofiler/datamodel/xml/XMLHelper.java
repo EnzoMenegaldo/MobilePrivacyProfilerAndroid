@@ -124,8 +124,14 @@ public class XMLHelper {
 			List<ContactOrganisation> contactOrganisations = dbContext.contactOrganisationDao.queryForAll();
 			for(ContactOrganisation  contactOrganisation : contactOrganisations){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(contactOrganisation.getReferencedContact() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(contactOrganisation.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -137,8 +143,14 @@ public class XMLHelper {
 			List<ContactIM> contactIMs = dbContext.contactIMDao.queryForAll();
 			for(ContactIM  contactIM : contactIMs){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(contactIM.getContact() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(contactIM.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -150,8 +162,14 @@ public class XMLHelper {
 			List<ContactEvent> contactEvents = dbContext.contactEventDao.queryForAll();
 			for(ContactEvent  contactEvent : contactEvents){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(contactEvent.getContact() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(contactEvent.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -311,8 +329,14 @@ public class XMLHelper {
 			List<OtherCellData> otherCellDatas = dbContext.otherCellDataDao.queryForAll();
 			for(OtherCellData  otherCellData : otherCellDatas){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(otherCellData.getIdentity() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(otherCellData.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -324,8 +348,14 @@ public class XMLHelper {
 			List<CdmaCellData> cdmaCellDatas = dbContext.cdmaCellDataDao.queryForAll();
 			for(CdmaCellData  cdmaCellData : cdmaCellDatas){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(cdmaCellData.getIdentity() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(cdmaCellData.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -337,8 +367,14 @@ public class XMLHelper {
 			List<NeighboringCellHistory> neighboringCellHistorys = dbContext.neighboringCellHistoryDao.queryForAll();
 			for(NeighboringCellHistory  neighboringCellHistory : neighboringCellHistorys){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(neighboringCellHistory.getCells() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(neighboringCellHistory.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

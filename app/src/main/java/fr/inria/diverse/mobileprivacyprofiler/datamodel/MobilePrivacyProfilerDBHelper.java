@@ -248,19 +248,20 @@ public class MobilePrivacyProfilerDBHelper {
 	 * @return
 	 */
 	public MobilePrivacyProfilerDB_metadata getDeviceDBMetadata() {
-		MobilePrivacyProfilerDB_metadata metadata;
-		CloseableIterator<MobilePrivacyProfilerDB_metadata> it = this.mobilePrivacyProfilerDB_metadataDao.iterator();
-		if(it.hasNext()){
-			metadata = it.next();
-			it.closeQuietly();
+		MobilePrivacyProfilerDB_metadata metadata=null;
+		List<MobilePrivacyProfilerDB_metadata> it = new ArrayList<>();
+        try {
+            it= this.mobilePrivacyProfilerDB_metadataDao.queryForAll();
+
+        if(!it.isEmpty()){
+			metadata = it.get(0);
 		} else {
 			metadata = new MobilePrivacyProfilerDB_metadata();
-			try {
+
 				this.mobilePrivacyProfilerDB_metadataDao.create(metadata);
-			} catch (SQLException e) {
-				Log.e(TAG,"error while creating MobilePrivacyProfilerDB_metadata", e);
-			}
 		}
+        } catch (SQLException e) { Log.e(TAG,"error while getting MobilePrivacyProfilerDB_metadata", e);}
+
 		return metadata;
 	}
 

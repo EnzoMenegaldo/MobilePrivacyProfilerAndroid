@@ -64,18 +64,6 @@ public class MobilePrivacyProfilerDB_metadata {
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
-	public boolean userApplicationHistory_mayNeedDBRefresh = true;
-	public boolean userAuthentification_mayNeedDBRefresh = true;
-	public boolean userContact_mayNeedDBRefresh = true;
-	public boolean userKnownWifi_mayNeedDBRefresh = true;
-	public boolean userWebHistory_mayNeedDBRefresh = true;
-	public boolean userBatteryUsage_mayNeedDBRefresh = true;
-	public boolean userSMS_mayNeedDBRefresh = true;
-	public boolean userBletoothDevice_mayNeedDBRefresh = true;
-	public boolean userCell_mayNeedDBRefresh = true;
-	public boolean userPhoneCallLog_mayNeedDBRefresh = true;
-	public boolean userCalendarEvent_mayNeedDBRefresh = true;
-	public boolean userGeolocation_mayNeedDBRefresh = true;
 	
 
 	@DatabaseField
@@ -100,41 +88,41 @@ public class MobilePrivacyProfilerDB_metadata {
 	protected java.util.Date lastContactScan;
 	
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected ApplicationHistory userApplicationHistory;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<ApplicationHistory> userApplicationHistory;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected Authentification userAuthentification;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<Authentification> userAuthentification;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected Contact userContact;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<Contact> userContact;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected KnownWifi userKnownWifi;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<KnownWifi> userKnownWifi;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected WebHistory userWebHistory;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<WebHistory> userWebHistory;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected BatteryUsage userBatteryUsage;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<BatteryUsage> userBatteryUsage;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected SMS userSMS;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<SMS> userSMS;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected BluetoothDevice userBletoothDevice;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<BluetoothDevice> userBletoothDevice;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected Cell userCell;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<Cell> userCell;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected PhoneCallLog userPhoneCallLog;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<PhoneCallLog> userPhoneCallLog;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected CalendarEvent userCalendarEvent;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<CalendarEvent> userCalendarEvent;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected Geolocation userGeolocation;
+	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	protected ForeignCollection<Geolocation> userGeolocation;
 
 	// Start of user code MobilePrivacyProfilerDB_metadata additional user properties
 	// End of user code
@@ -208,210 +196,42 @@ public class MobilePrivacyProfilerDB_metadata {
 		this.lastContactScan = lastContactScan;
 	}
 
-	public ApplicationHistory getUserApplicationHistory() {
-		try {
-			if(userApplicationHistory_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.applicationHistoryDao.refresh(this.userApplicationHistory);
-				userApplicationHistory_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userApplicationHistory == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	public Collection<ApplicationHistory> getUserApplicationHistory() {
 		return this.userApplicationHistory;
-	}
-	public void setUserApplicationHistory(ApplicationHistory userApplicationHistory) {
-		this.userApplicationHistory = userApplicationHistory;
-	}			
-	public Authentification getUserAuthentification() {
-		try {
-			if(userAuthentification_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.authentificationDao.refresh(this.userAuthentification);
-				userAuthentification_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userAuthentification == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<Authentification> getUserAuthentification() {
 		return this.userAuthentification;
-	}
-	public void setUserAuthentification(Authentification userAuthentification) {
-		this.userAuthentification = userAuthentification;
-	}			
-	public Contact getUserContact() {
-		try {
-			if(userContact_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.contactDao.refresh(this.userContact);
-				userContact_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userContact == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<Contact> getUserContact() {
 		return this.userContact;
-	}
-	public void setUserContact(Contact userContact) {
-		this.userContact = userContact;
-	}			
-	public KnownWifi getUserKnownWifi() {
-		try {
-			if(userKnownWifi_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.knownWifiDao.refresh(this.userKnownWifi);
-				userKnownWifi_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userKnownWifi == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<KnownWifi> getUserKnownWifi() {
 		return this.userKnownWifi;
-	}
-	public void setUserKnownWifi(KnownWifi userKnownWifi) {
-		this.userKnownWifi = userKnownWifi;
-	}			
-	public WebHistory getUserWebHistory() {
-		try {
-			if(userWebHistory_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.webHistoryDao.refresh(this.userWebHistory);
-				userWebHistory_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userWebHistory == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<WebHistory> getUserWebHistory() {
 		return this.userWebHistory;
-	}
-	public void setUserWebHistory(WebHistory userWebHistory) {
-		this.userWebHistory = userWebHistory;
-	}			
-	public BatteryUsage getUserBatteryUsage() {
-		try {
-			if(userBatteryUsage_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.batteryUsageDao.refresh(this.userBatteryUsage);
-				userBatteryUsage_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userBatteryUsage == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<BatteryUsage> getUserBatteryUsage() {
 		return this.userBatteryUsage;
-	}
-	public void setUserBatteryUsage(BatteryUsage userBatteryUsage) {
-		this.userBatteryUsage = userBatteryUsage;
-	}			
-	public SMS getUserSMS() {
-		try {
-			if(userSMS_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.sMSDao.refresh(this.userSMS);
-				userSMS_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userSMS == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<SMS> getUserSMS() {
 		return this.userSMS;
-	}
-	public void setUserSMS(SMS userSMS) {
-		this.userSMS = userSMS;
-	}			
-	public BluetoothDevice getUserBletoothDevice() {
-		try {
-			if(userBletoothDevice_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.bluetoothDeviceDao.refresh(this.userBletoothDevice);
-				userBletoothDevice_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userBletoothDevice == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<BluetoothDevice> getUserBletoothDevice() {
 		return this.userBletoothDevice;
-	}
-	public void setUserBletoothDevice(BluetoothDevice userBletoothDevice) {
-		this.userBletoothDevice = userBletoothDevice;
-	}			
-	public Cell getUserCell() {
-		try {
-			if(userCell_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.cellDao.refresh(this.userCell);
-				userCell_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userCell == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<Cell> getUserCell() {
 		return this.userCell;
-	}
-	public void setUserCell(Cell userCell) {
-		this.userCell = userCell;
-	}			
-	public PhoneCallLog getUserPhoneCallLog() {
-		try {
-			if(userPhoneCallLog_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.phoneCallLogDao.refresh(this.userPhoneCallLog);
-				userPhoneCallLog_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userPhoneCallLog == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<PhoneCallLog> getUserPhoneCallLog() {
 		return this.userPhoneCallLog;
-	}
-	public void setUserPhoneCallLog(PhoneCallLog userPhoneCallLog) {
-		this.userPhoneCallLog = userPhoneCallLog;
-	}			
-	public CalendarEvent getUserCalendarEvent() {
-		try {
-			if(userCalendarEvent_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.calendarEventDao.refresh(this.userCalendarEvent);
-				userCalendarEvent_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userCalendarEvent == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<CalendarEvent> getUserCalendarEvent() {
 		return this.userCalendarEvent;
-	}
-	public void setUserCalendarEvent(CalendarEvent userCalendarEvent) {
-		this.userCalendarEvent = userCalendarEvent;
-	}			
-	public Geolocation getUserGeolocation() {
-		try {
-			if(userGeolocation_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.geolocationDao.refresh(this.userGeolocation);
-				userGeolocation_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userGeolocation == null){
-			log.warn("MobilePrivacyProfilerDB_metadata may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<Geolocation> getUserGeolocation() {
 		return this.userGeolocation;
-	}
-	public void setUserGeolocation(Geolocation userGeolocation) {
-		this.userGeolocation = userGeolocation;
-	}			
+	}					
 
 
 
@@ -460,65 +280,101 @@ public class MobilePrivacyProfilerDB_metadata {
     	sb.append(">");
 
 
-		if(this.userApplicationHistory!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERAPPLICATIONHISTORY+">");
-			sb.append(this.userApplicationHistory.getId());
-	    	sb.append("</"+XML_REF_USERAPPLICATIONHISTORY+">");
+		if(this.userApplicationHistory != null){
+			for(ApplicationHistory ref : this.userApplicationHistory){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERAPPLICATIONHISTORY+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userAuthentification!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERAUTHENTIFICATION+">");
-			sb.append(this.userAuthentification.getId());
-	    	sb.append("</"+XML_REF_USERAUTHENTIFICATION+">");
+		if(this.userAuthentification != null){
+			for(Authentification ref : this.userAuthentification){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERAUTHENTIFICATION+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userContact!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERCONTACT+">");
-			sb.append(this.userContact.getId());
-	    	sb.append("</"+XML_REF_USERCONTACT+">");
+		if(this.userContact != null){
+			for(Contact ref : this.userContact){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERCONTACT+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userKnownWifi!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERKNOWNWIFI+">");
-			sb.append(this.userKnownWifi.getId());
-	    	sb.append("</"+XML_REF_USERKNOWNWIFI+">");
+		if(this.userKnownWifi != null){
+			for(KnownWifi ref : this.userKnownWifi){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERKNOWNWIFI+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userWebHistory!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERWEBHISTORY+">");
-			sb.append(this.userWebHistory.getId());
-	    	sb.append("</"+XML_REF_USERWEBHISTORY+">");
+		if(this.userWebHistory != null){
+			for(WebHistory ref : this.userWebHistory){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERWEBHISTORY+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userBatteryUsage!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERBATTERYUSAGE+">");
-			sb.append(this.userBatteryUsage.getId());
-	    	sb.append("</"+XML_REF_USERBATTERYUSAGE+">");
+		if(this.userBatteryUsage != null){
+			for(BatteryUsage ref : this.userBatteryUsage){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERBATTERYUSAGE+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userSMS!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERSMS+">");
-			sb.append(this.userSMS.getId());
-	    	sb.append("</"+XML_REF_USERSMS+">");
+		if(this.userSMS != null){
+			for(SMS ref : this.userSMS){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERSMS+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userBletoothDevice!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERBLETOOTHDEVICE+">");
-			sb.append(this.userBletoothDevice.getId());
-	    	sb.append("</"+XML_REF_USERBLETOOTHDEVICE+">");
+		if(this.userBletoothDevice != null){
+			for(BluetoothDevice ref : this.userBletoothDevice){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERBLETOOTHDEVICE+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userCell!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERCELL+">");
-			sb.append(this.userCell.getId());
-	    	sb.append("</"+XML_REF_USERCELL+">");
+		if(this.userCell != null){
+			for(Cell ref : this.userCell){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERCELL+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userPhoneCallLog!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERPHONECALLLOG+">");
-			sb.append(this.userPhoneCallLog.getId());
-	    	sb.append("</"+XML_REF_USERPHONECALLLOG+">");
+		if(this.userPhoneCallLog != null){
+			for(PhoneCallLog ref : this.userPhoneCallLog){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERPHONECALLLOG+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userCalendarEvent!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERCALENDAREVENT+">");
-			sb.append(this.userCalendarEvent.getId());
-	    	sb.append("</"+XML_REF_USERCALENDAREVENT+">");
+		if(this.userCalendarEvent != null){
+			for(CalendarEvent ref : this.userCalendarEvent){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERCALENDAREVENT+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
-		if(this.userGeolocation!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERGEOLOCATION+">");
-			sb.append(this.userGeolocation.getId());
-	    	sb.append("</"+XML_REF_USERGEOLOCATION+">");
+		if(this.userGeolocation != null){
+			for(Geolocation ref : this.userGeolocation){
+					
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERGEOLOCATION+" id=\"");
+	    		sb.append(ref._id);
+	        	sb.append("\"/>");
+	    	}		
 		}
 		// TODO deal with other case
 

@@ -138,11 +138,6 @@ public class ContactOrganisation {
     	sb.append(">");
 
 
-		if(this.referencedContact!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_REFERENCEDCONTACT+">");
-			sb.append(this.referencedContact.getId());
-	    	sb.append("</"+XML_REF_REFERENCEDCONTACT+">");
-		}
 		// TODO deal with other case
 
 		sb.append("</"+XML_CONTACTORGANISATION+">");

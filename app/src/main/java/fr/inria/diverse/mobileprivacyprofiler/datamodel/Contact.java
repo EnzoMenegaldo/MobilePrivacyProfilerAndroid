@@ -65,8 +65,6 @@ public class Contact {
 	 */
 	public boolean userMetaData_mayNeedDBRefresh = true;
 	public boolean contactOrganisation_mayNeedDBRefresh = true;
-	public boolean contactIM_mayNeedDBRefresh = true;
-	public boolean contactEvent_mayNeedDBRefresh = true;
 	
 
 	@DatabaseField
@@ -121,11 +119,11 @@ public class Contact {
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
 	protected ContactOrganisation contactOrganisation;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected ContactIM contactIM;
+	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	protected ForeignCollection<ContactIM> contactIM;
 
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	protected ContactEvent contactEvent;
+	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	protected ForeignCollection<ContactEvent> contactEvent;
 
 	// Start of user code Contact additional user properties
 	// End of user code
@@ -270,40 +268,12 @@ public class Contact {
 	public void setContactOrganisation(ContactOrganisation contactOrganisation) {
 		this.contactOrganisation = contactOrganisation;
 	}			
-	public ContactIM getContactIM() {
-		try {
-			if(contactIM_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.contactIMDao.refresh(this.contactIM);
-				contactIM_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.contactIM == null){
-			log.warn("Contact may not be properly refreshed from DB (_id="+_id+")");
-		}
+	public Collection<ContactIM> getContactIM() {
 		return this.contactIM;
-	}
-	public void setContactIM(ContactIM contactIM) {
-		this.contactIM = contactIM;
-	}			
-	public ContactEvent getContactEvent() {
-		try {
-			if(contactEvent_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.contactEventDao.refresh(this.contactEvent);
-				contactEvent_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.contactEvent == null){
-			log.warn("Contact may not be properly refreshed from DB (_id="+_id+")");
-		}
+	}					
+	public Collection<ContactEvent> getContactEvent() {
 		return this.contactEvent;
-	}
-	public void setContactEvent(ContactEvent contactEvent) {
-		this.contactEvent = contactEvent;
-	}			
+	}					
 
 
 
@@ -403,16 +373,20 @@ public class Contact {
 			sb.append(this.contactOrganisation.getId());
 	    	sb.append("</"+XML_REF_CONTACTORGANISATION+">");
 		}
-		if(this.contactIM!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_CONTACTIM+">");
-			sb.append(this.contactIM.getId());
-	    	sb.append("</"+XML_REF_CONTACTIM+">");
+		sb.append("\n"+indent+"\t<"+XML_REF_CONTACTIM+">");
+		if(this.contactIM != null){
+			for(ContactIM ref : this.contactIM){
+				sb.append("\n"+ref.toXML(indent+"\t\t", contextDB));
+	    	}
 		}
-		if(this.contactEvent!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_CONTACTEVENT+">");
-			sb.append(this.contactEvent.getId());
-	    	sb.append("</"+XML_REF_CONTACTEVENT+">");
+		sb.append("</"+XML_REF_CONTACTIM+">");		
+		sb.append("\n"+indent+"\t<"+XML_REF_CONTACTEVENT+">");
+		if(this.contactEvent != null){
+			for(ContactEvent ref : this.contactEvent){
+				sb.append("\n"+ref.toXML(indent+"\t\t", contextDB));
+	    	}
 		}
+		sb.append("</"+XML_REF_CONTACTEVENT+">");		
 		// TODO deal with other case
 
 		sb.append("</"+XML_CONTACT+">");

@@ -1059,78 +1059,18 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userApplicationHistory)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userApplicationHistory);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserApplicationHistory_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userApplicationHistory);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userAuthentification)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userAuthentification);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserAuthentification_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userAuthentification);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userContact)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userContact);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserContact_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userContact);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userKnownWifi)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userKnownWifi);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserKnownWifi_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userKnownWifi);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userWebHistory)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userWebHistory);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserWebHistory_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userWebHistory);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBatteryUsage)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBatteryUsage);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserBatteryUsage_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBatteryUsage);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userSMS)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userSMS);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserSMS_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userSMS);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBletoothDevice)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBletoothDevice);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserBletoothDevice_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBletoothDevice);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCell)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCell);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserCell_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCell);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userPhoneCallLog)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userPhoneCallLog);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserPhoneCallLog_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userPhoneCallLog);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCalendarEvent)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCalendarEvent);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserCalendarEvent_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCalendarEvent);	    
-	        } else
-			if (currentTagName.equals(DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userGeolocation)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userGeolocation);
-	            String id = readText(parser);
-				refCommands.add(new MobilePrivacyProfilerDB_metadata_setUserGeolocation_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userGeolocation);	    
-	        } else
+					// TODO deal with ref userApplicationHistory
+					// TODO deal with ref userAuthentification
+					// TODO deal with ref userContact
+					// TODO deal with ref userKnownWifi
+					// TODO deal with ref userWebHistory
+					// TODO deal with ref userBatteryUsage
+					// TODO deal with ref userSMS
+					// TODO deal with ref userBletoothDevice
+					// TODO deal with ref userCell
+					// TODO deal with ref userPhoneCallLog
+					// TODO deal with ref userCalendarEvent
+					// TODO deal with ref userGeolocation
 	        {
 	            skip(parser);
 	        }
@@ -1276,23 +1216,18 @@ public class MobilePrivacyProfilerDBXMLParser {
 				refCommands.add(new Contact_setUserMetaData_RefCommand(result,id, this));
 				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CONTACT_userMetaData);	    
 	        } else
-			if (currentTagName.equals(DATAREF_CONTACT_contactOrganisation)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CONTACT_contactOrganisation);
-	            String id = readText(parser);
-				refCommands.add(new Contact_setContactOrganisation_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CONTACT_contactOrganisation);	    
+					// TODO deal with owned ref contactOrganisation
+			if (currentTagName.equals(DATAREF_CONTACT_contactIM)) {
+				List<ContactIM> entries = readContactIMs(parser,DATAREF_CONTACT_contactIM);	
+				contactIMs.addAll(entries); // add for inclusion in the DB
+				//result.getContactIM().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
+				refCommands.add(new Contact_addContainedContactIM_RefCommand(result,entries));	    
 	        } else
-			if (currentTagName.equals(DATAREF_CONTACT_contactIM)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CONTACT_contactIM);
-	            String id = readText(parser);
-				refCommands.add(new Contact_setContactIM_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CONTACT_contactIM);	    
-	        } else
-			if (currentTagName.equals(DATAREF_CONTACT_contactEvent)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CONTACT_contactEvent);
-	            String id = readText(parser);
-				refCommands.add(new Contact_setContactEvent_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CONTACT_contactEvent);	    
+			if (currentTagName.equals(DATAREF_CONTACT_contactEvent)) {
+				List<ContactEvent> entries = readContactEvents(parser,DATAREF_CONTACT_contactEvent);	
+				contactEvents.addAll(entries); // add for inclusion in the DB
+				//result.getContactEvent().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
+				refCommands.add(new Contact_addContainedContactEvent_RefCommand(result,entries));	    
 	        } else
 	        {
 	            skip(parser);
@@ -1645,19 +1580,14 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-					// TODO deal with ref history
-			if (currentTagName.equals(DATAREF_CELL_cdmaposition)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CELL_cdmaposition);
-	            String id = readText(parser);
-				refCommands.add(new Cell_setCdmaposition_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CELL_cdmaposition);	    
+			if (currentTagName.equals(DATAREF_CELL_history)) {
+				List<NeighboringCellHistory> entries = readNeighboringCellHistorys(parser,DATAREF_CELL_history);	
+				neighboringCellHistorys.addAll(entries); // add for inclusion in the DB
+				//result.getHistory().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
+				refCommands.add(new Cell_addContainedHistory_RefCommand(result,entries));	    
 	        } else
-			if (currentTagName.equals(DATAREF_CELL_otherPosition)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CELL_otherPosition);
-	            String id = readText(parser);
-				refCommands.add(new Cell_setOtherPosition_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CELL_otherPosition);	    
-	        } else
+					// TODO deal with owned ref cdmaposition
+					// TODO deal with owned ref otherPosition
 			if (currentTagName.equals(DATAREF_CELL_userMetaData)) {	
 				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CELL_userMetaData);
 	            String id = readText(parser);
@@ -1899,234 +1829,18 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public abstract class RefCommand{
 		public abstract void run();
 	}
-	class MobilePrivacyProfilerDB_metadata_setUserApplicationHistory_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserApplicationHistory_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserApplicationHistory(parser.xmlId2ApplicationHistory.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserAuthentification_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserAuthentification_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserAuthentification(parser.xmlId2Authentification.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserContact_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserContact_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserContact(parser.xmlId2Contact.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserKnownWifi_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserKnownWifi_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserKnownWifi(parser.xmlId2KnownWifi.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserWebHistory_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserWebHistory_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserWebHistory(parser.xmlId2WebHistory.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserBatteryUsage_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserBatteryUsage_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserBatteryUsage(parser.xmlId2BatteryUsage.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserSMS_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserSMS_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserSMS(parser.xmlId2SMS.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserBletoothDevice_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserBletoothDevice_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserBletoothDevice(parser.xmlId2BluetoothDevice.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserCell_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserCell_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserCell(parser.xmlId2Cell.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserPhoneCallLog_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserPhoneCallLog_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserPhoneCallLog(parser.xmlId2PhoneCallLog.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserCalendarEvent_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserCalendarEvent_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserCalendarEvent(parser.xmlId2CalendarEvent.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
-	class MobilePrivacyProfilerDB_metadata_setUserGeolocation_RefCommand extends RefCommand{
-		MobilePrivacyProfilerDB_metadata self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public MobilePrivacyProfilerDB_metadata_setUserGeolocation_RefCommand(MobilePrivacyProfilerDB_metadata self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserGeolocation(parser.xmlId2Geolocation.get(referencedElementID));
-			mobilePrivacyProfilerDB_metadatasToUpdate.add(self);
-		}
-	}
+	// class MobilePrivacyProfilerDB_metadata_addUserApplicationHistory_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserAuthentification_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserContact_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserKnownWifi_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserWebHistory_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserBatteryUsage_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserSMS_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserBletoothDevice_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserCell_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserPhoneCallLog_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserCalendarEvent_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserGeolocation_RefCommand extends RefCommand{
 	class ApplicationHistory_addContainedUsageStats_RefCommand extends RefCommand{
 		ApplicationHistory container;
 		List<ApplicationUsageStats> containedElements;
@@ -2283,62 +1997,63 @@ public class MobilePrivacyProfilerDBXMLParser {
 			contactsToUpdate.add(self);
 		}
 	}
-	class Contact_setContactOrganisation_RefCommand extends RefCommand{
-		Contact self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
+	class Contact_setContainedContactOrganisation_RefCommand extends RefCommand{
+	Contact container;
+		ContactOrganisation containedElement;
 		
-		public Contact_setContactOrganisation_RefCommand(Contact self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+		public Contact_setContainedContactOrganisation_RefCommand(Contact container,
+				ContactOrganisation containedElement) {
 			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
+			this.container = container;
+			this.containedElement = containedElement;
 		}
 
 		@Override
 		public void run() {
-			self.setContactOrganisation(parser.xmlId2ContactOrganisation.get(referencedElementID));
-			contactsToUpdate.add(self);
+			containedElement.setReferencedContact(container);
+			contactOrganisationsToUpdate.add(containedElement);			
 		}
+		
 	}
-	class Contact_setContactIM_RefCommand extends RefCommand{
-		Contact self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
+	class Contact_addContainedContactIM_RefCommand extends RefCommand{
+		Contact container;
+		List<ContactIM> containedElements;
 		
-		public Contact_setContactIM_RefCommand(Contact self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+		public Contact_addContainedContactIM_RefCommand(Contact container,
+				List<ContactIM> containedElements) {
 			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
+			this.container = container;
+			this.containedElements = containedElements;
 		}
 
 		@Override
 		public void run() {
-			self.setContactIM(parser.xmlId2ContactIM.get(referencedElementID));
-			contactsToUpdate.add(self);
+			for (ContactIM element : containedElements) {				
+				element.setContact(container);
+				contactIMsToUpdate.add(element);
+			}
 		}
+		
 	}
-	class Contact_setContactEvent_RefCommand extends RefCommand{
-		Contact self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
+	class Contact_addContainedContactEvent_RefCommand extends RefCommand{
+		Contact container;
+		List<ContactEvent> containedElements;
 		
-		public Contact_setContactEvent_RefCommand(Contact self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+		public Contact_addContainedContactEvent_RefCommand(Contact container,
+				List<ContactEvent> containedElements) {
 			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
+			this.container = container;
+			this.containedElements = containedElements;
 		}
 
 		@Override
 		public void run() {
-			self.setContactEvent(parser.xmlId2ContactEvent.get(referencedElementID));
-			contactsToUpdate.add(self);
+			for (ContactEvent element : containedElements) {				
+				element.setContact(container);
+				contactEventsToUpdate.add(element);
+			}
 		}
+		
 	}
 	class ContactOrganisation_setReferencedContact_RefCommand extends RefCommand{
 		ContactOrganisation self;
@@ -2552,44 +2267,61 @@ public class MobilePrivacyProfilerDBXMLParser {
 			phoneCallLogsToUpdate.add(self);
 		}
 	}
-	// class Cell_addHistory_RefCommand extends RefCommand{
-	class Cell_setCdmaposition_RefCommand extends RefCommand{
-		Cell self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
+	class Cell_addContainedHistory_RefCommand extends RefCommand{
+		Cell container;
+		List<NeighboringCellHistory> containedElements;
 		
-		public Cell_setCdmaposition_RefCommand(Cell self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+		public Cell_addContainedHistory_RefCommand(Cell container,
+				List<NeighboringCellHistory> containedElements) {
 			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
+			this.container = container;
+			this.containedElements = containedElements;
 		}
 
 		@Override
 		public void run() {
-			self.setCdmaposition(parser.xmlId2CdmaCellData.get(referencedElementID));
-			cellsToUpdate.add(self);
+			for (NeighboringCellHistory element : containedElements) {				
+				element.setCells(container);
+				neighboringCellHistorysToUpdate.add(element);
+			}
 		}
+		
 	}
-	class Cell_setOtherPosition_RefCommand extends RefCommand{
-		Cell self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
+	class Cell_setContainedCdmaposition_RefCommand extends RefCommand{
+	Cell container;
+		CdmaCellData containedElement;
 		
-		public Cell_setOtherPosition_RefCommand(Cell self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
+		public Cell_setContainedCdmaposition_RefCommand(Cell container,
+				CdmaCellData containedElement) {
 			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
+			this.container = container;
+			this.containedElement = containedElement;
 		}
 
 		@Override
 		public void run() {
-			self.setOtherPosition(parser.xmlId2OtherCellData.get(referencedElementID));
-			cellsToUpdate.add(self);
+			containedElement.setIdentity(container);
+			cdmaCellDatasToUpdate.add(containedElement);			
 		}
+		
+	}
+	class Cell_setContainedOtherPosition_RefCommand extends RefCommand{
+	Cell container;
+		OtherCellData containedElement;
+		
+		public Cell_setContainedOtherPosition_RefCommand(Cell container,
+				OtherCellData containedElement) {
+			super();
+			this.container = container;
+			this.containedElement = containedElement;
+		}
+
+		@Override
+		public void run() {
+			containedElement.setIdentity(container);
+			otherCellDatasToUpdate.add(containedElement);			
+		}
+		
 	}
 	class Cell_setUserMetaData_RefCommand extends RefCommand{
 		Cell self;

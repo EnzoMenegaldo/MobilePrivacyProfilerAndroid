@@ -138,11 +138,6 @@ public class ContactEvent {
     	sb.append(">");
 
 
-		if(this.contact!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_CONTACT+">");
-			sb.append(this.contact.getId());
-	    	sb.append("</"+XML_REF_CONTACT+">");
-		}
 		// TODO deal with other case
 
 		sb.append("</"+XML_CONTACTEVENT+">");

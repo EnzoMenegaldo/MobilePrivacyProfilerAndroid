@@ -173,14 +173,13 @@ public class Cell {
     	sb.append(">");
 
 
+		sb.append("\n"+indent+"\t<"+XML_REF_HISTORY+">");
 		if(this.history != null){
 			for(NeighboringCellHistory ref : this.history){
-					
-	    		sb.append("\n"+indent+"\t<"+XML_REF_HISTORY+" id=\"");
-	    		sb.append(ref._id);
-	        	sb.append("\"/>");
-	    	}		
+				sb.append("\n"+ref.toXML(indent+"\t\t", contextDB));
+	    	}
 		}
+		sb.append("</"+XML_REF_HISTORY+">");		
 		if(this.cdmaposition!= null){
 			sb.append("\n"+indent+"\t<"+XML_REF_CDMAPOSITION+">");
 			sb.append(this.cdmaposition.getId());

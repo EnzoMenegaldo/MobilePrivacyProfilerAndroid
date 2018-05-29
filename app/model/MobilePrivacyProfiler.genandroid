@@ -2,18 +2,18 @@
 <genandroid:AndroidProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:genandroid="http://genandroid/1.0" name="MobilePrivacyProfiler" packagePrefix="fr.inria.diverse.mobileprivacyprofiler">
   <dataModel name="MobilePrivacyProfilerDB">
     <dataClasses xsi:type="genandroid:DataClass" name="MobilePrivacyProfilerDB_metadata" documentation="données complémentaires sur la base de donnée">
-      <dataReferences name="userApplicationHistory" opposite="//@dataModel/@dataAssociations.9" type="//@dataModel/@dataClasses.1"/>
-      <dataReferences name="userAuthentification" opposite="//@dataModel/@dataAssociations.10" type="//@dataModel/@dataClasses.3"/>
-      <dataReferences name="userContact" opposite="//@dataModel/@dataAssociations.11" type="//@dataModel/@dataClasses.4"/>
-      <dataReferences name="userKnownWifi" opposite="//@dataModel/@dataAssociations.12" type="//@dataModel/@dataClasses.11"/>
-      <dataReferences name="userWebHistory" opposite="//@dataModel/@dataAssociations.13" type="//@dataModel/@dataClasses.25"/>
-      <dataReferences name="userBatteryUsage" opposite="//@dataModel/@dataAssociations.14" type="//@dataModel/@dataClasses.24"/>
-      <dataReferences name="userSMS" opposite="//@dataModel/@dataAssociations.15" type="//@dataModel/@dataClasses.23"/>
-      <dataReferences name="userBletoothDevice" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.21"/>
-      <dataReferences name="userCell" opposite="//@dataModel/@dataAssociations.17" type="//@dataModel/@dataClasses.17"/>
-      <dataReferences name="userPhoneCallLog" opposite="//@dataModel/@dataAssociations.18" type="//@dataModel/@dataClasses.16"/>
-      <dataReferences name="userCalendarEvent" opposite="//@dataModel/@dataAssociations.19" type="//@dataModel/@dataClasses.15"/>
-      <dataReferences name="userGeolocation" opposite="//@dataModel/@dataAssociations.20" type="//@dataModel/@dataClasses.14"/>
+      <dataReferences name="userApplicationHistory" upperBound="-1" opposite="//@dataModel/@dataAssociations.9" type="//@dataModel/@dataClasses.1"/>
+      <dataReferences name="userAuthentification" upperBound="-1" opposite="//@dataModel/@dataAssociations.10" type="//@dataModel/@dataClasses.3"/>
+      <dataReferences name="userContact" upperBound="-1" opposite="//@dataModel/@dataAssociations.11" type="//@dataModel/@dataClasses.4"/>
+      <dataReferences name="userKnownWifi" upperBound="-1" opposite="//@dataModel/@dataAssociations.12" type="//@dataModel/@dataClasses.11"/>
+      <dataReferences name="userWebHistory" upperBound="-1" opposite="//@dataModel/@dataAssociations.13" type="//@dataModel/@dataClasses.25"/>
+      <dataReferences name="userBatteryUsage" upperBound="-1" opposite="//@dataModel/@dataAssociations.14" type="//@dataModel/@dataClasses.24"/>
+      <dataReferences name="userSMS" upperBound="-1" opposite="//@dataModel/@dataAssociations.15" type="//@dataModel/@dataClasses.23"/>
+      <dataReferences name="userBletoothDevice" upperBound="-1" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.21"/>
+      <dataReferences name="userCell" upperBound="-1" opposite="//@dataModel/@dataAssociations.17" type="//@dataModel/@dataClasses.17"/>
+      <dataReferences name="userPhoneCallLog" upperBound="-1" opposite="//@dataModel/@dataAssociations.18" type="//@dataModel/@dataClasses.16"/>
+      <dataReferences name="userCalendarEvent" upperBound="-1" opposite="//@dataModel/@dataAssociations.19" type="//@dataModel/@dataClasses.15"/>
+      <dataReferences name="userGeolocation" upperBound="-1" opposite="//@dataModel/@dataAssociations.20" type="//@dataModel/@dataClasses.14"/>
       <dataAttributes name="lastTransmissionDate" type="//@dataModel/@dataClasses.30"/>
       <dataAttributes name="lastScanInstalledApplications" type="//@dataModel/@dataClasses.30"/>
       <dataAttributes name="lastScanAppUsage" type="//@dataModel/@dataClasses.30"/>
@@ -24,7 +24,7 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
       <dataReferences name="usageStats" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.2"/>
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.9" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.9" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="appName" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="packageName" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
@@ -37,7 +37,7 @@
       <dataAttributes name="requestedInterval" documentation="Daily, weekly, monthly, yearly as defined in https://developer.android.com/reference/android/app/usage/UsageStatsManager.html" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Authentification" documentation="Identity known on the device">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.10" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.10" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="packageName" documentation="pachageName related to this Autenticator&#xA;" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="name" documentation="name related to this Authenticator" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="type" documentation="type is a unique string that identify an authenticator" type="//@dataModel/@dataClasses.27"/>
@@ -46,10 +46,10 @@
       <dataReferences name="phoneNumbers" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.4" type="//@dataModel/@dataClasses.8"/>
       <dataReferences name="physicalAddresses" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.5" type="//@dataModel/@dataClasses.9"/>
       <dataReferences name="emails" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.6" type="//@dataModel/@dataClasses.10"/>
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.11" type="//@dataModel/@dataClasses.0"/>
-      <dataReferences name="contactOrganisation" opposite="//@dataModel/@dataAssociations.21" type="//@dataModel/@dataClasses.5"/>
-      <dataReferences name="contactIM" opposite="//@dataModel/@dataAssociations.22" type="//@dataModel/@dataClasses.6"/>
-      <dataReferences name="ContactEvent" opposite="//@dataModel/@dataAssociations.23" type="//@dataModel/@dataClasses.7"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.11" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="contactOrganisation" containment="true" opposite="//@dataModel/@dataAssociations.21" type="//@dataModel/@dataClasses.5"/>
+      <dataReferences name="contactIM" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.22" type="//@dataModel/@dataClasses.6"/>
+      <dataReferences name="contactEvent" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.23" type="//@dataModel/@dataClasses.7"/>
       <dataAttributes name="surname" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="firstName" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="middleName" type="//@dataModel/@dataClasses.27"/>
@@ -63,17 +63,17 @@
       <dataAttributes name="scanTimeStamp" documentation="Attribut allowing to discriminate contacts created over different divice scan on server side." type="//@dataModel/@dataClasses.30"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ContactOrganisation">
-      <dataReferences name="referencedContact" opposite="//@dataModel/@dataAssociations.21" type="//@dataModel/@dataClasses.4"/>
+      <dataReferences name="referencedContact" lowerbound="1" opposite="//@dataModel/@dataAssociations.21" type="//@dataModel/@dataClasses.4"/>
       <dataAttributes name="company" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="title" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ContactIM">
-      <dataReferences name="Contact" opposite="//@dataModel/@dataAssociations.22" type="//@dataModel/@dataClasses.4"/>
+      <dataReferences name="contact" lowerbound="1" opposite="//@dataModel/@dataAssociations.22" type="//@dataModel/@dataClasses.4"/>
       <dataAttributes name="protocole" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="imId" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ContactEvent">
-      <dataReferences name="Contact" opposite="//@dataModel/@dataAssociations.23" type="//@dataModel/@dataClasses.4"/>
+      <dataReferences name="contact" lowerbound="1" opposite="//@dataModel/@dataAssociations.23" type="//@dataModel/@dataClasses.4"/>
       <dataAttributes name="startDate" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="type" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
@@ -94,7 +94,7 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="KnownWifi" documentation="Registered Wifi connexion on the device.&#xA;Ie. the device has registered it and was connected to it">
       <dataReferences name="detectedWifis" upperBound="-1" opposite="//@dataModel/@dataAssociations.8" type="//@dataModel/@dataClasses.13"/>
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.12" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.12" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="ssid" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="location" documentation="Location of the Wifi&#xA;&#xA;note: a given SSID is shared by several router (Access Point) (possibly worldwide) &#xA;so we need to check how this data is managed and have a better model" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
@@ -112,14 +112,14 @@
       <dataAttributes name="ssid" documentation="SSID detected during the session&#xA;(note: should we need to check what happen if several network conflicts by using the same SSID / man in the middle attack )" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Geolocation">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.20" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.20" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="date" lowerbound="1" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="position" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="precision" documentation="precision in centimeter" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="altitude" documentation="altitude in meter" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="CalendarEvent">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.19" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.19" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="EventLabel" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="startDate" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="endDate" type="//@dataModel/@dataClasses.27"/>
@@ -128,36 +128,36 @@
       <dataAttributes name="eventId" type="//@dataModel/@dataClasses.31"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="PhoneCallLog">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.18" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.18" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="phoneNumber" documentation="phone number or unknown" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="date" documentation="" type="//@dataModel/@dataClasses.30"/>
       <dataAttributes name="duration" documentation="duration of the call in s" type="//@dataModel/@dataClasses.31"/>
       <dataAttributes name="callType" documentation="missed, rejected, outgoing, incoming, blocked, voicemail" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Cell">
-      <dataReferences name="history" upperBound="-1" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.20"/>
-      <dataReferences name="cdmaposition" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.19"/>
-      <dataReferences name="otherPosition" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.18"/>
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.17" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="history" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.20"/>
+      <dataReferences name="cdmaposition" containment="true" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.19"/>
+      <dataReferences name="otherPosition" containment="true" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.18"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.17" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="cellId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="OtherCellData">
-      <dataReferences name="identity" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.17"/>
+      <dataReferences name="identity" lowerbound="1" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.17"/>
       <dataAttributes name="lacTac" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="type" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="CdmaCellData">
-      <dataReferences name="identity" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.17"/>
+      <dataReferences name="identity" lowerbound="1" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.17"/>
       <dataAttributes name="longitude" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="latitude" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="NeighboringCellHistory">
-      <dataReferences name="cells" documentation="observed cells at that date" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.17"/>
+      <dataReferences name="cells" documentation="observed cells at that date" lowerbound="1" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.17"/>
       <dataAttributes name="date" type="//@dataModel/@dataClasses.30"/>
       <dataAttributes name="strength" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="BluetoothDevice">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="mac" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="name" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="type" documentation="https://developer.android.com/reference/android/bluetooth/BluetoothClass.Device.html" type="//@dataModel/@dataClasses.26"/>
@@ -168,20 +168,20 @@
       <dataAttributes name="connected" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="SMS">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.15" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.15" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="date" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="phoneNumber" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="type" documentation="incoming, outgoing" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="BatteryUsage" documentation="https://developer.android.com/training/monitoring-device-state/battery-monitoring.html">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.14" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.14" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="date" type="//@dataModel/@dataClasses.30"/>
       <dataAttributes name="level" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="isPugged" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="plugType" documentation="Possible type :&#xA;&quot;BATTERY_PLUGGED_USB&quot;,&#xA;&quot;BATTERY_PLUGGED_AC&quot;,&#xA;&quot;BATTERY_PLUGGED_WIRELESS&quot;,&#xA; &quot;BATTERY_NOT_PLUGGED&quot;" type="//@dataModel/@dataClasses.27"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="WebHistory">
-      <dataReferences name="userMetaData" opposite="//@dataModel/@dataAssociations.13" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.13" type="//@dataModel/@dataClasses.0"/>
       <dataAttributes name="url" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="date" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="application" documentation="application that requested the url" type="//@dataModel/@dataClasses.27"/>
