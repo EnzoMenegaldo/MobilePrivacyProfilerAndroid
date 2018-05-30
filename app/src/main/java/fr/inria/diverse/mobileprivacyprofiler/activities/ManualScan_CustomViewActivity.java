@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -18,7 +19,7 @@ import android.view.MenuItem;
 //Start of user code additional imports ManualScan_CustomViewActivity
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-
+import fr.inria.diverse.mobileprivacyprofiler.test.Test;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -140,6 +141,12 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_contacts));
 		ScanDeviceIntentService.startActionScanContacts(this);
+	}
+	public void onClickBtnTest(View view) {
+		showToast(this.getBaseContext().getString(R.string.beginning_test_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.firing_up_test_action));
+		Test.mainTest(this);
 	}
 
 	//End of user code

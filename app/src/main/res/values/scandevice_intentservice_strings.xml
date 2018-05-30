@@ -12,4 +12,6 @@
     <string name="scandevice_intentservice_starting_scan_battery">Inspection des usages de la batterie</string>
     <string name="scandevice_intentservice_starting_scan_app_usage_stat">Inspection des utilisations des applications</string>
     <string name="scandevice_intentservice_starting_scan_contacts">Inspection contacts</string>
+    <string name="beginning_test_service">Start test</string>
+    <string name="firing_up_test_action">Start test action</string>
 </resources>

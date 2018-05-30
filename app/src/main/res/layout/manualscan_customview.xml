@@ -71,6 +71,13 @@
 		android:onClick="onClickBtnContact"
 		android:text="@string/manualscan_customview_contact_btn_label" />
 
+	<Button
+		android:id="@+id/btnTest"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="onClickBtnTest"
+		android:text="@string/manualscan_customview_test_btn_label" />
+
 </LinearLayout>
 <!--End of user code
 -->

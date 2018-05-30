@@ -31,7 +31,6 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhoneNumber;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhysicalAddress;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.DetectedWifi;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Geolocation;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.Identity;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.KnownWifi;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
@@ -133,7 +132,6 @@ public class ResetDBService extends IntentService {
         list.add(ContactPhysicalAddress.class);
         list.add(DetectedWifi.class);
         list.add(Geolocation.class);
-        list.add(Identity.class);
         list.add(KnownWifi.class);
         list.add(MobilePrivacyProfilerDB_metadata.class);
         list.add(NeighboringCellHistory.class);
