@@ -183,6 +183,24 @@ public class MobilePrivacyProfilerDBHelper {
 		return null;
 	}
 
+	/** find ApplicationUsageStats in the base using refereed ApplicationHistory
+	 * @param applicationHistory
+	 * @return
+	 */
+	public List<ApplicationUsageStats> queryApplicationUsageStatsByApplicationHistory(ApplicationHistory applicationHistory) {
+		try {
+			ApplicationUsageStats queryApplicationUsageStats = new ApplicationUsageStats();
+			queryApplicationUsageStats.setApplication(applicationHistory);
+			List<ApplicationUsageStats> fichesDeLaBase = this.applicationUsageStatsDao.queryForMatching(queryApplicationUsageStats);
+			if(0==fichesDeLaBase.size()){
+				Log.d(TAG,"ApplicationUsageStats doesn't exist in the base for this Application :"+applicationHistory.getPackageName());
+				return null;
+			}
+			return fichesDeLaBase;
+		} catch (SQLException e) { Log.e(TAG,"error while querying applicationUsageStats with application from package :"+applicationHistory.packageName+ " in the base", e); }
+		return null;
+	}
+
 	/** find Cell in the base using cellId
 	 * @param cellId
 	 * @return Cell with the cellId Identity

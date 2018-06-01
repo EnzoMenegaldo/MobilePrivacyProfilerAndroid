@@ -9,7 +9,7 @@
       <dataReferences name="userWebHistory" upperBound="-1" opposite="//@dataModel/@dataAssociations.13" type="//@dataModel/@dataClasses.25"/>
       <dataReferences name="userBatteryUsage" upperBound="-1" opposite="//@dataModel/@dataAssociations.14" type="//@dataModel/@dataClasses.24"/>
       <dataReferences name="userSMS" upperBound="-1" opposite="//@dataModel/@dataAssociations.15" type="//@dataModel/@dataClasses.23"/>
-      <dataReferences name="userBletoothDevice" upperBound="-1" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.21"/>
+      <dataReferences name="userBluetoothDevice" upperBound="-1" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.21"/>
       <dataReferences name="userCell" upperBound="-1" opposite="//@dataModel/@dataAssociations.17" type="//@dataModel/@dataClasses.17"/>
       <dataReferences name="userPhoneCallLog" upperBound="-1" opposite="//@dataModel/@dataAssociations.18" type="//@dataModel/@dataClasses.16"/>
       <dataReferences name="userCalendarEvent" upperBound="-1" opposite="//@dataModel/@dataAssociations.19" type="//@dataModel/@dataClasses.15"/>
@@ -158,12 +158,13 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="BluetoothDevice">
       <dataReferences name="userMetaData" lowerbound="1" opposite="//@dataModel/@dataAssociations.16" type="//@dataModel/@dataClasses.0"/>
+      <dataReferences name="bluetoothLog" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.24" type="//@dataModel/@dataClasses.22"/>
       <dataAttributes name="mac" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="name" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="type" documentation="https://developer.android.com/reference/android/bluetooth/BluetoothClass.Device.html" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="BluetoothLog">
-      <dataReferences name="device" lowerbound="1" type="//@dataModel/@dataClasses.21"/>
+      <dataReferences name="device" lowerbound="1" opposite="//@dataModel/@dataAssociations.24" type="//@dataModel/@dataClasses.21"/>
       <dataAttributes name="date" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="connected" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
@@ -216,6 +217,7 @@
     <dataAssociations name="Contact_ContactOrganisation" references="//@dataModel/@dataClasses.4/@dataReferences.4 //@dataModel/@dataClasses.5/@dataReferences.0"/>
     <dataAssociations name="Contact_ContactIM" references="//@dataModel/@dataClasses.4/@dataReferences.5 //@dataModel/@dataClasses.6/@dataReferences.0"/>
     <dataAssociations name="Contact_ContactEvent" references="//@dataModel/@dataClasses.7/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.6"/>
+    <dataAssociations name="BluetoothDevice_BluetoothLog" references="//@dataModel/@dataClasses.22/@dataReferences.0 //@dataModel/@dataClasses.21/@dataReferences.1"/>
   </dataModel>
   <presentationModel preferenceView="//@presentationModel/@viewActivities.0" welcomeView="//@presentationModel/@viewActivities.1">
     <viewActivities xsi:type="genandroid:PreferenceViewActivity" name="Preferences" documentation="Preference page for various settings of the application" defaultParentActivity="//@presentationModel/@viewActivities.1"/>

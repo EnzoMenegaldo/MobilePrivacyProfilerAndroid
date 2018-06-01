@@ -1,5 +1,7 @@
 package fr.inria.diverse.mobileprivacyprofiler.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
@@ -12,50 +14,104 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Test {
 
-    private volatile OrmLiteDBHelper dbHelper;
+    private static volatile OrmLiteDBHelper dbHelper;
 
     // Initialisation de la Gestion des Log
     private static final String TAG = Test.class.getSimpleName();
 
     public static void mainTest(Context context) {
+        Log.d(TAG,"-----> Let's go testing!  :  <-----");
 
-        /*MobilePrivacyProfilerDB_metadata metadata = new MobilePrivacyProfilerDB_metadata();
-        Date fake = new Date();
-        metadata.setLastCallScan(fake);
-        metadata.setLastContactScan(fake);
-        metadata.setLastScanAppUsage(fake);
-        metadata.setId(1);
-        metadata.setLastScanInstalledApplications(fake);
-        metadata.setLastSmsScan(fake);
-        metadata.setLastTransmissionDate(fake);
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
 
+        //creating an ApplicationHistory
         ApplicationHistory a = new ApplicationHistory();
-        a.setId(1);
         a.setAppName("appName (a)");
         a.setPackageName("packageName (a)");
         a.setUserMetaData(metadata);
+        //adding it to the db
+        getDBHelper(context).getApplicationHistoryDao().create(a);
 
-        ApplicationUsageStats appUseStat = new ApplicationUsageStats();
-        appUseStat.setApplication(a);
-        appUseStat.setFirstTimeStamp("firstTimeStamp");
-        appUseStat.setLastTimeStamp("lastTimeStamp");
-        appUseStat.setId(1);
-        appUseStat.setLastTimeUsed("lastTimeUsed");
-        appUseStat.setRequestedInterval(0);
-        appUseStat.setTotalTimeInForeground(111111);
+        //querying it from db
+        ApplicationHistory appHist = null;
+        appHist = getDBHelper(context).getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByAppName("appName (a)");
+        Log.d(TAG,"appHistList query successful : "+(null!=appHist));
 
-        List<ApplicationUsageStats>list = new ArrayList<>();
-        list.add(appUseStat);
-        a.setUsageStats(list);*/
+        if(null!=appHist) {
+            //creating an ApplicationUsageHistory related to appHist
+            ApplicationUsageStats appUseStatsInitial = new ApplicationUsageStats();
+            appUseStatsInitial.setApplication(appHist);
+            appUseStatsInitial.setFirstTimeStamp("firstTimeStamp");
+            appUseStatsInitial.setLastTimeStamp("lastTimeStamp");
+            appUseStatsInitial.setLastTimeUsed("lastTimeUsed");
+            appUseStatsInitial.setRequestedInterval(0);
+            appUseStatsInitial.setTotalTimeInForeground(111111);
+            //adding it to the db
+            getDBHelper(context).getApplicationUsageStatsDao().create(appUseStatsInitial);
 
-        Log.d(TAG,"Let's go testing!!!!");
-        /*ApplicationHistory b = new ApplicationHistory();
+            //querying it from db
+            List<ApplicationUsageStats> appUseStatFromBase = null;
+            appUseStatFromBase = getDBHelper(context).getMobilePrivacyProfilerDBHelper().queryApplicationUsageStatsByApplicationHistory(appHist);
+            Log.d(TAG, "appUseStat query successful : " + (null != appUseStatFromBase) + "\n Returned : " + appUseStatFromBase.size() + " results");
+
+            //translation of appUsageStats into Json
+            ObjectMapper mapperAppStats = new ObjectMapper();
+            String jsonAppStatsOutput = "";
+            try {
+                for (ApplicationUsageStats appUse : appUseStatFromBase) {
+                    jsonAppStatsOutput = mapperAppStats.writeValueAsString(appUse);
+                    Log.d(TAG, "=====>" + jsonAppStatsOutput + "<======");
+                }
+            } catch (JsonProcessingException e) { e.printStackTrace(); }
+
+
+            // Convert JSON string to single Object
+            String jsonInString = jsonAppStatsOutput;
+            ApplicationUsageStats appUseStatsDeserilized = null;
+            try {
+                appUseStatsDeserilized = mapperAppStats.readValue(jsonInString, ApplicationUsageStats.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.d(TAG,"Deserialized json: "+appUseStatsDeserilized.toString());
+
+            String json="";
+            try {
+                 json = mapperAppStats.writeValueAsString(appUseStatsDeserilized);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            Log.d(TAG,json);
+
+
+            //translation of appHist into Json
+            ObjectMapper mapperAppHist = new ObjectMapper();
+            String jsonAppHistOutput = "";
+            try {
+                jsonAppHistOutput = mapperAppHist.writeValueAsString(appHist);
+                Log.d(TAG, "*****>" + jsonAppHistOutput + "<*****");
+            } catch (JsonProcessingException e) { e.printStackTrace(); }
+
+            //translation of appUsageStats into Json
+            ObjectMapper mapperMetadata = new ObjectMapper();
+            String jsonMetadata = "";
+            try {
+                jsonMetadata = mapperAppStats.writeValueAsString(metadata);
+                Log.d(TAG, "~~~~~>" + jsonMetadata + "<~~~~~");
+            } catch (JsonProcessingException e) { e.printStackTrace(); }
+
+
+        }//end if appList!=null
+        /*
+        ApplicationHistory b = new ApplicationHistory();
         b.setAppName("appName : b");
         b.setPackageName("packageName : b");
         ApplicationHistory c = new ApplicationHistory();
@@ -115,7 +171,7 @@ public class Test {
 
 
     }//end main
-    private OrmLiteDBHelper getDBHelper(Context context){
+    private static OrmLiteDBHelper getDBHelper(Context context){
         if(dbHelper == null){
             dbHelper = OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);
         }

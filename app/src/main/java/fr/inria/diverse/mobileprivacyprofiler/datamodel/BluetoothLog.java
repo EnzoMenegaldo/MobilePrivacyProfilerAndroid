@@ -58,7 +58,7 @@ public class BluetoothLog {
 	protected int connected;
 	
 
-	@DatabaseField(foreign = true)
+	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
 	protected BluetoothDevice device;
 
 	// Start of user code BluetoothLog additional user properties
@@ -138,11 +138,6 @@ public class BluetoothLog {
     	sb.append(">");
 
 
-		if(this.device!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_DEVICE+">");
-			sb.append(this.device.getId());
-	    	sb.append("</"+XML_REF_DEVICE+">");
-		}
 		// TODO deal with other case
 
 		sb.append("</"+XML_BLUETOOTHLOG+">");

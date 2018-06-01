@@ -46,7 +46,7 @@ public class MobilePrivacyProfilerDB_metadata {
 	public static final String XML_REF_USERWEBHISTORY = "userWebHistory";
 	public static final String XML_REF_USERBATTERYUSAGE = "userBatteryUsage";
 	public static final String XML_REF_USERSMS = "userSMS";
-	public static final String XML_REF_USERBLETOOTHDEVICE = "userBletoothDevice";
+	public static final String XML_REF_USERBLUETOOTHDEVICE = "userBluetoothDevice";
 	public static final String XML_REF_USERCELL = "userCell";
 	public static final String XML_REF_USERPHONECALLLOG = "userPhoneCallLog";
 	public static final String XML_REF_USERCALENDAREVENT = "userCalendarEvent";
@@ -110,7 +110,7 @@ public class MobilePrivacyProfilerDB_metadata {
 	protected ForeignCollection<SMS> userSMS;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	protected ForeignCollection<BluetoothDevice> userBletoothDevice;
+	protected ForeignCollection<BluetoothDevice> userBluetoothDevice;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
 	protected ForeignCollection<Cell> userCell;
@@ -217,8 +217,8 @@ public class MobilePrivacyProfilerDB_metadata {
 	public Collection<SMS> getUserSMS() {
 		return this.userSMS;
 	}					
-	public Collection<BluetoothDevice> getUserBletoothDevice() {
-		return this.userBletoothDevice;
+	public Collection<BluetoothDevice> getUserBluetoothDevice() {
+		return this.userBluetoothDevice;
 	}					
 	public Collection<Cell> getUserCell() {
 		return this.userCell;
@@ -336,10 +336,10 @@ public class MobilePrivacyProfilerDB_metadata {
 	        	sb.append("\"/>");
 	    	}		
 		}
-		if(this.userBletoothDevice != null){
-			for(BluetoothDevice ref : this.userBletoothDevice){
+		if(this.userBluetoothDevice != null){
+			for(BluetoothDevice ref : this.userBluetoothDevice){
 					
-	    		sb.append("\n"+indent+"\t<"+XML_REF_USERBLETOOTHDEVICE+" id=\"");
+	    		sb.append("\n"+indent+"\t<"+XML_REF_USERBLUETOOTHDEVICE+" id=\"");
 	    		sb.append(ref._id);
 	        	sb.append("\"/>");
 	    	}		

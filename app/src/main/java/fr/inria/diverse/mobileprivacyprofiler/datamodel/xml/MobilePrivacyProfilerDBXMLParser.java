@@ -183,7 +183,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userWebHistory = "userWebHistory";
 	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBatteryUsage = "userBatteryUsage";
 	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userSMS = "userSMS";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBletoothDevice = "userBletoothDevice";
+	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBluetoothDevice = "userBluetoothDevice";
 	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCell = "userCell";
 	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userPhoneCallLog = "userPhoneCallLog";
 	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCalendarEvent = "userCalendarEvent";
@@ -351,6 +351,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_BLUETOOTHDEVICE_type = "type";
 	public static final String DATAATT_BLUETOOTHDEVICE_TYPE = "TYPE";
 	public static final String DATAREF_BLUETOOTHDEVICE_userMetaData = "userMetaData";
+	public static final String DATAREF_BLUETOOTHDEVICE_bluetoothLog = "bluetoothLog";
 	public static final String DATAATT_BLUETOOTHLOG_date = "date";
 	public static final String DATAATT_BLUETOOTHLOG_DATE = "DATE";
 	public static final String DATAATT_BLUETOOTHLOG_connected = "connected";
@@ -1066,7 +1067,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 					// TODO deal with ref userWebHistory
 					// TODO deal with ref userBatteryUsage
 					// TODO deal with ref userSMS
-					// TODO deal with ref userBletoothDevice
+					// TODO deal with ref userBluetoothDevice
 					// TODO deal with ref userCell
 					// TODO deal with ref userPhoneCallLog
 					// TODO deal with ref userCalendarEvent
@@ -1703,6 +1704,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 				refCommands.add(new BluetoothDevice_setUserMetaData_RefCommand(result,id, this));
 				parser.require(XmlPullParser.END_TAG, ns, DATAREF_BLUETOOTHDEVICE_userMetaData);	    
 	        } else
+			if (currentTagName.equals(DATAREF_BLUETOOTHDEVICE_bluetoothLog)) {
+				List<BluetoothLog> entries = readBluetoothLogs(parser,DATAREF_BLUETOOTHDEVICE_bluetoothLog);	
+				bluetoothLogs.addAll(entries); // add for inclusion in the DB
+				//result.getBluetoothLog().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
+				refCommands.add(new BluetoothDevice_addContainedBluetoothLog_RefCommand(result,entries));	    
+	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1836,7 +1843,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	// class MobilePrivacyProfilerDB_metadata_addUserWebHistory_RefCommand extends RefCommand{
 	// class MobilePrivacyProfilerDB_metadata_addUserBatteryUsage_RefCommand extends RefCommand{
 	// class MobilePrivacyProfilerDB_metadata_addUserSMS_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserBletoothDevice_RefCommand extends RefCommand{
+	// class MobilePrivacyProfilerDB_metadata_addUserBluetoothDevice_RefCommand extends RefCommand{
 	// class MobilePrivacyProfilerDB_metadata_addUserCell_RefCommand extends RefCommand{
 	// class MobilePrivacyProfilerDB_metadata_addUserPhoneCallLog_RefCommand extends RefCommand{
 	// class MobilePrivacyProfilerDB_metadata_addUserCalendarEvent_RefCommand extends RefCommand{
@@ -2417,6 +2424,26 @@ public class MobilePrivacyProfilerDBXMLParser {
 			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
 			bluetoothDevicesToUpdate.add(self);
 		}
+	}
+	class BluetoothDevice_addContainedBluetoothLog_RefCommand extends RefCommand{
+		BluetoothDevice container;
+		List<BluetoothLog> containedElements;
+		
+		public BluetoothDevice_addContainedBluetoothLog_RefCommand(BluetoothDevice container,
+				List<BluetoothLog> containedElements) {
+			super();
+			this.container = container;
+			this.containedElements = containedElements;
+		}
+
+		@Override
+		public void run() {
+			for (BluetoothLog element : containedElements) {				
+				element.setDevice(container);
+				bluetoothLogsToUpdate.add(element);
+			}
+		}
+		
 	}
 	class BluetoothLog_setDevice_RefCommand extends RefCommand{
 		BluetoothLog self;

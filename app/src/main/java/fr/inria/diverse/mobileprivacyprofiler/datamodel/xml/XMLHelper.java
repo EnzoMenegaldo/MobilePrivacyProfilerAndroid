@@ -399,8 +399,14 @@ public class XMLHelper {
 			List<BluetoothLog> bluetoothLogs = dbContext.bluetoothLogDao.queryForAll();
 			for(BluetoothLog  bluetoothLog : bluetoothLogs){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(bluetoothLog.getDevice() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
 					sb.append(bluetoothLog.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
