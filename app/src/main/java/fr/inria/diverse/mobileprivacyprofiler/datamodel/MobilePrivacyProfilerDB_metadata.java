@@ -9,6 +9,13 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for MobilePrivacyProfilerDB_metadata
 // End of user code
 
@@ -26,6 +32,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWif
   * données complémentaires sur la base de donnée 
   */ 
 @DatabaseTable(tableName = "mobilePrivacyProfilerDB_metadata")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+                  property  = "_id")
 public class MobilePrivacyProfilerDB_metadata {
 
 	public static Log log = LogFactory.getLog(MobilePrivacyProfilerDB_metadata.class);
@@ -59,6 +67,7 @@ public class MobilePrivacyProfilerDB_metadata {
      * dbHelper used to autorefresh values and doing queries
      * must be set other wise most getter will return proxy that will need to be refreshed
 	 */
+	@JsonIgnore
 	protected MobilePrivacyProfilerDBHelper _contextDB = null;
 
 	/**
@@ -89,39 +98,51 @@ public class MobilePrivacyProfilerDB_metadata {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="applicationhistory_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<ApplicationHistory> userApplicationHistory;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="authentification_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<Authentification> userAuthentification;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="contact_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<Contact> userContact;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="knownwifi_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<KnownWifi> userKnownWifi;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="webhistory_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<WebHistory> userWebHistory;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="batteryusage_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<BatteryUsage> userBatteryUsage;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="sms_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<SMS> userSMS;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="bluetoothdevice_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<BluetoothDevice> userBluetoothDevice;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="cell_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<Cell> userCell;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="phonecalllog_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<PhoneCallLog> userPhoneCallLog;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="calendarevent_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<CalendarEvent> userCalendarEvent;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
+	// @JsonBackReference(value="geolocation_mobileprivacyprofilerdb_metadata")
 	protected ForeignCollection<Geolocation> userGeolocation;
 
 	// Start of user code MobilePrivacyProfilerDB_metadata additional user properties
@@ -142,6 +163,7 @@ public class MobilePrivacyProfilerDB_metadata {
 	public int getId() {
 		return _id;
 	}
+	@JsonProperty
 	public void setId(int id) {
 		this._id = id;
 	}
@@ -149,6 +171,7 @@ public class MobilePrivacyProfilerDB_metadata {
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
+	@JsonIgnore
 	public void setContextDB(MobilePrivacyProfilerDBHelper contextDB){
 		this._contextDB = contextDB;
 	}
@@ -156,82 +179,161 @@ public class MobilePrivacyProfilerDB_metadata {
 	public java.util.Date getLastTransmissionDate() {
 		return this.lastTransmissionDate;
 	}
+	@JsonProperty
 	public void setLastTransmissionDate(java.util.Date lastTransmissionDate) {
 		this.lastTransmissionDate = lastTransmissionDate;
 	}
 	public java.util.Date getLastScanInstalledApplications() {
 		return this.lastScanInstalledApplications;
 	}
+	@JsonProperty
 	public void setLastScanInstalledApplications(java.util.Date lastScanInstalledApplications) {
 		this.lastScanInstalledApplications = lastScanInstalledApplications;
 	}
 	public java.util.Date getLastScanAppUsage() {
 		return this.lastScanAppUsage;
 	}
+	@JsonProperty
 	public void setLastScanAppUsage(java.util.Date lastScanAppUsage) {
 		this.lastScanAppUsage = lastScanAppUsage;
 	}
 	public java.util.Date getLastSmsScan() {
 		return this.lastSmsScan;
 	}
+	@JsonProperty
 	public void setLastSmsScan(java.util.Date lastSmsScan) {
 		this.lastSmsScan = lastSmsScan;
 	}
 	public java.util.Date getLastCallScan() {
 		return this.lastCallScan;
 	}
+	@JsonProperty
 	public void setLastCallScan(java.util.Date lastCallScan) {
 		this.lastCallScan = lastCallScan;
 	}
 	public java.lang.String getUserId() {
 		return this.userId;
 	}
+	@JsonProperty
 	public void setUserId(java.lang.String userId) {
 		this.userId = userId;
 	}
 	public java.util.Date getLastContactScan() {
 		return this.lastContactScan;
 	}
+	@JsonProperty
 	public void setLastContactScan(java.util.Date lastContactScan) {
 		this.lastContactScan = lastContactScan;
 	}
 
-	public Collection<ApplicationHistory> getUserApplicationHistory() {
-		return this.userApplicationHistory;
-	}					
-	public Collection<Authentification> getUserAuthentification() {
-		return this.userAuthentification;
-	}					
-	public Collection<Contact> getUserContact() {
-		return this.userContact;
-	}					
-	public Collection<KnownWifi> getUserKnownWifi() {
-		return this.userKnownWifi;
-	}					
-	public Collection<WebHistory> getUserWebHistory() {
-		return this.userWebHistory;
-	}					
-	public Collection<BatteryUsage> getUserBatteryUsage() {
-		return this.userBatteryUsage;
-	}					
-	public Collection<SMS> getUserSMS() {
-		return this.userSMS;
-	}					
-	public Collection<BluetoothDevice> getUserBluetoothDevice() {
-		return this.userBluetoothDevice;
-	}					
-	public Collection<Cell> getUserCell() {
-		return this.userCell;
-	}					
-	public Collection<PhoneCallLog> getUserPhoneCallLog() {
-		return this.userPhoneCallLog;
-	}					
-	public Collection<CalendarEvent> getUserCalendarEvent() {
-		return this.userCalendarEvent;
-	}					
-	public Collection<Geolocation> getUserGeolocation() {
-		return this.userGeolocation;
-	}					
+	public List	<ApplicationHistory> getUserApplicationHistory() {
+		if(null==this.userApplicationHistory){return null;}
+		return new ArrayList<ApplicationHistory>(userApplicationHistory);
+	}
+	
+	@JsonProperty
+	public void setUserApplicationHistory (Collection<ApplicationHistory> collection){ this.userApplicationHistory=(ForeignCollection) collection;}
+
+			
+	public List	<Authentification> getUserAuthentification() {
+		if(null==this.userAuthentification){return null;}
+		return new ArrayList<Authentification>(userAuthentification);
+	}
+	
+	@JsonProperty
+	public void setUserAuthentification (Collection<Authentification> collection){ this.userAuthentification=(ForeignCollection) collection;}
+
+			
+	public List	<Contact> getUserContact() {
+		if(null==this.userContact){return null;}
+		return new ArrayList<Contact>(userContact);
+	}
+	
+	@JsonProperty
+	public void setUserContact (Collection<Contact> collection){ this.userContact=(ForeignCollection) collection;}
+
+			
+	public List	<KnownWifi> getUserKnownWifi() {
+		if(null==this.userKnownWifi){return null;}
+		return new ArrayList<KnownWifi>(userKnownWifi);
+	}
+	
+	@JsonProperty
+	public void setUserKnownWifi (Collection<KnownWifi> collection){ this.userKnownWifi=(ForeignCollection) collection;}
+
+			
+	public List	<WebHistory> getUserWebHistory() {
+		if(null==this.userWebHistory){return null;}
+		return new ArrayList<WebHistory>(userWebHistory);
+	}
+	
+	@JsonProperty
+	public void setUserWebHistory (Collection<WebHistory> collection){ this.userWebHistory=(ForeignCollection) collection;}
+
+			
+	public List	<BatteryUsage> getUserBatteryUsage() {
+		if(null==this.userBatteryUsage){return null;}
+		return new ArrayList<BatteryUsage>(userBatteryUsage);
+	}
+	
+	@JsonProperty
+	public void setUserBatteryUsage (Collection<BatteryUsage> collection){ this.userBatteryUsage=(ForeignCollection) collection;}
+
+			
+	public List	<SMS> getUserSMS() {
+		if(null==this.userSMS){return null;}
+		return new ArrayList<SMS>(userSMS);
+	}
+	
+	@JsonProperty
+	public void setUserSMS (Collection<SMS> collection){ this.userSMS=(ForeignCollection) collection;}
+
+			
+	public List	<BluetoothDevice> getUserBluetoothDevice() {
+		if(null==this.userBluetoothDevice){return null;}
+		return new ArrayList<BluetoothDevice>(userBluetoothDevice);
+	}
+	
+	@JsonProperty
+	public void setUserBluetoothDevice (Collection<BluetoothDevice> collection){ this.userBluetoothDevice=(ForeignCollection) collection;}
+
+			
+	public List	<Cell> getUserCell() {
+		if(null==this.userCell){return null;}
+		return new ArrayList<Cell>(userCell);
+	}
+	
+	@JsonProperty
+	public void setUserCell (Collection<Cell> collection){ this.userCell=(ForeignCollection) collection;}
+
+			
+	public List	<PhoneCallLog> getUserPhoneCallLog() {
+		if(null==this.userPhoneCallLog){return null;}
+		return new ArrayList<PhoneCallLog>(userPhoneCallLog);
+	}
+	
+	@JsonProperty
+	public void setUserPhoneCallLog (Collection<PhoneCallLog> collection){ this.userPhoneCallLog=(ForeignCollection) collection;}
+
+			
+	public List	<CalendarEvent> getUserCalendarEvent() {
+		if(null==this.userCalendarEvent){return null;}
+		return new ArrayList<CalendarEvent>(userCalendarEvent);
+	}
+	
+	@JsonProperty
+	public void setUserCalendarEvent (Collection<CalendarEvent> collection){ this.userCalendarEvent=(ForeignCollection) collection;}
+
+			
+	public List	<Geolocation> getUserGeolocation() {
+		if(null==this.userGeolocation){return null;}
+		return new ArrayList<Geolocation>(userGeolocation);
+	}
+	
+	@JsonProperty
+	public void setUserGeolocation (Collection<Geolocation> collection){ this.userGeolocation=(ForeignCollection) collection;}
+
+			
 
 
 

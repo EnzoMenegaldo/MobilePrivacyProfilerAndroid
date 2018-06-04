@@ -183,8 +183,10 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         sb.append("Table "+getHelper().getDetectedWifiDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getDetectedWifiDao().countOf()+"\n");
 
+        /*
         sb.append("Table "+getHelper().getDetectedWifi_AccessPointDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getDetectedWifi_AccessPointDao().countOf()+"\n");
+        */
 
         sb.append("Table "+getHelper().getGeolocationDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getGeolocationDao().countOf()+"\n");
@@ -209,10 +211,10 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         sb.append("Table "+getHelper().getWebHistoryDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getWebHistoryDao().countOf()+"\n");
-
+/*
         sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
-
+*/
     }
 	//End of user code
 

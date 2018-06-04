@@ -22,12 +22,14 @@ import java.util.List;
 
 public class Test {
 
-    private static volatile OrmLiteDBHelper dbHelper;
+    private volatile OrmLiteDBHelper dbHelper;
 
     // Initialisation de la Gestion des Log
-    private static final String TAG = Test.class.getSimpleName();
+    private final String TAG = Test.class.getSimpleName();
 
-    public static void mainTest(Context context) {
+    public Test(){}
+
+    public void mainTest(Context context) {
         Log.d(TAG,"-----> Let's go testing!  :  <-----");
 
         MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
@@ -60,8 +62,9 @@ public class Test {
             //querying it from db
             List<ApplicationUsageStats> appUseStatFromBase = null;
             appUseStatFromBase = getDBHelper(context).getMobilePrivacyProfilerDBHelper().queryApplicationUsageStatsByApplicationHistory(appHist);
-            Log.d(TAG, "appUseStat query successful : " + (null != appUseStatFromBase) + "\n Returned : " + appUseStatFromBase.size() + " results");
-
+            Log.d(TAG, "appUseStat query successful : " + (null != appUseStatFromBase)
+                        + "\n Returned : " + appUseStatFromBase.size() + " results");
+            /*
             //translation of appUsageStats into Json
             ObjectMapper mapperAppStats = new ObjectMapper();
             String jsonAppStatsOutput = "";
@@ -89,9 +92,20 @@ public class Test {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            Log.d(TAG,json);
+            Log.d(TAG," Reserialized object : =====> "+json+"<=====\n"
+                    +"Json is stable : "+json.equals(jsonAppStatsOutput)
+                    +"\nObjects are equals : "+appUseStatFromBase.get(0).equals(appUseStatsDeserilized));
+            */
+            //Convert JSON string to single Object (same test using fallowing methods : )
+            String jsonFunctionOutPut = serialize("=",appUseStatFromBase.get(0));
+            ApplicationUsageStats appUseOutput =(ApplicationUsageStats) deserialize("=",jsonFunctionOutPut,ApplicationUsageStats.class);
+            Log.d(TAG,"Deserialized json: "+appUseOutput.toString());
+            String jsonFunctionSecondOutput = serialize("=",appUseOutput);
+            Log.d(TAG,"\n"
+                    +"Json is stable : "+jsonFunctionOutPut.equals(jsonFunctionSecondOutput)
+                    +"\nObjects are equals : "+appUseStatFromBase.get(0).equals(appUseOutput));
 
-
+            /*
             //translation of appHist into Json
             ObjectMapper mapperAppHist = new ObjectMapper();
             String jsonAppHistOutput = "";
@@ -107,7 +121,7 @@ public class Test {
                 jsonMetadata = mapperAppStats.writeValueAsString(metadata);
                 Log.d(TAG, "~~~~~>" + jsonMetadata + "<~~~~~");
             } catch (JsonProcessingException e) { e.printStackTrace(); }
-
+            */
 
         }//end if appList!=null
         /*
@@ -171,7 +185,35 @@ public class Test {
 
 
     }//end main
-    private static OrmLiteDBHelper getDBHelper(Context context){
+
+    private String serialize (String aroS,Object object) {
+        //translation of object into Json
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonObjectOutput = "";
+        try {
+            jsonObjectOutput = mapper.writeValueAsString(object);
+            Log.d(TAG, ". \n"+aroS + aroS + aroS + aroS + ">" + jsonObjectOutput + "<" + aroS + aroS + aroS + aroS);
+
+        } catch (JsonProcessingException e) {e.printStackTrace();}
+    return jsonObjectOutput;
+    }
+
+    private Object deserialize (String aroS,String jsonArg,Class deserialisationClass) {
+        // Convert JSON string to single Object
+        ObjectMapper mapper = new ObjectMapper();
+        Object deserializedObject = null;
+        try {
+            deserializedObject = mapper.readValue(jsonArg, deserialisationClass);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "Deserialized json: " + deserializedObject.toString());
+
+    return deserializedObject;
+    }
+
+
+    private OrmLiteDBHelper getDBHelper(Context context){
         if(dbHelper == null){
             dbHelper = OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);
         }

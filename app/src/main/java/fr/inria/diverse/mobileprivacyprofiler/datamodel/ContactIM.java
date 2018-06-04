@@ -9,6 +9,13 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for ContactIM
 // End of user code
 
@@ -26,6 +32,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWif
   *  
   */ 
 @DatabaseTable(tableName = "contactIM")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+                  property  = "_id")
 public class ContactIM {
 
 	public static Log log = LogFactory.getLog(ContactIM.class);
@@ -43,11 +51,13 @@ public class ContactIM {
      * dbHelper used to autorefresh values and doing queries
      * must be set other wise most getter will return proxy that will need to be refreshed
 	 */
+	@JsonIgnore
 	protected MobilePrivacyProfilerDBHelper _contextDB = null;
 
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
+	@JsonIgnore
 	public boolean contact_mayNeedDBRefresh = true;
 	
 
@@ -59,6 +69,7 @@ public class ContactIM {
 	
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="contact_contactim")
 	protected Contact contact;
 
 	// Start of user code ContactIM additional user properties
@@ -74,6 +85,7 @@ public class ContactIM {
 	public int getId() {
 		return _id;
 	}
+	@JsonProperty
 	public void setId(int id) {
 		this._id = id;
 	}
@@ -81,6 +93,7 @@ public class ContactIM {
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
+	@JsonIgnore
 	public void setContextDB(MobilePrivacyProfilerDBHelper contextDB){
 		this._contextDB = contextDB;
 	}
@@ -88,12 +101,14 @@ public class ContactIM {
 	public java.lang.String getProtocole() {
 		return this.protocole;
 	}
+	@JsonProperty
 	public void setProtocole(java.lang.String protocole) {
 		this.protocole = protocole;
 	}
 	public java.lang.String getImId() {
 		return this.imId;
 	}
+	@JsonProperty
 	public void setImId(java.lang.String imId) {
 		this.imId = imId;
 	}
@@ -112,6 +127,7 @@ public class ContactIM {
 		}
 		return this.contact;
 	}
+	@JsonProperty
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}			

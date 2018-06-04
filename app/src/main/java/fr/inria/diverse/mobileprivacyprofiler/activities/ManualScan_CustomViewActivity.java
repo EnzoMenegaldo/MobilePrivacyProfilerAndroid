@@ -145,7 +145,9 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		showToast(this.getBaseContext().getString(R.string.beginning_test_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.firing_up_test_action));
-		Test.mainTest(this);
+
+		Test test = new Test();
+		test.mainTest(this);
 	}
 
 	//End of user code

@@ -8,7 +8,6 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code protected additional OrmLiteDBHelper imports
 import com.j256.ormlite.table.TableUtils;
 // End of user code
@@ -52,8 +51,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	private RuntimeExceptionDao<ContactEmail, Integer> contactEmailRuntimeDao = null;
 	// the DAO object we use to access the KnownWifi table
 	private RuntimeExceptionDao<KnownWifi, Integer> knownWifiRuntimeDao = null;
-	// the DAO object we use to access the WifiAccessPoint table
-	private RuntimeExceptionDao<WifiAccessPoint, Integer> wifiAccessPointRuntimeDao = null;
 	// the DAO object we use to access the DetectedWifi table
 	private RuntimeExceptionDao<DetectedWifi, Integer> detectedWifiRuntimeDao = null;
 	// the DAO object we use to access the Geolocation table
@@ -81,8 +78,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	// the DAO object we use to access the WebHistory table
 	private RuntimeExceptionDao<WebHistory, Integer> webHistoryRuntimeDao = null;
 	
-	// the DAO object we use to access the DetectedWifi_AccessPoint table implemeting the association
-	private RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> detectedWifi_AccessPointRuntimeDao = null;
 
 	public OrmLiteDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -117,7 +112,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
 		TableUtils.createTable(connectionSource, ContactEmail.class);
 		TableUtils.createTable(connectionSource, KnownWifi.class);
-		TableUtils.createTable(connectionSource, WifiAccessPoint.class);
 		TableUtils.createTable(connectionSource, DetectedWifi.class);
 		TableUtils.createTable(connectionSource, Geolocation.class);
 		TableUtils.createTable(connectionSource, CalendarEvent.class);
@@ -131,7 +125,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, SMS.class);
 		TableUtils.createTable(connectionSource, BatteryUsage.class);
 		TableUtils.createTable(connectionSource, WebHistory.class);
-		TableUtils.createTable(connectionSource, DetectedWifi_AccessPoint.class);
 	}
 
 	/**
@@ -165,7 +158,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
 		TableUtils.dropTable(connectionSource, ContactEmail.class, true);
 		TableUtils.dropTable(connectionSource, KnownWifi.class, true);
-		TableUtils.dropTable(connectionSource, WifiAccessPoint.class, true);
 		TableUtils.dropTable(connectionSource, DetectedWifi.class, true);
 		TableUtils.dropTable(connectionSource, Geolocation.class, true);
 		TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
@@ -179,7 +171,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, SMS.class, true);
 		TableUtils.dropTable(connectionSource, BatteryUsage.class, true);
 		TableUtils.dropTable(connectionSource, WebHistory.class, true);
-		TableUtils.dropTable(connectionSource, DetectedWifi_AccessPoint.class, true);
 	}
 
 	/**
@@ -312,17 +303,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			knownWifiRuntimeDao = getRuntimeExceptionDao(KnownWifi.class);
 		}
 		return knownWifiRuntimeDao;
-	}
-
-	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our WifiAccessPoint class. It will
-	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
-	 */
-	public RuntimeExceptionDao<WifiAccessPoint, Integer> getWifiAccessPointDao() {
-		if (wifiAccessPointRuntimeDao == null) {
-			wifiAccessPointRuntimeDao = getRuntimeExceptionDao(WifiAccessPoint.class);
-		}
-		return wifiAccessPointRuntimeDao;
 	}
 
 	/**
@@ -470,16 +450,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 
 	
 	
-	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our DetectedWifi_AccessPoint class. It will
-	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
-	 */
-	public RuntimeExceptionDao<DetectedWifi_AccessPoint, Integer> getDetectedWifi_AccessPointDao() {
-		if (detectedWifi_AccessPointRuntimeDao == null) {
-			detectedWifi_AccessPointRuntimeDao = getRuntimeExceptionDao(DetectedWifi_AccessPoint.class);
-		}
-		return detectedWifi_AccessPointRuntimeDao;
-	}
 
 
 	/**
@@ -500,7 +470,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		contactPhysicalAddressRuntimeDao = null;
 		contactEmailRuntimeDao = null;
 		knownWifiRuntimeDao = null;
-		wifiAccessPointRuntimeDao = null;
 		detectedWifiRuntimeDao = null;
 		geolocationRuntimeDao = null;
 		calendarEventRuntimeDao = null;
@@ -514,7 +483,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		sMSRuntimeDao = null;
 		batteryUsageRuntimeDao = null;
 		webHistoryRuntimeDao = null;
-		detectedWifi_AccessPointRuntimeDao = null;
 	}
 
 	
@@ -536,7 +504,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.contactPhysicalAddressDao = getDao(ContactPhysicalAddress.class);
 			helper.contactEmailDao = getDao(ContactEmail.class);
 			helper.knownWifiDao = getDao(KnownWifi.class);
-			helper.wifiAccessPointDao = getDao(WifiAccessPoint.class);
 			helper.detectedWifiDao = getDao(DetectedWifi.class);
 			helper.geolocationDao = getDao(Geolocation.class);
 			helper.calendarEventDao = getDao(CalendarEvent.class);
@@ -550,7 +517,6 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.sMSDao = getDao(SMS.class);
 			helper.batteryUsageDao = getDao(BatteryUsage.class);
 			helper.webHistoryDao = getDao(WebHistory.class);
-		helper.detectedWifi_AccessPointDao = getDao(DetectedWifi_AccessPoint.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't get ", e);
 		}

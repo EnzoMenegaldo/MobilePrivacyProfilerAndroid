@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xmlpull.v1.XmlPullParserException;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.*;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.xml.MobilePrivacyProfilerDBXMLParser.RefCommand;
 // Start of user code additional import
@@ -246,19 +245,6 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</KNOWNWIFIS>\n");
-		sb.append("\n\t<WIFIACCESSPOINTS>");
-		try {	
-			List<WifiAccessPoint> wifiAccessPoints = dbContext.wifiAccessPointDao.queryForAll();
-			for(WifiAccessPoint  wifiAccessPoint : wifiAccessPoints){
-				// TODO find if contained by another element, if not put it there
-					sb.append("\n");
-					sb.append(wifiAccessPoint.toXML("\t\t", dbContext));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		sb.append("\n\t</WIFIACCESSPOINTS>\n");
 		sb.append("\n\t<DETECTEDWIFIS>");
 		try {	
 			List<DetectedWifi> detectedWifis = dbContext.detectedWifiDao.queryForAll();
@@ -566,14 +552,6 @@ public class XMLHelper {
 					log.error("cannot create KnownWifi "+e.getMessage(),e);
 				}
 			}
-			log.info("starting creation of WifiAccessPoint...");
-			for(WifiAccessPoint wifiAccessPoint : parser.wifiAccessPoints){
-				try {
-					dbContext.wifiAccessPointDao.create(wifiAccessPoint);
-				} catch (SQLException e) {
-					log.error("cannot create WifiAccessPoint "+e.getMessage(),e);
-				}
-			}
 			log.info("starting creation of DetectedWifi...");
 			for(DetectedWifi detectedWifi : parser.detectedWifis){
 				try {
@@ -779,14 +757,6 @@ public class XMLHelper {
 					dbContext.knownWifiDao.update(elem);
 				} catch (SQLException e) {
 					log.error("cannot update KnownWifi "+e.getMessage(),e);
-				}
-			}
-			log.info("starting update DB of WifiAccessPoint...");
-			for(WifiAccessPoint elem : parser.wifiAccessPointsToUpdate){
-				try {
-					dbContext.wifiAccessPointDao.update(elem);
-				} catch (SQLException e) {
-					log.error("cannot update WifiAccessPoint "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of DetectedWifi...");

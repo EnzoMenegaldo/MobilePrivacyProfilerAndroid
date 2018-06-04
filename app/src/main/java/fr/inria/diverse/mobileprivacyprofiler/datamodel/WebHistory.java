@@ -9,6 +9,13 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for WebHistory
 // End of user code
 
@@ -26,6 +32,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWif
   *  
   */ 
 @DatabaseTable(tableName = "webHistory")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+                  property  = "_id")
 public class WebHistory {
 
 	public static Log log = LogFactory.getLog(WebHistory.class);
@@ -44,11 +52,13 @@ public class WebHistory {
      * dbHelper used to autorefresh values and doing queries
      * must be set other wise most getter will return proxy that will need to be refreshed
 	 */
+	@JsonIgnore
 	protected MobilePrivacyProfilerDBHelper _contextDB = null;
 
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
+	@JsonIgnore
 	public boolean userMetaData_mayNeedDBRefresh = true;
 	
 
@@ -64,6 +74,7 @@ public class WebHistory {
 	
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="webhistory_mobileprivacyprofilerdb_metadata")
 	protected MobilePrivacyProfilerDB_metadata userMetaData;
 
 	// Start of user code WebHistory additional user properties
@@ -80,6 +91,7 @@ public class WebHistory {
 	public int getId() {
 		return _id;
 	}
+	@JsonProperty
 	public void setId(int id) {
 		this._id = id;
 	}
@@ -87,6 +99,7 @@ public class WebHistory {
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
+	@JsonIgnore
 	public void setContextDB(MobilePrivacyProfilerDBHelper contextDB){
 		this._contextDB = contextDB;
 	}
@@ -94,18 +107,21 @@ public class WebHistory {
 	public java.lang.String getUrl() {
 		return this.url;
 	}
+	@JsonProperty
 	public void setUrl(java.lang.String url) {
 		this.url = url;
 	}
 	public java.lang.String getDate() {
 		return this.date;
 	}
+	@JsonProperty
 	public void setDate(java.lang.String date) {
 		this.date = date;
 	}
 	public java.lang.String getApplication() {
 		return this.application;
 	}
+	@JsonProperty
 	public void setApplication(java.lang.String application) {
 		this.application = application;
 	}
@@ -124,6 +140,7 @@ public class WebHistory {
 		}
 		return this.userMetaData;
 	}
+	@JsonProperty
 	public void setUserMetaData(MobilePrivacyProfilerDB_metadata userMetaData) {
 		this.userMetaData = userMetaData;
 	}			

@@ -9,6 +9,13 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for Cell
 // End of user code
 
@@ -26,6 +32,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWif
   *  
   */ 
 @DatabaseTable(tableName = "cell")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+                  property  = "_id")
 public class Cell {
 
 	public static Log log = LogFactory.getLog(Cell.class);
@@ -45,13 +53,17 @@ public class Cell {
      * dbHelper used to autorefresh values and doing queries
      * must be set other wise most getter will return proxy that will need to be refreshed
 	 */
+	@JsonIgnore
 	protected MobilePrivacyProfilerDBHelper _contextDB = null;
 
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
+	@JsonIgnore
 	public boolean cdmaposition_mayNeedDBRefresh = true;
+	@JsonIgnore
 	public boolean otherPosition_mayNeedDBRefresh = true;
+	@JsonIgnore
 	public boolean userMetaData_mayNeedDBRefresh = true;
 	
 
@@ -60,15 +72,19 @@ public class Cell {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "cells")
+	// @JsonBackReference(value="cell_neighboringcellhistory")
 	protected ForeignCollection<NeighboringCellHistory> history;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="cell_cdmacelldata")
 	protected CdmaCellData cdmaposition;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="cell_othercelldata")
 	protected OtherCellData otherPosition;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="cell_mobileprivacyprofilerdb_metadata")
 	protected MobilePrivacyProfilerDB_metadata userMetaData;
 
 	// Start of user code Cell additional user properties
@@ -83,6 +99,7 @@ public class Cell {
 	public int getId() {
 		return _id;
 	}
+	@JsonProperty
 	public void setId(int id) {
 		this._id = id;
 	}
@@ -90,6 +107,7 @@ public class Cell {
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
+	@JsonIgnore
 	public void setContextDB(MobilePrivacyProfilerDBHelper contextDB){
 		this._contextDB = contextDB;
 	}
@@ -97,13 +115,20 @@ public class Cell {
 	public int getCellId() {
 		return this.cellId;
 	}
+	@JsonProperty
 	public void setCellId(int cellId) {
 		this.cellId = cellId;
 	}
 
-	public Collection<NeighboringCellHistory> getHistory() {
-		return this.history;
-	}					
+	public List	<NeighboringCellHistory> getHistory() {
+		if(null==this.history){return null;}
+		return new ArrayList<NeighboringCellHistory>(history);
+	}
+	
+	@JsonProperty
+	public void setHistory (Collection<NeighboringCellHistory> collection){ this.history=(ForeignCollection) collection;}
+
+			
 	public CdmaCellData getCdmaposition() {
 		try {
 			if(cdmaposition_mayNeedDBRefresh && _contextDB != null){
@@ -118,6 +143,7 @@ public class Cell {
 		}
 		return this.cdmaposition;
 	}
+	@JsonProperty
 	public void setCdmaposition(CdmaCellData cdmaposition) {
 		this.cdmaposition = cdmaposition;
 	}			
@@ -135,6 +161,7 @@ public class Cell {
 		}
 		return this.otherPosition;
 	}
+	@JsonProperty
 	public void setOtherPosition(OtherCellData otherPosition) {
 		this.otherPosition = otherPosition;
 	}			
@@ -152,6 +179,7 @@ public class Cell {
 		}
 		return this.userMetaData;
 	}
+	@JsonProperty
 	public void setUserMetaData(MobilePrivacyProfilerDB_metadata userMetaData) {
 		this.userMetaData = userMetaData;
 	}			

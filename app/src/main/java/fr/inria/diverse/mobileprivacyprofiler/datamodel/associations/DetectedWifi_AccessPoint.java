@@ -77,7 +77,7 @@ public class DetectedWifi_AccessPoint {
 	}
 
 	/** accessors for Right part */ 
-	public WifiAccessPoint getWifiAccessPoint() {
+	/*public WifiAccessPoint getWifiAccessPoint() {
 		try {
 			if(_wifiAccessPoint_mayNeedDBRefresh && _contextDB != null){
 				_contextDB.wifiAccessPointDao.refresh(this.wifiAccessPoint);
@@ -91,7 +91,7 @@ public class DetectedWifi_AccessPoint {
 			log.warn("DetectedWifi_AccessPoint may not be properly refreshed from DB (_id="+_id+")");
 		}
 		return this.wifiAccessPoint;
-	}
+	}*/
 	public void setWifiAccessPoint(WifiAccessPoint wifiAccessPoint) {
 		this.wifiAccessPoint = wifiAccessPoint;
 	}

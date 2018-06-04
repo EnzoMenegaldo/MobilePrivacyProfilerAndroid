@@ -39,7 +39,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	List<ContactPhysicalAddress> contactPhysicalAddresss = new ArrayList<ContactPhysicalAddress>();
 	List<ContactEmail> contactEmails = new ArrayList<ContactEmail>();
 	List<KnownWifi> knownWifis = new ArrayList<KnownWifi>();
-	List<WifiAccessPoint> wifiAccessPoints = new ArrayList<WifiAccessPoint>();
 	List<DetectedWifi> detectedWifis = new ArrayList<DetectedWifi>();
 	List<Geolocation> geolocations = new ArrayList<Geolocation>();
 	List<CalendarEvent> calendarEvents = new ArrayList<CalendarEvent>();
@@ -65,7 +64,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Set<ContactPhysicalAddress> contactPhysicalAddresssToUpdate = new HashSet<ContactPhysicalAddress>();
 	Set<ContactEmail> contactEmailsToUpdate = new HashSet<ContactEmail>();
 	Set<KnownWifi> knownWifisToUpdate = new HashSet<KnownWifi>();
-	Set<WifiAccessPoint> wifiAccessPointsToUpdate = new HashSet<WifiAccessPoint>();
 	Set<DetectedWifi> detectedWifisToUpdate = new HashSet<DetectedWifi>();
 	Set<Geolocation> geolocationsToUpdate = new HashSet<Geolocation>();
 	Set<CalendarEvent> calendarEventsToUpdate = new HashSet<CalendarEvent>();
@@ -91,7 +89,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, ContactPhysicalAddress> xmlId2ContactPhysicalAddress = new Hashtable<String, ContactPhysicalAddress>();
 	Hashtable<String, ContactEmail> xmlId2ContactEmail = new Hashtable<String, ContactEmail>();
 	Hashtable<String, KnownWifi> xmlId2KnownWifi = new Hashtable<String, KnownWifi>();
-	Hashtable<String, WifiAccessPoint> xmlId2WifiAccessPoint = new Hashtable<String, WifiAccessPoint>();
 	Hashtable<String, DetectedWifi> xmlId2DetectedWifi = new Hashtable<String, DetectedWifi>();
 	Hashtable<String, Geolocation> xmlId2Geolocation = new Hashtable<String, Geolocation>();
 	Hashtable<String, CalendarEvent> xmlId2CalendarEvent = new Hashtable<String, CalendarEvent>();
@@ -133,8 +130,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATACLASSIFIER_CONTACTEMAIL  = "CONTACTEMAIL";
 	public static final String DATACLASSIFIER_KNOWNWIFIS = "KNOWNWIFIS";
 	public static final String DATACLASSIFIER_KNOWNWIFI  = "KNOWNWIFI";
-	public static final String DATACLASSIFIER_WIFIACCESSPOINTS = "WIFIACCESSPOINTS";
-	public static final String DATACLASSIFIER_WIFIACCESSPOINT  = "WIFIACCESSPOINT";
 	public static final String DATACLASSIFIER_DETECTEDWIFIS = "DETECTEDWIFIS";
 	public static final String DATACLASSIFIER_DETECTEDWIFI  = "DETECTEDWIFI";
 	public static final String DATACLASSIFIER_GEOLOCATIONS = "GEOLOCATIONS";
@@ -277,11 +272,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_KNOWNWIFI_LOCATION = "LOCATION";
 	public static final String DATAREF_KNOWNWIFI_detectedWifis = "detectedWifis";
 	public static final String DATAREF_KNOWNWIFI_userMetaData = "userMetaData";
-	public static final String DATAATT_WIFIACCESSPOINT_ssid = "ssid";
-	public static final String DATAATT_WIFIACCESSPOINT_SSID = "SSID";
-	public static final String DATAATT_WIFIACCESSPOINT_Location = "Location";
-	public static final String DATAATT_WIFIACCESSPOINT_LOCATION = "LOCATION";
-	public static final String DATAREF_WIFIACCESSPOINT_detectedWifis = "detectedWifis";
 	public static final String DATAATT_DETECTEDWIFI_startDetectionDate = "startDetectionDate";
 	public static final String DATAATT_DETECTEDWIFI_STARTDETECTIONDATE = "STARTDETECTIONDATE";
 	public static final String DATAATT_DETECTEDWIFI_endDetectionDate = "endDetectionDate";
@@ -290,7 +280,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_DETECTEDWIFI_HASCONNECTED = "HASCONNECTED";
 	public static final String DATAATT_DETECTEDWIFI_ssid = "ssid";
 	public static final String DATAATT_DETECTEDWIFI_SSID = "SSID";
-	public static final String DATAREF_DETECTEDWIFI_accessPoints = "accessPoints";
 	public static final String DATAREF_DETECTEDWIFI_knownWifi = "knownWifi";
 	public static final String DATAATT_GEOLOCATION_date = "date";
 	public static final String DATAATT_GEOLOCATION_DATE = "DATE";
@@ -456,10 +445,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		 	if (name.equals(DATACLASSIFIER_KNOWNWIFIS)) {
 				knownWifis = readKnownWifis(parser,DATACLASSIFIER_KNOWNWIFIS);
 	            // knownWifis.addAll(readKnownWifis(parser,DATACLASSIFIER_KNOWNWIFIS));
-	        } else 
-		 	if (name.equals(DATACLASSIFIER_WIFIACCESSPOINTS)) {
-				wifiAccessPoints = readWifiAccessPoints(parser,DATACLASSIFIER_WIFIACCESSPOINTS);
-	            // wifiAccessPoints.addAll(readWifiAccessPoints(parser,DATACLASSIFIER_WIFIACCESSPOINTS));
 	        } else 
 		 	if (name.equals(DATACLASSIFIER_DETECTEDWIFIS)) {
 				detectedWifis = readDetectedWifis(parser,DATACLASSIFIER_DETECTEDWIFIS);
@@ -753,26 +738,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	        String name = parser.getName();
 			if (name.equals(DATACLASSIFIER_KNOWNWIFI)) {
 	            entries.add(readKnownWifi(parser));
-	        } else {
-	            skip(parser);
-	        }
-	    }
-		entries.trimToSize();
-		return entries;
-	}
-	/**
-     * parser for a group of WifiAccessPoint
-     */
-	List<WifiAccessPoint> readWifiAccessPoints(XmlPullParser parser, final String containingTag)  throws XmlPullParserException, IOException{
-		ArrayList<WifiAccessPoint> entries = new ArrayList<WifiAccessPoint>();
-		parser.require(XmlPullParser.START_TAG, ns, containingTag);
-	    while (parser.next() != XmlPullParser.END_TAG) {
-	        if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
-	        String name = parser.getName();
-			if (name.equals(DATACLASSIFIER_WIFIACCESSPOINT)) {
-	            entries.add(readWifiAccessPoint(parser));
 	        } else {
 	            skip(parser);
 	        }
@@ -1427,28 +1392,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 
 		return result;
 	}
-	WifiAccessPoint readWifiAccessPoint(XmlPullParser parser)  throws XmlPullParserException, IOException{
-		WifiAccessPoint result = new WifiAccessPoint();
-
-		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_WIFIACCESSPOINT);
-    	String currentTagName = parser.getName();
-    			
-    	xmlId2WifiAccessPoint.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setSsid(parser.getAttributeValue(null, DATAATT_WIFIACCESSPOINT_ssid));
-		result.setLocation(parser.getAttributeValue(null, DATAATT_WIFIACCESSPOINT_Location));
-		while (parser.next() != XmlPullParser.END_TAG) {
-	        if (parser.getEventType() != XmlPullParser.START_TAG) {
-	            continue;
-	        }
-	        currentTagName = parser.getName();
-					// TODO deal with ref detectedWifis
-	        {
-	            skip(parser);
-	        }
-	    }
-
-		return result;
-	}
 	DetectedWifi readDetectedWifi(XmlPullParser parser)  throws XmlPullParserException, IOException{
 		DetectedWifi result = new DetectedWifi();
 
@@ -1465,7 +1408,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-					// TODO deal with ref accessPoints
 			if (currentTagName.equals(DATAREF_DETECTEDWIFI_knownWifi)) {	
 				parser.require(XmlPullParser.START_TAG, ns, DATAREF_DETECTEDWIFI_knownWifi);
 	            String id = readText(parser);
@@ -2196,8 +2138,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 			knownWifisToUpdate.add(self);
 		}
 	}
-	// class WifiAccessPoint_addDetectedWifis_RefCommand extends RefCommand{
-	// class DetectedWifi_addAccessPoints_RefCommand extends RefCommand{
 	class DetectedWifi_setKnownWifi_RefCommand extends RefCommand{
 		DetectedWifi self;
 		String referencedElementID;

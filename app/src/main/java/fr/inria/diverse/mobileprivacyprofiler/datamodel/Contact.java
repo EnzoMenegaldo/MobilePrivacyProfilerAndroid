@@ -9,6 +9,13 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +25,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWifi_AccessPoint;
 // Start of user code additional import for Contact
 // End of user code
 
@@ -26,6 +32,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.associations.DetectedWif
   * Contact in the device 
   */ 
 @DatabaseTable(tableName = "contact")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
+                  property  = "_id")
 public class Contact {
 
 	public static Log log = LogFactory.getLog(Contact.class);
@@ -58,12 +66,15 @@ public class Contact {
      * dbHelper used to autorefresh values and doing queries
      * must be set other wise most getter will return proxy that will need to be refreshed
 	 */
+	@JsonIgnore
 	protected MobilePrivacyProfilerDBHelper _contextDB = null;
 
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
+	@JsonIgnore
 	public boolean userMetaData_mayNeedDBRefresh = true;
+	@JsonIgnore
 	public boolean contactOrganisation_mayNeedDBRefresh = true;
 	
 
@@ -105,24 +116,31 @@ public class Contact {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	// @JsonBackReference(value="contact_phonenumber")
 	protected ForeignCollection<ContactPhoneNumber> phoneNumbers;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	// @JsonBackReference(value="contact_physicaladdress")
 	protected ForeignCollection<ContactPhysicalAddress> physicalAddresses;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	// @JsonBackReference(value="contact_email")
 	protected ForeignCollection<ContactEmail> emails;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="contact_mobileprivacyprofilerdb_metadata")
 	protected MobilePrivacyProfilerDB_metadata userMetaData;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
+	// @JsonManagedReference(value="contact_contactorganisation")
 	protected ContactOrganisation contactOrganisation;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	// @JsonBackReference(value="contact_contactim")
 	protected ForeignCollection<ContactIM> contactIM;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
+	// @JsonBackReference(value="contact_contactevent")
 	protected ForeignCollection<ContactEvent> contactEvent;
 
 	// Start of user code Contact additional user properties
@@ -147,6 +165,7 @@ public class Contact {
 	public int getId() {
 		return _id;
 	}
+	@JsonProperty
 	public void setId(int id) {
 		this._id = id;
 	}
@@ -154,6 +173,7 @@ public class Contact {
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
+	@JsonIgnore
 	public void setContextDB(MobilePrivacyProfilerDBHelper contextDB){
 		this._contextDB = contextDB;
 	}
@@ -161,79 +181,108 @@ public class Contact {
 	public java.lang.String getSurname() {
 		return this.surname;
 	}
+	@JsonProperty
 	public void setSurname(java.lang.String surname) {
 		this.surname = surname;
 	}
 	public java.lang.String getFirstName() {
 		return this.firstName;
 	}
+	@JsonProperty
 	public void setFirstName(java.lang.String firstName) {
 		this.firstName = firstName;
 	}
 	public java.lang.String getMiddleName() {
 		return this.middleName;
 	}
+	@JsonProperty
 	public void setMiddleName(java.lang.String middleName) {
 		this.middleName = middleName;
 	}
 	public java.lang.String getLastName() {
 		return this.lastName;
 	}
+	@JsonProperty
 	public void setLastName(java.lang.String lastName) {
 		this.lastName = lastName;
 	}
 	public java.lang.String getNamePrefix() {
 		return this.namePrefix;
 	}
+	@JsonProperty
 	public void setNamePrefix(java.lang.String namePrefix) {
 		this.namePrefix = namePrefix;
 	}
 	public java.lang.String getDisplayName() {
 		return this.displayName;
 	}
+	@JsonProperty
 	public void setDisplayName(java.lang.String displayName) {
 		this.displayName = displayName;
 	}
 	public java.lang.String getNameSuffix() {
 		return this.nameSuffix;
 	}
+	@JsonProperty
 	public void setNameSuffix(java.lang.String nameSuffix) {
 		this.nameSuffix = nameSuffix;
 	}
 	public java.lang.String getNickname() {
 		return this.nickname;
 	}
+	@JsonProperty
 	public void setNickname(java.lang.String nickname) {
 		this.nickname = nickname;
 	}
 	public java.lang.String getRelation() {
 		return this.relation;
 	}
+	@JsonProperty
 	public void setRelation(java.lang.String relation) {
 		this.relation = relation;
 	}
 	public java.lang.String getWebsite() {
 		return this.website;
 	}
+	@JsonProperty
 	public void setWebsite(java.lang.String website) {
 		this.website = website;
 	}
 	public java.util.Date getScanTimeStamp() {
 		return this.scanTimeStamp;
 	}
+	@JsonProperty
 	public void setScanTimeStamp(java.util.Date scanTimeStamp) {
 		this.scanTimeStamp = scanTimeStamp;
 	}
 
-	public Collection<ContactPhoneNumber> getPhoneNumbers() {
-		return this.phoneNumbers;
-	}					
-	public Collection<ContactPhysicalAddress> getPhysicalAddresses() {
-		return this.physicalAddresses;
-	}					
-	public Collection<ContactEmail> getEmails() {
-		return this.emails;
-	}					
+	public List	<ContactPhoneNumber> getPhoneNumbers() {
+		if(null==this.phoneNumbers){return null;}
+		return new ArrayList<ContactPhoneNumber>(phoneNumbers);
+	}
+	
+	@JsonProperty
+	public void setPhoneNumbers (Collection<ContactPhoneNumber> collection){ this.phoneNumbers=(ForeignCollection) collection;}
+
+			
+	public List	<ContactPhysicalAddress> getPhysicalAddresses() {
+		if(null==this.physicalAddresses){return null;}
+		return new ArrayList<ContactPhysicalAddress>(physicalAddresses);
+	}
+	
+	@JsonProperty
+	public void setPhysicalAddresses (Collection<ContactPhysicalAddress> collection){ this.physicalAddresses=(ForeignCollection) collection;}
+
+			
+	public List	<ContactEmail> getEmails() {
+		if(null==this.emails){return null;}
+		return new ArrayList<ContactEmail>(emails);
+	}
+	
+	@JsonProperty
+	public void setEmails (Collection<ContactEmail> collection){ this.emails=(ForeignCollection) collection;}
+
+			
 	public MobilePrivacyProfilerDB_metadata getUserMetaData() {
 		try {
 			if(userMetaData_mayNeedDBRefresh && _contextDB != null){
@@ -248,6 +297,7 @@ public class Contact {
 		}
 		return this.userMetaData;
 	}
+	@JsonProperty
 	public void setUserMetaData(MobilePrivacyProfilerDB_metadata userMetaData) {
 		this.userMetaData = userMetaData;
 	}			
@@ -265,15 +315,28 @@ public class Contact {
 		}
 		return this.contactOrganisation;
 	}
+	@JsonProperty
 	public void setContactOrganisation(ContactOrganisation contactOrganisation) {
 		this.contactOrganisation = contactOrganisation;
 	}			
-	public Collection<ContactIM> getContactIM() {
-		return this.contactIM;
-	}					
-	public Collection<ContactEvent> getContactEvent() {
-		return this.contactEvent;
-	}					
+	public List	<ContactIM> getContactIM() {
+		if(null==this.contactIM){return null;}
+		return new ArrayList<ContactIM>(contactIM);
+	}
+	
+	@JsonProperty
+	public void setContactIM (Collection<ContactIM> collection){ this.contactIM=(ForeignCollection) collection;}
+
+			
+	public List	<ContactEvent> getContactEvent() {
+		if(null==this.contactEvent){return null;}
+		return new ArrayList<ContactEvent>(contactEvent);
+	}
+	
+	@JsonProperty
+	public void setContactEvent (Collection<ContactEvent> collection){ this.contactEvent=(ForeignCollection) collection;}
+
+			
 
 
 
