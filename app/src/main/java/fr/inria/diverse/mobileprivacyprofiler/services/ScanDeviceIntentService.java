@@ -540,7 +540,7 @@ public class ScanDeviceIntentService extends IntentService {
                 latitude = cell.getCellIdentity().getLatitude();
                 strength = cell.getCellSignalStrength().getDbm();
             }
-            if (cellInfo instanceof CellInfoGsm) {
+            else if (cellInfo instanceof CellInfoGsm) {
                 isCell = true;
                 CellInfoGsm cell = (CellInfoGsm) cellInfo;
                 cellType = "Gsm";
@@ -548,7 +548,7 @@ public class ScanDeviceIntentService extends IntentService {
                 lacTac = cell.getCellIdentity().getLac();
                 strength = cell.getCellSignalStrength().getDbm();
             }
-            if (cellInfo instanceof CellInfoLte) {
+            else if (cellInfo instanceof CellInfoLte) {
                 isCell = true;
                 CellInfoLte cell = (CellInfoLte) cellInfo;
                 cellType = "Lte";
@@ -556,20 +556,25 @@ public class ScanDeviceIntentService extends IntentService {
                 lacTac = cell.getCellIdentity().getTac();
                 strength = cell.getCellSignalStrength().getDbm();
             }
-            if (cellInfo instanceof CellInfoWcdma) {
+            else if (cellInfo instanceof CellInfoWcdma) {
                 isCell = true;
                 CellInfoWcdma cell = (CellInfoWcdma) cellInfo;
                 cellType = "Wcdma";
                 cellId = cell.getCellIdentity().getCid();
                 lacTac = cell.getCellIdentity().getLac();
                 strength = cell.getCellSignalStrength().getDbm();
+                Log.d(TAG,cellType+" : Cid "+cellId+" : Lac "+lacTac+" : Mcc "+cell.getCellIdentity().getMcc()+" : Mnc "+cell.getCellIdentity().getMnc());
             }
-            if (isCell) {//isCell true if the cell as been recognised
+            if(2147483647==cellId){
+                isCell=false;
+                Log.d(TAG,"Cell's data not available : Ignoring this row");
+            }
+            if (isCell) {//isCell true if the cell as been recognised and data are available (!=2147483647)
+                //Log.d(TAG,"--------> looking for cell with "+cellId+" as CellId");
                 Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
                 if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
                     Log.d(TAG, "Adding a new " + cellType + " Cell");
-                    Cell newCell = new Cell();
-                    newCell.setCellId(cellId);
+                    Cell newCell = new Cell(cellId);
                     newCell.setUserMetaData(getDeviceDBMetadata());
                     getDBHelper().getCellDao().create(newCell);
                     cell = newCell;
@@ -595,6 +600,15 @@ public class ScanDeviceIntentService extends IntentService {
                 neighboringCellHistory.setCells(cell);
                 getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
             }
+            //reinitializing parameters :
+            cellType = "";
+            date = new Date();cellId = null;
+            longitude = null;
+            latitude = null;
+            lacTac = null;
+            strength = 0;
+
+            isCell = false;
         }//end for (processing the cells in neighbouring)
     }
 
@@ -782,7 +796,7 @@ public class ScanDeviceIntentService extends IntentService {
             endDate = queryEventOutput.getString(PROJECTION_DTEND_INDEX);
 
             // Preparing the gathering on participant's information
-            String participants = null;
+            String participants = "";
 
             String[] ATTENDEE_PROJECTION = new String[] {CalendarContract.Attendees.ATTENDEE_NAME};
 
@@ -791,7 +805,9 @@ public class ScanDeviceIntentService extends IntentService {
             uri = CalendarContract.Attendees.CONTENT_URI;
             String[] arg ={""+eventID};
             //queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
-            queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,null,null,null );
+            final String query = "(" + CalendarContract.Attendees.EVENT_ID + " = ?)";
+            final String[] args = new String[]{""+eventID};
+            queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,query,args,null );
 
             while (queryAttendeeOuput.moveToNext()){
                 participants+= queryAttendeeOuput.getString(0);

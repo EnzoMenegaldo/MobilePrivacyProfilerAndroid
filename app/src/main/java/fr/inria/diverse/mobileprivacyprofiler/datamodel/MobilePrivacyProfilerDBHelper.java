@@ -206,12 +206,13 @@ public class MobilePrivacyProfilerDBHelper {
 	 * @return Cell with the cellId Identity
 	 */
 	public Cell queryCellByCellId(int cellId){
+		//Log.d(TAG,"queryCellByCellId with parameter : "+ cellId);
+		Cell queryCell = new Cell(cellId);
+		Log.d(TAG,"queryCellByCellId with "+queryCell.getCellId()+" as cellId");
 		try {
-			Cell queryCell = new Cell();
-			queryCell.setId(cellId);
 			List<Cell> queryOutput = this.cellDao.queryForMatching(queryCell);
 			if(1 != queryOutput.size()){
-				Log.d(TAG,"Cell with cellId "+queryCell.getCellId()+ " doesn't exist in the base");
+				Log.d(TAG,"Cell with cellId "+queryCell.getCellId()+ " doesn't exist in the base or has multiple entries");
 				return null;
 			}
 			return queryOutput.get(0);
