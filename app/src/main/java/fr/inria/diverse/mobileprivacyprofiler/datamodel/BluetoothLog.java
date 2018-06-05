@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "bluetoothLog")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = BluetoothLog.class)
 public class BluetoothLog {
 
 	public static Log log = LogFactory.getLog(BluetoothLog.class);

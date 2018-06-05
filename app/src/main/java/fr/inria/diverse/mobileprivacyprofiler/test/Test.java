@@ -15,10 +15,13 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Test {
 
@@ -31,6 +34,11 @@ public class Test {
 
     public void mainTest(Context context) {
         Log.d(TAG,"-----> Let's go testing!  :  <-----");
+
+        List<String> map =new ArrayList<String>();
+        map.add("A");
+        map.add("B");
+        Log.d("+++++++++"+TAG,map.toString());
 
         MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
 
@@ -64,39 +72,20 @@ public class Test {
             appUseStatFromBase = getDBHelper(context).getMobilePrivacyProfilerDBHelper().queryApplicationUsageStatsByApplicationHistory(appHist);
             Log.d(TAG, "appUseStat query successful : " + (null != appUseStatFromBase)
                         + "\n Returned : " + appUseStatFromBase.size() + " results");
-            /*
-            //translation of appUsageStats into Json
-            ObjectMapper mapperAppStats = new ObjectMapper();
-            String jsonAppStatsOutput = "";
-            try {
-                for (ApplicationUsageStats appUse : appUseStatFromBase) {
-                    jsonAppStatsOutput = mapperAppStats.writeValueAsString(appUse);
-                    Log.d(TAG, "=====>" + jsonAppStatsOutput + "<======");
-                }
-            } catch (JsonProcessingException e) { e.printStackTrace(); }
+
+            /**
+             *Testing objects :
+             * List<ApplicationUsageStats>      appUseStatFromBase
+             * ApplicationHistory               appHist
+             * MobilePrivacyProfilerDB_metadata metadata
+             **/
 
 
-            // Convert JSON string to single Object
-            String jsonInString = jsonAppStatsOutput;
-            ApplicationUsageStats appUseStatsDeserilized = null;
-            try {
-                appUseStatsDeserilized = mapperAppStats.readValue(jsonInString, ApplicationUsageStats.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.d(TAG,"Deserialized json: "+appUseStatsDeserilized.toString());
-
-            String json="";
-            try {
-                 json = mapperAppStats.writeValueAsString(appUseStatsDeserilized);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            Log.d(TAG," Reserialized object : =====> "+json+"<=====\n"
-                    +"Json is stable : "+json.equals(jsonAppStatsOutput)
-                    +"\nObjects are equals : "+appUseStatFromBase.get(0).equals(appUseStatsDeserilized));
+            /*******************************************************************************
+            *Convert AppUseStats to Json deserialize then reserialize before comparing Json*
+            ********************************************************************************
             */
-            //Convert JSON string to single Object (same test using fallowing methods : )
+
             String jsonFunctionOutPut = serialize("=",appUseStatFromBase.get(0));
             ApplicationUsageStats appUseOutput =(ApplicationUsageStats) deserialize("=",jsonFunctionOutPut,ApplicationUsageStats.class);
             Log.d(TAG,"Deserialized json: "+appUseOutput.toString());
@@ -105,15 +94,54 @@ public class Test {
                     +"Json is stable : "+jsonFunctionOutPut.equals(jsonFunctionSecondOutput)
                     +"\nObjects are equals : "+appUseStatFromBase.get(0).equals(appUseOutput));
 
-            /*
-            //translation of appHist into Json
-            ObjectMapper mapperAppHist = new ObjectMapper();
-            String jsonAppHistOutput = "";
-            try {
-                jsonAppHistOutput = mapperAppHist.writeValueAsString(appHist);
-                Log.d(TAG, "*****>" + jsonAppHistOutput + "<*****");
-            } catch (JsonProcessingException e) { e.printStackTrace(); }
+            /*******************************************************************************
+             *Convert ApplicationHistory to Json deserialize then reserialize before comparing Json*
+             ********************************************************************************
+             */
 
+            String jsonOutPutFunction = serialize("*",appHist);
+            ApplicationHistory appHistOutput =(ApplicationHistory) deserialize("*",jsonOutPutFunction,ApplicationHistory.class);
+            Log.d(TAG,"Deserialized json: "+appHistOutput.toString());
+            String jsonSecondOutputFunction = serialize("*",appHistOutput);
+            Log.d(TAG,"\n"
+                    +"Json is stable : "+jsonOutPutFunction.equals(jsonSecondOutputFunction)
+                    +"\nObjects are equals : "+appHist.equals(appHistOutput));
+        }//end if appList!=null
+            /*******************************************************************************
+             *Convert metadata to Json deserialize then reserialize before comparing Json*
+             ********************************************************************************
+             */
+
+            String jsonMetadataOutPut = serialize("~",metadata);
+            MobilePrivacyProfilerDB_metadata metadataOutput =(MobilePrivacyProfilerDB_metadata) deserialize("~",jsonMetadataOutPut,MobilePrivacyProfilerDB_metadata.class);
+            Log.d(TAG,"Deserialized json: "+metadata.toString());
+            String jsonSecondMetadataOutput = serialize("~",metadataOutput);
+            Log.d(TAG,"\n"
+                    +"Json is stable : "+jsonMetadataOutPut.equals(jsonSecondMetadataOutput)
+                    +"\nObjects are equals : "+metadata.equals(metadataOutput));
+
+
+        /**
+         *
+         *
+         *
+         **/
+
+        //querying it from db
+        List<ApplicationHistory> appHistList = null;
+        appHistList = getDBHelper(context).getApplicationHistoryDao().queryForAll();
+        Log.d(TAG,"Number of ApplicationHistory to serialize : "+appHistList.size());
+
+        //serialize the list
+        String outPut = serialize("-",appHistList);
+        //deserialize the list
+        List<ApplicationHistory> appHistListOutPut =  deserializeList(outPut,ApplicationHistory.class);
+        String secondOutPut = serialize("-",appHistListOutPut);
+        Log.d(TAG,"\n"
+                +"Json is stable : "+outPut.equals(secondOutPut)
+                +"\nObjects are equals : "+appHistList.equals(appHistListOutPut));
+
+            /*
             //translation of appUsageStats into Json
             ObjectMapper mapperMetadata = new ObjectMapper();
             String jsonMetadata = "";
@@ -123,7 +151,7 @@ public class Test {
             } catch (JsonProcessingException e) { e.printStackTrace(); }
             */
 
-        }//end if appList!=null
+
         /*
         ApplicationHistory b = new ApplicationHistory();
         b.setAppName("appName : b");
@@ -212,7 +240,34 @@ public class Test {
     return deserializedObject;
     }
 
+    private List deserializeList (String jsonArg,Class deserialisationClass) {
+        // Convert JSON string to single Object
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList list = new ArrayList();
+        try {
+            list = mapper.readValue(jsonArg, mapper.getTypeFactory().constructCollectionType(List.class, deserialisationClass));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "Deserialized json: " + list.toString());
 
+        return list;
+    }
+/*
+    private List<String> parser(String json){
+
+        int lenght;
+        int hookCount=0;
+        int parenthesisCount=0;
+
+        lenght = json.length();
+        List<String> result = new;
+
+
+
+        return null;
+    }
+*/
     private OrmLiteDBHelper getDBHelper(Context context){
         if(dbHelper == null){
             dbHelper = OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);

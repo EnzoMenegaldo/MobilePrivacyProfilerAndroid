@@ -25,11 +25,9 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
     JSONObject postData;
 
     // This is a constructor that allows you to pass in the JSON body
-    public HttpPostAsyncTask(String jsonBody) {
-        if (jsonBody != null) {
-            try {
-                this.postData = new JSONObject(jsonBody);
-            } catch (JSONException e) { e.printStackTrace(); }
+    public HttpPostAsyncTask(Map<String, String> postData) {
+        if (postData != null) {
+            this.postData = new JSONObject(postData);
         }
     }
 

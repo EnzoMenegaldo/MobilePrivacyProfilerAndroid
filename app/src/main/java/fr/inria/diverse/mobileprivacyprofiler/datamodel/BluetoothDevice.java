@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "bluetoothDevice")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = BluetoothDevice.class)
 public class BluetoothDevice {
 
 	public static Log log = LogFactory.getLog(BluetoothDevice.class);
@@ -79,7 +80,7 @@ public class BluetoothDevice {
 	protected MobilePrivacyProfilerDB_metadata userMetaData;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "device")
-	// @JsonBackReference(value="bluetoothdevice_bluetoothlog")
+	@JsonIgnore
 	protected ForeignCollection<BluetoothLog> bluetoothLog;
 
 	// Start of user code BluetoothDevice additional user properties
@@ -154,8 +155,6 @@ public class BluetoothDevice {
 		return new ArrayList<BluetoothLog>(bluetoothLog);
 	}
 	
-	@JsonProperty
-	public void setBluetoothLog (Collection<BluetoothLog> collection){ this.bluetoothLog=(ForeignCollection) collection;}
 
 			
 

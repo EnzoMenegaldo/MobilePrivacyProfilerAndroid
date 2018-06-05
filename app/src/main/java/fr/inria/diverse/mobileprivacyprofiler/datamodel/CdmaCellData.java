@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "cdmaCellData")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = CdmaCellData.class)
 public class CdmaCellData {
 
 	public static Log log = LogFactory.getLog(CdmaCellData.class);

@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "applicationHistory")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = ApplicationHistory.class)
 public class ApplicationHistory {
 
 	public static Log log = LogFactory.getLog(ApplicationHistory.class);
@@ -70,7 +71,7 @@ public class ApplicationHistory {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "application")
-	// @JsonBackReference(value="applicationhistory_applicationusagestats")
+	@JsonIgnore
 	protected ForeignCollection<ApplicationUsageStats> usageStats;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
@@ -123,8 +124,6 @@ public class ApplicationHistory {
 		return new ArrayList<ApplicationUsageStats>(usageStats);
 	}
 	
-	@JsonProperty
-	public void setUsageStats (Collection<ApplicationUsageStats> collection){ this.usageStats=(ForeignCollection) collection;}
 
 			
 	public MobilePrivacyProfilerDB_metadata getUserMetaData() {

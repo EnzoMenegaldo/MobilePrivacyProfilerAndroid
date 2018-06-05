@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "cell")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = Cell.class)
 public class Cell {
 
 	public static Log log = LogFactory.getLog(Cell.class);
@@ -72,7 +73,7 @@ public class Cell {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "cells")
-	// @JsonBackReference(value="cell_neighboringcellhistory")
+	@JsonIgnore
 	protected ForeignCollection<NeighboringCellHistory> history;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
@@ -125,8 +126,6 @@ public class Cell {
 		return new ArrayList<NeighboringCellHistory>(history);
 	}
 	
-	@JsonProperty
-	public void setHistory (Collection<NeighboringCellHistory> collection){ this.history=(ForeignCollection) collection;}
 
 			
 	public CdmaCellData getCdmaposition() {

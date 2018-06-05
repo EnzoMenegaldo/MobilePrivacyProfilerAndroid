@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "mobilePrivacyProfilerDB_metadata")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = MobilePrivacyProfilerDB_metadata.class)
 public class MobilePrivacyProfilerDB_metadata {
 
 	public static Log log = LogFactory.getLog(MobilePrivacyProfilerDB_metadata.class);
@@ -98,51 +99,51 @@ public class MobilePrivacyProfilerDB_metadata {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="applicationhistory_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<ApplicationHistory> userApplicationHistory;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="authentification_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<Authentification> userAuthentification;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="contact_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<Contact> userContact;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="knownwifi_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<KnownWifi> userKnownWifi;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="webhistory_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<WebHistory> userWebHistory;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="batteryusage_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<BatteryUsage> userBatteryUsage;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="sms_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<SMS> userSMS;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="bluetoothdevice_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<BluetoothDevice> userBluetoothDevice;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="cell_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<Cell> userCell;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="phonecalllog_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<PhoneCallLog> userPhoneCallLog;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="calendarevent_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<CalendarEvent> userCalendarEvent;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "userMetaData")
-	// @JsonBackReference(value="geolocation_mobileprivacyprofilerdb_metadata")
+	@JsonIgnore
 	protected ForeignCollection<Geolocation> userGeolocation;
 
 	// Start of user code MobilePrivacyProfilerDB_metadata additional user properties
@@ -231,8 +232,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<ApplicationHistory>(userApplicationHistory);
 	}
 	
-	@JsonProperty
-	public void setUserApplicationHistory (Collection<ApplicationHistory> collection){ this.userApplicationHistory=(ForeignCollection) collection;}
 
 			
 	public List	<Authentification> getUserAuthentification() {
@@ -240,8 +239,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<Authentification>(userAuthentification);
 	}
 	
-	@JsonProperty
-	public void setUserAuthentification (Collection<Authentification> collection){ this.userAuthentification=(ForeignCollection) collection;}
 
 			
 	public List	<Contact> getUserContact() {
@@ -249,8 +246,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<Contact>(userContact);
 	}
 	
-	@JsonProperty
-	public void setUserContact (Collection<Contact> collection){ this.userContact=(ForeignCollection) collection;}
 
 			
 	public List	<KnownWifi> getUserKnownWifi() {
@@ -258,8 +253,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<KnownWifi>(userKnownWifi);
 	}
 	
-	@JsonProperty
-	public void setUserKnownWifi (Collection<KnownWifi> collection){ this.userKnownWifi=(ForeignCollection) collection;}
 
 			
 	public List	<WebHistory> getUserWebHistory() {
@@ -267,8 +260,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<WebHistory>(userWebHistory);
 	}
 	
-	@JsonProperty
-	public void setUserWebHistory (Collection<WebHistory> collection){ this.userWebHistory=(ForeignCollection) collection;}
 
 			
 	public List	<BatteryUsage> getUserBatteryUsage() {
@@ -276,8 +267,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<BatteryUsage>(userBatteryUsage);
 	}
 	
-	@JsonProperty
-	public void setUserBatteryUsage (Collection<BatteryUsage> collection){ this.userBatteryUsage=(ForeignCollection) collection;}
 
 			
 	public List	<SMS> getUserSMS() {
@@ -285,8 +274,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<SMS>(userSMS);
 	}
 	
-	@JsonProperty
-	public void setUserSMS (Collection<SMS> collection){ this.userSMS=(ForeignCollection) collection;}
 
 			
 	public List	<BluetoothDevice> getUserBluetoothDevice() {
@@ -294,8 +281,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<BluetoothDevice>(userBluetoothDevice);
 	}
 	
-	@JsonProperty
-	public void setUserBluetoothDevice (Collection<BluetoothDevice> collection){ this.userBluetoothDevice=(ForeignCollection) collection;}
 
 			
 	public List	<Cell> getUserCell() {
@@ -303,8 +288,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<Cell>(userCell);
 	}
 	
-	@JsonProperty
-	public void setUserCell (Collection<Cell> collection){ this.userCell=(ForeignCollection) collection;}
 
 			
 	public List	<PhoneCallLog> getUserPhoneCallLog() {
@@ -312,8 +295,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<PhoneCallLog>(userPhoneCallLog);
 	}
 	
-	@JsonProperty
-	public void setUserPhoneCallLog (Collection<PhoneCallLog> collection){ this.userPhoneCallLog=(ForeignCollection) collection;}
 
 			
 	public List	<CalendarEvent> getUserCalendarEvent() {
@@ -321,8 +302,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<CalendarEvent>(userCalendarEvent);
 	}
 	
-	@JsonProperty
-	public void setUserCalendarEvent (Collection<CalendarEvent> collection){ this.userCalendarEvent=(ForeignCollection) collection;}
 
 			
 	public List	<Geolocation> getUserGeolocation() {
@@ -330,8 +309,6 @@ public class MobilePrivacyProfilerDB_metadata {
 		return new ArrayList<Geolocation>(userGeolocation);
 	}
 	
-	@JsonProperty
-	public void setUserGeolocation (Collection<Geolocation> collection){ this.userGeolocation=(ForeignCollection) collection;}
 
 			
 

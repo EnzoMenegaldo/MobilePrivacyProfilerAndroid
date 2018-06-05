@@ -34,7 +34,8 @@ Ie. the device has registered it and was connected to it
   */ 
 @DatabaseTable(tableName = "knownWifi")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = KnownWifi.class)
 public class KnownWifi {
 
 	public static Log log = LogFactory.getLog(KnownWifi.class);
@@ -75,7 +76,7 @@ so we need to check how this data is managed and have a better model */
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "knownWifi")
-	// @JsonBackReference(value="knownwifi_detectedwifi")
+	@JsonIgnore
 	protected ForeignCollection<DetectedWifi> detectedWifis;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
@@ -128,8 +129,6 @@ so we need to check how this data is managed and have a better model */
 		return new ArrayList<DetectedWifi>(detectedWifis);
 	}
 	
-	@JsonProperty
-	public void setDetectedWifis (Collection<DetectedWifi> collection){ this.detectedWifis=(ForeignCollection) collection;}
 
 			
 	public MobilePrivacyProfilerDB_metadata getUserMetaData() {

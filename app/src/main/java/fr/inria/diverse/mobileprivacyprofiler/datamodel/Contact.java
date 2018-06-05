@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "contact")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = Contact.class)
 public class Contact {
 
 	public static Log log = LogFactory.getLog(Contact.class);
@@ -116,15 +117,15 @@ public class Contact {
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
-	// @JsonBackReference(value="contact_phonenumber")
+	@JsonIgnore
 	protected ForeignCollection<ContactPhoneNumber> phoneNumbers;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
-	// @JsonBackReference(value="contact_physicaladdress")
+	@JsonIgnore
 	protected ForeignCollection<ContactPhysicalAddress> physicalAddresses;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
-	// @JsonBackReference(value="contact_email")
+	@JsonIgnore
 	protected ForeignCollection<ContactEmail> emails;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
@@ -136,11 +137,11 @@ public class Contact {
 	protected ContactOrganisation contactOrganisation;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
-	// @JsonBackReference(value="contact_contactim")
+	@JsonIgnore
 	protected ForeignCollection<ContactIM> contactIM;
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
-	// @JsonBackReference(value="contact_contactevent")
+	@JsonIgnore
 	protected ForeignCollection<ContactEvent> contactEvent;
 
 	// Start of user code Contact additional user properties
@@ -261,8 +262,6 @@ public class Contact {
 		return new ArrayList<ContactPhoneNumber>(phoneNumbers);
 	}
 	
-	@JsonProperty
-	public void setPhoneNumbers (Collection<ContactPhoneNumber> collection){ this.phoneNumbers=(ForeignCollection) collection;}
 
 			
 	public List	<ContactPhysicalAddress> getPhysicalAddresses() {
@@ -270,8 +269,6 @@ public class Contact {
 		return new ArrayList<ContactPhysicalAddress>(physicalAddresses);
 	}
 	
-	@JsonProperty
-	public void setPhysicalAddresses (Collection<ContactPhysicalAddress> collection){ this.physicalAddresses=(ForeignCollection) collection;}
 
 			
 	public List	<ContactEmail> getEmails() {
@@ -279,8 +276,6 @@ public class Contact {
 		return new ArrayList<ContactEmail>(emails);
 	}
 	
-	@JsonProperty
-	public void setEmails (Collection<ContactEmail> collection){ this.emails=(ForeignCollection) collection;}
 
 			
 	public MobilePrivacyProfilerDB_metadata getUserMetaData() {
@@ -324,8 +319,6 @@ public class Contact {
 		return new ArrayList<ContactIM>(contactIM);
 	}
 	
-	@JsonProperty
-	public void setContactIM (Collection<ContactIM> collection){ this.contactIM=(ForeignCollection) collection;}
 
 			
 	public List	<ContactEvent> getContactEvent() {
@@ -333,8 +326,6 @@ public class Contact {
 		return new ArrayList<ContactEvent>(contactEvent);
 	}
 	
-	@JsonProperty
-	public void setContactEvent (Collection<ContactEvent> collection){ this.contactEvent=(ForeignCollection) collection;}
 
 			
 

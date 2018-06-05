@@ -72,9 +72,9 @@ public class MobilePrivacyRestClient {
         }
 
         try {
-            //Map<String, List<ApplicationHistory>> postData = new HashMap<>();
-            //postData.put("appHistList", appHistToExport);
-            HttpPostAsyncTask task = new HttpPostAsyncTask(jsonList);
+            Map<String, String> postData = new HashMap<>();
+            postData.put("appHistList", jsonList);
+            HttpPostAsyncTask task = new HttpPostAsyncTask(postData);
             task.execute(serverUrl + "/ApplicationHistory");
         } catch (Exception e) {
             e.printStackTrace();return false;

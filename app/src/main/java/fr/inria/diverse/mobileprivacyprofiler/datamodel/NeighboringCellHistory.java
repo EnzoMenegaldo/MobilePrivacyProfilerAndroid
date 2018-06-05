@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "neighboringCellHistory")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = NeighboringCellHistory.class)
 public class NeighboringCellHistory {
 
 	public static Log log = LogFactory.getLog(NeighboringCellHistory.class);

@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "detectedWifi")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = DetectedWifi.class)
 public class DetectedWifi {
 
 	public static Log log = LogFactory.getLog(DetectedWifi.class);

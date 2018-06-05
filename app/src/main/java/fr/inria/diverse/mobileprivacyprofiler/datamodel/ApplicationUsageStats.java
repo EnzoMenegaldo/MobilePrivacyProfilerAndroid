@@ -33,7 +33,8 @@ import org.apache.commons.logging.LogFactory;
   */ 
 @DatabaseTable(tableName = "applicationUsageStats")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
-                  property  = "_id")
+                  property  = "_id",
+				  scope = ApplicationUsageStats.class)
 public class ApplicationUsageStats {
 
 	public static Log log = LogFactory.getLog(ApplicationUsageStats.class);
