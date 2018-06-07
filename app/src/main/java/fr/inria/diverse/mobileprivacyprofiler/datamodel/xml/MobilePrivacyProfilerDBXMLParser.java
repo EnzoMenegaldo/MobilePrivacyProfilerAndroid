@@ -171,24 +171,13 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_USERID = "USERID";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastContactScan = "lastContactScan";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTCONTACTSCAN = "LASTCONTACTSCAN";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userApplicationHistory = "userApplicationHistory";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userAuthentification = "userAuthentification";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userContact = "userContact";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userKnownWifi = "userKnownWifi";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userWebHistory = "userWebHistory";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBatteryUsage = "userBatteryUsage";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userSMS = "userSMS";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userBluetoothDevice = "userBluetoothDevice";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCell = "userCell";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userPhoneCallLog = "userPhoneCallLog";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userCalendarEvent = "userCalendarEvent";
-	public static final String DATAREF_MOBILEPRIVACYPROFILERDB_METADATA_userGeolocation = "userGeolocation";
 	public static final String DATAATT_APPLICATIONHISTORY_appName = "appName";
 	public static final String DATAATT_APPLICATIONHISTORY_APPNAME = "APPNAME";
 	public static final String DATAATT_APPLICATIONHISTORY_packageName = "packageName";
 	public static final String DATAATT_APPLICATIONHISTORY_PACKAGENAME = "PACKAGENAME";
+	public static final String DATAATT_APPLICATIONHISTORY_userId = "userId";
+	public static final String DATAATT_APPLICATIONHISTORY_USERID = "USERID";
 	public static final String DATAREF_APPLICATIONHISTORY_usageStats = "usageStats";
-	public static final String DATAREF_APPLICATIONHISTORY_userMetaData = "userMetaData";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_totalTimeInForeground = "totalTimeInForeground";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_TOTALTIMEINFOREGROUND = "TOTALTIMEINFOREGROUND";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_lastTimeUsed = "lastTimeUsed";
@@ -199,6 +188,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_APPLICATIONUSAGESTATS_LASTTIMESTAMP = "LASTTIMESTAMP";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_requestedInterval = "requestedInterval";
 	public static final String DATAATT_APPLICATIONUSAGESTATS_REQUESTEDINTERVAL = "REQUESTEDINTERVAL";
+	public static final String DATAATT_APPLICATIONUSAGESTATS_userId = "userId";
+	public static final String DATAATT_APPLICATIONUSAGESTATS_USERID = "USERID";
 	public static final String DATAREF_APPLICATIONUSAGESTATS_application = "application";
 	public static final String DATAATT_AUTHENTIFICATION_packageName = "packageName";
 	public static final String DATAATT_AUTHENTIFICATION_PACKAGENAME = "PACKAGENAME";
@@ -206,7 +197,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_AUTHENTIFICATION_NAME = "NAME";
 	public static final String DATAATT_AUTHENTIFICATION_type = "type";
 	public static final String DATAATT_AUTHENTIFICATION_TYPE = "TYPE";
-	public static final String DATAREF_AUTHENTIFICATION_userMetaData = "userMetaData";
+	public static final String DATAATT_AUTHENTIFICATION_userId = "userId";
+	public static final String DATAATT_AUTHENTIFICATION_USERID = "USERID";
 	public static final String DATAATT_CONTACT_surname = "surname";
 	public static final String DATAATT_CONTACT_SURNAME = "SURNAME";
 	public static final String DATAATT_CONTACT_firstName = "firstName";
@@ -229,10 +221,11 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_CONTACT_WEBSITE = "WEBSITE";
 	public static final String DATAATT_CONTACT_scanTimeStamp = "scanTimeStamp";
 	public static final String DATAATT_CONTACT_SCANTIMESTAMP = "SCANTIMESTAMP";
+	public static final String DATAATT_CONTACT_userId = "userId";
+	public static final String DATAATT_CONTACT_USERID = "USERID";
 	public static final String DATAREF_CONTACT_phoneNumbers = "phoneNumbers";
 	public static final String DATAREF_CONTACT_physicalAddresses = "physicalAddresses";
 	public static final String DATAREF_CONTACT_emails = "emails";
-	public static final String DATAREF_CONTACT_userMetaData = "userMetaData";
 	public static final String DATAREF_CONTACT_contactOrganisation = "contactOrganisation";
 	public static final String DATAREF_CONTACT_contactIM = "contactIM";
 	public static final String DATAREF_CONTACT_contactEvent = "contactEvent";
@@ -240,38 +233,51 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_CONTACTORGANISATION_COMPANY = "COMPANY";
 	public static final String DATAATT_CONTACTORGANISATION_title = "title";
 	public static final String DATAATT_CONTACTORGANISATION_TITLE = "TITLE";
+	public static final String DATAATT_CONTACTORGANISATION_userId = "userId";
+	public static final String DATAATT_CONTACTORGANISATION_USERID = "USERID";
 	public static final String DATAREF_CONTACTORGANISATION_referencedContact = "referencedContact";
 	public static final String DATAATT_CONTACTIM_protocole = "protocole";
 	public static final String DATAATT_CONTACTIM_PROTOCOLE = "PROTOCOLE";
 	public static final String DATAATT_CONTACTIM_imId = "imId";
 	public static final String DATAATT_CONTACTIM_IMID = "IMID";
+	public static final String DATAATT_CONTACTIM_userId = "userId";
+	public static final String DATAATT_CONTACTIM_USERID = "USERID";
 	public static final String DATAREF_CONTACTIM_contact = "contact";
 	public static final String DATAATT_CONTACTEVENT_startDate = "startDate";
 	public static final String DATAATT_CONTACTEVENT_STARTDATE = "STARTDATE";
 	public static final String DATAATT_CONTACTEVENT_type = "type";
 	public static final String DATAATT_CONTACTEVENT_TYPE = "TYPE";
+	public static final String DATAATT_CONTACTEVENT_userId = "userId";
+	public static final String DATAATT_CONTACTEVENT_USERID = "USERID";
 	public static final String DATAREF_CONTACTEVENT_contact = "contact";
 	public static final String DATAATT_CONTACTPHONENUMBER_phoneNumber = "phoneNumber";
 	public static final String DATAATT_CONTACTPHONENUMBER_PHONENUMBER = "PHONENUMBER";
 	public static final String DATAATT_CONTACTPHONENUMBER_role = "role";
 	public static final String DATAATT_CONTACTPHONENUMBER_ROLE = "ROLE";
+	public static final String DATAATT_CONTACTPHONENUMBER_userId = "userId";
+	public static final String DATAATT_CONTACTPHONENUMBER_USERID = "USERID";
 	public static final String DATAREF_CONTACTPHONENUMBER_contact = "contact";
 	public static final String DATAATT_CONTACTPHYSICALADDRESS_address = "address";
 	public static final String DATAATT_CONTACTPHYSICALADDRESS_ADDRESS = "ADDRESS";
 	public static final String DATAATT_CONTACTPHYSICALADDRESS_role = "role";
 	public static final String DATAATT_CONTACTPHYSICALADDRESS_ROLE = "ROLE";
+	public static final String DATAATT_CONTACTPHYSICALADDRESS_userId = "userId";
+	public static final String DATAATT_CONTACTPHYSICALADDRESS_USERID = "USERID";
 	public static final String DATAREF_CONTACTPHYSICALADDRESS_contact = "contact";
 	public static final String DATAATT_CONTACTEMAIL_email = "email";
 	public static final String DATAATT_CONTACTEMAIL_EMAIL = "EMAIL";
 	public static final String DATAATT_CONTACTEMAIL_role = "role";
 	public static final String DATAATT_CONTACTEMAIL_ROLE = "ROLE";
+	public static final String DATAATT_CONTACTEMAIL_userId = "userId";
+	public static final String DATAATT_CONTACTEMAIL_USERID = "USERID";
 	public static final String DATAREF_CONTACTEMAIL_contact = "contact";
 	public static final String DATAATT_KNOWNWIFI_ssid = "ssid";
 	public static final String DATAATT_KNOWNWIFI_SSID = "SSID";
 	public static final String DATAATT_KNOWNWIFI_location = "location";
 	public static final String DATAATT_KNOWNWIFI_LOCATION = "LOCATION";
+	public static final String DATAATT_KNOWNWIFI_userId = "userId";
+	public static final String DATAATT_KNOWNWIFI_USERID = "USERID";
 	public static final String DATAREF_KNOWNWIFI_detectedWifis = "detectedWifis";
-	public static final String DATAREF_KNOWNWIFI_userMetaData = "userMetaData";
 	public static final String DATAATT_DETECTEDWIFI_startDetectionDate = "startDetectionDate";
 	public static final String DATAATT_DETECTEDWIFI_STARTDETECTIONDATE = "STARTDETECTIONDATE";
 	public static final String DATAATT_DETECTEDWIFI_endDetectionDate = "endDetectionDate";
@@ -280,6 +286,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_DETECTEDWIFI_HASCONNECTED = "HASCONNECTED";
 	public static final String DATAATT_DETECTEDWIFI_ssid = "ssid";
 	public static final String DATAATT_DETECTEDWIFI_SSID = "SSID";
+	public static final String DATAATT_DETECTEDWIFI_userId = "userId";
+	public static final String DATAATT_DETECTEDWIFI_USERID = "USERID";
 	public static final String DATAREF_DETECTEDWIFI_knownWifi = "knownWifi";
 	public static final String DATAATT_GEOLOCATION_date = "date";
 	public static final String DATAATT_GEOLOCATION_DATE = "DATE";
@@ -289,7 +297,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_GEOLOCATION_PRECISION = "PRECISION";
 	public static final String DATAATT_GEOLOCATION_altitude = "altitude";
 	public static final String DATAATT_GEOLOCATION_ALTITUDE = "ALTITUDE";
-	public static final String DATAREF_GEOLOCATION_userMetaData = "userMetaData";
+	public static final String DATAATT_GEOLOCATION_userId = "userId";
+	public static final String DATAATT_GEOLOCATION_USERID = "USERID";
 	public static final String DATAATT_CALENDAREVENT_EventLabel = "EventLabel";
 	public static final String DATAATT_CALENDAREVENT_EVENTLABEL = "EVENTLABEL";
 	public static final String DATAATT_CALENDAREVENT_startDate = "startDate";
@@ -302,7 +311,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_CALENDAREVENT_PARTICIPANTS = "PARTICIPANTS";
 	public static final String DATAATT_CALENDAREVENT_eventId = "eventId";
 	public static final String DATAATT_CALENDAREVENT_EVENTID = "EVENTID";
-	public static final String DATAREF_CALENDAREVENT_userMetaData = "userMetaData";
+	public static final String DATAATT_CALENDAREVENT_userId = "userId";
+	public static final String DATAATT_CALENDAREVENT_USERID = "USERID";
 	public static final String DATAATT_PHONECALLLOG_phoneNumber = "phoneNumber";
 	public static final String DATAATT_PHONECALLLOG_PHONENUMBER = "PHONENUMBER";
 	public static final String DATAATT_PHONECALLLOG_date = "date";
@@ -311,27 +321,35 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_PHONECALLLOG_DURATION = "DURATION";
 	public static final String DATAATT_PHONECALLLOG_callType = "callType";
 	public static final String DATAATT_PHONECALLLOG_CALLTYPE = "CALLTYPE";
-	public static final String DATAREF_PHONECALLLOG_userMetaData = "userMetaData";
+	public static final String DATAATT_PHONECALLLOG_userId = "userId";
+	public static final String DATAATT_PHONECALLLOG_USERID = "USERID";
 	public static final String DATAATT_CELL_cellId = "cellId";
 	public static final String DATAATT_CELL_CELLID = "CELLID";
+	public static final String DATAATT_CELL_userId = "userId";
+	public static final String DATAATT_CELL_USERID = "USERID";
 	public static final String DATAREF_CELL_history = "history";
 	public static final String DATAREF_CELL_cdmaposition = "cdmaposition";
 	public static final String DATAREF_CELL_otherPosition = "otherPosition";
-	public static final String DATAREF_CELL_userMetaData = "userMetaData";
 	public static final String DATAATT_OTHERCELLDATA_lacTac = "lacTac";
 	public static final String DATAATT_OTHERCELLDATA_LACTAC = "LACTAC";
 	public static final String DATAATT_OTHERCELLDATA_type = "type";
 	public static final String DATAATT_OTHERCELLDATA_TYPE = "TYPE";
+	public static final String DATAATT_OTHERCELLDATA_userId = "userId";
+	public static final String DATAATT_OTHERCELLDATA_USERID = "USERID";
 	public static final String DATAREF_OTHERCELLDATA_identity = "identity";
 	public static final String DATAATT_CDMACELLDATA_longitude = "longitude";
 	public static final String DATAATT_CDMACELLDATA_LONGITUDE = "LONGITUDE";
 	public static final String DATAATT_CDMACELLDATA_latitude = "latitude";
 	public static final String DATAATT_CDMACELLDATA_LATITUDE = "LATITUDE";
+	public static final String DATAATT_CDMACELLDATA_userId = "userId";
+	public static final String DATAATT_CDMACELLDATA_USERID = "USERID";
 	public static final String DATAREF_CDMACELLDATA_identity = "identity";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_date = "date";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_DATE = "DATE";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_strength = "strength";
 	public static final String DATAATT_NEIGHBORINGCELLHISTORY_STRENGTH = "STRENGTH";
+	public static final String DATAATT_NEIGHBORINGCELLHISTORY_userId = "userId";
+	public static final String DATAATT_NEIGHBORINGCELLHISTORY_USERID = "USERID";
 	public static final String DATAREF_NEIGHBORINGCELLHISTORY_cells = "cells";
 	public static final String DATAATT_BLUETOOTHDEVICE_mac = "mac";
 	public static final String DATAATT_BLUETOOTHDEVICE_MAC = "MAC";
@@ -339,12 +357,15 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_BLUETOOTHDEVICE_NAME = "NAME";
 	public static final String DATAATT_BLUETOOTHDEVICE_type = "type";
 	public static final String DATAATT_BLUETOOTHDEVICE_TYPE = "TYPE";
-	public static final String DATAREF_BLUETOOTHDEVICE_userMetaData = "userMetaData";
+	public static final String DATAATT_BLUETOOTHDEVICE_userId = "userId";
+	public static final String DATAATT_BLUETOOTHDEVICE_USERID = "USERID";
 	public static final String DATAREF_BLUETOOTHDEVICE_bluetoothLog = "bluetoothLog";
 	public static final String DATAATT_BLUETOOTHLOG_date = "date";
 	public static final String DATAATT_BLUETOOTHLOG_DATE = "DATE";
 	public static final String DATAATT_BLUETOOTHLOG_connected = "connected";
 	public static final String DATAATT_BLUETOOTHLOG_CONNECTED = "CONNECTED";
+	public static final String DATAATT_BLUETOOTHLOG_userId = "userId";
+	public static final String DATAATT_BLUETOOTHLOG_USERID = "USERID";
 	public static final String DATAREF_BLUETOOTHLOG_device = "device";
 	public static final String DATAATT_SMS_date = "date";
 	public static final String DATAATT_SMS_DATE = "DATE";
@@ -352,7 +373,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_SMS_PHONENUMBER = "PHONENUMBER";
 	public static final String DATAATT_SMS_type = "type";
 	public static final String DATAATT_SMS_TYPE = "TYPE";
-	public static final String DATAREF_SMS_userMetaData = "userMetaData";
+	public static final String DATAATT_SMS_userId = "userId";
+	public static final String DATAATT_SMS_USERID = "USERID";
 	public static final String DATAATT_BATTERYUSAGE_date = "date";
 	public static final String DATAATT_BATTERYUSAGE_DATE = "DATE";
 	public static final String DATAATT_BATTERYUSAGE_level = "level";
@@ -361,14 +383,16 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_BATTERYUSAGE_ISPUGGED = "ISPUGGED";
 	public static final String DATAATT_BATTERYUSAGE_plugType = "plugType";
 	public static final String DATAATT_BATTERYUSAGE_PLUGTYPE = "PLUGTYPE";
-	public static final String DATAREF_BATTERYUSAGE_userMetaData = "userMetaData";
+	public static final String DATAATT_BATTERYUSAGE_userId = "userId";
+	public static final String DATAATT_BATTERYUSAGE_USERID = "USERID";
 	public static final String DATAATT_WEBHISTORY_url = "url";
 	public static final String DATAATT_WEBHISTORY_URL = "URL";
 	public static final String DATAATT_WEBHISTORY_date = "date";
 	public static final String DATAATT_WEBHISTORY_DATE = "DATE";
 	public static final String DATAATT_WEBHISTORY_application = "application";
 	public static final String DATAATT_WEBHISTORY_APPLICATION = "APPLICATION";
-	public static final String DATAREF_WEBHISTORY_userMetaData = "userMetaData";
+	public static final String DATAATT_WEBHISTORY_userId = "userId";
+	public static final String DATAATT_WEBHISTORY_USERID = "USERID";
 
 
 
@@ -1025,18 +1049,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-					// TODO deal with ref userApplicationHistory
-					// TODO deal with ref userAuthentification
-					// TODO deal with ref userContact
-					// TODO deal with ref userKnownWifi
-					// TODO deal with ref userWebHistory
-					// TODO deal with ref userBatteryUsage
-					// TODO deal with ref userSMS
-					// TODO deal with ref userBluetoothDevice
-					// TODO deal with ref userCell
-					// TODO deal with ref userPhoneCallLog
-					// TODO deal with ref userCalendarEvent
-					// TODO deal with ref userGeolocation
 	        {
 	            skip(parser);
 	        }
@@ -1053,6 +1065,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ApplicationHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setAppName(parser.getAttributeValue(null, DATAATT_APPLICATIONHISTORY_appName));
 		result.setPackageName(parser.getAttributeValue(null, DATAATT_APPLICATIONHISTORY_packageName));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_APPLICATIONHISTORY_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1063,12 +1076,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 				applicationUsageStatss.addAll(entries); // add for inclusion in the DB
 				//result.getUsageStats().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
 				refCommands.add(new ApplicationHistory_addContainedUsageStats_RefCommand(result,entries));	    
-	        } else
-			if (currentTagName.equals(DATAREF_APPLICATIONHISTORY_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_APPLICATIONHISTORY_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new ApplicationHistory_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_APPLICATIONHISTORY_userMetaData);	    
 	        } else
 	        {
 	            skip(parser);
@@ -1089,6 +1096,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setFirstTimeStamp(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_firstTimeStamp));
 		result.setLastTimeStamp(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_lastTimeStamp));
 		// TODO requestedInterval = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_REQUESTEDINTERVAL);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1117,17 +1125,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setPackageName(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_packageName));
 		result.setName(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_name));
 		result.setType(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_type));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_AUTHENTIFICATION_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_AUTHENTIFICATION_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_AUTHENTIFICATION_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new Authentification_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_AUTHENTIFICATION_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1153,6 +1156,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setRelation(parser.getAttributeValue(null, DATAATT_CONTACT_relation));
 		result.setWebsite(parser.getAttributeValue(null, DATAATT_CONTACT_website));
 		// TODO scanTimeStamp = parser.getAttributeValue(null, DATAATT_CONTACT_SCANTIMESTAMP);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACT_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1175,12 +1179,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 				contactEmails.addAll(entries); // add for inclusion in the DB
 				//result.getEmails().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
 				refCommands.add(new Contact_addContainedEmails_RefCommand(result,entries));	    
-	        } else
-			if (currentTagName.equals(DATAREF_CONTACT_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CONTACT_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new Contact_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CONTACT_userMetaData);	    
 	        } else
 					// TODO deal with owned ref contactOrganisation
 			if (currentTagName.equals(DATAREF_CONTACT_contactIM)) {
@@ -1211,6 +1209,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ContactOrganisation.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setCompany(parser.getAttributeValue(null, DATAATT_CONTACTORGANISATION_company));
 		result.setTitle(parser.getAttributeValue(null, DATAATT_CONTACTORGANISATION_title));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTORGANISATION_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1238,6 +1237,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ContactIM.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setProtocole(parser.getAttributeValue(null, DATAATT_CONTACTIM_protocole));
 		result.setImId(parser.getAttributeValue(null, DATAATT_CONTACTIM_imId));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTIM_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1265,6 +1265,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ContactEvent.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setStartDate(parser.getAttributeValue(null, DATAATT_CONTACTEVENT_startDate));
 		result.setType(parser.getAttributeValue(null, DATAATT_CONTACTEVENT_type));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTEVENT_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1292,6 +1293,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ContactPhoneNumber.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setPhoneNumber(parser.getAttributeValue(null, DATAATT_CONTACTPHONENUMBER_phoneNumber));
 		result.setRole(parser.getAttributeValue(null, DATAATT_CONTACTPHONENUMBER_role));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTPHONENUMBER_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1319,6 +1321,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ContactPhysicalAddress.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setAddress(parser.getAttributeValue(null, DATAATT_CONTACTPHYSICALADDRESS_address));
 		result.setRole(parser.getAttributeValue(null, DATAATT_CONTACTPHYSICALADDRESS_role));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTPHYSICALADDRESS_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1346,6 +1349,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2ContactEmail.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setEmail(parser.getAttributeValue(null, DATAATT_CONTACTEMAIL_email));
 		result.setRole(parser.getAttributeValue(null, DATAATT_CONTACTEMAIL_role));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTEMAIL_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1373,18 +1377,13 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2KnownWifi.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setSsid(parser.getAttributeValue(null, DATAATT_KNOWNWIFI_ssid));
 		result.setLocation(parser.getAttributeValue(null, DATAATT_KNOWNWIFI_location));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_KNOWNWIFI_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
 					// TODO deal with ref detectedWifis
-			if (currentTagName.equals(DATAREF_KNOWNWIFI_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_KNOWNWIFI_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new KnownWifi_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_KNOWNWIFI_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1403,6 +1402,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setEndDetectionDate(parser.getAttributeValue(null, DATAATT_DETECTEDWIFI_endDetectionDate));
 		// TODO hasConnected = parser.getAttributeValue(null, DATAATT_DETECTEDWIFI_HASCONNECTED);
 		result.setSsid(parser.getAttributeValue(null, DATAATT_DETECTEDWIFI_ssid));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_DETECTEDWIFI_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1432,17 +1432,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setPosition(parser.getAttributeValue(null, DATAATT_GEOLOCATION_position));
 		// TODO precision = parser.getAttributeValue(null, DATAATT_GEOLOCATION_PRECISION);
 		// TODO altitude = parser.getAttributeValue(null, DATAATT_GEOLOCATION_ALTITUDE);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_GEOLOCATION_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_GEOLOCATION_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_GEOLOCATION_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new Geolocation_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_GEOLOCATION_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1463,17 +1458,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setPlace(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_place));
 		result.setParticipants(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_participants));
 		// TODO eventId = parser.getAttributeValue(null, DATAATT_CALENDAREVENT_EVENTID);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_CALENDAREVENT_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CALENDAREVENT_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new CalendarEvent_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CALENDAREVENT_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1492,17 +1482,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		// TODO date = parser.getAttributeValue(null, DATAATT_PHONECALLLOG_DATE);
 		// TODO duration = parser.getAttributeValue(null, DATAATT_PHONECALLLOG_DURATION);
 		result.setCallType(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_callType));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_PHONECALLLOG_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_PHONECALLLOG_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_PHONECALLLOG_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new PhoneCallLog_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_PHONECALLLOG_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1518,6 +1503,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     			
     	xmlId2Cell.put(parser.getAttributeValue(null, ID_STRING),result);		
 		// TODO cellId = parser.getAttributeValue(null, DATAATT_CELL_CELLID);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CELL_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1531,12 +1517,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	        } else
 					// TODO deal with owned ref cdmaposition
 					// TODO deal with owned ref otherPosition
-			if (currentTagName.equals(DATAREF_CELL_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_CELL_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new Cell_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_CELL_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1553,6 +1533,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2OtherCellData.put(parser.getAttributeValue(null, ID_STRING),result);		
 		// TODO lacTac = parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_LACTAC);
 		result.setType(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_type));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1580,6 +1561,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2CdmaCellData.put(parser.getAttributeValue(null, ID_STRING),result);		
 		// TODO longitude = parser.getAttributeValue(null, DATAATT_CDMACELLDATA_LONGITUDE);
 		// TODO latitude = parser.getAttributeValue(null, DATAATT_CDMACELLDATA_LATITUDE);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_CDMACELLDATA_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1607,6 +1589,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2NeighboringCellHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
 		// TODO date = parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_DATE);
 		// TODO strength = parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_STRENGTH);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_NEIGHBORINGCELLHISTORY_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1635,17 +1618,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setMac(parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_mac));
 		result.setName(parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_name));
 		// TODO type = parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_TYPE);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_BLUETOOTHDEVICE_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_BLUETOOTHDEVICE_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_BLUETOOTHDEVICE_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new BluetoothDevice_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_BLUETOOTHDEVICE_userMetaData);	    
-	        } else
 			if (currentTagName.equals(DATAREF_BLUETOOTHDEVICE_bluetoothLog)) {
 				List<BluetoothLog> entries = readBluetoothLogs(parser,DATAREF_BLUETOOTHDEVICE_bluetoothLog);	
 				bluetoothLogs.addAll(entries); // add for inclusion in the DB
@@ -1668,6 +1646,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	xmlId2BluetoothLog.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setDate(parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_date));
 		// TODO connected = parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_CONNECTED);
+		result.setUserId(parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1696,17 +1675,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setDate(parser.getAttributeValue(null, DATAATT_SMS_date));
 		result.setPhoneNumber(parser.getAttributeValue(null, DATAATT_SMS_phoneNumber));
 		result.setType(parser.getAttributeValue(null, DATAATT_SMS_type));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_SMS_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_SMS_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_SMS_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new SMS_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_SMS_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1725,17 +1699,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		// TODO level = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_LEVEL);
 		// TODO isPugged = parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_ISPUGGED);
 		result.setPlugType(parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_plugType));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_BATTERYUSAGE_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_BATTERYUSAGE_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_BATTERYUSAGE_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new BatteryUsage_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_BATTERYUSAGE_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1753,17 +1722,12 @@ public class MobilePrivacyProfilerDBXMLParser {
 		result.setUrl(parser.getAttributeValue(null, DATAATT_WEBHISTORY_url));
 		result.setDate(parser.getAttributeValue(null, DATAATT_WEBHISTORY_date));
 		result.setApplication(parser.getAttributeValue(null, DATAATT_WEBHISTORY_application));
+		result.setUserId(parser.getAttributeValue(null, DATAATT_WEBHISTORY_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
 	        }
 	        currentTagName = parser.getName();
-			if (currentTagName.equals(DATAREF_WEBHISTORY_userMetaData)) {	
-				parser.require(XmlPullParser.START_TAG, ns, DATAREF_WEBHISTORY_userMetaData);
-	            String id = readText(parser);
-				refCommands.add(new WebHistory_setUserMetaData_RefCommand(result,id, this));
-				parser.require(XmlPullParser.END_TAG, ns, DATAREF_WEBHISTORY_userMetaData);	    
-	        } else
 	        {
 	            skip(parser);
 	        }
@@ -1778,18 +1742,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public abstract class RefCommand{
 		public abstract void run();
 	}
-	// class MobilePrivacyProfilerDB_metadata_addUserApplicationHistory_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserAuthentification_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserContact_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserKnownWifi_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserWebHistory_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserBatteryUsage_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserSMS_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserBluetoothDevice_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserCell_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserPhoneCallLog_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserCalendarEvent_RefCommand extends RefCommand{
-	// class MobilePrivacyProfilerDB_metadata_addUserGeolocation_RefCommand extends RefCommand{
 	class ApplicationHistory_addContainedUsageStats_RefCommand extends RefCommand{
 		ApplicationHistory container;
 		List<ApplicationUsageStats> containedElements;
@@ -1810,25 +1762,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		}
 		
 	}
-	class ApplicationHistory_setUserMetaData_RefCommand extends RefCommand{
-		ApplicationHistory self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public ApplicationHistory_setUserMetaData_RefCommand(ApplicationHistory self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			applicationHistorysToUpdate.add(self);
-		}
-	}
 	class ApplicationUsageStats_setApplication_RefCommand extends RefCommand{
 		ApplicationUsageStats self;
 		String referencedElementID;
@@ -1846,25 +1779,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		public void run() {
 			self.setApplication(parser.xmlId2ApplicationHistory.get(referencedElementID));
 			applicationUsageStatssToUpdate.add(self);
-		}
-	}
-	class Authentification_setUserMetaData_RefCommand extends RefCommand{
-		Authentification self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public Authentification_setUserMetaData_RefCommand(Authentification self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			authentificationsToUpdate.add(self);
 		}
 	}
 	class Contact_addContainedPhoneNumbers_RefCommand extends RefCommand{
@@ -1926,25 +1840,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 			}
 		}
 		
-	}
-	class Contact_setUserMetaData_RefCommand extends RefCommand{
-		Contact self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public Contact_setUserMetaData_RefCommand(Contact self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			contactsToUpdate.add(self);
-		}
 	}
 	class Contact_setContainedContactOrganisation_RefCommand extends RefCommand{
 	Contact container;
@@ -2119,25 +2014,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		}
 	}
 	// class KnownWifi_addDetectedWifis_RefCommand extends RefCommand{
-	class KnownWifi_setUserMetaData_RefCommand extends RefCommand{
-		KnownWifi self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public KnownWifi_setUserMetaData_RefCommand(KnownWifi self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			knownWifisToUpdate.add(self);
-		}
-	}
 	class DetectedWifi_setKnownWifi_RefCommand extends RefCommand{
 		DetectedWifi self;
 		String referencedElementID;
@@ -2155,63 +2031,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		public void run() {
 			self.setKnownWifi(parser.xmlId2KnownWifi.get(referencedElementID));
 			detectedWifisToUpdate.add(self);
-		}
-	}
-	class Geolocation_setUserMetaData_RefCommand extends RefCommand{
-		Geolocation self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public Geolocation_setUserMetaData_RefCommand(Geolocation self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			geolocationsToUpdate.add(self);
-		}
-	}
-	class CalendarEvent_setUserMetaData_RefCommand extends RefCommand{
-		CalendarEvent self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public CalendarEvent_setUserMetaData_RefCommand(CalendarEvent self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			calendarEventsToUpdate.add(self);
-		}
-	}
-	class PhoneCallLog_setUserMetaData_RefCommand extends RefCommand{
-		PhoneCallLog self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public PhoneCallLog_setUserMetaData_RefCommand(PhoneCallLog self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			phoneCallLogsToUpdate.add(self);
 		}
 	}
 	class Cell_addContainedHistory_RefCommand extends RefCommand{
@@ -2270,25 +2089,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		}
 		
 	}
-	class Cell_setUserMetaData_RefCommand extends RefCommand{
-		Cell self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public Cell_setUserMetaData_RefCommand(Cell self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			cellsToUpdate.add(self);
-		}
-	}
 	class OtherCellData_setIdentity_RefCommand extends RefCommand{
 		OtherCellData self;
 		String referencedElementID;
@@ -2346,25 +2146,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 			neighboringCellHistorysToUpdate.add(self);
 		}
 	}
-	class BluetoothDevice_setUserMetaData_RefCommand extends RefCommand{
-		BluetoothDevice self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public BluetoothDevice_setUserMetaData_RefCommand(BluetoothDevice self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			bluetoothDevicesToUpdate.add(self);
-		}
-	}
 	class BluetoothDevice_addContainedBluetoothLog_RefCommand extends RefCommand{
 		BluetoothDevice container;
 		List<BluetoothLog> containedElements;
@@ -2402,63 +2183,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 		public void run() {
 			self.setDevice(parser.xmlId2BluetoothDevice.get(referencedElementID));
 			bluetoothLogsToUpdate.add(self);
-		}
-	}
-	class SMS_setUserMetaData_RefCommand extends RefCommand{
-		SMS self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public SMS_setUserMetaData_RefCommand(SMS self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			sMSsToUpdate.add(self);
-		}
-	}
-	class BatteryUsage_setUserMetaData_RefCommand extends RefCommand{
-		BatteryUsage self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public BatteryUsage_setUserMetaData_RefCommand(BatteryUsage self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			batteryUsagesToUpdate.add(self);
-		}
-	}
-	class WebHistory_setUserMetaData_RefCommand extends RefCommand{
-		WebHistory self;
-		String referencedElementID;
-		MobilePrivacyProfilerDBXMLParser parser;
-		
-		public WebHistory_setUserMetaData_RefCommand(WebHistory self,
-				String referencedElementID, MobilePrivacyProfilerDBXMLParser parser) {
-			super();
-			this.self = self;
-			this.referencedElementID = referencedElementID;
-			this.parser = parser;
-		}
-
-		@Override
-		public void run() {
-			self.setUserMetaData(parser.xmlId2MobilePrivacyProfilerDB_metadata.get(referencedElementID));
-			webHistorysToUpdate.add(self);
 		}
 	}
 

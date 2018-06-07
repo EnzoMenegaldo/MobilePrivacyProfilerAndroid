@@ -52,10 +52,10 @@ public class Contact {
 	public static final String XML_ATT_RELATION = "relation";
 	public static final String XML_ATT_WEBSITE = "website";
 	public static final String XML_ATT_SCANTIMESTAMP = "scanTimeStamp";
+	public static final String XML_ATT_USERID = "userId";
 	public static final String XML_REF_PHONENUMBERS = "phoneNumbers";
 	public static final String XML_REF_PHYSICALADDRESSES = "physicalAddresses";
 	public static final String XML_REF_EMAILS = "emails";
-	public static final String XML_REF_USERMETADATA = "userMetaData";
 	public static final String XML_REF_CONTACTORGANISATION = "contactOrganisation";
 	public static final String XML_REF_CONTACTIM = "contactIM";
 	public static final String XML_REF_CONTACTEVENT = "contactEvent";
@@ -73,8 +73,6 @@ public class Contact {
 	/**
 	 * object created from DB may need to be updated from the DB for being fully navigable
 	 */
-	@JsonIgnore
-	public boolean userMetaData_mayNeedDBRefresh = true;
 	@JsonIgnore
 	public boolean contactOrganisation_mayNeedDBRefresh = true;
 	
@@ -114,6 +112,9 @@ public class Contact {
 	/** Attribut allowing to discriminate contacts created over different divice scan on server side. */ 
 	@DatabaseField
 	protected java.util.Date scanTimeStamp;
+
+	@DatabaseField
+	protected java.lang.String userId;
 	
 
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
@@ -127,10 +128,6 @@ public class Contact {
 	@ForeignCollectionField(eager = false, foreignFieldName = "contact")
 	@JsonIgnore
 	protected ForeignCollection<ContactEmail> emails;
-
-	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
-	// @JsonManagedReference(value="contact_mobileprivacyprofilerdb_metadata")
-	protected MobilePrivacyProfilerDB_metadata userMetaData;
 
 	@DatabaseField(foreign = true) //, columnName = USER_ID_FIELD_NAME)
 	// @JsonManagedReference(value="contact_contactorganisation")
@@ -148,7 +145,7 @@ public class Contact {
 	// End of user code
 	
 	public Contact() {} // needed by ormlite
-	public Contact(java.lang.String surname, java.lang.String firstName, java.lang.String middleName, java.lang.String lastName, java.lang.String namePrefix, java.lang.String displayName, java.lang.String nameSuffix, java.lang.String nickname, java.lang.String relation, java.lang.String website, java.util.Date scanTimeStamp) {
+	public Contact(java.lang.String surname, java.lang.String firstName, java.lang.String middleName, java.lang.String lastName, java.lang.String namePrefix, java.lang.String displayName, java.lang.String nameSuffix, java.lang.String nickname, java.lang.String relation, java.lang.String website, java.util.Date scanTimeStamp, java.lang.String userId) {
 		super();
 		this.surname = surname;
 		this.firstName = firstName;
@@ -161,6 +158,7 @@ public class Contact {
 		this.relation = relation;
 		this.website = website;
 		this.scanTimeStamp = scanTimeStamp;
+		this.userId = userId;
 	} 
 
 	public int getId() {
@@ -256,6 +254,13 @@ public class Contact {
 	public void setScanTimeStamp(java.util.Date scanTimeStamp) {
 		this.scanTimeStamp = scanTimeStamp;
 	}
+	public java.lang.String getUserId() {
+		return this.userId;
+	}
+	@JsonProperty
+	public void setUserId(java.lang.String userId) {
+		this.userId = userId;
+	}
 
 	public List	<ContactPhoneNumber> getPhoneNumbers() {
 		if(null==this.phoneNumbers){return null;}
@@ -278,24 +283,6 @@ public class Contact {
 	
 
 			
-	public MobilePrivacyProfilerDB_metadata getUserMetaData() {
-		try {
-			if(userMetaData_mayNeedDBRefresh && _contextDB != null){
-				_contextDB.mobilePrivacyProfilerDB_metadataDao.refresh(this.userMetaData);
-				userMetaData_mayNeedDBRefresh = false;
-			}
-		} catch (SQLException e) {
-			log.error(e.getMessage(),e);
-		}
-		if(_contextDB==null && this.userMetaData == null){
-			log.warn("Contact may not be properly refreshed from DB (_id="+_id+")");
-		}
-		return this.userMetaData;
-	}
-	@JsonProperty
-	public void setUserMetaData(MobilePrivacyProfilerDB_metadata userMetaData) {
-		this.userMetaData = userMetaData;
-	}			
 	public ContactOrganisation getContactOrganisation() {
 		try {
 			if(contactOrganisation_mayNeedDBRefresh && _contextDB != null){
@@ -393,6 +380,11 @@ public class Contact {
     	sb.append("=\"");
 		sb.append(this.scanTimeStamp);
     	sb.append("\" ");
+		sb.append(" ");
+    	sb.append(XML_ATT_USERID);
+    	sb.append("=\"");
+		sb.append(StringEscapeUtils.escapeXml(this.userId));
+    	sb.append("\" ");
     	sb.append(">");
 
 
@@ -417,11 +409,6 @@ public class Contact {
 	    	}
 		}
 		sb.append("</"+XML_REF_EMAILS+">");		
-		if(this.userMetaData!= null){
-			sb.append("\n"+indent+"\t<"+XML_REF_USERMETADATA+">");
-			sb.append(this.userMetaData.getId());
-	    	sb.append("</"+XML_REF_USERMETADATA+">");
-		}
 		if(this.contactOrganisation!= null){
 			sb.append("\n"+indent+"\t<"+XML_REF_CONTACTORGANISATION+">");
 			sb.append(this.contactOrganisation.getId());

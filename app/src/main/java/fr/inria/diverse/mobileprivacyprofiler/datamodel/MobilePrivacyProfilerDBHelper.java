@@ -199,7 +199,8 @@ public class MobilePrivacyProfilerDBHelper {
 	 */
 	public Cell queryCellByCellId(int cellId){
 		//Log.d(TAG,"queryCellByCellId with parameter : "+ cellId);
-		Cell queryCell = new Cell(cellId);
+		Cell queryCell = new Cell();
+		queryCell.setCellId(cellId);
 		Log.d(TAG,"queryCellByCellId with "+queryCell.getCellId()+" as cellId");
 		try {
 			List<Cell> queryOutput = this.cellDao.queryForMatching(queryCell);

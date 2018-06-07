@@ -50,7 +50,6 @@ public class Test {
         ApplicationHistory a = new ApplicationHistory();
         a.setAppName("appName (a)");
         a.setPackageName("packageName (a)");
-        a.setUserMetaData(metadata);
         //adding it to the db
         getDBHelper(context).getApplicationHistoryDao().create(a);
 
