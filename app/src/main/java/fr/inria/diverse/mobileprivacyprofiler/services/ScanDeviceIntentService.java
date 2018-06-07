@@ -860,14 +860,16 @@ public class ScanDeviceIntentService extends IntentService {
         String queryContactColumnArr[] = {ContactsContract.RawContacts._ID};
         // Query raw_contacts table and return raw_contacts table _id.
         Cursor rawContactCursor = contentResolver.query(rawContactUri,queryContactColumnArr, null, null, null);
-        if(rawContactCursor!=null)
-        {
+        if(rawContactCursor!=null) {
             rawContactCursor.moveToFirst();
-            do{
-                int idColumnIndex = rawContactCursor.getColumnIndex(ContactsContract.RawContacts._ID);
-                int rawContactsId = rawContactCursor.getInt(idColumnIndex);
-                rawContactIdList.add(new Integer(rawContactsId));
-            }while(rawContactCursor.moveToNext());
+            if(0!=rawContactCursor.getCount()){
+                do {
+                    int idColumnIndex = rawContactCursor.getColumnIndex(ContactsContract.RawContacts._ID);
+                    int rawContactsId = rawContactCursor.getInt(idColumnIndex);
+                    rawContactIdList.add(new Integer(rawContactsId));
+
+                } while (rawContactCursor.moveToNext());
+            }
         }
 
         rawContactCursor.close();
