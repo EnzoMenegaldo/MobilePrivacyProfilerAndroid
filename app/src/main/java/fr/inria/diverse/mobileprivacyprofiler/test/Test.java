@@ -35,10 +35,14 @@ public class Test {
     public void mainTest(Context context) {
         Log.d(TAG,"-----> Let's go testing!  :  <-----");
 
-        List<String> map =new ArrayList<String>();
-        map.add("A");
-        map.add("B");
-        Log.d("+++++++++"+TAG,map.toString());
+        String parseDummy = "[{Object A{,}}, {[{,}],ObjectB et b}, { hébhéObj@ctC}, {ObjectD}, {ObjectE}]";
+        List<String> parseOutput = parser(parseDummy);
+        Log.d(TAG,"+++++++++\n"+parseOutput.toString()+" same as input? : "+parseDummy.equals(parseOutput.toString()) +"\n"
+                +parseOutput.get(0)+ "\n"
+                +parseOutput.get(1)+"\n"
+                +parseOutput.get(2)+"\n"
+                +parseOutput.get(3)+"\n"
+                +parseOutput.get(4)+"\n");
 
         MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
 
@@ -87,33 +91,34 @@ public class Test {
             */
 
             String jsonFunctionOutPut = serialize("=",appUseStatFromBase.get(0));
-            ApplicationUsageStats appUseOutput =(ApplicationUsageStats) deserialize("=",jsonFunctionOutPut,ApplicationUsageStats.class);
+            ApplicationUsageStats appUseOutput =(ApplicationUsageStats) deserialize(jsonFunctionOutPut,ApplicationUsageStats.class);
             Log.d(TAG,"Deserialized json: "+appUseOutput.toString());
             String jsonFunctionSecondOutput = serialize("=",appUseOutput);
             Log.d(TAG,"\n"
                     +"Json is stable : "+jsonFunctionOutPut.equals(jsonFunctionSecondOutput)
                     +"\nObjects are equals : "+appUseStatFromBase.get(0).equals(appUseOutput));
 
-            /*******************************************************************************
+            /***************************************************************************************
              *Convert ApplicationHistory to Json deserialize then reserialize before comparing Json*
-             ********************************************************************************
+             ***************************************************************************************
              */
 
             String jsonOutPutFunction = serialize("*",appHist);
-            ApplicationHistory appHistOutput =(ApplicationHistory) deserialize("*",jsonOutPutFunction,ApplicationHistory.class);
+            ApplicationHistory appHistOutput =(ApplicationHistory) deserialize(jsonOutPutFunction,ApplicationHistory.class);
             Log.d(TAG,"Deserialized json: "+appHistOutput.toString());
             String jsonSecondOutputFunction = serialize("*",appHistOutput);
             Log.d(TAG,"\n"
                     +"Json is stable : "+jsonOutPutFunction.equals(jsonSecondOutputFunction)
                     +"\nObjects are equals : "+appHist.equals(appHistOutput));
         }//end if appList!=null
-            /*******************************************************************************
+
+            /*****************************************************************************
              *Convert metadata to Json deserialize then reserialize before comparing Json*
-             ********************************************************************************
+             *****************************************************************************
              */
 
             String jsonMetadataOutPut = serialize("~",metadata);
-            MobilePrivacyProfilerDB_metadata metadataOutput =(MobilePrivacyProfilerDB_metadata) deserialize("~",jsonMetadataOutPut,MobilePrivacyProfilerDB_metadata.class);
+            MobilePrivacyProfilerDB_metadata metadataOutput =(MobilePrivacyProfilerDB_metadata) deserialize(jsonMetadataOutPut,MobilePrivacyProfilerDB_metadata.class);
             Log.d(TAG,"Deserialized json: "+metadata.toString());
             String jsonSecondMetadataOutput = serialize("~",metadataOutput);
             Log.d(TAG,"\n"
@@ -121,12 +126,10 @@ public class Test {
                     +"\nObjects are equals : "+metadata.equals(metadataOutput));
 
 
-        /**
-         *
-         *
-         *
-         **/
-
+        /*********************************************************
+         *Test of de/serialisation of an List<ApplicationHistory>*
+         *********************************************************
+         */
         //querying it from db
         List<ApplicationHistory> appHistList = null;
         appHistList = getDBHelper(context).getApplicationHistoryDao().queryForAll();
@@ -135,12 +138,17 @@ public class Test {
         //serialize the list
         String outPut = serialize("-",appHistList);
         //deserialize the list
-        List<ApplicationHistory> appHistListOutPut =  deserializeList(outPut,ApplicationHistory.class);
-        String secondOutPut = serialize("-",appHistListOutPut);
-        Log.d(TAG,"\n"
-                +"Json is stable : "+outPut.equals(secondOutPut)
-                +"\nObjects are equals : "+appHistList.equals(appHistListOutPut));
+        List<String> AppHistJsonList = parser(outPut);
+        List<ApplicationHistory> appHistListOutPut = new ArrayList<>();
+        for(String json : AppHistJsonList) {
+            ApplicationHistory app =(ApplicationHistory) deserialize(json, ApplicationHistory.class);
+            appHistListOutPut.add(app);
+        }
 
+        for(ApplicationHistory app :appHistListOutPut) {
+            Log.d(TAG, app.toString()+"");
+        }
+        Log.d(TAG, ""+appHistListOutPut.size());
             /*
             //translation of appUsageStats into Json
             ObjectMapper mapperMetadata = new ObjectMapper();
@@ -214,6 +222,11 @@ public class Test {
 
     }//end main
 
+    /**
+     * @param aroS (parameter used for logCat tag
+     * @param object
+     * @return a json String from your object
+     */
     private String serialize (String aroS,Object object) {
         //translation of object into Json
         ObjectMapper mapper = new ObjectMapper();
@@ -226,7 +239,14 @@ public class Test {
     return jsonObjectOutput;
     }
 
-    private Object deserialize (String aroS,String jsonArg,Class deserialisationClass) {
+    /**
+     * Use Jackson to deserialize a single object of deserialisationClass Type
+     * @param jsonArg
+     * @param deserialisationClass
+     * @return a single Object you need to cast to deserialisationClass Type
+     */
+
+    private Object deserialize (String jsonArg,Class deserialisationClass) {
         // Convert JSON string to single Object
         ObjectMapper mapper = new ObjectMapper();
         Object deserializedObject = null;
@@ -240,7 +260,8 @@ public class Test {
     return deserializedObject;
     }
 
-    private List deserializeList (String jsonArg,Class deserialisationClass) {
+    // unsupported operation from jackson-databind
+   /* private List deserializeList (String jsonArg,Class deserialisationClass) {
         // Convert JSON string to single Object
         ObjectMapper mapper = new ObjectMapper();
         ArrayList list = new ArrayList();
@@ -252,22 +273,77 @@ public class Test {
         Log.d(TAG, "Deserialized json: " + list.toString());
 
         return list;
-    }
-/*
-    private List<String> parser(String json){
+    }*/
 
-        int lenght;
+    /**
+     * take in a single json String to parse it into a List<String>
+     * @param json
+     * @return a List<String>
+     */
+    public List<String> parser(String json){
+
+        int length;
+        int parseCounter;
         int hookCount=0;
         int parenthesisCount=0;
 
-        lenght = json.length();
-        List<String> result = new;
+        length = json.length();
+        List<String> result = new ArrayList<>();
 
+        StringBuffer stringBuffer = new StringBuffer();
+        for(parseCounter = 0;parseCounter<length;parseCounter++) {
+            char testedCar = json.charAt(parseCounter);
 
+            switch(testedCar) {
+                case '['    :
+                    if(0!=hookCount){
+                        stringBuffer.append(testedCar);
+                    }
+                    hookCount++;
+                break;
 
-        return null;
+                case '{'    :
+                    parenthesisCount++;
+                    stringBuffer.append(testedCar);
+                break;
+
+                case '}'    :
+                    parenthesisCount--;
+                    stringBuffer.append(testedCar);
+                break;
+
+                case ']'    :
+                    hookCount--;
+                    if(0==hookCount){
+                        result.add(stringBuffer.toString());
+                        stringBuffer= new StringBuffer();
+                    }
+                    else{
+                        stringBuffer.append(testedCar);
+                    }
+                break;
+
+                case ','    :
+                    if(0==parenthesisCount){
+                        result.add(stringBuffer.toString());
+                        stringBuffer= new StringBuffer();
+                    }else{ stringBuffer.append(testedCar);}
+                break;
+
+                case ' '    :
+                    if(0!=parenthesisCount){
+                        stringBuffer.append(testedCar);
+                    }
+                break;
+
+                default     :       stringBuffer.append(testedCar);
+            }//end switch
+
+        }//end for
+
+        return result;
     }
-*/
+
     private OrmLiteDBHelper getDBHelper(Context context){
         if(dbHelper == null){
             dbHelper = OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);

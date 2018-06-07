@@ -3,6 +3,7 @@ package fr.inria.diverse.mobileprivacyprofiler.rest;
 import android.content.Context;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -20,7 +21,7 @@ public class MobilePrivacyRestClient {
 
     private static final String TAG = MobilePrivacyRestClient.class.getSimpleName();
     private volatile OrmLiteDBHelper dbHelper;
-    private String serverUrl = "server/app/URL";
+    private String serverUrl = "http://131.254.18.198:4567";
 
     /**
      * Class constructor
@@ -38,61 +39,37 @@ public class MobilePrivacyRestClient {
 
     /**
      * Export the local DB to the server
-     * @return true if no problems occurred during operation
+     * @return
      */
-    public boolean exportDB(Context context) throws SQLException {
-        boolean noExecProblem = true;
-        boolean tempResponse = false;
+    public void exportDB(Context context) throws SQLException {
 
-        tempResponse=exportApplicationHistory(context);
-        noExecProblem=noExecProblemChecker(noExecProblem,tempResponse);
+        exportApplicationHistory(context);
 
         //TODO
         //other tables export
 
-        if(noExecProblem){ Log.d(TAG, "exportDB: export ended without problem");}
-        else{Log.d(TAG, "exportDB: export encountered a problem");}
-        return noExecProblem;
     }
 
     /**
      *
-     * @return true if the request answer is conform
      */
-    private boolean exportApplicationHistory(Context context) throws SQLException {//TODO
+    private void exportApplicationHistory(Context context) throws SQLException {//TODO
         //query all ApplicationHistory entries
-        List<ApplicationHistory> appHistToExport= getDBHelper(context).getMobilePrivacyProfilerDBHelper().getAllApplicationHistory();
+        List<ApplicationHistory> appHistToExport= getDBHelper(context).getApplicationHistoryDao().queryForAll();
         //translation of the collection into Json
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonList = null;
-        try {
-            jsonList = mapper.writeValueAsString(appHistToExport);
-        } catch (Exception jsonProcessingException) {
-            jsonProcessingException.printStackTrace();
-        }
+        String postData = serialize(appHistToExport);
+        //execute the export to the server
+        executePostRequest(this.serverUrl,"/ApplicationHistory",postData);
 
-        try {
-            Map<String, String> postData = new HashMap<>();
-            postData.put("appHistList", jsonList);
-            HttpPostAsyncTask task = new HttpPostAsyncTask(postData);
-            task.execute(serverUrl + "/ApplicationHistory");
-        } catch (Exception e) {
-            e.printStackTrace();return false;
-        }
 
-        return  true;
     }
 
 
-
-    /**
-     * get de general token and the last operation token to update the general token
-     * @param general
-     * @param income
-     * @return true if general&income
-     */
-    private boolean noExecProblemChecker(boolean general,boolean income){
-        return general&&income;
+    private void executePostRequest(String serverUrl,String apiPath,String postData){
+        try {
+            HttpPostAsyncTask task = new HttpPostAsyncTask(postData);
+            task.execute( serverUrl+ apiPath);
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     /**
@@ -105,6 +82,22 @@ public class MobilePrivacyRestClient {
             dbHelper = OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);
         }
         return dbHelper;
+    }
+
+    /**
+     * @param object
+     * @return a json String from your object
+     */
+    private String serialize (Object object) {
+        //translation of object into Json
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonObjectOutput = "";
+        try {
+            jsonObjectOutput = mapper.writeValueAsString(object);
+            Log.d(TAG, "serialized : "+object.getClass().getSimpleName());
+
+        } catch (JsonProcessingException e) {e.printStackTrace();}
+        return jsonObjectOutput;
     }
 
 }

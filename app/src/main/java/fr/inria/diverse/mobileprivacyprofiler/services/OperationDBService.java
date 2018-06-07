@@ -3,15 +3,14 @@ package fr.inria.diverse.mobileprivacyprofiler.services;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
-import android.provider.Telephony;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
@@ -47,10 +46,10 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.WifiAccessPoint;
  *
  * helper methods.
  */
-public class ResetDBService extends IntentService {
+public class OperationDBService extends IntentService {
 
 
-    private static final String TAG = ResetDBService.class.getSimpleName();
+    private static final String TAG = OperationDBService.class.getSimpleName();
     private volatile OrmLiteDBHelper dbHelper;
 
 
@@ -63,8 +62,8 @@ public class ResetDBService extends IntentService {
     private static final String EXTRA_PARAM1 = "fr.inria.diverse.mobileprivacyprofiler.services.extra.PARAM1";
     private static final String EXTRA_PARAM2 = "fr.inria.diverse.mobileprivacyprofiler.services.extra.PARAM2";
 
-    public ResetDBService() {
-        super("ResetDBService");
+    public OperationDBService() {
+        super("OperationDBService");
     }
 
     /**
@@ -74,7 +73,7 @@ public class ResetDBService extends IntentService {
      * @see IntentService
      */
     public static void startActionResetDB(Context context) {
-        Intent intent = new Intent(context, ResetDBService.class);
+        Intent intent = new Intent(context, OperationDBService.class);
         intent.setAction(ACTION_RESET_DB);
         context.startService(intent);
     }
@@ -87,7 +86,7 @@ public class ResetDBService extends IntentService {
      */
     // TODO: Customize helper method
     public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ResetDBService.class);
+        Intent intent = new Intent(context, OperationDBService.class);
         intent.setAction(ACTION_BAZ);
         intent.putExtra(EXTRA_PARAM1, param1);
         intent.putExtra(EXTRA_PARAM2, param2);

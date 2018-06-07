@@ -98,7 +98,7 @@
             tools:node="remove" />
 
         <service
-            android:name=".services.ResetDBService"
+            android:name=".services.OperationDBService"
             android:enabled="true"
             android:exported="true" />
         <!-- End of user code-->

@@ -22,12 +22,12 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
     private static final String TAG = HttpPostAsyncTask.class.getSimpleName();
     private String authString ="someAuthString";
     // This is the JSON body of the post
-    JSONObject postData;
+    String postData;
 
     // This is a constructor that allows you to pass in the JSON body
-    public HttpPostAsyncTask(Map<String, String> postData) {
+    public HttpPostAsyncTask(String postData) {
         if (postData != null) {
-            this.postData = new JSONObject(postData);
+            this.postData = postData;
         }
     }
 
@@ -57,18 +57,18 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
             // Send the post body
             if (this.postData != null) {
                 OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-                writer.write(postData.toString());
+                writer.write(postData);
                 writer.flush();
             }
 
             int statusCode = urlConnection.getResponseCode();
 
-            if (statusCode ==  200) {
+            if (statusCode ==  201) {
 
                 InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
 
                 String response = convertInputStreamToString(inputStream);
-
+                Log.d(TAG, response);
                 // From here you can convert the string to JSON with whatever JSON parser you like to use
 
                 // After converting the string to JSON, I call my custom callback. You can follow this process too, or you can implement the onPostExecute(Result) method

@@ -14,6 +14,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 //End of user code
 /**
  * Context class used to simplify the access to the different DAOs of the application
@@ -267,14 +268,14 @@ public class MobilePrivacyProfilerDBHelper {
 			metadata = it.get(0);
 		} else {
 			metadata = new MobilePrivacyProfilerDB_metadata();
-
+			metadata.setUserId(UUID.randomUUID().toString());
 				this.mobilePrivacyProfilerDB_metadataDao.create(metadata);
 		}
         } catch (SQLException e) { Log.e(TAG,"error while getting MobilePrivacyProfilerDB_metadata", e);}
 
 		return metadata;
 	}
-
+	
 	/**
 	 * Get a list of all entries in ApplicationHistory
 	 * @return List<ApplicationHistory>

@@ -18,29 +18,21 @@ import android.view.MenuItem;
 import android.preference.PreferenceManager;
 //Start of user code additional imports Home_CustomViewActivity
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
-import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
 import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
-import fr.inria.diverse.mobileprivacyprofiler.services.ResetDBService;
-import android.app.Activity;
+import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
+
 import android.app.AppOpsManager;
 import android.content.Context;
 
-import android.util.Log;
-
 import android.view.View;
 
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -103,7 +95,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
     public void onClickBtnResetDB (View view){
         showToast( this.getString(R.string.reset_db_launch_toast));
-        ResetDBService.startActionResetDB(this);
+        OperationDBService.startActionResetDB(this);
     }
 
     @Override
