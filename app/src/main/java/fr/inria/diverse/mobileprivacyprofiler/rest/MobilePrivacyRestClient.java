@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,10 @@ public class MobilePrivacyRestClient {
      * @return
      */
     public void exportDB(Context context) throws SQLException {
+
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        metadata.setLastTransmissionDate(new Date());
+        getDBHelper(context).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
         exportMetadata(context);
 
@@ -135,6 +140,7 @@ public class MobilePrivacyRestClient {
         if(null != toExport && !toExport.isEmpty()) {
             //translation of the collection into Json
             String postData = serialize(toExport);
+            Log.d(TAG,postData);
             //execute the export to the server
             executePostRequest(this.serverUrl,"/ApplicationUsageStats",postData);
         }

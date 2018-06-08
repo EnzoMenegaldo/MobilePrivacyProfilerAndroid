@@ -850,9 +850,12 @@ public class ScanDeviceIntentService extends IntentService {
         ContentResolver contentResolver = getContentResolver();
 
         //update last ContactScan and flushing previous contact set
-        Date scanTimeStamp = new Date();
         getDBHelper().getMobilePrivacyProfilerDBHelper().flushContactDataSet();
-        getDeviceDBMetadata().setLastContactScan(scanTimeStamp);
+
+        MobilePrivacyProfilerDB_metadata metadata = getDeviceDBMetadata();
+        Date scanTimeStamp = new Date();
+        metadata.setLastContactScan(scanTimeStamp);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
         // Row contacts content uri( access raw_contacts table. ).
         Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI;

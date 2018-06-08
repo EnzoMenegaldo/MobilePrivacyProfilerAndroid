@@ -44,12 +44,13 @@ public class Test {
                 +parseOutput.get(3)+"\n"
                 +parseOutput.get(4)+"\n");
 
-        MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = getDeviceDBMetadata(context);
 
         //creating an ApplicationHistory
         ApplicationHistory a = new ApplicationHistory();
         a.setAppName("appName (a)");
         a.setPackageName("packageName (a)");
+        a.setUserId(metadata.getUserId());
         //adding it to the db
         getDBHelper(context).getApplicationHistoryDao().create(a);
 
@@ -67,6 +68,7 @@ public class Test {
             appUseStatsInitial.setLastTimeUsed("lastTimeUsed");
             appUseStatsInitial.setRequestedInterval(0);
             appUseStatsInitial.setTotalTimeInForeground(111111);
+            appUseStatsInitial.setUserId(metadata.getUserId());
             //adding it to the db
             getDBHelper(context).getApplicationUsageStatsDao().create(appUseStatsInitial);
 
@@ -349,4 +351,8 @@ public class Test {
         }
         return dbHelper;
     }
+
+    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(Context context){
+        return getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
+
 }//end class
