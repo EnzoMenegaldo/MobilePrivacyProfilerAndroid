@@ -17,6 +17,8 @@ import android.view.MenuItem;
 
 import android.preference.PreferenceManager;
 //Start of user code additional imports Home_CustomViewActivity
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;

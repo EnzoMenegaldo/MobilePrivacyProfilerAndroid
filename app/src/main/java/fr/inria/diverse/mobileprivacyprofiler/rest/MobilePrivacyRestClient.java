@@ -9,9 +9,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
@@ -498,7 +496,7 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportApplicationHistory(Context context) throws SQLException {//TODO
+    private void exportApplicationHistory(Context context) throws SQLException {
         //query all ApplicationHistory entries
         List<ApplicationHistory> toExport = getDBHelper(context).getApplicationHistoryDao().queryForAll();
         if (null != toExport && !toExport.isEmpty()) {
