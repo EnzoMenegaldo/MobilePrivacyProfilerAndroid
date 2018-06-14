@@ -136,6 +136,8 @@
       <dataAttributes name="lacTac" type="//@dataModel/@dataClasses.25"/>
       <dataAttributes name="type" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="Mcc" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="Mnc" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="CdmaCellData">
       <dataReferences name="identity" lowerbound="1" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.16"/>

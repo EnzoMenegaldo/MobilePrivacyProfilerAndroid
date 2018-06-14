@@ -524,6 +524,8 @@ public class ScanDeviceIntentService extends IntentService {
         Integer longitude = null;
         Integer latitude = null;
         Integer lacTac = null;
+        String mcc = null;
+        String mnc = null;
         Integer strength = 0;
 
         boolean isCell = false;
@@ -544,6 +546,8 @@ public class ScanDeviceIntentService extends IntentService {
                 cellType = "Gsm";
                 cellId = cell.getCellIdentity().getCid();
                 lacTac = cell.getCellIdentity().getLac();
+                mcc = ""+cell.getCellIdentity().getMcc();
+                mnc = ""+cell.getCellIdentity().getMnc();
                 strength = cell.getCellSignalStrength().getDbm();
             }
             else if (cellInfo instanceof CellInfoLte) {
@@ -552,6 +556,8 @@ public class ScanDeviceIntentService extends IntentService {
                 cellType = "Lte";
                 cellId = cell.getCellIdentity().getCi();
                 lacTac = cell.getCellIdentity().getTac();
+                mcc = ""+cell.getCellIdentity().getMcc();
+                mnc = ""+cell.getCellIdentity().getMnc();
                 strength = cell.getCellSignalStrength().getDbm();
             }
             else if (cellInfo instanceof CellInfoWcdma) {
@@ -560,6 +566,8 @@ public class ScanDeviceIntentService extends IntentService {
                 cellType = "Wcdma";
                 cellId = cell.getCellIdentity().getCid();
                 lacTac = cell.getCellIdentity().getLac();
+                mcc = ""+cell.getCellIdentity().getMcc();
+                mnc = ""+cell.getCellIdentity().getMnc();
                 strength = cell.getCellSignalStrength().getDbm();
                 Log.d(TAG,cellType+" : Cid "+cellId+" : Lac "+lacTac+" : Mcc "+cell.getCellIdentity().getMcc()+" : Mnc "+cell.getCellIdentity().getMnc());
             }
@@ -587,6 +595,8 @@ public class ScanDeviceIntentService extends IntentService {
                         otherCell.setLacTac(lacTac);
                         otherCell.setType(cellType);
                         otherCell.setIdentity(newCell);
+                        otherCell.setMcc(mcc);
+                        otherCell.setMnc(mnc);
                         otherCell.setUserId(getDeviceDBMetadata().getUserId());
                         getDBHelper().getOtherCellDataDao().create(otherCell);
                     }

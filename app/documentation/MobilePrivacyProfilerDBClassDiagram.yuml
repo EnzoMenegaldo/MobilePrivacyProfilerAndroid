@@ -15,7 +15,7 @@
 [CalendarEvent|EventLabel : String;startDate : String;endDate : String;place : String;participants : LongString;eventId : Long;userId : String]		
 [PhoneCallLog|phoneNumber : String;date : Date;duration : Long;callType : String;userId : String]		
 [Cell|cellId : Integer;userId : String]		
-[OtherCellData|lacTac : Integer;type : String;userId : String]		
+[OtherCellData|lacTac : Integer;type : String;userId : String;Mcc : String;Mnc : String]		
 [CdmaCellData|longitude : Integer;latitude : Integer;userId : String]		
 [NeighboringCellHistory|date : Date;strength : Integer;userId : String]		
 [BluetoothDevice|mac : String;name : String;type : Integer;userId : String]		

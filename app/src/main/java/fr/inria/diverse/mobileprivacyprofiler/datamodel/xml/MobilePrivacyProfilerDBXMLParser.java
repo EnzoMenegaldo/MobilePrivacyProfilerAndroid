@@ -336,6 +336,10 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_OTHERCELLDATA_TYPE = "TYPE";
 	public static final String DATAATT_OTHERCELLDATA_userId = "userId";
 	public static final String DATAATT_OTHERCELLDATA_USERID = "USERID";
+	public static final String DATAATT_OTHERCELLDATA_Mcc = "Mcc";
+	public static final String DATAATT_OTHERCELLDATA_MCC = "MCC";
+	public static final String DATAATT_OTHERCELLDATA_Mnc = "Mnc";
+	public static final String DATAATT_OTHERCELLDATA_MNC = "MNC";
 	public static final String DATAREF_OTHERCELLDATA_identity = "identity";
 	public static final String DATAATT_CDMACELLDATA_longitude = "longitude";
 	public static final String DATAATT_CDMACELLDATA_LONGITUDE = "LONGITUDE";
@@ -1534,6 +1538,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 		// TODO lacTac = parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_LACTAC);
 		result.setType(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_type));
 		result.setUserId(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_userId));
+		result.setMcc(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_Mcc));
+		result.setMnc(parser.getAttributeValue(null, DATAATT_OTHERCELLDATA_Mnc));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
