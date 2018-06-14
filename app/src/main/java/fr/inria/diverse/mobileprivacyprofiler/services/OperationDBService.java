@@ -10,7 +10,6 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
@@ -37,7 +36,6 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.PhoneCallLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.WebHistory;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.WifiAccessPoint;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -137,7 +135,6 @@ public class OperationDBService extends IntentService {
         list.add(PhoneCallLog.class);
         list.add(SMS.class);
         list.add(WebHistory.class);
-        list.add(WifiAccessPoint.class);
 
         for(Class _class : list){
         resetTable(_class);
