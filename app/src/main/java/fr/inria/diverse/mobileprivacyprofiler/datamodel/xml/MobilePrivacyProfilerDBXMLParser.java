@@ -393,12 +393,14 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_BATTERYUSAGE_PLUGTYPE = "PLUGTYPE";
 	public static final String DATAATT_BATTERYUSAGE_userId = "userId";
 	public static final String DATAATT_BATTERYUSAGE_USERID = "USERID";
-	public static final String DATAATT_WEBHISTORY_url = "url";
-	public static final String DATAATT_WEBHISTORY_URL = "URL";
 	public static final String DATAATT_WEBHISTORY_date = "date";
 	public static final String DATAATT_WEBHISTORY_DATE = "DATE";
 	public static final String DATAATT_WEBHISTORY_application = "application";
 	public static final String DATAATT_WEBHISTORY_APPLICATION = "APPLICATION";
+	public static final String DATAATT_WEBHISTORY_hostname = "hostname";
+	public static final String DATAATT_WEBHISTORY_HOSTNAME = "HOSTNAME";
+	public static final String DATAATT_WEBHISTORY_ipDestination = "ipDestination";
+	public static final String DATAATT_WEBHISTORY_IPDESTINATION = "IPDESTINATION";
 	public static final String DATAATT_WEBHISTORY_userId = "userId";
 	public static final String DATAATT_WEBHISTORY_USERID = "USERID";
 
@@ -1731,9 +1733,10 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2WebHistory.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setUrl(parser.getAttributeValue(null, DATAATT_WEBHISTORY_url));
-		result.setDate(parser.getAttributeValue(null, DATAATT_WEBHISTORY_date));
+		// TODO date = parser.getAttributeValue(null, DATAATT_WEBHISTORY_DATE);
 		result.setApplication(parser.getAttributeValue(null, DATAATT_WEBHISTORY_application));
+		result.setHostname(parser.getAttributeValue(null, DATAATT_WEBHISTORY_hostname));
+		result.setIpDestination(parser.getAttributeValue(null, DATAATT_WEBHISTORY_ipDestination));
 		result.setUserId(parser.getAttributeValue(null, DATAATT_WEBHISTORY_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {

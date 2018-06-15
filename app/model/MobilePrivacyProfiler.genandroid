@@ -180,9 +180,10 @@
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="WebHistory">
-      <dataAttributes name="url" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="date" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="date" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="application" documentation="application that requested the url" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="hostname" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="ipDestination" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:NativeDataClass" name="Integer" instanceClassName="int"/>
