@@ -17,6 +17,10 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -57,6 +61,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactIM;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactOrganisation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhoneNumber;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhysicalAddress;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.Geolocation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
@@ -297,7 +302,7 @@ public class ScanDeviceIntentService extends IntentService {
             ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByPackageName(packageInfo.packageName);
             if (applicationHistory == null) {
                 // create
-                applicationHistory = new ApplicationHistory(appName, packageInfo.packageName,getDeviceDBMetadata().getUserId());
+                applicationHistory = new ApplicationHistory(appName, packageInfo.packageName, getDeviceDBMetadata().getUserId());
                 getDBHelper().getApplicationHistoryDao().create(applicationHistory);
             } else {
                 // update
@@ -436,7 +441,7 @@ public class ScanDeviceIntentService extends IntentService {
         //new entry in DB
         Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
 
-        BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType,getDeviceDBMetadata().getUserId());
+        BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType, getDeviceDBMetadata().getUserId());
         getDBHelper().getBatteryUsageDao().create(batState);
     }
 
@@ -481,12 +486,16 @@ public class ScanDeviceIntentService extends IntentService {
             while (smsQueryOutput.moveToNext()) {
                 String date = smsQueryOutput.getString(3);
                 String phoneNumber = smsQueryOutput.getString(1);
-                String type="";
-                if("content://sms/inbox"==source){ type = "inbox";}
-                if("content://sms/sent"==source){ type = "sent";}
-                SMS sms = new SMS(date, phoneNumber, type,getDeviceDBMetadata().getUserId());
+                String type = "";
+                if ("content://sms/inbox" == source) {
+                    type = "inbox";
+                }
+                if ("content://sms/sent" == source) {
+                    type = "sent";
+                }
+                SMS sms = new SMS(date, phoneNumber, type, getDeviceDBMetadata().getUserId());
                 getDBHelper().getSMSDao().create(sms);
-                Log.d(TAG,"date : "+date+",phone number : "+phoneNumber+",type :"+type/*+",body : "+smsQueryOutput.getString(5)*/);
+                Log.d(TAG, "date : " + date + ",phone number : " + phoneNumber + ",type :" + type/*+",body : "+smsQueryOutput.getString(5)*/);
             }
             smsQueryOutput.close();
         }
@@ -539,48 +548,45 @@ public class ScanDeviceIntentService extends IntentService {
                 longitude = cell.getCellIdentity().getLongitude();
                 latitude = cell.getCellIdentity().getLatitude();
                 strength = cell.getCellSignalStrength().getDbm();
-            }
-            else if (cellInfo instanceof CellInfoGsm) {
+            } else if (cellInfo instanceof CellInfoGsm) {
                 isCell = true;
                 CellInfoGsm cell = (CellInfoGsm) cellInfo;
                 cellType = "Gsm";
                 cellId = cell.getCellIdentity().getCid();
                 lacTac = cell.getCellIdentity().getLac();
-                mcc = ""+cell.getCellIdentity().getMcc();
-                mnc = ""+cell.getCellIdentity().getMnc();
+                mcc = "" + cell.getCellIdentity().getMcc();
+                mnc = "" + cell.getCellIdentity().getMnc();
                 strength = cell.getCellSignalStrength().getDbm();
-            }
-            else if (cellInfo instanceof CellInfoLte) {
+            } else if (cellInfo instanceof CellInfoLte) {
                 isCell = true;
                 CellInfoLte cell = (CellInfoLte) cellInfo;
                 cellType = "Lte";
                 cellId = cell.getCellIdentity().getCi();
                 lacTac = cell.getCellIdentity().getTac();
-                mcc = ""+cell.getCellIdentity().getMcc();
-                mnc = ""+cell.getCellIdentity().getMnc();
+                mcc = "" + cell.getCellIdentity().getMcc();
+                mnc = "" + cell.getCellIdentity().getMnc();
                 strength = cell.getCellSignalStrength().getDbm();
-            }
-            else if (cellInfo instanceof CellInfoWcdma) {
+            } else if (cellInfo instanceof CellInfoWcdma) {
                 isCell = true;
                 CellInfoWcdma cell = (CellInfoWcdma) cellInfo;
                 cellType = "Wcdma";
                 cellId = cell.getCellIdentity().getCid();
                 lacTac = cell.getCellIdentity().getLac();
-                mcc = ""+cell.getCellIdentity().getMcc();
-                mnc = ""+cell.getCellIdentity().getMnc();
+                mcc = "" + cell.getCellIdentity().getMcc();
+                mnc = "" + cell.getCellIdentity().getMnc();
                 strength = cell.getCellSignalStrength().getDbm();
-                Log.d(TAG,cellType+" : Cid "+cellId+" : Lac "+lacTac+" : Mcc "+cell.getCellIdentity().getMcc()+" : Mnc "+cell.getCellIdentity().getMnc());
+                Log.d(TAG, cellType + " : Cid " + cellId + " : Lac " + lacTac + " : Mcc " + cell.getCellIdentity().getMcc() + " : Mnc " + cell.getCellIdentity().getMnc());
             }
-            if(2147483647==cellId){
-                isCell=false;
-                Log.d(TAG,"Cell's data not available : Ignoring this row");
+            if (2147483647 == cellId) {
+                isCell = false;
+                Log.d(TAG, "Cell's data not available : Ignoring this row");
             }
             if (isCell) {//isCell true if the cell as been recognised and data are available (!=2147483647)
                 //Log.d(TAG,"--------> looking for cell with "+cellId+" as CellId");
                 Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
                 if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
                     Log.d(TAG, "Adding a new " + cellType + " Cell");
-                    Cell newCell = new Cell(cellId,getDeviceDBMetadata().getUserId());
+                    Cell newCell = new Cell(cellId, getDeviceDBMetadata().getUserId());
                     getDBHelper().getCellDao().create(newCell);
                     cell = newCell;
                     if ("Cdma" == cellType) {
@@ -602,7 +608,7 @@ public class ScanDeviceIntentService extends IntentService {
                     }
                 }
                 //then add the history log
-                Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString()+", LAC/TAC : "+lacTac);
+                Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString() + ", LAC/TAC : " + lacTac);
                 NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
                 neighboringCellHistory.setStrength(strength);
                 neighboringCellHistory.setDate(date);
@@ -612,7 +618,8 @@ public class ScanDeviceIntentService extends IntentService {
             }
             //reinitializing parameters :
             cellType = "";
-            date = new Date();cellId = null;
+            date = new Date();
+            cellId = null;
             longitude = null;
             latitude = null;
             lacTac = null;
@@ -628,8 +635,84 @@ public class ScanDeviceIntentService extends IntentService {
      * @param intent
      */
     private void handleActionRecordLocation(Intent intent) {
-        // TODO: Handle action RecordLocation
-        throw new UnsupportedOperationException("Not yet implemented");
+
+
+        /**
+         * Reference:
+         * https://github.com/googlemaps/android-samples/blob/master/tutorials/CurrentPlaceDetailsOnMap
+         */
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+
+            Location location = null;
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            double latitude;
+            double longitude;
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            Geolocation lastKnowLocation = getDBHelper().getMobilePrivacyProfilerDBHelper().getLastKnowLocation();
+            Boolean registerLocation = false;
+            //evaluation of registration necessity
+            if(null!=lastKnowLocation) {
+                double lastLatitude = Double.parseDouble(lastKnowLocation.getLatitude());
+                double lastLongitude = Double.parseDouble(lastKnowLocation.getLongitude());
+                if (300 < distance(latitude, lastLatitude, longitude, lastLongitude)) {
+                    registerLocation = true;
+                    Log.d(TAG,"New location detected");
+                }//end if supp 300m
+                else{Log.d(TAG,"New location too close to last location");}
+            }
+            else{
+                registerLocation = true;
+                Log.d(TAG,"First location recording");
+            }
+            // info gathering and registration
+            if(registerLocation){
+                Log.d(TAG,"Building a new Geolocation entry");
+                Geolocation geolocation = new Geolocation();
+                geolocation.setLatitude(""+latitude);
+                geolocation.setLongitude(""+longitude);
+                geolocation.setUserId(getDeviceDBMetadata().getUserId());
+                geolocation.setDate(new Date(location.getTime()));
+
+                if(location.hasAccuracy())              { geolocation.setPrecision(""+location.getAccuracy()); }
+                else                                    { geolocation.setPrecision("not available"); }
+
+                if(location.hasAltitude())              { geolocation.setAltitude(""+location.getAltitude()); }
+                else                                    { geolocation.setAltitude("not available"); }
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (location.hasVerticalAccuracy()) { geolocation.setVerticalPrecision("" + location.getVerticalAccuracyMeters()); }
+                    else                                { geolocation.setVerticalPrecision("not available"); }
+                }
+                else                                    { geolocation.setVerticalPrecision("not available"); }
+                Log.d(TAG,"Geolocation : date "+geolocation.getDate() +
+                        ", latitude "+geolocation.getLatitude() +
+                        ", longitude "+geolocation.getLongitude() +
+                        ", accuracy "+geolocation.getPrecision() +
+                        ", altitude "+geolocation.getAltitude() +
+                        ", verticalPrecision "+geolocation.getVerticalPrecision() +
+                        ", userId "+geolocation.getUserId());
+                getDBHelper().getGeolocationDao().create(geolocation);
+
+            }//end register location
+        }//end if manager
+        else{
+            Log.d(TAG, "Location Manager was not found");
+        }
     }
 
     /**
@@ -1043,7 +1126,6 @@ public class ScanDeviceIntentService extends IntentService {
                 contactDetailCursor.close();
 
                 // feeding the DB from the collected data
-                //TODO check for redundant pre add
                 try {
                     //add a new contact
                         contact.setUserId(getDeviceDBMetadata().getUserId());
@@ -1122,9 +1204,8 @@ public class ScanDeviceIntentService extends IntentService {
                 android.os.Process.myUid(), getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
     }
-    //TODO ask about the quoting
+
     /**
-     * code used from : www.dev2qa.com/how-to-get-contact-list-in-android-programmatically/
      *
      *  Return data column value by mimetype column value.
      *  Because for each mimetype there has not only one related value,
@@ -1428,6 +1509,30 @@ public class ScanDeviceIntentService extends IntentService {
             case ContactsContract.CommonDataKinds.Relation.TYPE_SPOUSE :            toReturn = "Spouse";        break;
         }//end switch
         return toReturn;
+    }
+
+    /**
+     * Calculate distance between two points in latitude and longitude taking
+     * into account height difference. If you are not interested in height
+     * difference pass 0.0. Uses Haversine method as its base.
+     *
+     * lat1, lon1 Start point lat2, lon2 End point
+     * @returns Distance in Meters
+     */
+    private double distance(double lat1, double lat2, double lon1,
+                                  double lon2) {
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        return Math.abs(distance);
     }
 
     private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){

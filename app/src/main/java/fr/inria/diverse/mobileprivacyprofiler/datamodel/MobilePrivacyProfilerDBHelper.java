@@ -3,6 +3,8 @@ package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ import java.sql.SQLException;
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
 import com.j256.ormlite.dao.CloseableIterator;
+
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -338,6 +341,24 @@ public class MobilePrivacyProfilerDBHelper {
 
 	}
 
-	//End of user code
+	/**
+	 *
+	 * @return null if no entries in the DB or the last know Geolocation from the DB
+	 */
+    public Geolocation getLastKnowLocation() {
+		Geolocation geolocationToReturn = null;
+    	this.geolocationDao.getConnectionSource();
+
+		QueryBuilder<Geolocation, Integer> queryBuilder = this.geolocationDao.queryBuilder();
+		queryBuilder.orderBy("date",false);
+		try {
+			PreparedQuery<Geolocation> preparedQuery = queryBuilder.prepare();
+			geolocationToReturn = this.geolocationDao.queryForFirst(preparedQuery);
+		} catch (SQLException e) { e.printStackTrace(); }
+
+		return geolocationToReturn;
+    }
+
+    //End of user code
 
 }

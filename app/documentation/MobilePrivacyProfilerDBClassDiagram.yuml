@@ -11,7 +11,7 @@
 [ContactEmail|email : String;role : String;userId : String]		
 [KnownWifi|ssid : String;location : String;userId : String]		
 [DetectedWifi|startDetectionDate : String;endDetectionDate : String;hasConnected : Integer;ssid : String;userId : String]		
-[Geolocation|date : String;position : String;precision : Integer;altitude : Integer;userId : String]		
+[Geolocation|date : Date;latitude : String;longitude : String;precision : String;altitude : String;verticalPrecision : String;userId : String]		
 [CalendarEvent|EventLabel : String;startDate : String;endDate : String;place : String;participants : LongString;eventId : Long;userId : String]		
 [PhoneCallLog|phoneNumber : String;date : Date;duration : Long;callType : String;userId : String]		
 [Cell|cellId : Integer;userId : String]		

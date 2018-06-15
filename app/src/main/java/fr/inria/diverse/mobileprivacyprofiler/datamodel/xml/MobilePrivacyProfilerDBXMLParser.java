@@ -291,12 +291,16 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAREF_DETECTEDWIFI_knownWifi = "knownWifi";
 	public static final String DATAATT_GEOLOCATION_date = "date";
 	public static final String DATAATT_GEOLOCATION_DATE = "DATE";
-	public static final String DATAATT_GEOLOCATION_position = "position";
-	public static final String DATAATT_GEOLOCATION_POSITION = "POSITION";
+	public static final String DATAATT_GEOLOCATION_latitude = "latitude";
+	public static final String DATAATT_GEOLOCATION_LATITUDE = "LATITUDE";
+	public static final String DATAATT_GEOLOCATION_longitude = "longitude";
+	public static final String DATAATT_GEOLOCATION_LONGITUDE = "LONGITUDE";
 	public static final String DATAATT_GEOLOCATION_precision = "precision";
 	public static final String DATAATT_GEOLOCATION_PRECISION = "PRECISION";
 	public static final String DATAATT_GEOLOCATION_altitude = "altitude";
 	public static final String DATAATT_GEOLOCATION_ALTITUDE = "ALTITUDE";
+	public static final String DATAATT_GEOLOCATION_verticalPrecision = "verticalPrecision";
+	public static final String DATAATT_GEOLOCATION_VERTICALPRECISION = "VERTICALPRECISION";
 	public static final String DATAATT_GEOLOCATION_userId = "userId";
 	public static final String DATAATT_GEOLOCATION_USERID = "USERID";
 	public static final String DATAATT_CALENDAREVENT_EventLabel = "EventLabel";
@@ -1432,10 +1436,12 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2Geolocation.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setDate(parser.getAttributeValue(null, DATAATT_GEOLOCATION_date));
-		result.setPosition(parser.getAttributeValue(null, DATAATT_GEOLOCATION_position));
-		// TODO precision = parser.getAttributeValue(null, DATAATT_GEOLOCATION_PRECISION);
-		// TODO altitude = parser.getAttributeValue(null, DATAATT_GEOLOCATION_ALTITUDE);
+		// TODO date = parser.getAttributeValue(null, DATAATT_GEOLOCATION_DATE);
+		result.setLatitude(parser.getAttributeValue(null, DATAATT_GEOLOCATION_latitude));
+		result.setLongitude(parser.getAttributeValue(null, DATAATT_GEOLOCATION_longitude));
+		result.setPrecision(parser.getAttributeValue(null, DATAATT_GEOLOCATION_precision));
+		result.setAltitude(parser.getAttributeValue(null, DATAATT_GEOLOCATION_altitude));
+		result.setVerticalPrecision(parser.getAttributeValue(null, DATAATT_GEOLOCATION_verticalPrecision));
 		result.setUserId(parser.getAttributeValue(null, DATAATT_GEOLOCATION_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {

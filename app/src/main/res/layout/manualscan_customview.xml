@@ -8,75 +8,97 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<Button
-		android:id="@+id/btnApplicationHistoryManualScan"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnApplicationHistoryManualScan"
-		android:text="@string/manualscan_customview_applicationhistorylist_btn_label" />
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
-	<Button
-		android:id="@+id/btnSMS"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnSMS"
-		android:text="@string/manualscan_customview_sms_btn_label" />
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical" >
 
-	<Button
-		android:id="@+id/btnNeihgboringCellHistory"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnNeihgboringCellHistory"
-		android:text="@string/manualscan_customview_neighboringcellhistory_btn_label" />
+			<Button
+				android:id="@+id/btnPhoneCallLog"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnPhoneCallLog"
+				android:text="@string/manualscan_customview_phonecalllog_btn_label" />
 
-	<Button
-		android:id="@+id/btnPhoneCallLog"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnPhoneCallLog"
-		android:text="@string/manualscan_customview_phonecalllog_btn_label" />
+			<Button
+				android:id="@+id/btnNeihgboringCellHistory"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnNeihgboringCellHistory"
+				android:text="@string/manualscan_customview_neighboringcellhistory_btn_label" />
 
-	<Button
-		android:id="@+id/btnAuthentification"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnAuthentification"
-		android:text="@string/manualscan_customview_identity_btn_label" />
+			<Button
+				android:id="@+id/btnSMS"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnSMS"
+				android:text="@string/manualscan_customview_sms_btn_label" />
 
-	<Button
-		android:id="@+id/btnBatteryUsage"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnBatteryUsage"
-		android:text="@string/manualscan_customview_batteryusage_btn_label" />
+			<Button
+				android:id="@+id/btnApplicationHistoryManualScan"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnApplicationHistoryManualScan"
+				android:text="@string/manualscan_customview_applicationhistorylist_btn_label" />
 
-	<Button
-		android:id="@+id/btnCalendarEvent"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnCalendarEvent"
-		android:text="@string/manualscan_customview_calendarevent_btn_label" />
+			<Button
+				android:id="@+id/btnAuthentification"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnAuthentification"
+				android:text="@string/manualscan_customview_identity_btn_label" />
 
-	<Button
-		android:id="@+id/btnAppUsageStat"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnAppUsageStat"
-		android:text="@string/manualscan_customview_appusagestat_btn_label" />
+			<Button
+				android:id="@+id/btnBatteryUsage"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnBatteryUsage"
+				android:text="@string/manualscan_customview_batteryusage_btn_label" />
 
-	<Button
-		android:id="@+id/btnContact"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnContact"
-		android:text="@string/manualscan_customview_contact_btn_label" />
+			<Button
+				android:id="@+id/btnCalendarEvent"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnCalendarEvent"
+				android:text="@string/manualscan_customview_calendarevent_btn_label" />
 
-	<Button
-		android:id="@+id/btnTest"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnTest"
-		android:text="@string/manualscan_customview_test_btn_label" />
+			<Button
+				android:id="@+id/btnAppUsageStat"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnAppUsageStat"
+				android:text="@string/manualscan_customview_appusagestat_btn_label" />
+
+			<Button
+				android:id="@+id/btnContact"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnContact"
+				android:text="@string/manualscan_customview_contact_btn_label" />
+
+            <Button
+                android:id="@+id/btnGeolocation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickBtnGeolocation"
+                android:text="@string/manualscan_customview_geolocation_btn_label" />
+
+			<Button
+				android:id="@+id/btnTest"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnTest"
+				android:text="@string/manualscan_customview_test_btn_label" />
+		</LinearLayout>
+
+
+	</ScrollView>
+
+
 
 </LinearLayout>
 <!--End of user code

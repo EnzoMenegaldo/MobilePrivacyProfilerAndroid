@@ -4,8 +4,6 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
-import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -41,6 +39,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
+
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 
 //End of user code
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>

@@ -102,10 +102,12 @@
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Geolocation">
-      <dataAttributes name="date" lowerbound="1" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="position" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="precision" documentation="precision in centimeter" type="//@dataModel/@dataClasses.25"/>
-      <dataAttributes name="altitude" documentation="altitude in meter" type="//@dataModel/@dataClasses.25"/>
+      <dataAttributes name="date" lowerbound="1" type="//@dataModel/@dataClasses.29"/>
+      <dataAttributes name="latitude" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="longitude" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="precision" documentation="precision in centimeter" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="altitude" documentation="altitude in meter" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="verticalPrecision" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="CalendarEvent">
