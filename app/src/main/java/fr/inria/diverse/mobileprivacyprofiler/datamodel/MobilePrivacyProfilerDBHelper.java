@@ -11,6 +11,9 @@ import java.sql.SQLException;
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
 import com.j256.ormlite.dao.CloseableIterator;
 
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+
 import android.util.Log;
 
 import java.util.ArrayList;

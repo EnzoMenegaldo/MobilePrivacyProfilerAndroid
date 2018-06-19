@@ -1,13 +1,6 @@
 package fr.inria.diverse.mobileprivacyprofiler.job;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
@@ -17,9 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanDeviceIntentService;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 
 /**
  * Created by dvojtise on 30/01/18.
@@ -35,8 +26,8 @@ public class ScanAppUsageJob extends Job {
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
 
-        ScanDeviceIntentService.startActionScanInstalledApplications(getContext());
-        ScanDeviceIntentService.startActionScanAppUsage(getContext());
+        ScanActivityIntentService.startActionScanInstalledApplications(getContext());
+        ScanActivityIntentService.startActionScanAppUsage(getContext());
 
         return Result.SUCCESS;
     }

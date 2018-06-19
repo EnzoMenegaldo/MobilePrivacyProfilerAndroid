@@ -2,8 +2,12 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanConnectionIntentService;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanContactIntentService;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanSocialIntentService;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -17,26 +21,9 @@ import android.view.MenuItem;
 
 //Start of user code additional imports ManualScan_CustomViewActivity
 
-import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
 import fr.inria.diverse.mobileprivacyprofiler.test.Test;
-import android.app.Activity;
-import android.app.AppOpsManager;
-import android.content.Context;
-
-import android.util.Log;
 
 import android.view.View;
-
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.evernote.android.job.JobRequest;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
-
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanDeviceIntentService;
 
 //End of user code
 public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -75,12 +62,12 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_installed_applications));
-		ScanDeviceIntentService.startActionScanInstalledApplications(this);
+		ScanActivityIntentService.startActionScanInstalledApplications(this);
 
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_month_app_usage));
-		ScanDeviceIntentService.startActionScanAppUsage(this);
+		ScanActivityIntentService.startActionScanAppUsage(this);
 /*
 		new JobRequest.Builder(ScanAppUsageJob.TAG)
 				.startNow()
@@ -97,55 +84,55 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_battery));
-		ScanDeviceIntentService.startActionScanBatteryUsage(this);
+		ScanActivityIntentService.startActionScanBatteryUsage(this);
 	}
 	public void onClickBtnSMS(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_sms));
-		ScanDeviceIntentService.startActionScanSms(this);
+		ScanSocialIntentService.startActionScanSms(this);
 	}
 	public void onClickBtnNeihgboringCellHistory(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_neighboring_cell_history));
-		ScanDeviceIntentService.startActionScanCellInfo(this);
+		ScanConnectionIntentService.startActionScanCellInfo(this);
 	}
 	public void onClickBtnPhoneCallLog(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_phone_call_log));
-		ScanDeviceIntentService.startActionScanCallHistory(this);
+		ScanSocialIntentService.startActionScanCallHistory(this);
 	}
 	public void onClickBtnAuthentification(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_authentification));
-		ScanDeviceIntentService.startActionScanAuthenticators(this);
+		ScanActivityIntentService.startActionScanAuthenticators(this);
 	}
 	public void onClickBtnCalendarEvent(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_calendar_event));
-		ScanDeviceIntentService.startActionScanCalendarEvent(this);
+		ScanSocialIntentService.startActionScanCalendarEvent(this);
 	}
 	public void onClickBtnAppUsageStat(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_app_usage_stat));
-		ScanDeviceIntentService.startActionScanAppUsage(this);
+		ScanActivityIntentService.startActionScanAppUsage(this);
 	}
 	public void onClickBtnContact(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_contacts));
-		ScanDeviceIntentService.startActionScanContacts(this);
+		ScanContactIntentService.startActionScanContacts(this);
 	}
 	public void onClickBtnGeolocation(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_geolocation));
-		ScanDeviceIntentService.startActionRecordLocation(this);
+		ScanActivityIntentService.startActionRecordLocation(this);
 	}
 	public void onClickBtnTest(View view) {
 		showToast(this.getBaseContext().getString(R.string.beginning_test_service)+

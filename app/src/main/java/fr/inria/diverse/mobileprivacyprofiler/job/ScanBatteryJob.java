@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanDeviceIntentService;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 
 /**
  * Created by gohier on 23/04/18.
@@ -26,7 +26,7 @@ public class ScanBatteryJob extends Job {
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
 
-        ScanDeviceIntentService.startActionScanBatteryUsage(getContext());
+        ScanActivityIntentService.startActionScanBatteryUsage(getContext());
 
         return Result.SUCCESS;
     }
