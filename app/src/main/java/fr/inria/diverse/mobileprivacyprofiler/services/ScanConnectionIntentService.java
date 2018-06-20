@@ -5,6 +5,12 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
+import android.net.wifi.hotspot2.PasspointConfiguration;
+import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
@@ -16,11 +22,14 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.KnownWifi;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.LogsWifi;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
@@ -41,6 +50,8 @@ public class ScanConnectionIntentService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SCAN_CELL_INFO = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_NEAR_CELL_INFO";
+    private static final String ACTION_SCAN_WIFI = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_WIFI";
+    private static final String ACTION_SCAN_BLUETOOTH = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_BLUETOOTH";
     private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.action.BAZ";
 
     // TODO: Rename parameters
@@ -64,6 +75,30 @@ public class ScanConnectionIntentService extends IntentService {
     }
 
     /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanWifi(Context context) {
+        Intent intent = new Intent(context, ScanConnectionIntentService.class);
+        intent.setAction(ACTION_SCAN_WIFI);
+        context.startService(intent);
+    }
+
+    /**
+     * Starts this service to perform action Foo with the given parameters. If
+     * the service is already performing a task this action will be queued.
+     *
+     * @see IntentService
+     */
+    public static void startActionScanBluetooth(Context context) {
+        Intent intent = new Intent(context, ScanConnectionIntentService.class);
+        intent.setAction(ACTION_SCAN_BLUETOOTH);
+        context.startService(intent);
+    }
+
+    /**
      * Starts this service to perform action Baz with the given parameters. If
      * the service is already performing a task this action will be queued.
      *
@@ -83,7 +118,11 @@ public class ScanConnectionIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_SCAN_CELL_INFO.equals(action)) {
-                handleActionScanCellInfo(intent);
+                handleActionScanCellInfo();
+            }else if (ACTION_SCAN_WIFI.equals(action)) {
+                handleActionScanWifi();
+            }else if (ACTION_SCAN_BLUETOOTH.equals(action)) {
+                handleActionScanBluetooth();
             } else if (ACTION_BAZ.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
@@ -96,7 +135,7 @@ public class ScanConnectionIntentService extends IntentService {
      * Handle action ScanCellInfo in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionScanCellInfo(Intent intent) {
+    private void handleActionScanCellInfo() {
         //set up the manager
         Log.d(TAG, "Requesting CellInfo");
 
@@ -214,6 +253,103 @@ public class ScanConnectionIntentService extends IntentService {
 
             isCell = false;
         }//end for (processing the cells in neighbouring)
+    }
+
+    /**
+     * Handle action ScanWifi in the provided background thread with the provided
+     * parameters.
+     */
+    private void handleActionScanWifi() {
+        WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+
+        List<ScanResult> scannedWifis= wifiManager.getScanResults();
+        if (null!=scannedWifis&&!scannedWifis.isEmpty()) {
+            Log.d(TAG,"Handling scanned Wifi");
+            for(ScanResult scannedWifi : scannedWifis){//every scan : record if new wifi point
+                String ssid = null;
+                String bssid = null;
+
+                ssid = scannedWifi.SSID;
+                bssid = scannedWifi.BSSID;
+
+                KnownWifi knownWifi = new KnownWifi();
+
+                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isKnownWifi(ssid,bssid)){
+
+                    knownWifi.setSsid(ssid);
+                    knownWifi.setBssid(bssid);
+                    knownWifi.setIsConfiguredWifi(0);
+                    knownWifi.setUserId(getDeviceDBMetadata().getUserId());
+
+                    Log.d(TAG," Create a new knownWifi : SSID : "+knownWifi.getSsid()+
+                            ", BSSID : "+knownWifi.getBssid()+
+                            ", isConfiguredWifi : "+knownWifi.getIsConfiguredWifi()
+                    //        +", UserId : "+knownWifi.getUserId()
+                    );
+                    getDBHelper().getKnownWifiDao().create(knownWifi);
+                }
+                else{Log.d(TAG,"KnownWifi : SSID : "+ ssid+", BSSID : "+bssid);}
+                // get the recorded wifi from the DB
+                knownWifi = getDBHelper().getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsidBssid(ssid,bssid);
+
+                //add a new detection event if not recorded yet
+                LogsWifi newLog = new LogsWifi();
+                newLog.setKnownWifi(knownWifi);
+                Date date = new Date(System.currentTimeMillis()+ (int) (scannedWifi.timestamp*0.001) - SystemClock.uptimeMillis());
+                newLog.setTimeStamp(date);
+                newLog.setUserId(getDeviceDBMetadata().getUserId());
+                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedLogWifi(knownWifi,date)) {
+                    Log.d(TAG,"Create new LogsWifi : "+knownWifi.toString()+", timeStamp : "+date.toString());
+                    getDBHelper().getLogsWifiDao().createOrUpdate(newLog);
+                }
+                else{Log.d(TAG,"Aborting addition of LogsWifi duplicate");}
+            }
+        }
+
+
+        // updating isConfiguredWifi
+        List<WifiConfiguration> configuredWifis = wifiManager.getConfiguredNetworks();
+        if(null!=configuredWifis&&!configuredWifis.isEmpty()) {
+            Log.d(TAG,"Handling configured Wifi : "+configuredWifis.size());
+            for (WifiConfiguration wifiConfiguration : configuredWifis) {
+                String ssid = null;
+
+                ssid = wifiConfiguration.SSID;
+                ssid = ssid.substring(1,ssid.length()-1);
+                List<KnownWifi> knownWifis = new ArrayList();
+                knownWifis = getDBHelper().getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsid(ssid);
+                if (null!=knownWifis) {//if unrecorded wifi
+                    for (KnownWifi knownWifi : knownWifis) {
+                        if (1!=knownWifi.getIsConfiguredWifi()) {
+                            knownWifi.setIsConfiguredWifi(1);
+                            Log.d(TAG, " Editing knownWifi : SSID : " + knownWifi.getSsid() +
+                                            ", BSSID : " + knownWifi.getBssid() +
+                                            ", isConfiguredWifi : " + knownWifi.getIsConfiguredWifi()
+                                    //        +", UserId : "+knownWifi.getUserId()
+                            );
+                            getDBHelper().getKnownWifiDao().update(knownWifi);
+                        }
+                        else{Log.d(TAG, "Up to date knownWifi : SSID : " + knownWifi.getSsid() +
+                                        ", BSSID : " + knownWifi.getBssid() +
+                                        ", isConfiguredWifi : " + knownWifi.getIsConfiguredWifi()
+                                //        +", UserId : "+knownWifi.getUserId()
+                        );}
+                    }
+                }
+            }
+        }
+        else{Log.d(TAG,"No WifiConfiguration retrieved");}
+
+
+    }
+
+    /**
+     * Handle action ScanBluetooth in the provided background thread with the provided
+     * parameters.
+     */
+    private void handleActionScanBluetooth() {
+        // TODO: Handle action ScanBluetooth
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /**

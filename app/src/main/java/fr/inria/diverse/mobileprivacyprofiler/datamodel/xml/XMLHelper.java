@@ -245,19 +245,25 @@ public class XMLHelper {
 			e.printStackTrace();
 		}
 		sb.append("\n\t</KNOWNWIFIS>\n");
-		sb.append("\n\t<DETECTEDWIFIS>");
+		sb.append("\n\t<LOGSWIFIS>");
 		try {	
-			List<DetectedWifi> detectedWifis = dbContext.detectedWifiDao.queryForAll();
-			for(DetectedWifi  detectedWifi : detectedWifis){
+			List<LogsWifi> logsWifis = dbContext.logsWifiDao.queryForAll();
+			for(LogsWifi  logsWifi : logsWifis){
 				// TODO find if contained by another element, if not put it there
+				boolean isContained = false;
+				if(logsWifi.getKnownWifi() != null){
+					isContained = true;
+				}
+				if(!isContained){
 					sb.append("\n");
-					sb.append(detectedWifi.toXML("\t\t", dbContext));
+					sb.append(logsWifi.toXML("\t\t", dbContext));
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sb.append("\n\t</DETECTEDWIFIS>\n");
+		sb.append("\n\t</LOGSWIFIS>\n");
 		sb.append("\n\t<GEOLOCATIONS>");
 		try {	
 			List<Geolocation> geolocations = dbContext.geolocationDao.queryForAll();
@@ -552,12 +558,12 @@ public class XMLHelper {
 					log.error("cannot create KnownWifi "+e.getMessage(),e);
 				}
 			}
-			log.info("starting creation of DetectedWifi...");
-			for(DetectedWifi detectedWifi : parser.detectedWifis){
+			log.info("starting creation of LogsWifi...");
+			for(LogsWifi logsWifi : parser.logsWifis){
 				try {
-					dbContext.detectedWifiDao.create(detectedWifi);
+					dbContext.logsWifiDao.create(logsWifi);
 				} catch (SQLException e) {
-					log.error("cannot create DetectedWifi "+e.getMessage(),e);
+					log.error("cannot create LogsWifi "+e.getMessage(),e);
 				}
 			}
 			log.info("starting creation of Geolocation...");
@@ -759,12 +765,12 @@ public class XMLHelper {
 					log.error("cannot update KnownWifi "+e.getMessage(),e);
 				}
 			}
-			log.info("starting update DB of DetectedWifi...");
-			for(DetectedWifi elem : parser.detectedWifisToUpdate){
+			log.info("starting update DB of LogsWifi...");
+			for(LogsWifi elem : parser.logsWifisToUpdate){
 				try {
-					dbContext.detectedWifiDao.update(elem);
+					dbContext.logsWifiDao.update(elem);
 				} catch (SQLException e) {
-					log.error("cannot update DetectedWifi "+e.getMessage(),e);
+					log.error("cannot update LogsWifi "+e.getMessage(),e);
 				}
 			}
 			log.info("starting update DB of Geolocation...");

@@ -88,17 +88,15 @@
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="KnownWifi" documentation="Registered Wifi connexion on the device.&#xA;Ie. the device has registered it and was connected to it">
-      <dataReferences name="detectedWifis" upperBound="-1" opposite="//@dataModel/@dataAssociations.7" type="//@dataModel/@dataClasses.12"/>
+      <dataReferences name="logsWifi" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.7" type="//@dataModel/@dataClasses.12"/>
       <dataAttributes name="ssid" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="location" documentation="Location of the Wifi&#xA;&#xA;note: a given SSID is shared by several router (Access Point) (possibly worldwide) &#xA;so we need to check how this data is managed and have a better model" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="bssid" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="isConfiguredWifi" type="//@dataModel/@dataClasses.25"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
-    <dataClasses xsi:type="genandroid:DataClass" name="DetectedWifi" documentation="log entry for a given detected wifi">
-      <dataReferences name="knownWifi" opposite="//@dataModel/@dataAssociations.7" type="//@dataModel/@dataClasses.11"/>
-      <dataAttributes name="startDetectionDate" documentation="approximate date where the WifiAccessPoint has been detected" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="endDetectionDate" documentation="if reached, &#xA;approximate time where the WifiAccessPoint was not received anymore" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="hasConnected" documentation="indicates wether the device succefuly connect to the wifi during this session" type="//@dataModel/@dataClasses.25"/>
-      <dataAttributes name="ssid" documentation="SSID detected during the session&#xA;(note: should we need to check what happen if several network conflicts by using the same SSID / man in the middle attack )" type="//@dataModel/@dataClasses.26"/>
+    <dataClasses xsi:type="genandroid:DataClass" name="LogsWifi" documentation="log entry for a given detected wifi">
+      <dataReferences name="knownWifi" lowerbound="1" opposite="//@dataModel/@dataAssociations.7" type="//@dataModel/@dataClasses.11"/>
+      <dataAttributes name="timeStamp" documentation="approximate date where the WifiAccessPoint has been detected" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Geolocation">
@@ -199,7 +197,7 @@
     <dataAssociations name="Contact_PhoneNumber" references="//@dataModel/@dataClasses.4/@dataReferences.0 //@dataModel/@dataClasses.8/@dataReferences.0"/>
     <dataAssociations name="Contact_PhysicalAddress" references="//@dataModel/@dataClasses.9/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.1"/>
     <dataAssociations name="Contact_Email" references="//@dataModel/@dataClasses.10/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.2"/>
-    <dataAssociations name="KnownWifi_DetectedWifi" references="//@dataModel/@dataClasses.11/@dataReferences.0 //@dataModel/@dataClasses.12/@dataReferences.0"/>
+    <dataAssociations name="KnownWifi_LogsWifi" references="//@dataModel/@dataClasses.11/@dataReferences.0 //@dataModel/@dataClasses.12/@dataReferences.0"/>
     <dataAssociations name="Contact_ContactOrganisation" references="//@dataModel/@dataClasses.4/@dataReferences.3 //@dataModel/@dataClasses.5/@dataReferences.0"/>
     <dataAssociations name="Contact_ContactIM" references="//@dataModel/@dataClasses.4/@dataReferences.4 //@dataModel/@dataClasses.6/@dataReferences.0"/>
     <dataAssociations name="Contact_ContactEvent" references="//@dataModel/@dataClasses.7/@dataReferences.0 //@dataModel/@dataClasses.4/@dataReferences.5"/>

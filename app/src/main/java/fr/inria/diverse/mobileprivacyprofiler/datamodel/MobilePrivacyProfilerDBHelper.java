@@ -17,6 +17,7 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 //End of user code
@@ -52,8 +53,8 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<ContactEmail, Integer> contactEmailDao;
 	public Dao<KnownWifi, Integer> knownWifiDao;
 	//public RuntimeExceptionDao<KnownWifi, Integer> knownWifiDao;
-	public Dao<DetectedWifi, Integer> detectedWifiDao;
-	//public RuntimeExceptionDao<DetectedWifi, Integer> detectedWifiDao;
+	public Dao<LogsWifi, Integer> logsWifiDao;
+	//public RuntimeExceptionDao<LogsWifi, Integer> logsWifiDao;
 	public Dao<Geolocation, Integer> geolocationDao;
 	//public RuntimeExceptionDao<Geolocation, Integer> geolocationDao;
 	public Dao<CalendarEvent, Integer> calendarEventDao;
@@ -96,7 +97,7 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<ContactPhysicalAddress, Integer> contactPhysicalAddressDao,
 		Dao<ContactEmail, Integer> contactEmailDao,
 		Dao<KnownWifi, Integer> knownWifiDao,
-		Dao<DetectedWifi, Integer> detectedWifiDao,
+		Dao<LogsWifi, Integer> logsWifiDao,
 		Dao<Geolocation, Integer> geolocationDao,
 		Dao<CalendarEvent, Integer> calendarEventDao,
 		Dao<PhoneCallLog, Integer> phoneCallLogDao,
@@ -122,7 +123,7 @@ public class MobilePrivacyProfilerDBHelper {
 		this.contactPhysicalAddressDao = contactPhysicalAddressDao;
 		this.contactEmailDao = contactEmailDao;
 		this.knownWifiDao = knownWifiDao;
-		this.detectedWifiDao = detectedWifiDao;
+		this.logsWifiDao = logsWifiDao;
 		this.geolocationDao = geolocationDao;
 		this.calendarEventDao = calendarEventDao;
 		this.phoneCallLogDao = phoneCallLogDao;
@@ -360,6 +361,83 @@ public class MobilePrivacyProfilerDBHelper {
 		return geolocationToReturn;
     }
 
-    //End of user code
+	/**
+	 *
+	 * @param ssid
+	 * @param bssid
+	 * @return true if 1 matching entry in the DB if 0 : false else catch exception
+	 */
+	public boolean isKnownWifi(String ssid, String bssid) {
+    	boolean toReturn = false;
+    	KnownWifi wifiQuery = new KnownWifi();
+		wifiQuery.setSsid(ssid);
+    	wifiQuery.setBssid(bssid);
+
+    	List queryOutPut = new ArrayList();
+    	try {
+			queryOutPut = this.knownWifiDao.queryForMatching(wifiQuery);
+		} catch (SQLException e) { e.printStackTrace(); }
+    	if(0 == queryOutPut.size()){toReturn = false;}
+    	else if(1 == queryOutPut.size()){toReturn = true;}
+    	else{
+			try {
+				throw new SQLException();
+			} catch (SQLException e) { e.printStackTrace(); }
+		}
+    	return toReturn;
+	}
+
+	public boolean isRecordedLogWifi(KnownWifi knownWifi, Date date) {
+		boolean toReturn = false;
+		LogsWifi logQuery = new LogsWifi();
+		logQuery.setKnownWifi(knownWifi);
+		logQuery.setTimeStamp(date);
+
+		List queryOutPut = new ArrayList();
+		try {
+			queryOutPut = this.logsWifiDao.queryForMatching(logQuery);
+		} catch (SQLException e) { e.printStackTrace(); }
+		if(0 == queryOutPut.size()){toReturn = false;}
+		else if(1 == queryOutPut.size()){toReturn = true;}
+		else{
+			try {
+				throw new SQLException();
+			} catch (SQLException e) { e.printStackTrace(); }
+		}
+		return toReturn;
+	}
+
+	public KnownWifi queryKnownWifiFromSsidBssid(String ssid, String bssid) {
+		KnownWifi toReturn = null;
+		KnownWifi wifiQuery = new KnownWifi();
+		wifiQuery.setSsid(ssid);
+		wifiQuery.setBssid(bssid);
+
+		List<KnownWifi> queryOutPut = new ArrayList();
+		try {
+			queryOutPut = this.knownWifiDao.queryForMatching(wifiQuery);
+		} catch (SQLException e) { e.printStackTrace(); }
+		if(0 == queryOutPut.size()){Log.d(TAG,"Failed to retrieve a wifi point from DB"); toReturn = null;}
+		else if(1 == queryOutPut.size()){toReturn = queryOutPut.get(0);}
+		else{
+			try {
+				throw new SQLException();
+			} catch (SQLException e) { Log.d(TAG,"Duplicated knownWifi in DB");e.printStackTrace(); }
+		}
+		return toReturn;
+	}
+
+	public List<KnownWifi> queryKnownWifiFromSsid(String ssid) {
+		List<KnownWifi> toReturn = new ArrayList<>();
+		try {
+			//Log.d(TAG,"Querying for knownWifi where ssid = "+ssid);
+			toReturn = this.knownWifiDao.queryForEq("ssid",ssid);
+		} catch (SQLException e) { e.printStackTrace(); }
+		if(0 == toReturn.size()){Log.d(TAG,"Failed to query knownWifi from DB with ssid : "+ssid); toReturn = null;}
+
+		return toReturn;
+	}
+
+	//End of user code
 
 }

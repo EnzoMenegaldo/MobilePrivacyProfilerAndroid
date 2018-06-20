@@ -15,6 +15,7 @@
 	<string name="manualscan_customview_contact_btn_label">Scan des contacts</string>
 	<string name="manualscan_customview_geolocation_btn_label">Scan géolocalisation</string>
 	<string name="manualscan_customview_test_btn_label">Test me</string>
+	<string name="manualscan_customview_scan_wifi_btn_label">Scan wifi </string>
 	<!-- End of user code
 	-->
 </resources>

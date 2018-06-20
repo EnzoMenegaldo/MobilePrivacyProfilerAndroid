@@ -26,7 +26,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhoneNumber;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhysicalAddress;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactEmail;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.KnownWifi;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.DetectedWifi;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.LogsWifi;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Geolocation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CalendarEvent;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.PhoneCallLog;
@@ -95,7 +95,7 @@ public class MobilePrivacyRestClient {
 		exportContactPhysicalAddress(context);
 		exportContactEmail(context);
 		exportKnownWifi(context);
-		exportDetectedWifi(context);
+		exportLogsWifi(context);
 		exportGeolocation(context);
 		exportCalendarEvent(context);
 		exportPhoneCallLog(context);
@@ -321,15 +321,15 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportDetectedWifi(Context context) {
+    private void exportLogsWifi(Context context) {
         //query all entries
-        List<DetectedWifi> toExport= getDBHelper(context).getDetectedWifiDao().queryForAll();
+        List<LogsWifi> toExport= getDBHelper(context).getLogsWifiDao().queryForAll();
         if(null != toExport && !toExport.isEmpty()) {
             //translation of the collection into Json
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/DetectedWifi",postData);
+            executePostRequest(this.serverUrl,"/LogsWifi",postData);
         }
     }
 

@@ -51,8 +51,8 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	private RuntimeExceptionDao<ContactEmail, Integer> contactEmailRuntimeDao = null;
 	// the DAO object we use to access the KnownWifi table
 	private RuntimeExceptionDao<KnownWifi, Integer> knownWifiRuntimeDao = null;
-	// the DAO object we use to access the DetectedWifi table
-	private RuntimeExceptionDao<DetectedWifi, Integer> detectedWifiRuntimeDao = null;
+	// the DAO object we use to access the LogsWifi table
+	private RuntimeExceptionDao<LogsWifi, Integer> logsWifiRuntimeDao = null;
 	// the DAO object we use to access the Geolocation table
 	private RuntimeExceptionDao<Geolocation, Integer> geolocationRuntimeDao = null;
 	// the DAO object we use to access the CalendarEvent table
@@ -112,7 +112,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, ContactPhysicalAddress.class);
 		TableUtils.createTable(connectionSource, ContactEmail.class);
 		TableUtils.createTable(connectionSource, KnownWifi.class);
-		TableUtils.createTable(connectionSource, DetectedWifi.class);
+		TableUtils.createTable(connectionSource, LogsWifi.class);
 		TableUtils.createTable(connectionSource, Geolocation.class);
 		TableUtils.createTable(connectionSource, CalendarEvent.class);
 		TableUtils.createTable(connectionSource, PhoneCallLog.class);
@@ -158,7 +158,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, ContactPhysicalAddress.class, true);
 		TableUtils.dropTable(connectionSource, ContactEmail.class, true);
 		TableUtils.dropTable(connectionSource, KnownWifi.class, true);
-		TableUtils.dropTable(connectionSource, DetectedWifi.class, true);
+		TableUtils.dropTable(connectionSource, LogsWifi.class, true);
 		TableUtils.dropTable(connectionSource, Geolocation.class, true);
 		TableUtils.dropTable(connectionSource, CalendarEvent.class, true);
 		TableUtils.dropTable(connectionSource, PhoneCallLog.class, true);
@@ -306,14 +306,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	}
 
 	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our DetectedWifi class. It will
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our LogsWifi class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<DetectedWifi, Integer> getDetectedWifiDao() {
-		if (detectedWifiRuntimeDao == null) {
-			detectedWifiRuntimeDao = getRuntimeExceptionDao(DetectedWifi.class);
+	public RuntimeExceptionDao<LogsWifi, Integer> getLogsWifiDao() {
+		if (logsWifiRuntimeDao == null) {
+			logsWifiRuntimeDao = getRuntimeExceptionDao(LogsWifi.class);
 		}
-		return detectedWifiRuntimeDao;
+		return logsWifiRuntimeDao;
 	}
 
 	/**
@@ -470,7 +470,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		contactPhysicalAddressRuntimeDao = null;
 		contactEmailRuntimeDao = null;
 		knownWifiRuntimeDao = null;
-		detectedWifiRuntimeDao = null;
+		logsWifiRuntimeDao = null;
 		geolocationRuntimeDao = null;
 		calendarEventRuntimeDao = null;
 		phoneCallLogRuntimeDao = null;
@@ -504,7 +504,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.contactPhysicalAddressDao = getDao(ContactPhysicalAddress.class);
 			helper.contactEmailDao = getDao(ContactEmail.class);
 			helper.knownWifiDao = getDao(KnownWifi.class);
-			helper.detectedWifiDao = getDao(DetectedWifi.class);
+			helper.logsWifiDao = getDao(LogsWifi.class);
 			helper.geolocationDao = getDao(Geolocation.class);
 			helper.calendarEventDao = getDao(CalendarEvent.class);
 			helper.phoneCallLogDao = getDao(PhoneCallLog.class);

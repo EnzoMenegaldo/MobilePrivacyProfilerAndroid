@@ -13,6 +13,7 @@
     <string name="scandevice_intentservice_starting_scan_app_usage_stat">Inspection des utilisations des applications</string>
     <string name="scandevice_intentservice_starting_scan_contacts">Inspection contacts</string>
     <string name="scandevice_intentservice_starting_scan_geolocation">Enregistrement géolocalisation</string>
+    <string name="scandevice_intentservice_starting_scan_wifi">Récupération des dernières informations wifi</string>
     <string name="beginning_test_service">Start test</string>
     <string name="firing_up_test_action">Start test action</string>
 </resources>
