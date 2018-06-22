@@ -438,6 +438,45 @@ public class MobilePrivacyProfilerDBHelper {
 		return toReturn;
 	}
 
+	public boolean isRecordedBluetoothDevice(String mac) {
+		boolean toReturn = false;
+		BluetoothDevice bluetoothQuery = new BluetoothDevice();
+		bluetoothQuery.setMac(mac);
+
+		List queryOutPut = new ArrayList();
+		try {
+			queryOutPut = this.bluetoothDeviceDao.queryForEq("mac",mac);
+		} catch (SQLException e) { e.printStackTrace(); }
+		if(0 == queryOutPut.size()){toReturn = false;}
+		else if(1 == queryOutPut.size()){toReturn = true;}
+		else{
+			try {
+				throw new SQLException("Duplicated BluetoothDevice in base");
+			} catch (SQLException e) { e.printStackTrace(); }
+		}
+		return toReturn;
+	}
+
+	public BluetoothDevice getBluetoothDeviceFromMac(String mac) {
+		BluetoothDevice toReturn = null;
+
+		BluetoothDevice bluetoothQuery = new BluetoothDevice();
+		bluetoothQuery.setMac(mac);
+
+		List<BluetoothDevice> queryOutPut = new ArrayList();
+		try {
+			queryOutPut = this.bluetoothDeviceDao.queryForEq("mac",mac);
+		} catch (SQLException e) { e.printStackTrace(); }
+		if(0 == queryOutPut.size()){toReturn = null;}
+		else if(1 == queryOutPut.size()){toReturn = queryOutPut.get(0);}
+		else{
+			try {
+				throw new SQLException("Duplicated BluetoothDevice in base");
+			} catch (SQLException e) { e.printStackTrace(); }
+		}
+		return toReturn;
+	}
+
 	//End of user code
 
 }

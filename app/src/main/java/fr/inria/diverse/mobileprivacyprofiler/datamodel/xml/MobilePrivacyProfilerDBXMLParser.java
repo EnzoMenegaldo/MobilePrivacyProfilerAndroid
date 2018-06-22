@@ -366,8 +366,6 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAREF_BLUETOOTHDEVICE_bluetoothLog = "bluetoothLog";
 	public static final String DATAATT_BLUETOOTHLOG_date = "date";
 	public static final String DATAATT_BLUETOOTHLOG_DATE = "DATE";
-	public static final String DATAATT_BLUETOOTHLOG_connected = "connected";
-	public static final String DATAATT_BLUETOOTHLOG_CONNECTED = "CONNECTED";
 	public static final String DATAATT_BLUETOOTHLOG_userId = "userId";
 	public static final String DATAATT_BLUETOOTHLOG_USERID = "USERID";
 	public static final String DATAREF_BLUETOOTHLOG_device = "device";
@@ -1657,8 +1655,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2BluetoothLog.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setDate(parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_date));
-		// TODO connected = parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_CONNECTED);
+		// TODO date = parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_DATE);
 		result.setUserId(parser.getAttributeValue(null, DATAATT_BLUETOOTHLOG_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {

@@ -139,6 +139,12 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_wifi));
 		ScanConnectionIntentService.startActionScanWifi(this);
 	}
+	public void onClickBtnScanBluetooth(View view) {
+		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
+				"\n"+
+				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_bluetooth));
+		ScanConnectionIntentService.startActionScanBluetooth(this);
+	}
 	public void onClickBtnTest(View view) {
 		showToast(this.getBaseContext().getString(R.string.beginning_test_service)+
 				"\n"+

@@ -2,14 +2,16 @@ package fr.inria.diverse.mobileprivacyprofiler.services;
 
 import android.Manifest;
 import android.app.IntentService;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
-import android.net.wifi.hotspot2.PasspointConfiguration;
-import android.os.Build;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
@@ -25,7 +27,9 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.KnownWifi;
@@ -349,8 +353,62 @@ public class ScanConnectionIntentService extends IntentService {
      */
     private void handleActionScanBluetooth() {
         // TODO: Handle action ScanBluetooth
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+        BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+        Set<BluetoothDevice> bluetoothDevices = bluetoothAdapter.getBondedDevices();
+
+        Log.d(TAG, "Query returned :"+bluetoothDevices.size()+" paired devices");
+        if(null!=bluetoothDevices){
+            for(BluetoothDevice bluetoothDevice :bluetoothDevices){
+                String mac = null;
+                String name = null;
+                String userId = getDeviceDBMetadata().getUserId();
+                int type = -1;
+                Date date = new Date();
+
+                mac = bluetoothDevice.getAddress();
+                name = bluetoothDevice.getName();
+                type = bluetoothDevice.getType();
+
+                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedBluetoothDevice(mac)){
+                    fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice newBluetoothDevice = new fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice();
+                    newBluetoothDevice.setMac(mac);
+                    newBluetoothDevice.setName(name);
+                    newBluetoothDevice.setType(type);
+                    newBluetoothDevice.setUserId(userId);
+                    Log.d(TAG, "Create new BluetoothDevice : MAC : " + newBluetoothDevice.getMac() +
+                                    ", Name : " + newBluetoothDevice.getName() +
+                                    ", type : " + newBluetoothDevice.getType()
+                                    +", UserId : "+userId
+                    );
+                    getDBHelper().getBluetoothDeviceDao().create(newBluetoothDevice);
+                }
+                else{
+                    Log.d(TAG, "Recorded BluetoothDevice : MAC : " + mac +
+                                ", Name : " + name +
+                                ", type : " + type
+                        //        +", UserId : "+knownWifi.getUserId()
+                    );
+                }
+                //TODO manage the recording of bluetooth paired device activity
+                /*
+                fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice dbBluetoothDevice;
+                dbBluetoothDevice = getDBHelper().getMobilePrivacyProfilerDBHelper().getBluetoothDeviceFromMac(mac);
+
+                if(bluetoothDevice.getBondState()) {// device connected?
+                    Log.d(TAG, "Create new BluetoothLog : date : " + date.toString() +
+                                    ", Name : " + name +
+                                    ", MAC : " + mac
+                            //        +", UserId : user
+                    );
+                    BluetoothLog newBluetoothLog = new BluetoothLog();
+                    newBluetoothLog.setDevice(dbBluetoothDevice);
+                    newBluetoothLog.setDate(date);
+                    newBluetoothLog.setUserId(userId);
+                }*/
+            }
+        }//end if not null
+    }//end method
 
     /**
      * Handle action Baz in the provided background thread with the provided

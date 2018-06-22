@@ -95,11 +95,19 @@
 				android:text="@string/manualscan_customview_scan_wifi_btn_label" />
 
 			<Button
+				android:id="@+id/btnScanBluetooth"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnScanBluetooth"
+				android:text="@string/manualscan_customview_scan_bluetooth_btn_label" />
+
+			<Button
 				android:id="@+id/btnTest"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:onClick="onClickBtnTest"
 				android:text="@string/manualscan_customview_test_btn_label" />
+
 		</LinearLayout>
 
 

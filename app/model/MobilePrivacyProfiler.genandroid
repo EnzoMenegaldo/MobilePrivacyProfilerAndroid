@@ -160,8 +160,7 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="BluetoothLog">
       <dataReferences name="device" lowerbound="1" opposite="//@dataModel/@dataAssociations.11" type="//@dataModel/@dataClasses.20"/>
-      <dataAttributes name="date" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="connected" type="//@dataModel/@dataClasses.25"/>
+      <dataAttributes name="date" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="SMS">

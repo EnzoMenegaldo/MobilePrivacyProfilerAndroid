@@ -19,7 +19,7 @@
 [CdmaCellData|longitude : Integer;latitude : Integer;userId : String]		
 [NeighboringCellHistory|date : Date;strength : Integer;userId : String]		
 [BluetoothDevice|mac : String;name : String;type : Integer;userId : String]		
-[BluetoothLog|date : String;connected : Integer;userId : String]		
+[BluetoothLog|date : Date;userId : String]		
 [SMS|date : String;phoneNumber : String;type : String;userId : String]		
 [BatteryUsage|date : Date;level : Integer;isPugged : Integer;plugType : String;userId : String]		
 [WebHistory|date : Date;application : String;hostname : String;ipDestination : String;userId : String]		
