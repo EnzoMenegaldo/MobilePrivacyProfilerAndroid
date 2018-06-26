@@ -111,6 +111,10 @@ public class Geolocation {
 		this._id = id;
 	}
 
+	public int get_id() {
+	return this._id;
+	}
+
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
