@@ -10,14 +10,14 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanSocialIntentService;
 
 /**
- * Created by gohier on 23/04/18.
+ * Created by gohier on 27/06/18.
  */
 
-public class ScanBatteryJob extends Job {
-    public static final String TAG = "ScanBatteryJob";
+public class ScanCalendarJob extends Job {
+    public static final String TAG = "CalendarJob";
 
 
     private static final boolean DEBUG = BuildConfig.DEBUG;
@@ -26,7 +26,7 @@ public class ScanBatteryJob extends Job {
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
 
-        ScanActivityIntentService.startActionScanBatteryUsage(getContext());
+        ScanSocialIntentService.startActionScanCalendarEvent(getContext());
 
         return Result.SUCCESS;
     }
@@ -37,8 +37,8 @@ public class ScanBatteryJob extends Job {
             return jobRequests.iterator().next().getJobId();
         }
         // adapt the triggering of the update
-        long interval = TimeUnit.MINUTES.toMillis(20); // every 40 min
-        long flex = TimeUnit.MINUTES.toMillis(5); // wait 10 min before job runs again
+        long interval = TimeUnit.HOURS.toMillis(12); // every 12 h
+        long flex = TimeUnit.HOURS.toMillis(1); // -+ 1h to execute
 
         if (DEBUG) {
             interval = JobRequest.MIN_INTERVAL;
