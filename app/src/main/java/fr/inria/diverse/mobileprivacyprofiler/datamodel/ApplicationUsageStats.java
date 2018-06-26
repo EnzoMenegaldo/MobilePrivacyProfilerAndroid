@@ -115,6 +115,10 @@ public class ApplicationUsageStats {
 		this._id = id;
 	}
 
+	public int get_Id() {
+	return this._id;
+	}
+
 	public MobilePrivacyProfilerDBHelper getContextDB(){
 		return _contextDB;
 	}
