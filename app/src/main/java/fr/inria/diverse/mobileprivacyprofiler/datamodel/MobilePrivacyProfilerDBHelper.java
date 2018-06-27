@@ -1,6 +1,7 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -14,6 +15,7 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -477,6 +479,12 @@ public class MobilePrivacyProfilerDBHelper {
 		return toReturn;
 	}
 
+	public static OrmLiteDBHelper getDBHelper(Context context){
+		return OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);
+	}
+
+	public static MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(Context context){
+		return getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 	//End of user code
 
 }

@@ -285,7 +285,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		switch (requestCode){
 			case REQUEST_CODE_VPN :
 				if (resultCode == RESULT_OK) {
-					//ScanActivityIntentService.startActionNetACtivity(getApplicationContext());
+					ScanActivityIntentService.startActionNetActivity(getApplicationContext());
 				} else if (resultCode == RESULT_CANCELED) {
 					showVPNRefusedDialog();
 				}

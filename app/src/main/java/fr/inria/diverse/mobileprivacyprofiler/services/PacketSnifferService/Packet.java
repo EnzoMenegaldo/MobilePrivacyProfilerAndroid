@@ -20,7 +20,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.WebHistory;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.network.ip.IPv4Header;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.ITransportHeader;
@@ -44,6 +49,8 @@ public class Packet {
 	private final String applicationName;
 	@NonNull private final String hostName;
 	@NonNull private final Date time;
+
+	private OrmLiteDBHelper dbHelper;
 
 
 	public Packet(@NonNull IPv4Header ipHeader, @NonNull ITransportHeader transportHeader, @NonNull byte[] data) {
@@ -141,7 +148,9 @@ public class Packet {
 		webHistory.setDate(time);
 		webHistory.setHostname(hostName);
 		webHistory.setIpDestination(PacketUtil.intToIPAddress(ipHeader.getDestinationIP()));
-		//webHistory.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata().getUserId());
-		//MobilePrivacyProfilerDBHelper.getDBHelper(context).getWebHistoryDao().create(webHistory);
+		webHistory.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(Home_CustomViewActivity.getContext()).getUserId());
+		MobilePrivacyProfilerDBHelper.getDBHelper(Home_CustomViewActivity.getContext()).getWebHistoryDao().create(webHistory);
 	}
+
+
 }

@@ -5,11 +5,11 @@
 #include "util.h"
 
 
+
 JNIEXPORT jint JNICALL
 Java_fr_inria_diverse_mobileprivacyprofiler_services_PacketSnifferService_Packet_get_1uid(
         JNIEnv *env, jobject instance, jint ipVersion, jint protocol, jstring sourceIP_,
         jint sourcePort, jstring destinationIP_, jint destinationPort) {
-
     const char *sourceIP = (*env)->GetStringUTFChars(env, sourceIP_, 0);
     const char *destinationIP = (*env)->GetStringUTFChars(env, destinationIP_, 0);
 

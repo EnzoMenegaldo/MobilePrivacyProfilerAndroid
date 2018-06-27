@@ -5,7 +5,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
     package="fr.inria.diverse.mobileprivacyprofiler" >
 	
-		<uses-sdk android:minSdkVersion="16" />
+		<uses-sdk android:minSdkVersion="19" />
 
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.BLUETOOTH" />

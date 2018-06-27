@@ -84,8 +84,8 @@ public class MobilePrivacyRestClient {
 					
 		exportMetadata(context);
 
-	/*	exportApplicationHistory(context);
-		exportApplicationUsageStats(context);
+		exportApplicationHistory(context);
+	/*	exportApplicationUsageStats(context);
 		exportAuthentification(context);
 		exportContact(context);
 		exportContactOrganisation(context);
@@ -106,8 +106,8 @@ public class MobilePrivacyRestClient {
 		exportBluetoothDevice(context);
 		exportBluetoothLog(context);
 		exportSMS(context);
-		exportBatteryUsage(context);
-		exportWebHistory(context);*/
+		exportBatteryUsage(context);*/
+		exportWebHistory(context);
 
 	}//endexportDB
 
