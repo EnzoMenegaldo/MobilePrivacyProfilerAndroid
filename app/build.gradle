@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "fr.inria.diverse.mobileprivacyprofiler"
-        minSdkVersion 19
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -16,11 +16,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
 }
 
 dependencies {
     compile 'com.android.support:multidex:1.0.1'
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:26.1.0'
@@ -29,20 +35,19 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.1'
     implementation 'commons-logging:commons-logging:1.2'
     compile 'com.evernote:android-job:1.2.2'
-    implementation "com.google.android.gms:play-services-gcm:11.0.2"
-  /*  implementation('com.google.api-client:google-api-client-android:1.23.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    implementation('com.google.http-client:google-http-client-gson:1.23.0') {
-        exclude group: 'org.apache.httpcomponents'
-    }
-    compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
-    */
+    implementation 'com.google.android.gms:play-services-gcm:11.0.2'
+    /*  implementation('com.google.api-client:google-api-client-android:1.23.0') {
+            exclude group: 'org.apache.httpcomponents'
+        }
+        implementation('com.google.http-client:google-http-client-gson:1.23.0') {
+            exclude group: 'org.apache.httpcomponents'
+        }
+        compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
+        */
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
 }

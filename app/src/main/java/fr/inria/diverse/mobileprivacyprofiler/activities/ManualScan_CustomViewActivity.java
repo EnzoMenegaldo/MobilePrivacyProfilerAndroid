@@ -4,12 +4,19 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.PacketSnifferService;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.VpnService;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +39,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 	
 	//Start of user code constants ManualScan_CustomViewActivity
 	private static final String TAG = ManualScan_CustomViewActivity.class.getSimpleName();
+	private static final int REQUEST_CODE_VPN = 0;
 
 	//End of user code
 
@@ -85,66 +93,77 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_battery));
 		ScanActivityIntentService.startActionScanBatteryUsage(this);
 	}
+
 	public void onClickBtnSMS(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_sms));
 		ScanSocialIntentService.startActionScanSms(this);
 	}
+
 	public void onClickBtnNeihgboringCellHistory(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_neighboring_cell_history));
 		ScanConnectionIntentService.startActionScanCellInfo(this);
 	}
+
 	public void onClickBtnPhoneCallLog(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_phone_call_log));
 		ScanSocialIntentService.startActionScanCallHistory(this);
 	}
+
 	public void onClickBtnAuthentification(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_authentification));
 		ScanActivityIntentService.startActionScanAuthenticators(this);
 	}
+
 	public void onClickBtnCalendarEvent(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_calendar_event));
 		ScanSocialIntentService.startActionScanCalendarEvent(this);
 	}
+
 	public void onClickBtnAppUsageStat(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_app_usage_stat));
 		ScanActivityIntentService.startActionScanAppUsage(this);
 	}
+
 	public void onClickBtnContact(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_contacts));
 		ScanContactIntentService.startActionScanContacts(this);
 	}
+
 	public void onClickBtnGeolocation(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_geolocation));
 		ScanActivityIntentService.startActionRecordLocation(this);
 	}
+
 	public void onClickBtnScanWifi(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_wifi));
 		ScanConnectionIntentService.startActionScanWifi(this);
 	}
+
 	public void onClickBtnScanBluetooth(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_bluetooth));
 		ScanConnectionIntentService.startActionScanBluetooth(this);
 	}
+
 	public void onClickBtnTest(View view) {
 		showToast(this.getBaseContext().getString(R.string.beginning_test_service)+
 				"\n"+
@@ -152,6 +171,52 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 		Test test = new Test();
 		test.mainTest(this);
+	}
+
+	public void onClickBtnScanNetActivity(View view){
+		// check for VPN already running
+		try {
+			if (!PhoneStateUtils.checkForActiveInterface(getString(R.string.vpn_interface))) {
+
+				// get user permission for VPN
+				Intent intent = VpnService.prepare(this);
+				if (intent != null) {
+					// ask user for VPN permission
+					startActivityForResult(intent, 0);
+				} else {
+					// already have VPN permission
+					onActivityResult(REQUEST_CODE_VPN, RESULT_OK, null);
+				}
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "Exception checking network interfaces :" + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Show dialog to educate the user about VPN trust
+	 * abort app if user chooses to quit
+	 * otherwise relaunch the onClickBtnScanNetActivity()
+	 */
+	private void showVPNRefusedDialog() {
+		new AlertDialog.Builder(this)
+				.setTitle("Usage Alert")
+				.setMessage("You must trust the application in order to run a VPN based trace.")
+				.setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						onClickBtnScanNetActivity(null);
+					}
+				})
+				.setNegativeButton(getString(R.string.exit), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						showVPNRefusedDialog();
+					}
+				})
+				.show();
+
 	}
 
 	//End of user code
@@ -205,10 +270,35 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		return new Intent(this, Home_CustomViewActivity.class);
 		//End of user code
 	}
+
 	@Override
 	public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
 		//Start of user code onCreateSupportNavigateUpTaskStack ManualScan_CustomViewActivity
 		super.onCreateSupportNavigateUpTaskStack(builder);
 		//End of user code
 	}
+
+	//Start of user code onActivityResult ManualScan_CustomViewActivity
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i(TAG, "onActivityResult(resultCode:  " + resultCode + ")");
+		switch (requestCode){
+			case REQUEST_CODE_VPN :
+				if (resultCode == RESULT_OK) {
+					//ScanActivityIntentService.startActionNetACtivity(getApplicationContext());
+				} else if (resultCode == RESULT_CANCELED) {
+					showVPNRefusedDialog();
+				}
+				break;
+
+			default:
+				break;
+		}
+	}
+	//End of user code
+
+
+
+
+
 }

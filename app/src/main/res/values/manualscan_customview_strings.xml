@@ -17,6 +17,7 @@
 	<string name="manualscan_customview_test_btn_label">Test me</string>
 	<string name="manualscan_customview_scan_wifi_btn_label">Scan wifi </string>
 	<string name="manualscan_customview_scan_bluetooth_btn_label">Scan bluetooth</string>
+	<string name="manualscan_customview_scan_net_activity_btn_label">Scan net activity</string>
 	<!-- End of user code
 	-->
 </resources>

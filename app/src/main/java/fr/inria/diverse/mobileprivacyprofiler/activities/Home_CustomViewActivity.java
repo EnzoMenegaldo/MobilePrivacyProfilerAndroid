@@ -52,7 +52,15 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	//Start of user code constants Home_CustomViewActivity
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
+    private static final String native_lib = "native_lib";
+    private static Context context;
 	//End of user code
+
+    //Start of user code Static Initialization
+    static {
+        System.loadLibrary(native_lib);
+    }
+    //End of user code
 
 	/** Called when the activity is first created. */
     @Override
@@ -73,6 +81,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         if (!hasPermission()){
             requestPermission();
         }
+        context = getApplicationContext();
         JobManager.create(this.getApplicationContext());
 		//End of user code
     }
@@ -85,6 +94,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
 	}
     //Start of user code additional code Home_CustomViewActivity
+
+    public static Context getContext(){return context;}
 
 	public void onClickBtnApplicationHistory(View view){
 		showToast( this.getString(R.string.applicationhistorylist_classlistview_launch_toast));
@@ -103,7 +114,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Log.d("MainActivity", "resultCode " + resultCode);
         switch (requestCode){
             case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
                if (!hasPermission()){
@@ -119,13 +129,14 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     }
 
     private boolean hasPermission() {
-        AppOpsManager appOps = (AppOpsManager)
+       /* AppOpsManager appOps = (AppOpsManager)
                 getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
 //        return ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;
+//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;*/
+       return true;
     }
 
     private void debugText(StringBuilder sb) {
