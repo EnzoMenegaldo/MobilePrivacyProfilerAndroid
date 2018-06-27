@@ -310,7 +310,7 @@ public class ScanSocialIntentService extends IntentService {
 
             uri = CalendarContract.Attendees.CONTENT_URI;
             String[] arg ={""+eventID};
-            //queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
+            //queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees.android_id+" = ?",arg,null );
             final String query = "(" + CalendarContract.Attendees.EVENT_ID + " = ?)";
             final String[] args = new String[]{""+eventID};
             queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,query,args,null );
