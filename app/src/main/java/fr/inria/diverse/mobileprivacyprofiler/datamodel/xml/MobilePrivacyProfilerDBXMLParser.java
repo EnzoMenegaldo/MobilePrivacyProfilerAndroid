@@ -104,7 +104,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, WebHistory> xmlId2WebHistory = new Hashtable<String, WebHistory>();
 
 	// minimize memory footprint by using static Strings
-    public static final String ID_STRING = "id";
+    public static final String ID_STRING = "android_id";
 
 	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS = "MOBILEPRIVACYPROFILERDB_METADATAS";
 	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA  = "MOBILEPRIVACYPROFILERDB_METADATA";

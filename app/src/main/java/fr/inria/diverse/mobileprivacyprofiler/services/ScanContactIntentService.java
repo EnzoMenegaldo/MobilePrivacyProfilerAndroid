@@ -96,7 +96,7 @@ public class ScanContactIntentService extends IntentService {
      * parameters.
      */
     private void handleActionScanContact (){
-        // Return all raw_contacts _id in a list: contactIdList
+        // Return all raw_contacts android_id in a list: contactIdList
         List<Integer> rawContactIdList = new ArrayList<Integer>();
 
         ContentResolver contentResolver = getContentResolver();
@@ -111,9 +111,9 @@ public class ScanContactIntentService extends IntentService {
 
         // Row contacts content uri( access raw_contacts table. ).
         Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI;
-        // Return _id column in contacts raw_contacts table.
+        // Return android_id column in contacts raw_contacts table.
         String queryContactColumnArr[] = {ContactsContract.RawContacts._ID};
-        // Query raw_contacts table and return raw_contacts table _id.
+        // Query raw_contacts table and return raw_contacts table android_id.
         Cursor rawContactCursor = contentResolver.query(rawContactUri,queryContactColumnArr, null, null, null);
         if(rawContactCursor!=null) {
             rawContactCursor.moveToFirst();
