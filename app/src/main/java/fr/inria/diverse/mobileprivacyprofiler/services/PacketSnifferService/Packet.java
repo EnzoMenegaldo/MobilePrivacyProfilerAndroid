@@ -26,7 +26,7 @@ import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.WebHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.network.ip.IPv4Header;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.ITransportHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPHeader;
@@ -143,13 +143,13 @@ public class Packet {
 	 * add the packet in the DB
 	 */
 	public void addPacketToDB(Context context){
-		WebHistory webHistory = new WebHistory();
-		webHistory.setApplication(applicationName);
-		webHistory.setDate(time);
-		webHistory.setHostname(hostName);
-		webHistory.setIpDestination(PacketUtil.intToIPAddress(ipHeader.getDestinationIP()));
-		webHistory.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(Home_CustomViewActivity.getContext()).getUserId());
-		MobilePrivacyProfilerDBHelper.getDBHelper(Home_CustomViewActivity.getContext()).getWebHistoryDao().create(webHistory);
+		NetActivity netActivity = new NetActivity();
+		netActivity.setApplication(applicationName);
+		netActivity.setDate(time);
+		netActivity.setHostname(hostName);
+		netActivity.setIpDestination(PacketUtil.intToIPAddress(ipHeader.getDestinationIP()));
+		netActivity.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(Home_CustomViewActivity.getContext()).getUserId());
+		MobilePrivacyProfilerDBHelper.getDBHelper(Home_CustomViewActivity.getContext()).getNetActivityDao().create(netActivity);
 	}
 
 

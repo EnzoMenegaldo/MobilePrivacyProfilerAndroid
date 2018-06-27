@@ -38,7 +38,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.WebHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
 
 // Start of user code additional import for MobilePrivacyRestClient
 // End of user code
@@ -85,7 +85,7 @@ public class MobilePrivacyRestClient {
 		exportMetadata(context);
 
 		exportApplicationHistory(context);
-	/*	exportApplicationUsageStats(context);
+		exportApplicationUsageStats(context);
 		exportAuthentification(context);
 		exportContact(context);
 		exportContactOrganisation(context);
@@ -106,8 +106,8 @@ public class MobilePrivacyRestClient {
 		exportBluetoothDevice(context);
 		exportBluetoothLog(context);
 		exportSMS(context);
-		exportBatteryUsage(context);*/
-		exportWebHistory(context);
+		exportBatteryUsage(context);
+		exportNetActivity(context);
 
 	}//endexportDB
 
@@ -525,15 +525,15 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportWebHistory(Context context) {
+    private void exportNetActivity(Context context) {
         //query all entries
-        List<WebHistory> toExport= getDBHelper(context).getWebHistoryDao().queryForAll();
+        List<NetActivity> toExport= getDBHelper(context).getNetActivityDao().queryForAll();
         if(null != toExport && !toExport.isEmpty()) {
             //translation of the collection into Json
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/WebHistory",postData);
+            executePostRequest(this.serverUrl,"/NetActivity",postData);
         }
     }
 

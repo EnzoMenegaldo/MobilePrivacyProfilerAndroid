@@ -176,7 +176,7 @@
       <dataAttributes name="plugType" documentation="Possible type :&#xA;&quot;BATTERY_PLUGGED_USB&quot;,&#xA;&quot;BATTERY_PLUGGED_AC&quot;,&#xA;&quot;BATTERY_PLUGGED_WIRELESS&quot;,&#xA; &quot;BATTERY_NOT_PLUGGED&quot;" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
-    <dataClasses xsi:type="genandroid:DataClass" name="WebHistory">
+    <dataClasses xsi:type="genandroid:DataClass" name="NetActivity">
       <dataAttributes name="date" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="application" documentation="application that requested the url" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="hostname" type="//@dataModel/@dataClasses.26"/>

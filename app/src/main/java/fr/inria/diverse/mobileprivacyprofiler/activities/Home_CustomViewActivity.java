@@ -130,11 +130,12 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
     private boolean hasPermission() {
 
-        AppOpsManager appOps = (AppOpsManager)
+       /* AppOpsManager appOps = (AppOpsManager)
                 getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;
+        return mode == AppOpsManager.MODE_ALLOWED;*/
+       return true  ;
 
 //        return ContextCompat.checkSelfPermission(this,
 //                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;*/
@@ -216,8 +217,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         sb.append("Table "+getHelper().getSMSDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getSMSDao().countOf()+"\n");
 
-        sb.append("Table "+getHelper().getWebHistoryDao().getDataClass().getSimpleName());
-        sb.append(" count="+ getHelper().getWebHistoryDao().countOf()+"\n");
+        sb.append("Table "+getHelper().getNetActivityDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getNetActivityDao().countOf()+"\n");
 /*
         sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
