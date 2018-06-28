@@ -6,8 +6,10 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +35,10 @@ import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -82,6 +88,11 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             requestPermission();
         }
         context = getApplicationContext();
+
+        //The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
+        //If the user use a device whose api is older than 20, he won't be able to use SSLSocket
+        updateAndroidSecurityProvider(this);
+
         JobManager.create(this.getApplicationContext());
 		//End of user code
     }
@@ -223,6 +234,23 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
 */
+    }
+
+    /**
+     * Install a newer security provider using Google Play Services to allow the application to use SSLSocket.
+     * If the devise has an API lower than 20, by default, he won't be able to use SSLSocket.
+     * https://stackoverflow.com/questions/29916962/javax-net-ssl-sslhandshakeexception-javax-net-ssl-sslprotocolexception-ssl-han/36892715#36892715
+     */
+    private void updateAndroidSecurityProvider(Activity callingActivity) {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Thrown when Google Play Services is not installed, up-to-date, or enabled
+            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Log.e("SecurityException", "Google Play Services not available.");
+        }
     }
 	//End of user code
 
