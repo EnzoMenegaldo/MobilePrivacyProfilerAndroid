@@ -75,12 +75,12 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_installed_applications));
-		ScanActivityIntentService.startActionScanInstalledApplications(this);
+		ScanActivityIntentService.startActionScanInstalledApplications();
 
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_month_app_usage));
-		ScanActivityIntentService.startActionScanAppUsage(this);
+		ScanActivityIntentService.startActionScanAppUsage();
 /*
 		new JobRequest.Builder(ScanAppUsageJob.TAG)
 				.startNow()
@@ -97,77 +97,77 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_battery));
-		ScanActivityIntentService.startActionScanBatteryUsage(this);
+		ScanActivityIntentService.startActionScanBatteryUsage();
 	}
 
 	public void onClickBtnSMS(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_sms));
-		ScanSocialIntentService.startActionScanSms(this);
+		ScanSocialIntentService.startActionScanSms();
 	}
 
 	public void onClickBtnNeihgboringCellHistory(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_neighboring_cell_history));
-		ScanConnectionIntentService.startActionScanCellInfo(this);
+		ScanConnectionIntentService.startActionScanCellInfo();
 	}
 
 	public void onClickBtnPhoneCallLog(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_phone_call_log));
-		ScanSocialIntentService.startActionScanCallHistory(this);
+		ScanSocialIntentService.startActionScanCallHistory();
 	}
 
 	public void onClickBtnAuthentification(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_authentification));
-		ScanActivityIntentService.startActionScanAuthenticators(this);
+		ScanActivityIntentService.startActionScanAuthenticators();
 	}
 
 	public void onClickBtnCalendarEvent(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_calendar_event));
-		ScanSocialIntentService.startActionScanCalendarEvent(this);
+		ScanSocialIntentService.startActionScanCalendarEvent();
 	}
 
 	public void onClickBtnAppUsageStat(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_app_usage_stat));
-		ScanActivityIntentService.startActionScanAppUsage(this);
+		ScanActivityIntentService.startActionScanAppUsage();
 	}
 
 	public void onClickBtnContact(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_contacts));
-		ScanContactIntentService.startActionScanContacts(this);
+		ScanContactIntentService.startActionScanContacts();
 	}
 
 	public void onClickBtnGeolocation(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_geolocation));
-		ScanActivityIntentService.startActionRecordLocation(this);
+		ScanActivityIntentService.startActionRecordLocation();
 	}
 
 	public void onClickBtnScanWifi(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_wifi));
-		ScanConnectionIntentService.startActionScanWifi(this);
+		ScanConnectionIntentService.startActionScanWifi();
 	}
 
 	public void onClickBtnScanBluetooth(View view) {
 		showToast(this.getBaseContext().getString(R.string.scandevice_intentservice_start_service)+
 				"\n"+
 				this.getBaseContext().getString(R.string.scandevice_intentservice_starting_scan_bluetooth));
-		ScanConnectionIntentService.startActionScanBluetooth(this);
+		ScanConnectionIntentService.startActionScanBluetooth();
 	}
 
 	public void onClickBtnTest(View view) {
@@ -253,7 +253,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		switch (requestCode){
 			case REQUEST_CODE_VPN :
 				if (resultCode == RESULT_OK) {
-					ScanActivityIntentService.startActionNetActivity(getApplicationContext());
+					ScanActivityIntentService.startActionNetActivity();
 				} else if (resultCode == RESULT_CANCELED) {
 					showVPNRefusedDialog();
 				}

@@ -11,14 +11,17 @@ import android.widget.Switch;
 
 import com.evernote.android.job.Job;
 
-import fr.inria.diverse.mobileprivacyprofiler.R;
+import java.util.Enumeration;
 
-public class JobList_Adapter extends BaseAdapter {
+import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.services.ServiceEnum;
+
+public class ServiceList_Adapter extends BaseAdapter {
     Context context;
-    Job[] jobs;
+    ServiceEnum[] jobs;
     LayoutInflater inflter;
 
-    public JobList_Adapter(Context applicationContext, Job[] jobs) {
+    public ServiceList_Adapter(Context applicationContext, ServiceEnum[] jobs) {
         this.context = applicationContext;
         this.jobs = jobs;
         inflter = (LayoutInflater.from(applicationContext));
@@ -40,8 +43,8 @@ public class JobList_Adapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        protected Button jobBtn;
-        protected Switch jobSwitch;
+        protected Button serviceBtn;
+        protected Switch serviceSwitch;
     }
 
     @Override
@@ -52,25 +55,27 @@ public class JobList_Adapter extends BaseAdapter {
         if(convertView == null) {
             convertView = inflter.inflate(R.layout.joblist_listviewrow, null);
             viewHolder = new ViewHolder();
-            viewHolder.jobBtn = (Button) convertView.findViewById(R.id.jobBtnId);
-            viewHolder.jobSwitch = (Switch) convertView.findViewById(R.id.jobSwitchId);
+            viewHolder.serviceBtn = (Button) convertView.findViewById(R.id.serviceBtnId);
+            viewHolder.serviceSwitch = (Switch) convertView.findViewById(R.id.serviceSwitchId);
 
-            viewHolder.jobSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            viewHolder.serviceSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
-                    Job job = (Job)viewHolder.jobSwitch.getTag();
+                    ServiceEnum job = (ServiceEnum)viewHolder.serviceSwitch.getTag();
                     if (bChecked) {
                         runJob(job);
+                        job.setSelected(bChecked);
                     } else {
                         cancelJob(job);
+                        job.setSelected(bChecked);
                     }
                 }
             });
 
-            viewHolder.jobBtn.setOnClickListener(new View.OnClickListener() {
+            viewHolder.serviceBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Job job = (Job)viewHolder.jobSwitch.getTag();
+                    ServiceEnum job = (ServiceEnum)viewHolder.serviceSwitch.getTag();
                     runScan(job);
                 }
             });
@@ -80,12 +85,12 @@ public class JobList_Adapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Job currentJob = (Job)getItem(position);
-        viewHolder.jobBtn.setText("TEXT");
+        ServiceEnum currentService = (ServiceEnum)getItem(position);
+        viewHolder.serviceBtn.setText(currentService.toString());
 
-        viewHolder.jobSwitch.setTag(currentJob);
+        viewHolder.serviceSwitch.setTag(currentService);
 
-        //viewHolder.jobSwitch.setChecked(currentJob.isSelected());
+        viewHolder.serviceSwitch.setChecked(currentService.isSelected());
 
         return convertView;
 
@@ -94,21 +99,21 @@ public class JobList_Adapter extends BaseAdapter {
     /**
      * Run the associated job
      */
-    private void runJob(Job job){
+    private void runJob(ServiceEnum service){
         //TODO
     }
 
     /**
      * Cancel the associated job
      */
-    private void cancelJob(Job job){
+    private void cancelJob(ServiceEnum service){
         //TODO
     }
 
     /**
      * Run the data collection once
      */
-    private void runScan(Job job){
-        //TODO
+    private void runScan(ServiceEnum service){
+        service.call();
     }
 }

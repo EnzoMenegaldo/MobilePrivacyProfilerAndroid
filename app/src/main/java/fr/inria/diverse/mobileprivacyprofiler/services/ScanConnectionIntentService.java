@@ -29,11 +29,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.KnownWifi;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.LogsWifi;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
@@ -56,11 +58,6 @@ public class ScanConnectionIntentService extends IntentService {
     private static final String ACTION_SCAN_CELL_INFO = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_NEAR_CELL_INFO";
     private static final String ACTION_SCAN_WIFI = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_WIFI";
     private static final String ACTION_SCAN_BLUETOOTH = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_BLUETOOTH";
-    private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM2";
 
     public ScanConnectionIntentService() {
         super("ScanConnectionIntentService");
@@ -72,10 +69,11 @@ public class ScanConnectionIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanCellInfo(Context context) {
-        Intent intent = new Intent(context, ScanConnectionIntentService.class);
+    public static Void startActionScanCellInfo() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanConnectionIntentService.class);
         intent.setAction(ACTION_SCAN_CELL_INFO);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
     /**
@@ -84,10 +82,11 @@ public class ScanConnectionIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanWifi(Context context) {
-        Intent intent = new Intent(context, ScanConnectionIntentService.class);
+    public static Void startActionScanWifi() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanConnectionIntentService.class);
         intent.setAction(ACTION_SCAN_WIFI);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
     /**
@@ -96,26 +95,14 @@ public class ScanConnectionIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanBluetooth(Context context) {
-        Intent intent = new Intent(context, ScanConnectionIntentService.class);
+    public static Void startActionScanBluetooth() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanConnectionIntentService.class);
         intent.setAction(ACTION_SCAN_BLUETOOTH);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ScanConnectionIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
+
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -127,10 +114,6 @@ public class ScanConnectionIntentService extends IntentService {
                 handleActionScanWifi();
             }else if (ACTION_SCAN_BLUETOOTH.equals(action)) {
                 handleActionScanBluetooth();
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
             }
         }
     }
@@ -213,19 +196,19 @@ public class ScanConnectionIntentService extends IntentService {
             }
             if (isCell) {//isCell true if the cell as been recognised and data are available (!=2147483647)
                 //Log.d(TAG,"--------> looking for cell with "+cellId+" as CellId");
-                Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
+                Cell cell = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
                 if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
                     Log.d(TAG, "Adding a new " + cellType + " Cell");
-                    Cell newCell = new Cell(cellId, getDeviceDBMetadata().getUserId());
-                    getDBHelper().getCellDao().create(newCell);
+                    Cell newCell = new Cell(cellId, MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getCellDao().create(newCell);
                     cell = newCell;
                     if ("Cdma" == cellType) {
                         CdmaCellData cdmaCellData = new CdmaCellData();
                         cdmaCellData.setLongitude(longitude);
                         cdmaCellData.setLatitude(latitude);
                         cdmaCellData.setIdentity(newCell);
-                        cdmaCellData.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
+                        cdmaCellData.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getCdmaCellDataDao().create(cdmaCellData);
                     } else {
                         OtherCellData otherCell = new OtherCellData();
                         otherCell.setLacTac(lacTac);
@@ -233,8 +216,8 @@ public class ScanConnectionIntentService extends IntentService {
                         otherCell.setIdentity(newCell);
                         otherCell.setMcc(mcc);
                         otherCell.setMnc(mnc);
-                        otherCell.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getOtherCellDataDao().create(otherCell);
+                        otherCell.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getOtherCellDataDao().create(otherCell);
                     }
                 }
                 //then add the history log
@@ -243,8 +226,8 @@ public class ScanConnectionIntentService extends IntentService {
                 neighboringCellHistory.setStrength(strength);
                 neighboringCellHistory.setDate(date);
                 neighboringCellHistory.setCells(cell);
-                neighboringCellHistory.setUserId(getDeviceDBMetadata().getUserId());
-                getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
+                neighboringCellHistory.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                MobilePrivacyProfilerDBHelper.getDBHelper(this).getNeighboringCellHistoryDao().create(neighboringCellHistory);
             }
             //reinitializing parameters :
             cellType = "";
@@ -278,33 +261,33 @@ public class ScanConnectionIntentService extends IntentService {
 
                 KnownWifi knownWifi = new KnownWifi();
 
-                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isKnownWifi(ssid,bssid)){
+                if(!MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().isKnownWifi(ssid,bssid)){
 
                     knownWifi.setSsid(ssid);
                     knownWifi.setBssid(bssid);
                     knownWifi.setIsConfiguredWifi(0);
-                    knownWifi.setUserId(getDeviceDBMetadata().getUserId());
+                    knownWifi.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
 
                     Log.d(TAG," Create a new knownWifi : SSID : "+knownWifi.getSsid()+
                             ", BSSID : "+knownWifi.getBssid()+
                             ", isConfiguredWifi : "+knownWifi.getIsConfiguredWifi()
                     //        +", UserId : "+knownWifi.getUserId()
                     );
-                    getDBHelper().getKnownWifiDao().create(knownWifi);
+                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getKnownWifiDao().create(knownWifi);
                 }
                 else{Log.d(TAG,"KnownWifi : SSID : "+ ssid+", BSSID : "+bssid);}
                 // get the recorded wifi from the DB
-                knownWifi = getDBHelper().getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsidBssid(ssid,bssid);
+                knownWifi = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsidBssid(ssid,bssid);
 
                 //add a new detection event if not recorded yet
                 LogsWifi newLog = new LogsWifi();
                 newLog.setKnownWifi(knownWifi);
                 Date date = new Date(System.currentTimeMillis()+ (int) (scannedWifi.timestamp*0.001) - SystemClock.uptimeMillis());
                 newLog.setTimeStamp(date);
-                newLog.setUserId(getDeviceDBMetadata().getUserId());
-                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedLogWifi(knownWifi,date)) {
+                newLog.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                if(!MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().isRecordedLogWifi(knownWifi,date)) {
                     Log.d(TAG,"Create new LogsWifi : "+knownWifi.toString()+", timeStamp : "+date.toString());
-                    getDBHelper().getLogsWifiDao().createOrUpdate(newLog);
+                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getLogsWifiDao().createOrUpdate(newLog);
                 }
                 else{Log.d(TAG,"Aborting addition of LogsWifi duplicate");}
             }
@@ -321,7 +304,7 @@ public class ScanConnectionIntentService extends IntentService {
                 ssid = wifiConfiguration.SSID;
                 ssid = ssid.substring(1,ssid.length()-1);
                 List<KnownWifi> knownWifis = new ArrayList();
-                knownWifis = getDBHelper().getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsid(ssid);
+                knownWifis = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsid(ssid);
                 if (null!=knownWifis) {//if unrecorded wifi
                     for (KnownWifi knownWifi : knownWifis) {
                         if (1!=knownWifi.getIsConfiguredWifi()) {
@@ -331,7 +314,7 @@ public class ScanConnectionIntentService extends IntentService {
                                             ", isConfiguredWifi : " + knownWifi.getIsConfiguredWifi()
                                     //        +", UserId : "+knownWifi.getUserId()
                             );
-                            getDBHelper().getKnownWifiDao().update(knownWifi);
+                            MobilePrivacyProfilerDBHelper.getDBHelper(this).getKnownWifiDao().update(knownWifi);
                         }
                         else{Log.d(TAG, "Up to date knownWifi : SSID : " + knownWifi.getSsid() +
                                         ", BSSID : " + knownWifi.getBssid() +
@@ -362,7 +345,7 @@ public class ScanConnectionIntentService extends IntentService {
             for(BluetoothDevice bluetoothDevice :bluetoothDevices){
                 String mac = null;
                 String name = null;
-                String userId = getDeviceDBMetadata().getUserId();
+                String userId = MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId();
                 int type = -1;
                 Date date = new Date();
 
@@ -370,7 +353,7 @@ public class ScanConnectionIntentService extends IntentService {
                 name = bluetoothDevice.getName();
                 type = bluetoothDevice.getType();
 
-                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedBluetoothDevice(mac)){
+                if(!MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().isRecordedBluetoothDevice(mac)){
                     fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice newBluetoothDevice = new fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice();
                     newBluetoothDevice.setMac(mac);
                     newBluetoothDevice.setName(name);
@@ -381,7 +364,7 @@ public class ScanConnectionIntentService extends IntentService {
                                     ", type : " + newBluetoothDevice.getType()
                                     +", UserId : "+userId
                     );
-                    getDBHelper().getBluetoothDeviceDao().create(newBluetoothDevice);
+                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getBluetoothDeviceDao().create(newBluetoothDevice);
                 }
                 else{
                     Log.d(TAG, "Recorded BluetoothDevice : MAC : " + mac +
@@ -410,23 +393,5 @@ public class ScanConnectionIntentService extends IntentService {
         }//end if not null
     }//end method
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private OrmLiteDBHelper getDBHelper(){
-        if(dbHelper == null){
-            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
-        }
-        return dbHelper;
-    }
-
-    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
-        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 
 }

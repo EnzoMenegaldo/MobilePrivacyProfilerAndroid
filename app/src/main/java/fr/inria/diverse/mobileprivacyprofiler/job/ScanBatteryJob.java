@@ -26,7 +26,7 @@ public class ScanBatteryJob extends Job {
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
 
-        ScanActivityIntentService.startActionScanBatteryUsage(getContext());
+        ScanActivityIntentService.startActionScanBatteryUsage();
 
         return Result.SUCCESS;
     }

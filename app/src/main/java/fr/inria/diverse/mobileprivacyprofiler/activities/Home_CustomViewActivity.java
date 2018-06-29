@@ -135,12 +135,12 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
     private boolean hasPermission() {
 
-        AppOpsManager appOps = (AppOpsManager)
+        /*AppOpsManager appOps = (AppOpsManager)
                 getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;
- //      return true  ;
+        return mode == AppOpsManager.MODE_ALLOWED;*/
+        return true  ;
 
 //        return ContextCompat.checkSelfPermission(this,
 //                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;*/

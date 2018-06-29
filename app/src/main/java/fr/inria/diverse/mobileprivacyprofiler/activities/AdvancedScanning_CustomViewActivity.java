@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.services.ServiceEnum;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -17,14 +18,7 @@ import android.view.MenuItem;
 
 //Start of user code additional imports AdvancedScanning_CustomViewActivity
 
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-
-import com.evernote.android.job.Job;
-
-import java.util.List;
 
 //End of user code
 
@@ -55,6 +49,10 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Start of user code onCreate AdvancedScanning_CustomViewActivity
+		ServiceEnum[] services = ServiceEnum.values();
+		ListView serviceListView = (ListView)findViewById(R.id.serviceListView);
+		ServiceList_Adapter adapter = new ServiceList_Adapter(getApplicationContext(),services);
+		serviceListView.setAdapter(adapter);
 		//End of user code
     }
     

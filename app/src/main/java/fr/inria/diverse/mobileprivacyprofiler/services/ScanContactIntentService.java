@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Contact;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactEmail;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactEvent;
@@ -22,6 +23,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactIM;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactOrganisation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhoneNumber;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhysicalAddress;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 
@@ -40,11 +42,6 @@ public class ScanContactIntentService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_SCAN_CONTACTS = "fr.inria.diverse.mobileprivacyprofiler.services.action.SCAN_CONTACTS";
-    private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM2";
 
     public ScanContactIntentService() {
         super("ScanContactIntentService");
@@ -56,25 +53,11 @@ public class ScanContactIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanContacts(Context context) {
-        Intent intent = new Intent(context, ScanContactIntentService.class);
+    public static Void startActionScanContacts() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanContactIntentService.class);
         intent.setAction(ACTION_SCAN_CONTACTS);
-        context.startService(intent);
-    }
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ScanContactIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
     @Override
@@ -83,10 +66,6 @@ public class ScanContactIntentService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_SCAN_CONTACTS.equals(action)) {
                 handleActionScanContact();
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
             }
         }
     }
@@ -102,12 +81,12 @@ public class ScanContactIntentService extends IntentService {
         ContentResolver contentResolver = getContentResolver();
 
         //update last ContactScan and flushing previous contact set
-        getDBHelper().getMobilePrivacyProfilerDBHelper().flushContactDataSet();
+        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().flushContactDataSet();
 
-        MobilePrivacyProfilerDB_metadata metadata = getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this);
         Date scanTimeStamp = new Date();
         metadata.setLastContactScan(scanTimeStamp);
-        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
         // Row contacts content uri( access raw_contacts table. ).
         Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI;
@@ -218,12 +197,12 @@ public class ScanContactIntentService extends IntentService {
                         //TODO change the List<String> to a Map
                         case "EMAIL":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactEmail contactEmail = new ContactEmail(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            ContactEmail contactEmail = new ContactEmail(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
                             emailList.add(contactEmail);
                             break;
                         case "IM":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactIM contactIM = new ContactIM(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            ContactIM contactIM = new ContactIM(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
                             imList.add(contactIM);
                             break;
                         case "NICKNAME":
@@ -232,11 +211,11 @@ public class ScanContactIntentService extends IntentService {
                             break;
                         case "ORGANISATION":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            organisation = new ContactOrganisation(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            organisation = new ContactOrganisation(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
                             break;
                         case "PHONE_NUMBER":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
                             phoneNumberList.add(contactPhoneNumber);
                             break;
                         case "NAME":
@@ -251,7 +230,7 @@ public class ScanContactIntentService extends IntentService {
                             break;
                         case "PHYSICAL_ADDRESS":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactPhysicalAddress contactPhysicalAddress = new ContactPhysicalAddress(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            ContactPhysicalAddress contactPhysicalAddress = new ContactPhysicalAddress(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
                             physicalAddressList.add(contactPhysicalAddress);
                             break;
                         case "WEBSITE":
@@ -263,7 +242,7 @@ public class ScanContactIntentService extends IntentService {
                             break;
                         case "EVENT":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactEvent contactEvent = new ContactEvent(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            ContactEvent contactEvent = new ContactEvent(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
                             eventList.add(contactEvent);
                             break;
                         case "RELATION_TYPE":
@@ -287,48 +266,48 @@ public class ScanContactIntentService extends IntentService {
                 // feeding the DB from the collected data
                 try {
                     //add a new contact
-                    contact.setUserId(getDeviceDBMetadata().getUserId());
-                    getDBHelper().getContactDao().create(contact);
+                    contact.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactDao().create(contact);
                     Log.d(TAG, "Added a new contact : " + contact.getDisplayName());
 
                     for(ContactEmail contactEmail: emailList){
                         contactEmail.setContact(contact);
-                        contactEmail.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getContactEmailDao().create(contactEmail);
+                        contactEmail.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactEmailDao().create(contactEmail);
                         Log.d(TAG, "Added a new email : " + contactEmail.getEmail());
                     }
                     if(null!=organisation.getCompany()) {
                         organisation.setReferencedContact(contact);
-                        organisation.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getContactOrganisationDao().create(organisation);
+                        organisation.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactOrganisationDao().create(organisation);
                         Log.d(TAG, "Added a new organisation : " + organisation.getCompany());
                     }
 
                     for(ContactPhoneNumber contactPhoneNumber : phoneNumberList){
                         contactPhoneNumber.setContact(contact);
-                        contactPhoneNumber.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getContactPhoneNumberDao().create(contactPhoneNumber);
+                        contactPhoneNumber.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactPhoneNumberDao().create(contactPhoneNumber);
                         Log.d(TAG, "Added a new phoneNumber : "+contactPhoneNumber.getPhoneNumber());
                     }
 
                     for(ContactPhysicalAddress contactPhysicalAddress : physicalAddressList){
                         contactPhysicalAddress.setContact(contact);
-                        contactPhysicalAddress.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getContactPhysicalAddressDao().create(contactPhysicalAddress);
+                        contactPhysicalAddress.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactPhysicalAddressDao().create(contactPhysicalAddress);
                         Log.d(TAG, "Added a new physicalAddress : "+contactPhysicalAddress.getAddress());
                     }
 
                     for(ContactIM contactIM : imList){
                         contactIM.setContact(contact);
-                        contactIM.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getContactIMDao().create(contactIM);
+                        contactIM.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactIMDao().create(contactIM);
                         Log.d(TAG, "Added a new instant messenger : "+contactIM.getImId());
                     }
 
                     for(ContactEvent contactEvent : eventList){
                         contactEvent.setContact(contact);
-                        contactEvent.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getContactEventDao().create(contactEvent);
+                        contactEvent.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactEventDao().create(contactEvent);
                         Log.d(TAG, "Added a new contactEvent : "+contactEvent.getType()+" : "+contactEvent.getStartDate());
                     }
                 } catch (Exception e) { Log.d(TAG, "Error while feeding the DB");e.printStackTrace(); }
@@ -340,14 +319,6 @@ public class ScanContactIntentService extends IntentService {
 
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
 
     /**
      *
@@ -654,14 +625,5 @@ public class ScanContactIntentService extends IntentService {
         return toReturn;
     }
 
-    private OrmLiteDBHelper getDBHelper(){
-        if(dbHelper == null){
-            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
-        }
-        return dbHelper;
-    }
-
-    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
-        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 
 }
