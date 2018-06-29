@@ -3,5 +3,6 @@
     <declare-styleable name="AppTheme">
     	<attr name="ic_action_search" format="reference" />
 		<attr name="ic_action_manualscan" format="reference" />
+		<attr name="ic_action_advancedscanning" format="reference" />
    	</declare-styleable>
 </resources>

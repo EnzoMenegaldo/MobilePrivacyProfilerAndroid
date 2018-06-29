@@ -6,10 +6,8 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +15,8 @@ import android.view.MenuItem;
 
 import android.preference.PreferenceManager;
 //Start of user code additional imports Home_CustomViewActivity
+import android.util.Log;
+import android.app.Activity;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
@@ -50,6 +50,7 @@ import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 
 //End of user code
+
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Home_CustomViewActivity
 //End of user code
@@ -62,11 +63,14 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     private static Context context;
 	//End of user code
 
-    //Start of user code Static Initialization
-    static {
-        System.loadLibrary(native_lib);
-    }
-    //End of user code
+
+	//Start of user code Static initialization Home_CustomViewActivity
+        static {
+            System.loadLibrary(native_lib);
+        }
+	//End of user code
+	
+	
 
 	/** Called when the activity is first created. */
     @Override
@@ -123,16 +127,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         OperationDBService.startActionResetDB(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
-               if (!hasPermission()){
-                    requestPermission();
-                }
-                break;
-        }
-    }
 
     private void requestPermission() {
         Toast.makeText(this, "Please grant App usage stat permission to Mobiel Privacy Profiler", Toast.LENGTH_SHORT).show();
@@ -141,12 +135,12 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
     private boolean hasPermission() {
 
-       /* AppOpsManager appOps = (AppOpsManager)
+        AppOpsManager appOps = (AppOpsManager)
                 getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;*/
-       return true  ;
+        return mode == AppOpsManager.MODE_ALLOWED;
+ //      return true  ;
 
 //        return ContextCompat.checkSelfPermission(this,
 //                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;*/
@@ -281,6 +275,20 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         return super.onCreateOptionsMenu(menu);
     }
     
+
+	// Dealing with Activity results
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Start of user code onActivityResult Home_CustomViewActivity
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
+                if (!hasPermission()){
+                    requestPermission();
+                }
+                break;
+        }
+		//End of user code
+	}
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -290,6 +298,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
 	            return true;
 			//Start of user code additional menu action Home_CustomViewActivity
+            case R.id.home_customview_action_advancedscanning:
+                startActivity(new Intent(this, AdvancedScanning_CustomViewActivity.class));
+                return true;
             case R.id.home_customview_action_manualscan:
                 startActivity(new Intent(this, ManualScan_CustomViewActivity.class));
                 return true;

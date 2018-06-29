@@ -563,7 +563,9 @@ public class MobilePrivacyRestClient {
             Log.d(TAG, "serialized : "+object.getClass().getSimpleName());
 
         } catch (JsonProcessingException e) {e.printStackTrace();}
-        return jsonObjectOutput;
+
+        //We want to convert _id to android_id to avoid issues on server side
+        return jsonObjectOutput.replace("_id","android_id");
     }
 
     /**

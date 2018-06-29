@@ -22,7 +22,7 @@
 [BluetoothLog|date : Date;userId : String]		
 [SMS|date : String;phoneNumber : String;type : String;userId : String]		
 [BatteryUsage|date : Date;level : Integer;isPugged : Integer;plugType : String;userId : String]		
-[NetActivity|date : Date;application : String;hostname : String;ipDestination : String;userId : String]
+[NetActivity|date : Date;application : String;hostname : String;ipDestination : String;userId : String]		
 [MobilePrivacyProfilerDB_metadata]
 [ApplicationHistory]
 [ApplicationUsageStats]

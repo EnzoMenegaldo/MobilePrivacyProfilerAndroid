@@ -104,7 +104,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 	Hashtable<String, NetActivity> xmlId2NetActivity = new Hashtable<String, NetActivity>();
 
 	// minimize memory footprint by using static Strings
-    public static final String ID_STRING = "android_id";
+    public static final String ID_STRING = "id";
 
 	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATAS = "MOBILEPRIVACYPROFILERDB_METADATAS";
 	public static final String DATACLASSIFIER_MOBILEPRIVACYPROFILERDB_METADATA  = "MOBILEPRIVACYPROFILERDB_METADATA";
@@ -1728,7 +1728,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		parser.require(XmlPullParser.START_TAG, ns, DATACLASSIFIER_NETACTIVITY);
     	String currentTagName = parser.getName();
     			
-    	xmlId2NetActivity.put(parser.getAttributeValue(null, ID_STRING),result);
+    	xmlId2NetActivity.put(parser.getAttributeValue(null, ID_STRING),result);		
 		// TODO date = parser.getAttributeValue(null, DATAATT_NETACTIVITY_DATE);
 		result.setApplication(parser.getAttributeValue(null, DATAATT_NETACTIVITY_application));
 		result.setHostname(parser.getAttributeValue(null, DATAATT_NETACTIVITY_hostname));

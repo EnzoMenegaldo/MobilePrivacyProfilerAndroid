@@ -4,25 +4,23 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.PacketSnifferService;
-import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.VpnService;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 
 //Start of user code additional imports ManualScan_CustomViewActivity
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.net.VpnService;
+import android.util.Log;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanConnectionIntentService;
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanContactIntentService;
@@ -32,6 +30,7 @@ import fr.inria.diverse.mobileprivacyprofiler.test.Test;
 import android.view.View;
 
 //End of user code
+
 public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements ManualScan_CustomViewActivity
 //End of user code
@@ -42,6 +41,13 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 	private static final int REQUEST_CODE_VPN = 0;
 
 	//End of user code
+
+
+	//Start of user code Static initialization ManualScan_CustomViewActivity
+		
+	//End of user code
+	
+	
 
 	/** Called when the activity is first created. */
     @Override
@@ -238,6 +244,26 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
         return super.onCreateOptionsMenu(menu);
     }
     
+
+	// Dealing with Activity results
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Start of user code onActivityResult ManualScan_CustomViewActivity
+		Log.i(TAG, "onActivityResult(resultCode:  " + resultCode + ")");
+		switch (requestCode){
+			case REQUEST_CODE_VPN :
+				if (resultCode == RESULT_OK) {
+					ScanActivityIntentService.startActionNetActivity(getApplicationContext());
+				} else if (resultCode == RESULT_CANCELED) {
+					showVPNRefusedDialog();
+				}
+				break;
+
+			default:
+				break;
+		}
+	//End of user code
+	}
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -270,35 +296,10 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		return new Intent(this, Home_CustomViewActivity.class);
 		//End of user code
 	}
-
 	@Override
 	public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
 		//Start of user code onCreateSupportNavigateUpTaskStack ManualScan_CustomViewActivity
 		super.onCreateSupportNavigateUpTaskStack(builder);
 		//End of user code
 	}
-
-	//Start of user code onActivityResult ManualScan_CustomViewActivity
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i(TAG, "onActivityResult(resultCode:  " + resultCode + ")");
-		switch (requestCode){
-			case REQUEST_CODE_VPN :
-				if (resultCode == RESULT_OK) {
-					ScanActivityIntentService.startActionNetActivity(getApplicationContext());
-				} else if (resultCode == RESULT_CANCELED) {
-					showVPNRefusedDialog();
-				}
-				break;
-
-			default:
-				break;
-		}
-	}
-	//End of user code
-
-
-
-
-
 }
