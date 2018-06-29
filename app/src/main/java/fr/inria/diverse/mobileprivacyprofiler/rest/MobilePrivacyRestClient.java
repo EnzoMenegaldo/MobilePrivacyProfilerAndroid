@@ -38,7 +38,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.WebHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
 
 // Start of user code additional import for MobilePrivacyRestClient
 // End of user code
@@ -54,7 +54,7 @@ public class MobilePrivacyRestClient {
     
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
-    private String serverUrl = "http://131.254.18.198:4567";
+    private String serverUrl = "https://131.254.18.200:4567";
 // End of user code
 	
 	/**
@@ -107,7 +107,7 @@ public class MobilePrivacyRestClient {
 		exportBluetoothLog(context);
 		exportSMS(context);
 		exportBatteryUsage(context);
-		exportWebHistory(context);
+		exportNetActivity(context);
 
 	}//endexportDB
 
@@ -525,15 +525,15 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportWebHistory(Context context) {
+    private void exportNetActivity(Context context) {
         //query all entries
-        List<WebHistory> toExport= getDBHelper(context).getWebHistoryDao().queryForAll();
+        List<NetActivity> toExport= getDBHelper(context).getNetActivityDao().queryForAll();
         if(null != toExport && !toExport.isEmpty()) {
             //translation of the collection into Json
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/WebHistory",postData);
+            executePostRequest(this.serverUrl,"/NetActivity",postData);
         }
     }
 
@@ -563,7 +563,9 @@ public class MobilePrivacyRestClient {
             Log.d(TAG, "serialized : "+object.getClass().getSimpleName());
 
         } catch (JsonProcessingException e) {e.printStackTrace();}
-        return jsonObjectOutput;
+
+        //We want to convert _id to android_id to avoid issues on server side
+        return jsonObjectOutput.replace("_id","android_id");
     }
 
     /**

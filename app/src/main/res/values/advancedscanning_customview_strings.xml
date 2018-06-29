@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resource Strings specific to advancedscanning Custom View -->
+<resources>	
+	<!-- Start of user code customView_strings advancedscanning
+	-->
+	<!-- freely add here the desired resource String for your custom view -->
+	<string name="advancedscanning_customview_sample_btn_label">SampleButton</string>
+	<string name="title_advancedscanning_activity">Advanced scanning</string>
+	<!-- End of user code
+	-->
+</resources>

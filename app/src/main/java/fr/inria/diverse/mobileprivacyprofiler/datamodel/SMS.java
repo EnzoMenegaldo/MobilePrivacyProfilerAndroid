@@ -95,7 +95,11 @@ public class SMS {
 		this._id = id;
 	}
 
+<<<<<<<<< Temporary merge branch 1
+	public int get_Id() {
+=========
 	public int get_id() {
+>>>>>>>>> Temporary merge branch 2
 	return this._id;
 	}
 

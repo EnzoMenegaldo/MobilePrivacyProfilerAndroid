@@ -29,6 +29,8 @@ import android.view.MenuItem;
 
 import android.preference.PreferenceManager;
 //Start of user code additional imports Home_CustomViewActivity
+import android.util.Log;
+import android.app.Activity;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
@@ -47,6 +49,10 @@ import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -58,6 +64,7 @@ import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 
 //End of user code
+
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Home_CustomViewActivity
 //End of user code
@@ -67,7 +74,18 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     public static WifiScanReceiver wifiScanReceiver;
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
+    private static final String native_lib = "native_lib";
+    private static Context context;
 	//End of user code
+
+
+	//Start of user code Static initialization Home_CustomViewActivity
+        static {
+            System.loadLibrary(native_lib);
+        }
+	//End of user code
+
+
 
 	/** Called when the activity is first created. */
     @Override
@@ -88,6 +106,12 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         if (!hasPermission()){
             requestPermission();
         }
+        context = getApplicationContext();
+
+        //The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
+        //If the user use a device whose api is older than 20, he won't be able to use SSLSocket
+        updateAndroidSecurityProvider(this);
+
 
         JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
 
@@ -112,15 +136,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         ExportDBJob.schedule();
 
-/*
-        this.wifiScanReceiver = new WifiScanReceiver();
-        unregisterReceiver(wifiScanReceiver);
-        registerReceiver(
-                wifiScanReceiver,
-                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        );*/
 
-		//End of user code
+        //End of user code
     }
     
     @Override
@@ -131,6 +148,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
 	}
     //Start of user code additional code Home_CustomViewActivity
+
+    public static Context getContext(){return context;}
 
 	public void onClickBtnApplicationHistory(View view){
 		showToast( this.getString(R.string.applicationhistorylist_classlistview_launch_toast));
@@ -147,17 +166,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         OperationDBService.startActionResetDB(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Log.d("MainActivity", "resultCode " + resultCode);
-        switch (requestCode){
-            case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
-               if (!hasPermission()){
-                    requestPermission();
-                }
-                break;
-        }
-    }
 
     private void requestPermission() {
         Toast.makeText(this, "Please grant App usage stat permission to Mobiel Privacy Profiler", Toast.LENGTH_SHORT).show();
@@ -165,13 +173,16 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     }
 
     private boolean hasPermission() {
+
         AppOpsManager appOps = (AppOpsManager)
                 getSystemService(Context.APP_OPS_SERVICE);
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
+ //      return true  ;
+
 //        return ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;
+//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;*/
     }
 
     private void debugText(StringBuilder sb) {
@@ -255,12 +266,29 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         sb.append("Table "+getHelper().getSMSDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getSMSDao().countOf()+"\n");
 
-        sb.append("Table "+getHelper().getWebHistoryDao().getDataClass().getSimpleName());
-        sb.append(" count="+ getHelper().getWebHistoryDao().countOf()+"\n");
+        sb.append("Table "+getHelper().getNetActivityDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getNetActivityDao().countOf()+"\n");
 /*
         sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
         sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
 */
+    }
+
+    /**
+     * Install a newer security provider using Google Play Services to allow the application to use SSLSocket.
+     * If the devise has an API lower than 20, by default, he won't be able to use SSLSocket.
+     * https://stackoverflow.com/questions/29916962/javax-net-ssl-sslhandshakeexception-javax-net-ssl-sslprotocolexception-ssl-han/36892715#36892715
+     */
+    private void updateAndroidSecurityProvider(Activity callingActivity) {
+        try {
+            ProviderInstaller.installIfNeeded(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Thrown when Google Play Services is not installed, up-to-date, or enabled
+            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Log.e("SecurityException", "Google Play Services not available.");
+        }
     }
 	//End of user code
 
@@ -291,7 +319,21 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         return super.onCreateOptionsMenu(menu);
     }
     
-    
+
+	// Dealing with Activity results
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//Start of user code onActivityResult Home_CustomViewActivity
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
+                if (!hasPermission()){
+                    requestPermission();
+                }
+                break;
+        }
+		//End of user code
+	}
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
@@ -300,6 +342,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
 	            return true;
 			//Start of user code additional menu action Home_CustomViewActivity
+            case R.id.home_customview_action_advancedscanning:
+                startActivity(new Intent(this, AdvancedScanning_CustomViewActivity.class));
+                return true;
             case R.id.home_customview_action_manualscan:
                 startActivity(new Intent(this, ManualScan_CustomViewActivity.class));
                 return true;

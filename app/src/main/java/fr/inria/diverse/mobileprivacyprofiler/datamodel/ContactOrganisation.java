@@ -88,16 +88,12 @@ public class ContactOrganisation {
 		this.userId = userId;
 	} 
 
-	public int getId() {
+	public int get_id() {
 		return _id;
 	}
 	@JsonProperty
-	public void setId(int id) {
+	public void set_id(int id) {
 		this._id = id;
-	}
-
-	public int get_id() {
-	return this._id;
 	}
 
 	public MobilePrivacyProfilerDBHelper getContextDB(){
