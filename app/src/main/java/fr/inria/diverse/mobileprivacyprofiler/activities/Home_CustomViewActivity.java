@@ -113,34 +113,15 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
 
         // if application is activated, then schedule jobs
-        ScanAppUsageJob.cancelRequest();
         ScanAppUsageJob.schedule();
-
-        ScanBatteryJob.cancelRequest();
         ScanBatteryJob.schedule();
-
-        ScanBluetoothJob.cancelRequest();
         ScanBluetoothJob.schedule();
-
-        ScanCalendarJob.cancelRequest();
         ScanCalendarJob.schedule();
-
-        ScanCellJob.cancelRequest();
         ScanCellJob.schedule();
-
-        ScanContactJob.cancelRequest();
         ScanContactJob.schedule();
-
-        ScanGeolocationJob.cancelRequest();
         ScanGeolocationJob.schedule();
-
-        ScanPhoneCallLogJob.cancelRequest();
         ScanPhoneCallLogJob.schedule();
-
-        ScanSMSJob.cancelRequest();
         ScanSMSJob.schedule();
-
-        ExportDBJob.cancelRequest();
         ExportDBJob.schedule();
 
 /*

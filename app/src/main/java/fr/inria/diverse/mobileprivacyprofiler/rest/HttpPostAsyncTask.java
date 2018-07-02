@@ -84,7 +84,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
             } else {
                 // Status code is not 200
                 // Do something to handle the error
-                Log.d(TAG, "Server intern error");
+                Log.d(TAG, "Error while exporting data to server : check server statue and device connection");
             }
 
         } catch (Exception e) {
