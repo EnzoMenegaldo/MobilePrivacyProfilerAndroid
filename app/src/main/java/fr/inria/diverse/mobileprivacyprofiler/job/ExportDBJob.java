@@ -1,25 +1,26 @@
 package fr.inria.diverse.mobileprivacyprofiler.job;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
+import java.sql.SQLException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanSocialIntentService;
 
 /**
- * Created by dvojtise on 30/01/18.
+ * Created by gohier on 27/06/18.
  */
 
-public class ScanAppUsageJob extends Job {
-    public static final String TAG = "ScanAppUsageJob";
+public class ExportDBJob extends Job {
+    public static final String TAG = "ExportDBJob";
 
 
     private static final boolean DEBUG = BuildConfig.DEBUG;
@@ -28,9 +29,11 @@ public class ScanAppUsageJob extends Job {
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
 
-        ScanActivityIntentService.startActionScanInstalledApplications();
-        ScanActivityIntentService.startActionScanAppUsage();
-
+        try {
+            new  MobilePrivacyRestClient().exportDB(getContext());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return Result.SUCCESS;
     }
 
@@ -39,9 +42,9 @@ public class ScanAppUsageJob extends Job {
         if (!jobRequests.isEmpty()) {
             return jobRequests.iterator().next().getJobId();
         }
-
-        long interval = TimeUnit.HOURS.toMillis(3); // every 3 hours
-        long flex = TimeUnit.HOURS.toMillis(1); // wait 1 hours before job runs again
+        // adapt the triggering of the update
+        long interval = TimeUnit.MINUTES.toMillis(20); // every 12 h
+        long flex = TimeUnit.MINUTES.toMillis(5); // -+ 1h to execute
 
         if (DEBUG) {
             interval = JobRequest.MIN_INTERVAL;
@@ -53,9 +56,9 @@ public class ScanAppUsageJob extends Job {
                 //.setUpdateCurrent(true)
                 //.setRequiresBatteryNotLow(true)
                 //.setRequiresStorageNotLow(true)
-                //.setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
+                .setRequiredNetworkType(JobRequest.NetworkType.UNMETERED)
                 //.setRequiresCharging(true)
-                //.setRequirementsEnforced(true)
+                .setRequirementsEnforced(true)
                 .build()
                 .schedule();
     }

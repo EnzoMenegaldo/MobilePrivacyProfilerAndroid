@@ -2,11 +2,25 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
+import fr.inria.diverse.mobileprivacyprofiler.BroadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.MobilePrivacyProfilerJobCreator;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanBatteryJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanBluetoothJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanCalendarJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanCellJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanContactJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,13 +64,13 @@ import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 
 //End of user code
-
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Home_CustomViewActivity
 //End of user code
 {
 	
 	//Start of user code constants Home_CustomViewActivity
+    public static WifiScanReceiver wifiScanReceiver;
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
     private static final String native_lib = "native_lib";
@@ -69,8 +83,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             System.loadLibrary(native_lib);
         }
 	//End of user code
-	
-	
 
 	/** Called when the activity is first created. */
     @Override
@@ -97,7 +109,48 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         //If the user use a device whose api is older than 20, he won't be able to use SSLSocket
         updateAndroidSecurityProvider(this);
 
-        JobManager.create(this.getApplicationContext());
+
+        JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
+
+        // if application is activated, then schedule jobs
+        ScanAppUsageJob.cancelRequest();
+        ScanAppUsageJob.schedule();
+
+        ScanBatteryJob.cancelRequest();
+        ScanBatteryJob.schedule();
+
+        ScanBluetoothJob.cancelRequest();
+        ScanBluetoothJob.schedule();
+
+        ScanCalendarJob.cancelRequest();
+        ScanCalendarJob.schedule();
+
+        ScanCellJob.cancelRequest();
+        ScanCellJob.schedule();
+
+        ScanContactJob.cancelRequest();
+        ScanContactJob.schedule();
+
+        ScanGeolocationJob.cancelRequest();
+        ScanGeolocationJob.schedule();
+
+        ScanPhoneCallLogJob.cancelRequest();
+        ScanPhoneCallLogJob.schedule();
+
+        ScanSMSJob.cancelRequest();
+        ScanSMSJob.schedule();
+
+        ExportDBJob.cancelRequest();
+        ExportDBJob.schedule();
+
+/*
+        this.wifiScanReceiver = new WifiScanReceiver();
+        unregisterReceiver(wifiScanReceiver);
+        registerReceiver(
+                wifiScanReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        );*/
+
 		//End of user code
     }
     
@@ -159,8 +212,13 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         sb.append(" - - last bg task run - -\n");
         MobilePrivacyProfilerDB_metadata metadata = getHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        sb.append("Last transmission date: "+(metadata.getLastTransmissionDate()!=null ? dateFormat.format(metadata.getLastTransmissionDate()):"never")+"\n");
         sb.append("ScanInstalledApp: "+(metadata.getLastScanInstalledApplications()!=null ? dateFormat.format(metadata.getLastScanInstalledApplications()):"never")+"\n");
         sb.append("ScanAppUsage: "+(metadata.getLastScanAppUsage()!=null ? dateFormat.format(metadata.getLastScanAppUsage()):"never")+"\n");
+        sb.append("ScanSMS: "+(metadata.getLastSmsScan()!=null ? dateFormat.format(metadata.getLastSmsScan()):"never")+"\n");
+        sb.append("ScanCallLog: "+(metadata.getLastCallScan()!=null ? dateFormat.format(metadata.getLastCallScan()):"never")+"\n");
+        sb.append("ContactScan: "+(metadata.getLastContactScan()!=null ? dateFormat.format(metadata.getLastContactScan()):"never")+"\n");
+
 
         sb.append(" - - - -\n");
         sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
