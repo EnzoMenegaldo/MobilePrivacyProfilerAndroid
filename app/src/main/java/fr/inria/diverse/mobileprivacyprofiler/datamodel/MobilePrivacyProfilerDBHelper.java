@@ -1,7 +1,6 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -15,7 +14,6 @@ import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -79,8 +77,8 @@ public class MobilePrivacyProfilerDBHelper {
 	//public RuntimeExceptionDao<SMS, Integer> sMSDao;
 	public Dao<BatteryUsage, Integer> batteryUsageDao;
 	//public RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageDao;
-	public Dao<NetActivity, Integer> netActivityDao;
-	//public RuntimeExceptionDao<NetActivity, Integer> netActivityDao;
+	public Dao<WebHistory, Integer> webHistoryDao;
+	//public RuntimeExceptionDao<WebHistory, Integer> webHistoryDao;
 
 	
 	public MobilePrivacyProfilerDBHelper(){
@@ -111,7 +109,7 @@ public class MobilePrivacyProfilerDBHelper {
 		Dao<BluetoothLog, Integer> bluetoothLogDao,
 		Dao<SMS, Integer> sMSDao,
 		Dao<BatteryUsage, Integer> batteryUsageDao,
-		Dao<NetActivity, Integer> netActivityDao        
+		Dao<WebHistory, Integer> webHistoryDao        
 	){
 		this.mobilePrivacyProfilerDB_metadataDao = mobilePrivacyProfilerDB_metadataDao;
 		this.applicationHistoryDao = applicationHistoryDao;
@@ -137,7 +135,7 @@ public class MobilePrivacyProfilerDBHelper {
 		this.bluetoothLogDao = bluetoothLogDao;
 		this.sMSDao = sMSDao;
 		this.batteryUsageDao = batteryUsageDao;
-		this.netActivityDao = netActivityDao;
+		this.webHistoryDao = webHistoryDao;
 	}
 
 	//Start of user code additional methods for MobilePrivacyProfilerDBHelper
@@ -479,12 +477,6 @@ public class MobilePrivacyProfilerDBHelper {
 		return toReturn;
 	}
 
-	public static OrmLiteDBHelper getDBHelper(Context context){
-		return OpenHelperManager.getHelper(context, OrmLiteDBHelper.class);
-	}
-
-	public static MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(Context context){
-		return getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 	//End of user code
 
 }

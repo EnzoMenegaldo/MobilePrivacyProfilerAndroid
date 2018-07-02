@@ -84,12 +84,16 @@ public class LogsWifi {
 		this.userId = userId;
 	} 
 
-	public int get_id() {
+	public int getId() {
 		return _id;
 	}
 	@JsonProperty
-	public void set_id(int id) {
+	public void setId(int id) {
 		this._id = id;
+	}
+
+	public int get_id() {
+	return this._id;
 	}
 
 	public MobilePrivacyProfilerDBHelper getContextDB(){

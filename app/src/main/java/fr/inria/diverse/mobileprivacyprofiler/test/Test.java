@@ -186,7 +186,7 @@ public class Test {
 
 
         // Convert JSON string to single Object
-        String jsonInString = "{\"android_id\":1,\"appName\":\"appName : a\",\"packageName\":\"packageName : a\",\"usageStats\":null,\"contextDB\":null}";
+        String jsonInString = "{\"_id\":1,\"appName\":\"appName : a\",\"packageName\":\"packageName : a\",\"usageStats\":null,\"contextDB\":null}";
         ApplicationHistory appHist = null;
         try {
             appHist = mapper.readValue(jsonInString, ApplicationHistory.class);
@@ -204,7 +204,7 @@ public class Test {
         log.info(jsonList);
 
         // Convert JSON string to a List of Object
-        String jsonStringSample = "[{\"android_id\":1,\"appName\":\"appName : a\",\"packageName\":\"packageName : a\",\"usageStats\":null,\"contextDB\":null},{\"android_id\":2,\"appName\":\"appName : b\",\"packageName\":\"packageName : b\",\"usageStats\":null,\"contextDB\":null},{\"android_id\":3,\"appName\":\"appName : c\",\"packageName\":\"packageName : c\",\"usageStats\":null,\"contextDB\":null}]";
+        String jsonStringSample = "[{\"_id\":1,\"appName\":\"appName : a\",\"packageName\":\"packageName : a\",\"usageStats\":null,\"contextDB\":null},{\"_id\":2,\"appName\":\"appName : b\",\"packageName\":\"packageName : b\",\"usageStats\":null,\"contextDB\":null},{\"_id\":3,\"appName\":\"appName : c\",\"packageName\":\"packageName : c\",\"usageStats\":null,\"contextDB\":null}]";
         List<ApplicationHistory> appHistList = null;
         try {
             appHistList = mapper.readValue(jsonStringSample, mapper.getTypeFactory().constructCollectionType(List.class, ApplicationHistory.class));

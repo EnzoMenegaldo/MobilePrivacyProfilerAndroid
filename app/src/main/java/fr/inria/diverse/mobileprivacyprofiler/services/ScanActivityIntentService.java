@@ -4,7 +4,6 @@ import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorDescription;
-import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.IntentService;
 import android.app.usage.UsageStats;
@@ -34,7 +33,6 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Geolocation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
-import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.PacketSnifferService;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
 /**
@@ -57,7 +55,6 @@ public class ScanActivityIntentService extends IntentService {
     private static final String ACTION_RECORD_LOCATION = "fr.inria.diverse.mobileprivacyprofiler.services.action.RECORD_LOCATION";
     private static final String ACTION_SCAN_AUTHENTICATORS = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_AUTHENTICATORS";
     private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.action.BAZ";
-    private static final String ACTION_NET_ACTIVITY = "fr.inria.diverse.mobileprivacyprofiler.action.NET_ACTIVITY";
 
     // TODO: Rename parameters
     private static final String EXTRA_PARAM1 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM1";
@@ -142,19 +139,6 @@ public class ScanActivityIntentService extends IntentService {
         context.startService(intent);
     }
 
-    /**
-     * Starts this service to perform action NetActivity with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionNetActivity(Context context) {
-        Intent intent = new Intent(context, ScanActivityIntentService.class);
-        intent.setAction(ACTION_NET_ACTIVITY);
-        context.startService(intent);
-    }
-
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
@@ -173,8 +157,6 @@ public class ScanActivityIntentService extends IntentService {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
                 final String param2 = intent.getStringExtra(EXTRA_PARAM2);
                 handleActionBaz(param1, param2);
-            }else if(ACTION_NET_ACTIVITY.equals(action)){
-                handleActionNetActivity();
             }
         }
     }
@@ -502,15 +484,6 @@ public class ScanActivityIntentService extends IntentService {
     }
 
     /**
-     * Handle action NetActivity in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionNetActivity(){
-        Intent intent = new Intent(getApplicationContext(), PacketSnifferService.class);
-        startService(intent);
-    }
-
-    /**
      * Calculate distance between two points in latitude and longitude taking
      * into account height difference. If you are not interested in height
      * difference pass 0.0. Uses Haversine method as its base.
@@ -540,7 +513,6 @@ public class ScanActivityIntentService extends IntentService {
         int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
-        //return true;
     }
 
     private OrmLiteDBHelper getDBHelper(){

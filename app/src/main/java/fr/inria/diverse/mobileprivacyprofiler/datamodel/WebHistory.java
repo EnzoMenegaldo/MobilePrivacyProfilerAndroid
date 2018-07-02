@@ -25,21 +25,21 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-// Start of user code additional import for NetActivity
+// Start of user code additional import for WebHistory
 // End of user code
 
 /** 
   *  
   */ 
-@DatabaseTable(tableName = "netActivity")
+@DatabaseTable(tableName = "webHistory")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, 
                   property  = "_id",
-				  scope = NetActivity.class)
-public class NetActivity {
+				  scope = WebHistory.class)
+public class WebHistory {
 
-	public static Log log = LogFactory.getLog(NetActivity.class);
+	public static Log log = LogFactory.getLog(WebHistory.class);
 
-	public static final String XML_NETACTIVITY = "NETACTIVITY";
+	public static final String XML_WEBHISTORY = "WEBHISTORY";
 	public static final String XML_ATT_ID = "id";
 	public static final String XML_ATT_DATE = "date";
 	public static final String XML_ATT_APPLICATION = "application";
@@ -79,11 +79,11 @@ public class NetActivity {
 	protected java.lang.String userId;
 	
 
-	// Start of user code NetActivity additional user properties
+	// Start of user code WebHistory additional user properties
 	// End of user code
 	
-	public NetActivity() {} // needed by ormlite
-	public NetActivity(java.util.Date date, java.lang.String application, java.lang.String hostname, java.lang.String ipDestination, java.lang.String userId) {
+	public WebHistory() {} // needed by ormlite
+	public WebHistory(java.util.Date date, java.lang.String application, java.lang.String hostname, java.lang.String ipDestination, java.lang.String userId) {
 		super();
 		this.date = date;
 		this.application = application;
@@ -92,12 +92,16 @@ public class NetActivity {
 		this.userId = userId;
 	} 
 
-	public int get_id() {
+	public int getId() {
 		return _id;
 	}
 	@JsonProperty
-	public void set_id(int id) {
+	public void setId(int id) {
 		this._id = id;
+	}
+
+	public int get_id() {
+	return this._id;
 	}
 
 	public MobilePrivacyProfilerDBHelper getContextDB(){
@@ -150,7 +154,7 @@ public class NetActivity {
 	public String toXML(String indent, MobilePrivacyProfilerDBHelper contextDB){
 		StringBuilder sb = new StringBuilder();
 		sb.append(indent+"<");
-    	sb.append(XML_NETACTIVITY);
+    	sb.append(XML_WEBHISTORY);
 		sb.append(" "+XML_ATT_ID+"=\"");
 		sb.append(this._id);
     	sb.append("\" ");
@@ -184,7 +188,7 @@ public class NetActivity {
 
 		// TODO deal with other case
 
-		sb.append("</"+XML_NETACTIVITY+">");
+		sb.append("</"+XML_WEBHISTORY+">");
 		return sb.toString();
 	}
 }
