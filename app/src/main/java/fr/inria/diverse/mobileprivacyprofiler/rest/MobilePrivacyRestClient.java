@@ -60,7 +60,7 @@ public class MobilePrivacyRestClient {
 	/**
      * Class constructor
      */
-    public MobilePrivacyRestClient(){}
+    MobilePrivacyRestClient(){}
 	
 	/**
      * singelton getter
