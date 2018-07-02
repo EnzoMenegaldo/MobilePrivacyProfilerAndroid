@@ -196,19 +196,19 @@ public class ScanConnectionIntentService extends IntentService {
             }
             if (isCell) {//isCell true if the cell as been recognised and data are available (!=2147483647)
                 //Log.d(TAG,"--------> looking for cell with "+cellId+" as CellId");
-                Cell cell = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
+                Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
                 if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
                     Log.d(TAG, "Adding a new " + cellType + " Cell");
-                    Cell newCell = new Cell(cellId, MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getCellDao().create(newCell);
+                    Cell newCell = new Cell(cellId, getDeviceDBMetadata().getUserId());
+                    getDBHelper().getCellDao().create(newCell);
                     cell = newCell;
                     if ("Cdma" == cellType) {
                         CdmaCellData cdmaCellData = new CdmaCellData();
                         cdmaCellData.setLongitude(longitude);
                         cdmaCellData.setLatitude(latitude);
                         cdmaCellData.setIdentity(newCell);
-                        cdmaCellData.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getCdmaCellDataDao().create(cdmaCellData);
+                        cdmaCellData.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
                     } else {
                         OtherCellData otherCell = new OtherCellData();
                         otherCell.setLacTac(lacTac);
@@ -216,8 +216,8 @@ public class ScanConnectionIntentService extends IntentService {
                         otherCell.setIdentity(newCell);
                         otherCell.setMcc(mcc);
                         otherCell.setMnc(mnc);
-                        otherCell.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getOtherCellDataDao().create(otherCell);
+                        otherCell.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getOtherCellDataDao().create(otherCell);
                     }
                 }
                 //then add the history log
@@ -226,8 +226,8 @@ public class ScanConnectionIntentService extends IntentService {
                 neighboringCellHistory.setStrength(strength);
                 neighboringCellHistory.setDate(date);
                 neighboringCellHistory.setCells(cell);
-                neighboringCellHistory.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                MobilePrivacyProfilerDBHelper.getDBHelper(this).getNeighboringCellHistoryDao().create(neighboringCellHistory);
+                neighboringCellHistory.setUserId(getDeviceDBMetadata().getUserId());
+                getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
             }
             //reinitializing parameters :
             cellType = "";
@@ -261,33 +261,33 @@ public class ScanConnectionIntentService extends IntentService {
 
                 KnownWifi knownWifi = new KnownWifi();
 
-                if(!MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().isKnownWifi(ssid,bssid)){
+                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isKnownWifi(ssid,bssid)){
 
                     knownWifi.setSsid(ssid);
                     knownWifi.setBssid(bssid);
                     knownWifi.setIsConfiguredWifi(0);
-                    knownWifi.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                    knownWifi.setUserId(getDeviceDBMetadata().getUserId());
 
                     Log.d(TAG," Create a new knownWifi : SSID : "+knownWifi.getSsid()+
                             ", BSSID : "+knownWifi.getBssid()+
                             ", isConfiguredWifi : "+knownWifi.getIsConfiguredWifi()
                     //        +", UserId : "+knownWifi.getUserId()
                     );
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getKnownWifiDao().create(knownWifi);
+                    getDBHelper().getKnownWifiDao().create(knownWifi);
                 }
                 else{Log.d(TAG,"KnownWifi : SSID : "+ ssid+", BSSID : "+bssid);}
                 // get the recorded wifi from the DB
-                knownWifi = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsidBssid(ssid,bssid);
+                knownWifi = getDBHelper().getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsidBssid(ssid,bssid);
 
                 //add a new detection event if not recorded yet
                 LogsWifi newLog = new LogsWifi();
                 newLog.setKnownWifi(knownWifi);
                 Date date = new Date(System.currentTimeMillis()+ (int) (scannedWifi.timestamp*0.001) - SystemClock.uptimeMillis());
                 newLog.setTimeStamp(date);
-                newLog.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                if(!MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().isRecordedLogWifi(knownWifi,date)) {
+                newLog.setUserId(getDeviceDBMetadata().getUserId());
+                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedLogWifi(knownWifi,date)) {
                     Log.d(TAG,"Create new LogsWifi : "+knownWifi.toString()+", timeStamp : "+date.toString());
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getLogsWifiDao().createOrUpdate(newLog);
+                    getDBHelper().getLogsWifiDao().createOrUpdate(newLog);
                 }
                 else{Log.d(TAG,"Aborting addition of LogsWifi duplicate");}
             }
@@ -304,7 +304,7 @@ public class ScanConnectionIntentService extends IntentService {
                 ssid = wifiConfiguration.SSID;
                 ssid = ssid.substring(1,ssid.length()-1);
                 List<KnownWifi> knownWifis = new ArrayList();
-                knownWifis = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsid(ssid);
+                knownWifis = getDBHelper().getMobilePrivacyProfilerDBHelper().queryKnownWifiFromSsid(ssid);
                 if (null!=knownWifis) {//if unrecorded wifi
                     for (KnownWifi knownWifi : knownWifis) {
                         if (1!=knownWifi.getIsConfiguredWifi()) {
@@ -314,7 +314,7 @@ public class ScanConnectionIntentService extends IntentService {
                                             ", isConfiguredWifi : " + knownWifi.getIsConfiguredWifi()
                                     //        +", UserId : "+knownWifi.getUserId()
                             );
-                            MobilePrivacyProfilerDBHelper.getDBHelper(this).getKnownWifiDao().update(knownWifi);
+                            getDBHelper().getKnownWifiDao().update(knownWifi);
                         }
                         else{Log.d(TAG, "Up to date knownWifi : SSID : " + knownWifi.getSsid() +
                                         ", BSSID : " + knownWifi.getBssid() +
@@ -345,7 +345,7 @@ public class ScanConnectionIntentService extends IntentService {
             for(BluetoothDevice bluetoothDevice :bluetoothDevices){
                 String mac = null;
                 String name = null;
-                String userId = MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId();
+                String userId = getDeviceDBMetadata().getUserId();
                 int type = -1;
                 Date date = new Date();
 
@@ -353,7 +353,7 @@ public class ScanConnectionIntentService extends IntentService {
                 name = bluetoothDevice.getName();
                 type = bluetoothDevice.getType();
 
-                if(!MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().isRecordedBluetoothDevice(mac)){
+                if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedBluetoothDevice(mac)){
                     fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice newBluetoothDevice = new fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice();
                     newBluetoothDevice.setMac(mac);
                     newBluetoothDevice.setName(name);
@@ -364,7 +364,7 @@ public class ScanConnectionIntentService extends IntentService {
                                     ", type : " + newBluetoothDevice.getType()
                                     +", UserId : "+userId
                     );
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getBluetoothDeviceDao().create(newBluetoothDevice);
+                    getDBHelper().getBluetoothDeviceDao().create(newBluetoothDevice);
                 }
                 else{
                     Log.d(TAG, "Recorded BluetoothDevice : MAC : " + mac +
@@ -393,5 +393,13 @@ public class ScanConnectionIntentService extends IntentService {
         }//end if not null
     }//end method
 
+    private OrmLiteDBHelper getDBHelper(){
+        if(dbHelper == null){
+            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
+        }
+        return dbHelper;
+    }
 
+    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
+        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 }

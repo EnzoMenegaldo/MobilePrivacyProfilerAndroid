@@ -487,11 +487,6 @@ public class MobilePrivacyProfilerDBHelper {
 		return getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 
 
-	public static void resetTable(Class _class,Context context){
-		try {
-			TableUtils.clearTable(getDBHelper(context).getConnectionSource(),_class);
-		} catch (SQLException e) { e.printStackTrace(); }
-	}
 	//End of user code
 
 }
