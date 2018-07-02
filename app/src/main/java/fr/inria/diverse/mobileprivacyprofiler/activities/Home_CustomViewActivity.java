@@ -4,8 +4,10 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -58,11 +60,16 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	
 	//Start of user code constants Home_CustomViewActivity
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
-    private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
+    public static final String[] PERMISSIONS = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
+                                                    Manifest.permission.GET_ACCOUNTS, Manifest.permission.INTERNET,
+                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CALENDAR,
+                                                            Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_SMS,
+                                                                Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE };
     private static final String native_lib = "native_lib";
     private static Context context;
 	//End of user code
-
 
 	//Start of user code Static initialization Home_CustomViewActivity
         static {
@@ -88,8 +95,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         if (paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
             ((ScrollView) findViewById(R.id.home_debug)).setVisibility(View.VISIBLE);
         }
-        if (!hasPermission()){
-            requestPermission();
+        if (!PhoneStateUtils.hasPermission(this,PERMISSIONS)){
+            PhoneStateUtils.requestPermissions(this,PERMISSIONS);
         }
         context = getApplicationContext();
 
@@ -127,28 +134,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         OperationDBService.startActionResetDB(this);
     }
 
-
-    private void requestPermission() {
-        Toast.makeText(this, "Please grant App usage stat permission to Mobiel Privacy Profiler", Toast.LENGTH_SHORT).show();
-        startActivityForResult(new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS), MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
-    }
-
-    private boolean hasPermission() {
-
-        /*AppOpsManager appOps = (AppOpsManager)
-                getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;*/
-        return true  ;
-
-//        return ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED;*/
-    }
-
     private void debugText(StringBuilder sb) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-	    sb.append("Has usage access permission = "+hasPermission()+"\n");
+	    sb.append("Has usage access permission = "+ PhoneStateUtils.hasPermission(this,PERMISSIONS)+"\n");
 
         sb.append(" - - Running Job status: - -\n");
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequests();
@@ -281,9 +269,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//Start of user code onActivityResult Home_CustomViewActivity
         switch (requestCode){
-            case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
-                if (!hasPermission()){
-                    requestPermission();
+            case PhoneStateUtils.MY_PERMISSIONS_REQUEST:
+                if (!PhoneStateUtils.hasPermission(this,PERMISSIONS)){
+                    PhoneStateUtils.requestPermissions(this,PERMISSIONS);
                 }
                 break;
         }

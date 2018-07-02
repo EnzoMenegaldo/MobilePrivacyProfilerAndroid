@@ -38,6 +38,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.PacketSnifferService;
 import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -241,7 +242,7 @@ public class ScanActivityIntentService extends IntentService {
             Log.d(TAG, " Stat period required " + DateUtils.printDate(start) +
                     " - " + DateUtils.printDate(end));
             List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType, start, end);
-            Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + hasPermission());
+            Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + PhoneStateUtils.hasPermission(this,Home_CustomViewActivity.PERMISSIONS));
             for (UsageStats appUsageStatsentry : stats) {
                 Log.d(TAG, "stats for " + appUsageStatsentry.getPackageName());
                 ApplicationHistory applicationHistory = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().
@@ -510,15 +511,6 @@ public class ScanActivityIntentService extends IntentService {
         double distance = R * c * 1000; // convert to meters
 
         return Math.abs(distance);
-    }
-
-    private boolean hasPermission() {
-       /* AppOpsManager appOps = (AppOpsManager)
-                getSystemService(Context.APP_OPS_SERVICE);
-        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;*/
-        return true;
     }
 
 }

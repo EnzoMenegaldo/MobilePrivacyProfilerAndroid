@@ -29,17 +29,17 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation 'com.android.support:design:26.1.0'
-    implementation 'com.j256.ormlite:ormlite-core:4.47'
+    implementation 'com.j256.ormlite:ormlite-core:5.1'
     implementation 'com.j256.ormlite:ormlite-android:4.47'
     implementation 'org.apache.commons:commons-lang3:3.1'
+    //noinspection DuplicatePlatformClasses
     implementation 'commons-logging:commons-logging:1.2'
-    compile 'com.evernote:android-job:1.2.2'
-    implementation 'com.google.android.gms:play-services-gcm:11.0.2'
+    implementation 'com.evernote:android-job:1.2.2'
     /*  implementation('com.google.api-client:google-api-client-android:1.23.0') {
             exclude group: 'org.apache.httpcomponents'
         }
@@ -49,11 +49,11 @@ dependencies {
         compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
         */
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.5'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
 
-    implementation 'com.google.android.gms:play-services-auth:11.8.0'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 }
