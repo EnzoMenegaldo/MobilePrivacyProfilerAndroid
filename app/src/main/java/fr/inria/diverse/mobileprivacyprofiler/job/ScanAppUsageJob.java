@@ -1,6 +1,8 @@
 package fr.inria.diverse.mobileprivacyprofiler.job;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
@@ -37,6 +39,7 @@ public class ScanAppUsageJob extends Job {
     public static int schedule() {
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TAG);
         if (!jobRequests.isEmpty()) {
+            //Log.d(TAG,"Job already scheduled : id : "+jobRequests.iterator().next().getJobId());
             return jobRequests.iterator().next().getJobId();
         }
 
@@ -47,8 +50,7 @@ public class ScanAppUsageJob extends Job {
             interval = JobRequest.MIN_INTERVAL;
             flex = JobRequest.MIN_FLEX;
         }
-
-        return new JobRequest.Builder(TAG)
+        int jobId = new JobRequest.Builder(TAG)
                 .setPeriodic(interval, flex)
                 //.setUpdateCurrent(true)
                 //.setRequiresBatteryNotLow(true)
@@ -58,6 +60,10 @@ public class ScanAppUsageJob extends Job {
                 //.setRequirementsEnforced(true)
                 .build()
                 .schedule();
+
+        //Log.d(TAG,"New job scheduled : id : "+jobId);
+
+        return jobId;
     }
     public static void cancelRequest() {
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TAG);
