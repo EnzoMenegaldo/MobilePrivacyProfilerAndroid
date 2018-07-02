@@ -37,8 +37,8 @@ public class ScanBatteryJob extends Job {
             return jobRequests.iterator().next().getJobId();
         }
         // adapt the triggering of the update
-        long interval = TimeUnit.MINUTES.toMillis(20); // every 40 min
-        long flex = TimeUnit.MINUTES.toMillis(5); // wait 10 min before job runs again
+        long interval = TimeUnit.MINUTES.toMillis(30); // every 40 min
+        long flex = TimeUnit.MINUTES.toMillis(10); // wait 10 min before job runs again
 
         if (DEBUG) {
             interval = JobRequest.MIN_INTERVAL;
