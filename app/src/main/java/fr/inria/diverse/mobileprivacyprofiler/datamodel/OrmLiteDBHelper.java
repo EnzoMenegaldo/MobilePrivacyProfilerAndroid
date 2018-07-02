@@ -75,8 +75,8 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	private RuntimeExceptionDao<SMS, Integer> sMSRuntimeDao = null;
 	// the DAO object we use to access the BatteryUsage table
 	private RuntimeExceptionDao<BatteryUsage, Integer> batteryUsageRuntimeDao = null;
-	// the DAO object we use to access the WebHistory table
-	private RuntimeExceptionDao<WebHistory, Integer> webHistoryRuntimeDao = null;
+	// the DAO object we use to access the NetActivity table
+	private RuntimeExceptionDao<NetActivity, Integer> netActivityRuntimeDao = null;
 	
 
 	public OrmLiteDBHelper(Context context) {
@@ -124,7 +124,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.createTable(connectionSource, BluetoothLog.class);
 		TableUtils.createTable(connectionSource, SMS.class);
 		TableUtils.createTable(connectionSource, BatteryUsage.class);
-		TableUtils.createTable(connectionSource, WebHistory.class);
+		TableUtils.createTable(connectionSource, NetActivity.class);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		TableUtils.dropTable(connectionSource, BluetoothLog.class, true);
 		TableUtils.dropTable(connectionSource, SMS.class, true);
 		TableUtils.dropTable(connectionSource, BatteryUsage.class, true);
-		TableUtils.dropTable(connectionSource, WebHistory.class, true);
+		TableUtils.dropTable(connectionSource, NetActivity.class, true);
 	}
 
 	/**
@@ -438,14 +438,14 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 	}
 
 	/**
-	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our WebHistory class. It will
+	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for our NetActivity class. It will
 	 * create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<WebHistory, Integer> getWebHistoryDao() {
-		if (webHistoryRuntimeDao == null) {
-			webHistoryRuntimeDao = getRuntimeExceptionDao(WebHistory.class);
+	public RuntimeExceptionDao<NetActivity, Integer> getNetActivityDao() {
+		if (netActivityRuntimeDao == null) {
+			netActivityRuntimeDao = getRuntimeExceptionDao(NetActivity.class);
 		}
-		return webHistoryRuntimeDao;
+		return netActivityRuntimeDao;
 	}
 
 	
@@ -482,7 +482,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 		bluetoothLogRuntimeDao = null;
 		sMSRuntimeDao = null;
 		batteryUsageRuntimeDao = null;
-		webHistoryRuntimeDao = null;
+		netActivityRuntimeDao = null;
 	}
 
 	
@@ -516,7 +516,7 @@ public class OrmLiteDBHelper extends OrmLiteSqliteOpenHelper{
 			helper.bluetoothLogDao = getDao(BluetoothLog.class);
 			helper.sMSDao = getDao(SMS.class);
 			helper.batteryUsageDao = getDao(BatteryUsage.class);
-			helper.webHistoryDao = getDao(WebHistory.class);
+			helper.netActivityDao = getDao(NetActivity.class);
 		} catch (SQLException e) {
 			Log.e(OrmLiteDBHelper.class.getName(), "Can't get ", e);
 		}

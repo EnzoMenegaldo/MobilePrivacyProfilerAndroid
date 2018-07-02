@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file:///home/src-reloc/agohier/git/mobile-privacy-profiler-android/app/app.iml" filepath="/home/src-reloc/agohier/git/mobile-privacy-profiler-android/app/app.iml" />
-      <module fileurl="file:///home/src-reloc/agohier/git/mobile-privacy-profiler-android/mobile-privacy-profiler-android.iml" filepath="/home/src-reloc/agohier/git/mobile-privacy-profiler-android/mobile-privacy-profiler-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MobilePrivacyProfilerAndroid.iml" filepath="$PROJECT_DIR$/MobilePrivacyProfilerAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../src-reloc/agohier/git/mobile-privacy-profiler-android/app/app.iml" filepath="$PROJECT_DIR$/../src-reloc/agohier/git/mobile-privacy-profiler-android/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../src-reloc/agohier/git/mobile-privacy-profiler-android/mobile-privacy-profiler-android.iml" filepath="$PROJECT_DIR$/../src-reloc/agohier/git/mobile-privacy-profiler-android/mobile-privacy-profiler-android.iml" />
     </modules>
   </component>
 </project>

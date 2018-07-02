@@ -30,12 +30,13 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.ContactPhysicalAddress;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Geolocation;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.KnownWifi;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.LogsWifi;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NeighboringCellHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.PhoneCallLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.WebHistory;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -54,11 +55,6 @@ public class OperationDBService extends IntentService {
     // TODO: Rename actions, choose action names that describe tasks that this
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_RESET_DB = "fr.inria.diverse.mobileprivacyprofiler.services.action.RESET_DB";
-    private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.services.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "fr.inria.diverse.mobileprivacyprofiler.services.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "fr.inria.diverse.mobileprivacyprofiler.services.extra.PARAM2";
 
     public OperationDBService() {
         super("OperationDBService");
@@ -76,20 +72,6 @@ public class OperationDBService extends IntentService {
         context.startService(intent);
     }
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, OperationDBService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -97,10 +79,6 @@ public class OperationDBService extends IntentService {
             final String action = intent.getAction();
             if (ACTION_RESET_DB.equals(action)) {
                 handleActionResetDB();
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
             }
         }
     }
@@ -134,36 +112,10 @@ public class OperationDBService extends IntentService {
         list.add(NeighboringCellHistory.class);
         list.add(PhoneCallLog.class);
         list.add(SMS.class);
-        list.add(WebHistory.class);
+        list.add(NetActivity.class);
 
         for(Class _class : list){
-        resetTable(_class);
+        MobilePrivacyProfilerDBHelper.resetTable(_class,this);
         }
-
-
-
     }
-
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private OrmLiteDBHelper getDBHelper(){
-        if(dbHelper == null){
-            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
-        }
-        return dbHelper;
-    }
-
-    private void resetTable(Class _class){
-        try {
-            TableUtils.clearTable(getDBHelper().getConnectionSource(),_class);
-        } catch (SQLException e) { e.printStackTrace(); }
-    }
-
 }

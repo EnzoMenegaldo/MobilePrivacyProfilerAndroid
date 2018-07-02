@@ -3,8 +3,6 @@ package fr.inria.diverse.mobileprivacyprofiler.rest;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -12,9 +10,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 
 public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
@@ -28,6 +34,9 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
     public HttpPostAsyncTask(String postData) {
         if (postData != null) {
             this.postData = postData;
+
+            //We need that because for now the server use a self-signed certificate.
+            ignoreCertificate();
         }
     }
 
@@ -38,9 +47,8 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
         try {
             // This is getting the url from the string we passed in
             URL url = new URL(params[0]);
-
             // Create the urlConnection
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 
 
             urlConnection.setDoInput(true);
@@ -113,6 +121,42 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
 
         return sb.toString();
 
+    }
+
+    private void ignoreCertificate(){
+        // Create a trust manager that does not validate certificate chains
+        TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+            public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            }
+            public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            }
+        }
+        };
+
+        // Install the all-trusting trust manager
+        SSLContext sc = null;
+        try {
+            sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        // Create all-trusting host name verifier
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+
+        // Install the all-trusting host verifier
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
 
 

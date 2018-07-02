@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Start of user code customView_layout for AdvancedScanning
+-->
+<!-- freely adapt here the desired layout for your custom view -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/title_advancedscanning_activity"/>
+
+	<ListView
+		android:id="@+id/serviceListView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+	</ListView>
+
+</LinearLayout>
+<!--End of user code
+-->

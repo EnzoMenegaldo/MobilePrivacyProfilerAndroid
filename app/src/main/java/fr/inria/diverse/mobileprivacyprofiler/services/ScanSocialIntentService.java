@@ -17,7 +17,9 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.util.Date;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CalendarEvent;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.PhoneCallLog;
@@ -40,11 +42,6 @@ public class ScanSocialIntentService extends IntentService {
     private static final String ACTION_SCAN_SMS = "fr.inria.diverse.mobileprivacyprofiler.services.action.SMS_SCAN";
     private static final String ACTION_SCAN_CALL_HISTORY = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_CALL_HISTORY";
     private static final String ACTION_SCAN_CALENDAR_EVENT = "fr.inria.diverse.mobileprivacyprofiler.services.action.ACTION_SCAN_CALENDAR_EVENT";
-    private static final String ACTION_BAZ = "fr.inria.diverse.mobileprivacyprofiler.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "fr.inria.diverse.mobileprivacyprofiler.extra.PARAM2";
 
     public ScanSocialIntentService() {
         super("ScanSocialIntentService");
@@ -56,10 +53,11 @@ public class ScanSocialIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanSms(Context context) {
-        Intent intent = new Intent(context, ScanSocialIntentService.class);
+    public static Void startActionScanSms() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanSocialIntentService.class);
         intent.setAction(ACTION_SCAN_SMS);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
     /**
@@ -68,10 +66,11 @@ public class ScanSocialIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanCallHistory(Context context) {
-        Intent intent = new Intent(context, ScanSocialIntentService.class);
+    public static Void startActionScanCallHistory() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanSocialIntentService.class);
         intent.setAction(ACTION_SCAN_CALL_HISTORY);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
     /**
@@ -80,26 +79,13 @@ public class ScanSocialIntentService extends IntentService {
      *
      * @see IntentService
      */
-    public static void startActionScanCalendarEvent(Context context) {
-        Intent intent = new Intent(context, ScanSocialIntentService.class);
+    public static Void startActionScanCalendarEvent() {
+        Intent intent = new Intent(Home_CustomViewActivity.getContext(), ScanSocialIntentService.class);
         intent.setAction(ACTION_SCAN_CALENDAR_EVENT);
-        context.startService(intent);
+        Home_CustomViewActivity.getContext().startService(intent);
+        return null;
     }
 
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ScanSocialIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -111,10 +97,6 @@ public class ScanSocialIntentService extends IntentService {
                 handleActionScanCallHistory(intent);
             } else if (ACTION_SCAN_CALENDAR_EVENT.equals(action)) {
                 handleActionScanCalendarEvent(intent);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
             }
         }
     }
@@ -128,7 +110,7 @@ public class ScanSocialIntentService extends IntentService {
         //list sms sources
         String[] sources = {"content://sms/inbox", "content://sms/sent"};
         //get the last update if it exist(else expecting = null)
-        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         Date lastScan = metadata.getLastSmsScan();
 
         String displayLastScan;
@@ -166,15 +148,15 @@ public class ScanSocialIntentService extends IntentService {
                 if ("content://sms/sent" == source) {
                     type = "sent";
                 }
-                SMS sms = new SMS(date, phoneNumber, type, getDeviceDBMetadata().getUserId());
-                getDBHelper().getSMSDao().create(sms);
+                SMS sms = new SMS(date, phoneNumber, type, MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                MobilePrivacyProfilerDBHelper.getDBHelper(this).getSMSDao().create(sms);
                 Log.d(TAG, "date : " + date + ",phone number : " + phoneNumber + ",type :" + type/*+",body : "+smsQueryOutput.getString(5)*/);
             }
             smsQueryOutput.close();
         }
         Log.d(TAG, "Updating last SMS scan");
         metadata.setLastSmsScan(new Date());
-        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
     }
 
     /**
@@ -203,7 +185,7 @@ public class ScanSocialIntentService extends IntentService {
                 android.provider.CallLog.Calls.DEFAULT_SORT_ORDER /*sort by*/);
 
         //get the last update if it exist(else expecting = null)
-        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         Date lastScan = metadata.getLastCallScan();
 
         String displayLastScan;
@@ -232,8 +214,8 @@ public class ScanSocialIntentService extends IntentService {
                     String[] typeArray = {"INCOMING", "OUTGOING", "MISSED", "VOICEMAIL", "REJECTED", "BLOCKED", "ANSWERED_EXTERNALLY"};
                     String callType = typeArray[callTypeCode - 1];
 
-                    PhoneCallLog callLog = new PhoneCallLog(phoneNumber, date, duration, callType,getDeviceDBMetadata().getUserId());
-                    getDBHelper().getPhoneCallLogDao().create(callLog);
+                    PhoneCallLog callLog = new PhoneCallLog(phoneNumber, date, duration, callType,MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getPhoneCallLogDao().create(callLog);
                     Log.d(TAG,"phoneNumber : "+phoneNumber+", date : "+date+", duration : "+duration+", callType : "+callType);
                 }
             }
@@ -242,7 +224,7 @@ public class ScanSocialIntentService extends IntentService {
 
         Log.d(TAG, " Updating last Call History Scan");
         metadata.setLastCallScan(new Date());
-        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
     }
     /**
@@ -310,7 +292,7 @@ public class ScanSocialIntentService extends IntentService {
 
             uri = CalendarContract.Attendees.CONTENT_URI;
             String[] arg ={""+eventID};
-            //queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees._ID+" = ?",arg,null );
+            //queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,CalendarContract.Attendees.android_id+" = ?",arg,null );
             final String query = "(" + CalendarContract.Attendees.EVENT_ID + " = ?)";
             final String[] args = new String[]{""+eventID};
             queryAttendeeOuput = cr.query(uri,ATTENDEE_PROJECTION,query,args,null );
@@ -319,14 +301,14 @@ public class ScanSocialIntentService extends IntentService {
                 participants+= queryAttendeeOuput.getString(0);
             }
             //Stocking data
-            CalendarEvent registredEvent = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
+            CalendarEvent registredEvent = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
             if(null!=registredEvent) {   // edit event
                 registredEvent.setEventLabel(eventLabel);
                 registredEvent.setStartDate(startDate);
                 registredEvent.setEndDate(endDate);
                 registredEvent.setPlace(place);
                 registredEvent.setParticipants(participants);
-                getDBHelper().getCalendarEventDao().update(registredEvent);
+                MobilePrivacyProfilerDBHelper.getDBHelper(this).getCalendarEventDao().update(registredEvent);
                 Log.d(TAG,"Event edited : \n "+
                         "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
 
@@ -339,31 +321,13 @@ public class ScanSocialIntentService extends IntentService {
                 calendarEvent.setEndDate(endDate);
                 calendarEvent.setPlace(place);
                 calendarEvent.setParticipants(participants);
-                calendarEvent.setUserId(getDeviceDBMetadata().getUserId());
-                getDBHelper().getCalendarEventDao().create(calendarEvent);
+                calendarEvent.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                MobilePrivacyProfilerDBHelper.getDBHelper(this).getCalendarEventDao().create(calendarEvent);
                 Log.d(TAG,"New event : \n "+
                         "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
             }
         }
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private OrmLiteDBHelper getDBHelper(){
-        if(dbHelper == null){
-            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
-        }
-        return dbHelper;
-    }
-
-    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
-        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 
 }

@@ -95,16 +95,12 @@ public class Cell {
 		this.userId = userId;
 	} 
 
-	public int getId() {
+	public int get_id() {
 		return _id;
 	}
 	@JsonProperty
-	public void setId(int id) {
+	public void set_id(int id) {
 		this._id = id;
-	}
-
-	public int get_id() {
-	return this._id;
 	}
 
 	public MobilePrivacyProfilerDBHelper getContextDB(){
@@ -205,12 +201,12 @@ public class Cell {
 		sb.append("</"+XML_REF_HISTORY+">");		
 		if(this.cdmaposition!= null){
 			sb.append("\n"+indent+"\t<"+XML_REF_CDMAPOSITION+">");
-			sb.append(this.cdmaposition.getId());
+			sb.append(this.cdmaposition.get_id());
 	    	sb.append("</"+XML_REF_CDMAPOSITION+">");
 		}
 		if(this.otherPosition!= null){
 			sb.append("\n"+indent+"\t<"+XML_REF_OTHERPOSITION+">");
-			sb.append(this.otherPosition.getId());
+			sb.append(this.otherPosition.get_id());
 	    	sb.append("</"+XML_REF_OTHERPOSITION+">");
 		}
 		// TODO deal with other case

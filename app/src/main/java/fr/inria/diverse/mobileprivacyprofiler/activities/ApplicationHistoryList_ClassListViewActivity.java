@@ -107,7 +107,7 @@ public class ApplicationHistoryList_ClassListViewActivity extends OrmLiteActionB
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long index) {
 	        Intent toDetailView = new Intent(this, ApplicationHistoryDetail_ElementViewActivity.class);
 	        Bundle b = new Bundle();
-	        b.putInt("applicationHistoryId", ((ApplicationHistory)view.getTag()).getId());
+	        b.putInt("applicationHistoryId", ((ApplicationHistory)view.getTag()).get_id());
 			toDetailView.putExtras(b);
 	        startActivity(toDetailView);
     }

@@ -26,8 +26,8 @@ public class ScanAppUsageJob extends Job {
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
 
-        ScanActivityIntentService.startActionScanInstalledApplications(getContext());
-        ScanActivityIntentService.startActionScanAppUsage(getContext());
+        ScanActivityIntentService.startActionScanInstalledApplications();
+        ScanActivityIntentService.startActionScanAppUsage();
 
         return Result.SUCCESS;
     }
