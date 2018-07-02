@@ -176,7 +176,7 @@
       <dataAttributes name="plugType" documentation="Possible type :&#xA;&quot;BATTERY_PLUGGED_USB&quot;,&#xA;&quot;BATTERY_PLUGGED_AC&quot;,&#xA;&quot;BATTERY_PLUGGED_WIRELESS&quot;,&#xA; &quot;BATTERY_NOT_PLUGGED&quot;" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
-    <dataClasses xsi:type="genandroid:DataClass" name="NetActivity">
+    <dataClasses xsi:type="genandroid:DataClass" name="WebHistory">
       <dataAttributes name="date" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="application" documentation="application that requested the url" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="hostname" type="//@dataModel/@dataClasses.26"/>
@@ -207,7 +207,6 @@
     <viewActivities xsi:type="genandroid:CustomViewActivity" name="Home" documentation="Welcome page / home page of the application" accessibleViews="//@presentationModel/@viewActivities.2"/>
     <viewActivities xsi:type="genandroid:ClassListViewActivity" name="ApplicationHistoryList" documentation="Page listing the applications detected in the device.&#xA;It gives acces to the application's history" accessibleViews="//@presentationModel/@viewActivities.4" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1" selectItemAction="//@presentationModel/@viewActivities.4" listedElement="//@dataModel/@dataClasses.1" presentedDetail="//@presentationModel/@classDetails.0"/>
     <viewActivities xsi:type="genandroid:CustomViewActivity" name="ManualScan" documentation="Page used to manually launch the vairous scans of the device" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
-    <viewActivities xsi:type="genandroid:CustomViewActivity" name="AdvancedScanning" documentation="Page used to run/cancel various jobs" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
     <viewActivities xsi:type="genandroid:ElementViewActivity" name="ApplicationHistoryDetail" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.2" element="//@dataModel/@dataClasses.1"/>
     <classDetails mainAttributes="//@dataModel/@dataClasses.1/@dataAttributes.0" name="ApplicationHistoryDetail" secondaryAttributes="//@dataModel/@dataClasses.1/@dataAttributes.1"/>
   </presentationModel>

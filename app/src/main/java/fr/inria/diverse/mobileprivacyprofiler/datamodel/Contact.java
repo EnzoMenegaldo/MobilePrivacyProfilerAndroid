@@ -161,12 +161,16 @@ public class Contact {
 		this.userId = userId;
 	} 
 
-	public int get_id() {
+	public int getId() {
 		return _id;
 	}
 	@JsonProperty
-	public void set_id(int id) {
+	public void setId(int id) {
 		this._id = id;
+	}
+
+	public int get_id() {
+	return this._id;
 	}
 
 	public MobilePrivacyProfilerDBHelper getContextDB(){
@@ -411,7 +415,7 @@ public class Contact {
 		sb.append("</"+XML_REF_EMAILS+">");		
 		if(this.contactOrganisation!= null){
 			sb.append("\n"+indent+"\t<"+XML_REF_CONTACTORGANISATION+">");
-			sb.append(this.contactOrganisation.get_id());
+			sb.append(this.contactOrganisation.getId());
 	    	sb.append("</"+XML_REF_CONTACTORGANISATION+">");
 		}
 		sb.append("\n"+indent+"\t<"+XML_REF_CONTACTIM+">");

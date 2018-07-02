@@ -8,11 +8,6 @@
 		android:icon="?attr/ic_action_manualscan"
 		android:title="@string/action_manualscan_text"
 		mobileprivacyprofiler:showAsAction="ifRoom" />
-
-	<item android:id="@+id/home_customview_action_advancedscanning"
-		android:icon="?attr/ic_action_advancedscanning"
-		android:title="@string/action_advancedscanning_text"
-		mobileprivacyprofiler:showAsAction="ifRoom" />
 	<!--End of user code
 	-->
 	<item android:id="@+id/home_customview_action_preference"
