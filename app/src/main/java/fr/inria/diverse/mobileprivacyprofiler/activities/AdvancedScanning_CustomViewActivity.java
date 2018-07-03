@@ -4,7 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.services.ServiceEnum;
+import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -49,7 +49,7 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Start of user code onCreate AdvancedScanning_CustomViewActivity
-		ServiceEnum[] services = ServiceEnum.values();
+		JobEnum[] services = JobEnum.values();
 		ListView serviceListView = (ListView)findViewById(R.id.serviceListView);
 		ServiceList_Adapter adapter = new ServiceList_Adapter(getApplicationContext(),services);
 		serviceListView.setAdapter(adapter);

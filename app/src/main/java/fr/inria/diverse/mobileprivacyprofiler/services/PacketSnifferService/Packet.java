@@ -149,7 +149,7 @@ public class Packet {
 		netActivity.setHostname(hostName);
 		netActivity.setIpDestination(PacketUtil.intToIPAddress(ipHeader.getDestinationIP()));
 		netActivity.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(Home_CustomViewActivity.getContext()).getUserId());
-		MobilePrivacyProfilerDBHelper.getDBHelper(Home_CustomViewActivity.getContext()).getNetActivityDao().create(netActivity);
+		MobilePrivacyProfilerDBHelper.getDBHelper(context).getNetActivityDao().create(netActivity);
 	}
 
 

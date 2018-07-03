@@ -81,12 +81,12 @@ public class ScanContactIntentService extends IntentService {
         ContentResolver contentResolver = getContentResolver();
 
         //update last ContactScan and flushing previous contact set
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().flushContactDataSet();
+        getDBHelper().getMobilePrivacyProfilerDBHelper().flushContactDataSet();
 
-        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this);
+        MobilePrivacyProfilerDB_metadata metadata = getDeviceDBMetadata();
         Date scanTimeStamp = new Date();
         metadata.setLastContactScan(scanTimeStamp);
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
         // Row contacts content uri( access raw_contacts table. ).
         Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI;
@@ -197,12 +197,12 @@ public class ScanContactIntentService extends IntentService {
                         //TODO change the List<String> to a Map
                         case "EMAIL":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactEmail contactEmail = new ContactEmail(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                            ContactEmail contactEmail = new ContactEmail(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             emailList.add(contactEmail);
                             break;
                         case "IM":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactIM contactIM = new ContactIM(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                            ContactIM contactIM = new ContactIM(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             imList.add(contactIM);
                             break;
                         case "NICKNAME":
@@ -211,11 +211,11 @@ public class ScanContactIntentService extends IntentService {
                             break;
                         case "ORGANISATION":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            organisation = new ContactOrganisation(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                            organisation = new ContactOrganisation(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             break;
                         case "PHONE_NUMBER":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                            ContactPhoneNumber contactPhoneNumber = new ContactPhoneNumber(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             phoneNumberList.add(contactPhoneNumber);
                             break;
                         case "NAME":
@@ -230,7 +230,7 @@ public class ScanContactIntentService extends IntentService {
                             break;
                         case "PHYSICAL_ADDRESS":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactPhysicalAddress contactPhysicalAddress = new ContactPhysicalAddress(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                            ContactPhysicalAddress contactPhysicalAddress = new ContactPhysicalAddress(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             physicalAddressList.add(contactPhysicalAddress);
                             break;
                         case "WEBSITE":
@@ -242,7 +242,7 @@ public class ScanContactIntentService extends IntentService {
                             break;
                         case "EVENT":
                             Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactEvent contactEvent = new ContactEvent(dataValueList.get(1),dataValueList.get(2),MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                            ContactEvent contactEvent = new ContactEvent(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             eventList.add(contactEvent);
                             break;
                         case "RELATION_TYPE":
@@ -266,48 +266,48 @@ public class ScanContactIntentService extends IntentService {
                 // feeding the DB from the collected data
                 try {
                     //add a new contact
-                    contact.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactDao().create(contact);
+                    contact.setUserId(getDeviceDBMetadata().getUserId());
+                    getDBHelper().getContactDao().create(contact);
                     Log.d(TAG, "Added a new contact : " + contact.getDisplayName());
 
                     for(ContactEmail contactEmail: emailList){
                         contactEmail.setContact(contact);
-                        contactEmail.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactEmailDao().create(contactEmail);
+                        contactEmail.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getContactEmailDao().create(contactEmail);
                         Log.d(TAG, "Added a new email : " + contactEmail.getEmail());
                     }
                     if(null!=organisation.getCompany()) {
                         organisation.setReferencedContact(contact);
-                        organisation.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactOrganisationDao().create(organisation);
+                        organisation.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getContactOrganisationDao().create(organisation);
                         Log.d(TAG, "Added a new organisation : " + organisation.getCompany());
                     }
 
                     for(ContactPhoneNumber contactPhoneNumber : phoneNumberList){
                         contactPhoneNumber.setContact(contact);
-                        contactPhoneNumber.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactPhoneNumberDao().create(contactPhoneNumber);
+                        contactPhoneNumber.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getContactPhoneNumberDao().create(contactPhoneNumber);
                         Log.d(TAG, "Added a new phoneNumber : "+contactPhoneNumber.getPhoneNumber());
                     }
 
                     for(ContactPhysicalAddress contactPhysicalAddress : physicalAddressList){
                         contactPhysicalAddress.setContact(contact);
-                        contactPhysicalAddress.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactPhysicalAddressDao().create(contactPhysicalAddress);
+                        contactPhysicalAddress.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getContactPhysicalAddressDao().create(contactPhysicalAddress);
                         Log.d(TAG, "Added a new physicalAddress : "+contactPhysicalAddress.getAddress());
                     }
 
                     for(ContactIM contactIM : imList){
                         contactIM.setContact(contact);
-                        contactIM.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactIMDao().create(contactIM);
+                        contactIM.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getContactIMDao().create(contactIM);
                         Log.d(TAG, "Added a new instant messenger : "+contactIM.getImId());
                     }
 
                     for(ContactEvent contactEvent : eventList){
                         contactEvent.setContact(contact);
-                        contactEvent.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getContactEventDao().create(contactEvent);
+                        contactEvent.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getContactEventDao().create(contactEvent);
                         Log.d(TAG, "Added a new contactEvent : "+contactEvent.getType()+" : "+contactEvent.getStartDate());
                     }
                 } catch (Exception e) { Log.d(TAG, "Error while feeding the DB");e.printStackTrace(); }
@@ -625,5 +625,13 @@ public class ScanContactIntentService extends IntentService {
         return toReturn;
     }
 
+    private OrmLiteDBHelper getDBHelper(){
+        if(dbHelper == null){
+            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
+        }
+        return dbHelper;
+    }
 
+    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
+        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 }
