@@ -126,6 +126,13 @@
 				<action android:name="android.net.VpnService" />
 			</intent-filter>
 		</service>
+
+		<receiver android:name=".broadcastReceiver.WifiScanReceiver"  android:enabled="true">
+			<intent-filter>
+				<action android:name="android.net.wifi.WifiManager.SCAN_RESULTS_AVAILABLE_ACTION"/>
+			</intent-filter>
+		</receiver>
+
 <!--End of user code-->
     </application>
 

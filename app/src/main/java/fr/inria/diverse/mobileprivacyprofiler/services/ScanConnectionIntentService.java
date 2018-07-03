@@ -1,6 +1,7 @@
 package fr.inria.diverse.mobileprivacyprofiler.services;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -122,6 +123,7 @@ public class ScanConnectionIntentService extends IntentService {
      * Handle action ScanCellInfo in the provided background thread with the provided
      * parameters.
      */
+    @SuppressLint("NewApi")
     private void handleActionScanCellInfo() {
         //set up the manager
         Log.d(TAG, "Requesting CellInfo");
@@ -282,7 +284,7 @@ public class ScanConnectionIntentService extends IntentService {
                 //add a new detection event if not recorded yet
                 LogsWifi newLog = new LogsWifi();
                 newLog.setKnownWifi(knownWifi);
-                Date date = new Date(System.currentTimeMillis()+ (int) (scannedWifi.timestamp*0.001) - SystemClock.uptimeMillis());
+                Date date = new Date(new Date().getTime()+ (int) (scannedWifi.timestamp*0.001) - SystemClock.uptimeMillis());
                 newLog.setTimeStamp(date);
                 newLog.setUserId(getDeviceDBMetadata().getUserId());
                 if(!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedLogWifi(knownWifi,date)) {
@@ -334,6 +336,7 @@ public class ScanConnectionIntentService extends IntentService {
      * Handle action ScanBluetooth in the provided background thread with the provided
      * parameters.
      */
+    @SuppressLint("NewApi")
     private void handleActionScanBluetooth() {
         // TODO: Handle action ScanBluetooth
         BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);

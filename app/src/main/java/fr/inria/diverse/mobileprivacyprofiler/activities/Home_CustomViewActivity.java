@@ -2,7 +2,7 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
-import fr.inria.diverse.mobileprivacyprofiler.BroadcastReceiver.WifiScanReceiver;
+import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
@@ -35,10 +35,7 @@ import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
-import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
-import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 
-import android.app.AppOpsManager;
 import android.content.Context;
 
 import android.view.View;
@@ -60,9 +57,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
-import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
-import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
-
 //End of user code
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Home_CustomViewActivity
@@ -70,7 +64,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 {
 	
 	//Start of user code constants Home_CustomViewActivity
-    public static WifiScanReceiver wifiScanReceiver;
+    private static WifiScanReceiver wifiScanReceiver;
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
     private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
     private static final String native_lib = "native_lib";
@@ -125,13 +119,13 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         ExportDBJob.schedule();
 
 /*
-        this.wifiScanReceiver = new WifiScanReceiver();
-        unregisterReceiver(wifiScanReceiver);
+        this.wifiScanReceiver = WifiScanReceiver.getInstance();
+        //unregisterReceiver(wifiScanReceiver);
         registerReceiver(
                 wifiScanReceiver,
                 new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        );*/
-
+        );
+*/
 		//End of user code
     }
     

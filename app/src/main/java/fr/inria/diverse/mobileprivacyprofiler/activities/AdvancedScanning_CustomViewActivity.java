@@ -7,6 +7,7 @@ import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.TaskStackBuilder;
@@ -33,7 +34,7 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 
 
 	//Start of user code Static initialization AdvancedScanning_CustomViewActivity
-		
+	private static Context context;
 	//End of user code
 	
 	
@@ -53,6 +54,7 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 		ListView serviceListView = (ListView)findViewById(R.id.serviceListView);
 		ServiceList_Adapter adapter = new ServiceList_Adapter(getApplicationContext(),services);
 		serviceListView.setAdapter(adapter);
+		context = getApplicationContext();
 		//End of user code
     }
     
@@ -64,6 +66,10 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 		//End of user code
 	}
     //Start of user code additional code AdvancedScanning_CustomViewActivity
+
+	public static Context getContext(){
+		return context;
+	}
 
 	//End of user code
 

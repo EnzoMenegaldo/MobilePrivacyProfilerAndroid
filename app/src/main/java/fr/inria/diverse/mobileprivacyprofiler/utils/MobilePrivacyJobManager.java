@@ -1,6 +1,11 @@
 package fr.inria.diverse.mobileprivacyprofiler.utils;
 
 
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
+import android.util.Log;
+
+import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanAuthenticatorJob;
@@ -13,7 +18,12 @@ import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
 
+import static fr.inria.diverse.mobileprivacyprofiler.activities.AdvancedScanning_CustomViewActivity.getContext;
+
 public class MobilePrivacyJobManager {
+
+    private static final String TAG = MobilePrivacyJobManager.class.getSimpleName();
+    private static WifiScanReceiver wifiScanReceiver;
 
     /*protected*/ MobilePrivacyJobManager(){}
 
@@ -113,6 +123,23 @@ public class MobilePrivacyJobManager {
     }
     static Void cancelScanAuthenticatorJob() {
         ScanAuthenticatorJob.cancelRequest();
+        return null;
+    }
+
+    static Void registerWifiBroadcastReceiver(){
+        Log.d(TAG,"RegisterWifiBroadcastReceiver");
+        wifiScanReceiver = WifiScanReceiver.getInstance();
+        //unregisterReceiver(wifiScanReceiver);
+        getContext().registerReceiver(
+                wifiScanReceiver,
+                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        );
+        return null;
+    }
+    static Void unregisterWifiBroadcastReceiver() {
+        Log.d(TAG,"UnregisterWifiBroadcastReceiver");
+        wifiScanReceiver = WifiScanReceiver.getInstance();
+        getContext().unregisterReceiver(wifiScanReceiver);
         return null;
     }
 
