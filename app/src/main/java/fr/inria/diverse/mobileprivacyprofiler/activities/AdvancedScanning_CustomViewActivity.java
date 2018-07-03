@@ -6,7 +6,6 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.TaskStackBuilder;
@@ -19,7 +18,7 @@ import android.view.MenuItem;
 //Start of user code additional imports AdvancedScanning_CustomViewActivity
 import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import android.widget.ListView;
-
+import android.content.Context;
 //End of user code
 public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements AdvancedScanning_CustomViewActivity

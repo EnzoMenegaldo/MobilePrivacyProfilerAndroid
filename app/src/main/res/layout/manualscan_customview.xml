@@ -117,6 +117,27 @@
 				android:layout_height="wrap_content"
 				android:onClick="onClickBtnTest"
 				android:text="@string/manualscan_customview_test_btn_label" />
+
+			<ScrollView
+			android:id="@+id/home_debug"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_weight="3"
+			android:background="#A0A0A0"
+			android:visibility="gone" >
+
+				<TextView
+				android:id="@+id/home_debug_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/home_customview_app_state_inactive"
+				android:textStyle="bold" />
+
+
+			</ScrollView>
+
+
+
 		</LinearLayout>
 
 

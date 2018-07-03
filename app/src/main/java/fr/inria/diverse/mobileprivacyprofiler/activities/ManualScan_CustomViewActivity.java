@@ -16,6 +16,11 @@ import android.view.MenuItem;
 
 
 //Start of user code additional imports ManualScan_CustomViewActivity
+
+
+
+import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.VpnService;
@@ -28,6 +33,16 @@ import fr.inria.diverse.mobileprivacyprofiler.services.ScanSocialIntentService;
 import fr.inria.diverse.mobileprivacyprofiler.test.Test;
 
 import android.view.View;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Set;
 
 //End of user code
 public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -55,6 +70,13 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Start of user code onCreate ManualScan_CustomViewActivity
+
+		ParametersUtils paramUtil = new ParametersUtils(this);
+		if (paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
+			((ScrollView) findViewById(R.id.home_debug)).setVisibility(View.VISIBLE);
+		}
+
+
 		//End of user code
     }
     
@@ -63,6 +85,7 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume ManualScan_CustomViewActivity
+
 		//End of user code
 	}
     //Start of user code additional code ManualScan_CustomViewActivity
@@ -220,13 +243,113 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 	}
 
+
+	private void debugText(StringBuilder sb) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+		sb.append("Has usage access permission = "+ PhoneStateUtils.hasPermission(this,Home_CustomViewActivity.PERMISSIONS)+"\n");
+
+		sb.append(" - - Running Job status: - -\n");
+		Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequests();
+		for (JobRequest jr : jobRequests ) {
+			sb.append("  "+jr.getTag()+"("+jr.getJobId()+") IntervalMs="+jr.getIntervalMs()+
+					",  ScheduledAt="+ dateFormat.format(new Date(jr.getScheduledAt()))+"\n");
+		}
+
+		sb.append(" - - last bg task run - -\n");
+		MobilePrivacyProfilerDB_metadata metadata = getHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+		sb.append("Last transmission date: "+(metadata.getLastTransmissionDate()!=null ? dateFormat.format(metadata.getLastTransmissionDate()):"never")+"\n");
+		sb.append("ScanInstalledApp: "+(metadata.getLastScanInstalledApplications()!=null ? dateFormat.format(metadata.getLastScanInstalledApplications()):"never")+"\n");
+		sb.append("ScanAppUsage: "+(metadata.getLastScanAppUsage()!=null ? dateFormat.format(metadata.getLastScanAppUsage()):"never")+"\n");
+		sb.append("ScanSMS: "+(metadata.getLastSmsScan()!=null ? dateFormat.format(metadata.getLastSmsScan()):"never")+"\n");
+		sb.append("ScanCallLog: "+(metadata.getLastCallScan()!=null ? dateFormat.format(metadata.getLastCallScan()):"never")+"\n");
+		sb.append("ContactScan: "+(metadata.getLastContactScan()!=null ? dateFormat.format(metadata.getLastContactScan()):"never")+"\n");
+		sb.append("WifiScan: "+(metadata.getLastWifiScan()!=null ? dateFormat.format(metadata.getLastWifiScan()):"never")+"\n");
+
+
+		sb.append(" - - - -\n");
+		sb.append("Table "+getHelper().getApplicationHistoryDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getApplicationHistoryDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getApplicationUsageStatsDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getApplicationUsageStatsDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getBatteryUsageDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getBatteryUsageDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getBluetoothDeviceDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getBluetoothDeviceDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getBluetoothLogDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getBluetoothLogDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getCalendarEventDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getCalendarEventDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getContactDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getContactDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getContactEmailDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getContactEmailDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getContactPhoneNumberDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getContactPhoneNumberDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getContactPhysicalAddressDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getContactPhysicalAddressDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getLogsWifiDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getLogsWifiDao().countOf()+"\n");
+
+        /*
+        sb.append("Table "+getHelper().getDetectedWifi_AccessPointDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getDetectedWifi_AccessPointDao().countOf()+"\n");
+        */
+
+		sb.append("Table "+getHelper().getGeolocationDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getGeolocationDao().countOf()+"\n");
+/*
+        sb.append("Table "+getHelper().getGSMCellDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getGSMCellDao().countOf()+"\n");
+
+        sb.append("Table "+getHelper().getIdentityDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getIdentityDao().countOf()+"\n");
+*/
+		sb.append("Table "+getHelper().getKnownWifiDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getKnownWifiDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getNeighboringCellHistoryDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getNeighboringCellHistoryDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getPhoneCallLogDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getPhoneCallLogDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getSMSDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getSMSDao().countOf()+"\n");
+
+		sb.append("Table "+getHelper().getNetActivityDao().getDataClass().getSimpleName());
+		sb.append(" count="+ getHelper().getNetActivityDao().countOf()+"\n");
+/*
+        sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
+*/
+	}
+
 	//End of user code
 
     /** refresh screen from data 
      */
     public void refreshScreenData() {
     	//Start of user code action when refreshing the screen ManualScan_CustomViewActivity
-		//End of user code
+
+		ParametersUtils paramUtil = new ParametersUtils(this);
+        if(paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)) {
+			// debug is set to true we can show some stuff here
+			StringBuilder sb = new StringBuilder();
+			sb.append("- - Debug - -\n");
+			debugText(sb);
+			((TextView) findViewById(R.id.home_debug_text)).setText(sb.toString());
+		}
+			//End of user code
 	}
 
 	@Override
@@ -290,10 +413,12 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		return new Intent(this, Home_CustomViewActivity.class);
 		//End of user code
 	}
+
 	@Override
 	public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
 		//Start of user code onCreateSupportNavigateUpTaskStack ManualScan_CustomViewActivity
 		super.onCreateSupportNavigateUpTaskStack(builder);
 		//End of user code
 	}
+
 }

@@ -250,6 +250,11 @@ public class ScanConnectionIntentService extends IntentService {
      */
     private void handleActionScanWifi() {
         WifiManager wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        MobilePrivacyProfilerDB_metadata metadata = getDeviceDBMetadata();
+        Date scanDate = new Date();
+        Log.d(TAG,"LastWifiScan set to "+scanDate.toString());
+        metadata.setLastWifiScan(scanDate);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
         List<ScanResult> scannedWifis= wifiManager.getScanResults();
         if (null!=scannedWifis&&!scannedWifis.isEmpty()) {
