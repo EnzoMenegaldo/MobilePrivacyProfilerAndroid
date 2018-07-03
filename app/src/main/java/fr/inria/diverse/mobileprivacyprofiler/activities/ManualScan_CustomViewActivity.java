@@ -30,7 +30,6 @@ import fr.inria.diverse.mobileprivacyprofiler.test.Test;
 import android.view.View;
 
 //End of user code
-
 public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements ManualScan_CustomViewActivity
 //End of user code
@@ -42,12 +41,8 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 	//End of user code
 
-
-	//Start of user code Static initialization ManualScan_CustomViewActivity
-		
+	//Start of user code Static initialization  ManualScan_CustomViewActivity
 	//End of user code
-	
-	
 
 	/** Called when the activity is first created. */
     @Override
@@ -244,7 +239,6 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
         return super.onCreateOptionsMenu(menu);
     }
     
-
 	// Dealing with Activity results
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

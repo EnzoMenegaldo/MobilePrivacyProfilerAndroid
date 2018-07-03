@@ -2,25 +2,19 @@
 package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 
-import fr.inria.diverse.mobileprivacyprofiler.BroadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 
-import android.preference.PreferenceManager;
-
 //Start of user code additional imports Home_CustomViewActivity
+import fr.inria.diverse.mobileprivacyprofiler.BroadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.MobilePrivacyProfilerJobCreator;
@@ -34,7 +28,9 @@ import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
 import android.util.Log;
+import android.Manifest;
 import android.app.Activity;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
@@ -50,6 +46,7 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
@@ -87,7 +84,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     private static Context context;
 	//End of user code
 
-	//Start of user code Static initialization Home_CustomViewActivity
+	//Start of user code Static initialization  Home_CustomViewActivity
         static {
             System.loadLibrary(native_lib);
         }
@@ -100,15 +97,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//Start of user code onCreate Home_CustomViewActivity_1
 		//ThemeUtil.onActivityCreateSetTheme(this);
 		//End of user code		
-			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         setContentView(R.layout.home_customview);
         //Start of user code onCreate Home_CustomViewActivity
 
-        // Display Debug info
-        ParametersUtils paramUtil = new ParametersUtils(this);
-        if (paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
-            ((ScrollView) findViewById(R.id.home_debug)).setVisibility(View.VISIBLE);
-        }
         if (!PhoneStateUtils.hasPermission(this,PERMISSIONS)){
             PhoneStateUtils.requestPermissions(this,PERMISSIONS);
         }
@@ -121,17 +112,25 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
 
-        // if application is activated, then schedule jobs
-        ScanAppUsageJob.schedule();
-        ScanBatteryJob.schedule();
-        ScanBluetoothJob.schedule();
-        ScanCalendarJob.schedule();
-        ScanCellJob.schedule();
-        ScanContactJob.schedule();
-        ScanGeolocationJob.schedule();
-        ScanPhoneCallLogJob.schedule();
-        ScanSMSJob.schedule();
-        ExportDBJob.schedule();
+
+        ToggleButton toggleCollection = (ToggleButton)findViewById(R.id.home_customview_toggle_collection);
+        TextView app_state = (TextView)findViewById(R.id.home_customview_app_state);
+        TextView screen_explanation = (TextView)findViewById(R.id.home_customview_screen_explanation);
+
+        toggleCollection.setOnClickListener(view -> {
+            if(((ToggleButton)view).isChecked()){
+                scheduleAllJobs();
+                app_state.setText(R.string.home_customview_app_state_active);
+                screen_explanation.setText(R.string.home_customview_stop_collection);
+            }else{
+                cancelAllJobs();
+                app_state.setText(R.string.home_customview_app_state_inactive);
+                screen_explanation.setText(R.string.home_customview_run_collection);
+            }
+        });
+
+
+
 
 /*
         this.wifiScanReceiver = new WifiScanReceiver();
@@ -275,21 +274,53 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             Log.e("SecurityException", "Google Play Services not available.");
         }
     }
-	//End of user code
+
+    /**
+     * Schedule all jobs
+     */
+    public void scheduleAllJobs(){
+        ScanAppUsageJob.schedule();
+        ScanBatteryJob.schedule();
+        ScanBluetoothJob.schedule();
+        ScanCalendarJob.schedule();
+        ScanCellJob.schedule();
+        ScanContactJob.schedule();
+        ScanGeolocationJob.schedule();
+        ScanPhoneCallLogJob.schedule();
+        ScanSMSJob.schedule();
+        ExportDBJob.schedule();
+    }
+
+    /**
+     * Cancel all jobs
+     */
+    public void cancelAllJobs(){
+        ScanAppUsageJob.cancelRequest();
+        ScanBatteryJob.cancelRequest();
+        ScanBluetoothJob.cancelRequest();
+        ScanCalendarJob.cancelRequest();
+        ScanCellJob.cancelRequest();
+        ScanContactJob.cancelRequest();
+        ScanGeolocationJob.cancelRequest();
+        ScanPhoneCallLogJob.cancelRequest();
+        ScanSMSJob.cancelRequest();
+        ExportDBJob.cancelRequest();
+    }
+    //End of user code
 
     /** refresh screen from data 
      */
     public void refreshScreenData() {
     	//Start of user code action when refreshing the screen Home_CustomViewActivity
 
-        ParametersUtils paramUtil = new ParametersUtils(this);
+      /*  ParametersUtils paramUtil = new ParametersUtils(this);
         if(paramUtil.getParamBoolean(R.string.pref_key_affichage_debug, false)){
             // debug is set to true we can show some stuff here
             StringBuilder sb = new StringBuilder();
             sb.append("- - Debug - -\n");
             debugText(sb);
             ((TextView) findViewById(R.id.home_debug_text)).setText(sb.toString());
-        }
+        }*/
 		//End of user code
 	}
 
@@ -304,7 +335,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         return super.onCreateOptionsMenu(menu);
     }
     
-
 	// Dealing with Activity results
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

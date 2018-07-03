@@ -1,9 +1,11 @@
-(start)->(Home)
+(start)->(Starting)
 (Preferences)-><PreferencesChoice>
+(Starting)-><StartingChoice>
 (Home)-><HomeChoice>
 (ApplicationHistoryList)-><ApplicationHistoryListChoice>
 (ManualScan)-><ManualScanChoice>
 (AdvancedScanning)-><AdvancedScanningChoice>
 (ApplicationHistoryDetail)-><ApplicationHistoryDetailChoice>
-<HomeChoice>->(ApplicationHistoryList)
-(ApplicationHistoryList)->(AdvancedScanning)		
+<StartingChoice>->(Home)
+<HomeChoice>->(Starting)
+<ApplicationHistoryListChoice>->(ManualScan)

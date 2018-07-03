@@ -1,7 +1,6 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -10,8 +9,7 @@ import java.sql.SQLException;
 
 
 //Start of user code additional import for MobilePrivacyProfilerDBHelper
-import com.j256.ormlite.dao.CloseableIterator;
-
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 

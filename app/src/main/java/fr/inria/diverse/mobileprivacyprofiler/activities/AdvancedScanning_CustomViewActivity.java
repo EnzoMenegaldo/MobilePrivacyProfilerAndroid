@@ -4,7 +4,6 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -17,11 +16,10 @@ import android.view.MenuItem;
 
 
 //Start of user code additional imports AdvancedScanning_CustomViewActivity
-
+import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import android.widget.ListView;
 
 //End of user code
-
 public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements AdvancedScanning_CustomViewActivity
 //End of user code
@@ -31,12 +29,8 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 
 	//End of user code
 
-
-	//Start of user code Static initialization AdvancedScanning_CustomViewActivity
-		
+	//Start of user code Static initialization  AdvancedScanning_CustomViewActivity
 	//End of user code
-	
-	
 
 	/** Called when the activity is first created. */
     @Override
@@ -85,7 +79,6 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
         return super.onCreateOptionsMenu(menu);
     }
     
-
 	// Dealing with Activity results
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

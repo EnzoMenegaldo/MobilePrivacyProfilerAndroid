@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resource Strings specific to starting Custom View -->
+<resources>	
+	<!-- Start of user code customView_strings starting
+	-->
+	<!-- freely add here the desired resource String for your custom view -->
+	<string name="starting_customview_sample_btn_label">SampleButton</string>
+	<string name="welcome_txt">Bienvenue</string>
+	<string name="intro_txt">L\'application PROFILE est réservée à un usage scientifique. Si vous avez un code foruni par les chercheurs entrez le ci-dessous.</string>
+	<string name="btnOK">OK</string>
+	<!-- End of user code
+	-->
+</resources>

@@ -3,42 +3,90 @@
 -->
 <!-- freely adapt here the desired layout for your custom view -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+	android:orientation="vertical">
 
-	<Button
-		android:id="@+id/btnApplicationHistory"
-		android:layout_width="fill_parent"
+
+	<LinearLayout
+		android:id="@+id/home_customview_state_layout"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:onClick="onClickBtnApplicationHistory"
-		android:text="@string/home_customview_applicationhistorylist_btn_label" />
-	<Button
-		android:id="@+id/btnExportDB"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnExportDB"
-		android:text="@string/home_customview_export_db_btn_label" />
-	<Button
-		android:id="@+id/btnResetDB"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:onClick="onClickBtnResetDB"
-		android:text="@string/home_customview_reset_db_btn_label" />
-	<ScrollView
-		android:id="@+id/home_debug"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_weight="3"
-		android:background="#A0A0A0"
-		android:visibility="gone">
+		android:layout_gravity="center"
+		android:layout_marginTop="20dp"
+		android:orientation="horizontal">
 
 		<TextView
-			android:id="@+id/home_debug_text"
+			android:id="@+id/home_customview_txt_before_app_state"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:padding="3dip" />
-	</ScrollView>
+			android:layout_marginTop="0dp"
+			android:text="@string/home_customview_txt_before_app_state" />
+
+		<TextView
+			android:id="@+id/home_customview_app_state"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/home_customview_app_state_inactive"
+			android:textStyle="bold" />
+	</LinearLayout>
+
+
+	<TextView
+		android:id="@+id/home_customview_screen_explanation"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_margin="25dp"
+		android:layout_marginTop="50dp"
+		android:text="@string/home_customview_run_collection"
+		android:gravity="center"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_gravity="center"
+		android:layout_weight="1">
+
+		<ToggleButton
+			android:id="@+id/home_customview_toggle_collection"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			style="@style/toggleButton"
+			android:background="@drawable/ic_toggle_bg"/>
+
+	</LinearLayout>
+
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="65dp"
+		android:gravity="bottom"
+		android:orientation="horizontal">
+
+		<ImageView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:padding="5dp"
+			android:src="@drawable/univ_rennes_2" />
+
+		<ImageView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:padding="5dp"
+			android:src="@drawable/universite_rennes_1" />
+
+		<ImageView
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:padding="5dp"
+			android:src="@drawable/irisa" />
+	</LinearLayout>
+
 </LinearLayout>
 <!--End of user code
 -->
