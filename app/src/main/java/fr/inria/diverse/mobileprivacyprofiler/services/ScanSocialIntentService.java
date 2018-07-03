@@ -110,7 +110,7 @@ public class ScanSocialIntentService extends IntentService {
         //list sms sources
         String[] sources = {"content://sms/inbox", "content://sms/sent"};
         //get the last update if it exist(else expecting = null)
-        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         Date lastScan = metadata.getLastSmsScan();
 
         String displayLastScan;
@@ -148,15 +148,15 @@ public class ScanSocialIntentService extends IntentService {
                 if ("content://sms/sent" == source) {
                     type = "sent";
                 }
-                SMS sms = new SMS(date, phoneNumber, type, MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                MobilePrivacyProfilerDBHelper.getDBHelper(this).getSMSDao().create(sms);
+                SMS sms = new SMS(date, phoneNumber, type, getDeviceDBMetadata().getUserId());
+                getDBHelper().getSMSDao().create(sms);
                 Log.d(TAG, "date : " + date + ",phone number : " + phoneNumber + ",type :" + type/*+",body : "+smsQueryOutput.getString(5)*/);
             }
             smsQueryOutput.close();
         }
         Log.d(TAG, "Updating last SMS scan");
         metadata.setLastSmsScan(new Date());
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
     }
 
     /**
@@ -185,7 +185,7 @@ public class ScanSocialIntentService extends IntentService {
                 android.provider.CallLog.Calls.DEFAULT_SORT_ORDER /*sort by*/);
 
         //get the last update if it exist(else expecting = null)
-        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         Date lastScan = metadata.getLastCallScan();
 
         String displayLastScan;
@@ -214,8 +214,8 @@ public class ScanSocialIntentService extends IntentService {
                     String[] typeArray = {"INCOMING", "OUTGOING", "MISSED", "VOICEMAIL", "REJECTED", "BLOCKED", "ANSWERED_EXTERNALLY"};
                     String callType = typeArray[callTypeCode - 1];
 
-                    PhoneCallLog callLog = new PhoneCallLog(phoneNumber, date, duration, callType,MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getPhoneCallLogDao().create(callLog);
+                    PhoneCallLog callLog = new PhoneCallLog(phoneNumber, date, duration, callType,getDeviceDBMetadata().getUserId());
+                    getDBHelper().getPhoneCallLogDao().create(callLog);
                     Log.d(TAG,"phoneNumber : "+phoneNumber+", date : "+date+", duration : "+duration+", callType : "+callType);
                 }
             }
@@ -224,7 +224,7 @@ public class ScanSocialIntentService extends IntentService {
 
         Log.d(TAG, " Updating last Call History Scan");
         metadata.setLastCallScan(new Date());
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
 
     }
     /**
@@ -301,14 +301,14 @@ public class ScanSocialIntentService extends IntentService {
                 participants+= queryAttendeeOuput.getString(0);
             }
             //Stocking data
-            CalendarEvent registredEvent = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
+            CalendarEvent registredEvent = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCalendarEvent(eventID);
             if(null!=registredEvent) {   // edit event
                 registredEvent.setEventLabel(eventLabel);
                 registredEvent.setStartDate(startDate);
                 registredEvent.setEndDate(endDate);
                 registredEvent.setPlace(place);
                 registredEvent.setParticipants(participants);
-                MobilePrivacyProfilerDBHelper.getDBHelper(this).getCalendarEventDao().update(registredEvent);
+                getDBHelper().getCalendarEventDao().update(registredEvent);
                 Log.d(TAG,"Event edited : \n "+
                         "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
 
@@ -321,13 +321,23 @@ public class ScanSocialIntentService extends IntentService {
                 calendarEvent.setEndDate(endDate);
                 calendarEvent.setPlace(place);
                 calendarEvent.setParticipants(participants);
-                calendarEvent.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                MobilePrivacyProfilerDBHelper.getDBHelper(this).getCalendarEventDao().create(calendarEvent);
+                calendarEvent.setUserId(getDeviceDBMetadata().getUserId());
+                getDBHelper().getCalendarEventDao().create(calendarEvent);
                 Log.d(TAG,"New event : \n "+
                         "eventID : "+eventID+", label : "+eventLabel+", startDate : "+startDate+", endDate : "+endDate+", place : "+place+", participants : "+participants);
             }
         }
     }
+    
+    private OrmLiteDBHelper getDBHelper(){
+        if(dbHelper == null){
+            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
+        }
+        return dbHelper;
+    }
+
+    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
+        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
 
 
 }

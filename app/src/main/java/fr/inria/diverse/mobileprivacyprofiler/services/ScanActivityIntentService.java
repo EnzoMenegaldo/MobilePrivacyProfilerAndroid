@@ -172,9 +172,9 @@ public class ScanActivityIntentService extends IntentService {
      */
     private void handleActionScanInstalledApplications() {
         // store in DB the last scan date
-        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         metadata.setLastScanInstalledApplications(new Date());
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
         // get list of installed applications
         // https://stackoverflow.com/questions/2695746/how-to-get-a-list-of-installed-android-applications-and-pick-one-to-run
         final PackageManager pm = getPackageManager();
@@ -187,11 +187,11 @@ public class ScanActivityIntentService extends IntentService {
             Log.d(TAG, "Installed package :" + packageInfo.packageName);
             Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
             Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
-            ApplicationHistory applicationHistory = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByPackageName(packageInfo.packageName);
+            ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().queryApplicationHistoryByPackageName(packageInfo.packageName);
             if (applicationHistory == null) {
                 // create
-                applicationHistory = new ApplicationHistory(appName, packageInfo.packageName, MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                MobilePrivacyProfilerDBHelper.getDBHelper(this).getApplicationHistoryDao().create(applicationHistory);
+                applicationHistory = new ApplicationHistory(appName, packageInfo.packageName, getDeviceDBMetadata().getUserId());
+                getDBHelper().getApplicationHistoryDao().create(applicationHistory);
             } else {
                 // update
                 // TODO
@@ -207,9 +207,9 @@ public class ScanActivityIntentService extends IntentService {
     private void handleActionScanAppUsage() {
         Log.d(TAG, "handleActionScanAppUsage");
         // store in DB the last scan date
-        MobilePrivacyProfilerDB_metadata metadata = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
+        MobilePrivacyProfilerDB_metadata metadata = getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         metadata.setLastScanAppUsage(new Date());
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDB_metadataDao().update(metadata);
+        getDBHelper().getMobilePrivacyProfilerDB_metadataDao().update(metadata);
         // do the work for both weekly and daily data
         scanAppUsageForLastPeriod(UsageStatsManager.INTERVAL_WEEKLY);
         scanAppUsageForLastPeriod(UsageStatsManager.INTERVAL_DAILY);
@@ -244,7 +244,7 @@ public class ScanActivityIntentService extends IntentService {
             Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + hasPermission());
             for (UsageStats appUsageStatsentry : stats) {
                 Log.d(TAG, "stats for " + appUsageStatsentry.getPackageName());
-                ApplicationHistory applicationHistory = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().
+                ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().
                         queryApplicationHistoryByPackageName(appUsageStatsentry.getPackageName());
                 if (applicationHistory != null) {
                     // search for equivalent stat to update
@@ -264,7 +264,7 @@ public class ScanActivityIntentService extends IntentService {
                         equivalentExistingStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                         equivalentExistingStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
                         equivalentExistingStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getApplicationUsageStatsDao().update(equivalentExistingStat);
+                        getDBHelper().getApplicationUsageStatsDao().update(equivalentExistingStat);
                     } else {
                         // create new entry
                         Log.d(TAG, "   creating new entry... ");
@@ -275,8 +275,8 @@ public class ScanActivityIntentService extends IntentService {
                         appStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
                         appStat.setRequestedInterval(periodType);
                         appStat.setApplication(applicationHistory);
-                        appStat.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                        MobilePrivacyProfilerDBHelper.getDBHelper(this).getApplicationUsageStatsDao().create(appStat);
+                        appStat.setUserId(getDeviceDBMetadata().getUserId());
+                        getDBHelper().getApplicationUsageStatsDao().create(appStat);
                     }
                 }
             }
@@ -329,8 +329,8 @@ public class ScanActivityIntentService extends IntentService {
         //new entry in DB
         Log.d(TAG, "   creating new Battery entry : time " + time + " , batteryLvl : " + batteryLvl + " ,isPlugged : " + isPlugged + " , pluggedType : " + plugType);
 
-        BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType, MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-        MobilePrivacyProfilerDBHelper.getDBHelper(this).getBatteryUsageDao().create(batState);
+        BatteryUsage batState = new BatteryUsage(time, batteryLvl, isPlugged, plugType, getDeviceDBMetadata().getUserId());
+        getDBHelper().getBatteryUsageDao().create(batState);
     }
 
     /**
@@ -367,7 +367,7 @@ public class ScanActivityIntentService extends IntentService {
                 double longitude;
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
-                Geolocation lastKnowLocation = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().getLastKnowLocation();
+                Geolocation lastKnowLocation = getDBHelper().getMobilePrivacyProfilerDBHelper().getLastKnowLocation();
                 Boolean registerLocation = false;
                 //evaluation of registration necessity
                 if (null != lastKnowLocation) {
@@ -390,7 +390,7 @@ public class ScanActivityIntentService extends IntentService {
                     Geolocation geolocation = new Geolocation();
                     geolocation.setLatitude("" + latitude);
                     geolocation.setLongitude("" + longitude);
-                    geolocation.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
+                    geolocation.setUserId(getDeviceDBMetadata().getUserId());
                     geolocation.setDate(new Date(location.getTime()));
 
                     if (location.hasAccuracy()) {
@@ -421,7 +421,7 @@ public class ScanActivityIntentService extends IntentService {
                             ", altitude " + geolocation.getAltitude() +
                             ", verticalPrecision " + geolocation.getVerticalPrecision() +
                             ", userId " + geolocation.getUserId());
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getGeolocationDao().create(geolocation);
+                    getDBHelper().getGeolocationDao().create(geolocation);
 
                 }//end register location
             }//end if location not null
@@ -445,7 +445,7 @@ public class ScanActivityIntentService extends IntentService {
         Account[] accounts = accountManager.getAccounts();// get a collection of Accounts and Descriptors
         AuthenticatorDescription[] authDescriptions = accountManager.getAuthenticatorTypes();
 
-        List<String> registredAuthType = MobilePrivacyProfilerDBHelper.getDBHelper(this).getMobilePrivacyProfilerDBHelper().queryAllAuthentificationType();
+        List<String> registredAuthType = getDBHelper().getMobilePrivacyProfilerDBHelper().queryAllAuthentificationType();
         boolean noRegistredAuthType = false;
         if(0==registredAuthType.size()){noRegistredAuthType=true;}
         Log.d(TAG,authDescriptions.length+" authDescriptions to record");
@@ -471,8 +471,8 @@ public class ScanActivityIntentService extends IntentService {
                     auth.setPackageName(packageName);
                     auth.setName(name);
                     auth.setType(type);
-                    auth.setUserId(MobilePrivacyProfilerDBHelper.getDeviceDBMetadata(this).getUserId());
-                    MobilePrivacyProfilerDBHelper.getDBHelper(this).getAuthentificationDao().create(auth);
+                    auth.setUserId(getDeviceDBMetadata().getUserId());
+                    getDBHelper().getAuthentificationDao().create(auth);
                     Log.d(TAG, "New Authentification :" + authDesc.type+", names : "+name+", packageName : "+packageName);
                 }
             }
@@ -520,5 +520,16 @@ public class ScanActivityIntentService extends IntentService {
         return mode == AppOpsManager.MODE_ALLOWED;*/
         return true;
     }
+
+    private OrmLiteDBHelper getDBHelper(){
+        if(dbHelper == null){
+            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
+        }
+        return dbHelper;
+    }
+
+    private MobilePrivacyProfilerDB_metadata getDeviceDBMetadata(){
+        return getDBHelper().getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();}
+
 
 }

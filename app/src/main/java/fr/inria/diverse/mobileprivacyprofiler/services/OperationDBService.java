@@ -115,7 +115,21 @@ public class OperationDBService extends IntentService {
         list.add(NetActivity.class);
 
         for(Class _class : list){
-        MobilePrivacyProfilerDBHelper.resetTable(_class,this);
+            resetTable(_class);
         }
     }
+
+    private OrmLiteDBHelper getDBHelper(){
+        if(dbHelper == null){
+            dbHelper = OpenHelperManager.getHelper(this, OrmLiteDBHelper.class);
+        }
+        return dbHelper;
+    }
+
+    private void resetTable(Class _class){
+        try {
+            TableUtils.clearTable(getDBHelper().getConnectionSource(),_class);
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
 }
