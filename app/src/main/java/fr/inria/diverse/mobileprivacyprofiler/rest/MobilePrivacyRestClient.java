@@ -560,7 +560,8 @@ public class MobilePrivacyRestClient {
         String jsonObjectOutput = "";
         try {
             jsonObjectOutput = mapper.writeValueAsString(object);
-            jsonObjectOutput=jsonObjectOutput.replace("_id","android_id");
+            jsonObjectOutput=jsonObjectOutput.replace("[{\"_id","[{\"android_id");
+            jsonObjectOutput=jsonObjectOutput.replace(",{\"_id",",{\"android_id");
             Log.d(TAG, "serialized : "+jsonObjectOutput);
 
         } catch (JsonProcessingException e) {e.printStackTrace();}
