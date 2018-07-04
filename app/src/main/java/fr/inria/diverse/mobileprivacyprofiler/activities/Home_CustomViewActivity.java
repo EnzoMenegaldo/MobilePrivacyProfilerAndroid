@@ -153,16 +153,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         startActivity(new Intent(this, ApplicationHistoryList_ClassListViewActivity.class));
     }
 
-    public void onClickBtnExportDB (View view) throws SQLException {
-        showToast( this.getString(R.string.export_db_launch_toast));
-        MobilePrivacyRestClient.getMobilePrivacyRestClient().exportDB(this);
-    }
-
-    public void onClickBtnResetDB (View view){
-        showToast( this.getString(R.string.reset_db_launch_toast));
-        OperationDBService.startActionResetDB(this);
-    }
-
     private void debugText(StringBuilder sb) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 	    sb.append("Has usage access permission = "+ PhoneStateUtils.hasPermission(this,PERMISSIONS)+"\n");

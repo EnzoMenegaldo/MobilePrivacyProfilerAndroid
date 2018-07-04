@@ -17,8 +17,8 @@ import android.view.MenuItem;
 
 //Start of user code additional imports ManualScan_CustomViewActivity
 
-
-
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
 import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import android.app.AlertDialog;
@@ -39,6 +39,7 @@ import android.widget.TextView;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -195,6 +196,16 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 		Test test = new Test();
 		test.mainTest(this);
+	}
+
+	public void onClickBtnExportDB (View view) throws SQLException {
+		showToast( this.getString(R.string.export_db_launch_toast));
+		MobilePrivacyRestClient.getMobilePrivacyRestClient().exportDB(this);
+	}
+
+	public void onClickBtnResetDB (View view){
+		showToast( this.getString(R.string.reset_db_launch_toast));
+		OperationDBService.startActionResetDB(this);
 	}
 
 	public void onClickBtnScanNetActivity(View view){
@@ -413,12 +424,10 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 		return new Intent(this, Home_CustomViewActivity.class);
 		//End of user code
 	}
-
 	@Override
 	public void onCreateSupportNavigateUpTaskStack(TaskStackBuilder builder) {
 		//Start of user code onCreateSupportNavigateUpTaskStack ManualScan_CustomViewActivity
 		super.onCreateSupportNavigateUpTaskStack(builder);
 		//End of user code
 	}
-
 }

@@ -136,7 +136,19 @@
 
 			</ScrollView>
 
+			<Button
+				android:id="@+id/btnExportData"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnExportDB"
+				android:text="@string/manualscan_customview_export_db_btn_label" />
 
+			<Button
+				android:id="@+id/btnResetDB"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:onClick="onClickBtnResetDB"
+				android:text="@string/manualscan_customview_reset_db_btn_label" />
 
 		</LinearLayout>
 
