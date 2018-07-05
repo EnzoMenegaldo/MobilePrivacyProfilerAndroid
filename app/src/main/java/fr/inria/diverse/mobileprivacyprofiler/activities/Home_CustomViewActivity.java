@@ -4,14 +4,9 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanNetActivityJob;
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.VpnService;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +14,10 @@ import android.view.MenuItem;
 
 
 //Start of user code additional imports Home_CustomViewActivity
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.net.VpnService;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanNetActivityJob;
 import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
@@ -374,7 +373,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
         return super.onCreateOptionsMenu(menu);
     }
-
+    
 	// Dealing with Activity results
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -398,9 +397,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                 break;
 
         }
-    }
     //End of user code
-
+	}
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
