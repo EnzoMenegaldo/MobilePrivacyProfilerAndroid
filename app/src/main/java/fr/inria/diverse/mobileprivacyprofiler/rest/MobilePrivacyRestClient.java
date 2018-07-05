@@ -54,7 +54,7 @@ public class MobilePrivacyRestClient {
     
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
-    private String serverUrl = "https://131.254.18.200:4567";
+    private String serverUrl = "https://131.254.18.198:4567";
 // End of user code
 	
 	/**
@@ -560,7 +560,9 @@ public class MobilePrivacyRestClient {
         String jsonObjectOutput = "";
         try {
             jsonObjectOutput = mapper.writeValueAsString(object);
-            Log.d(TAG, "serialized : "+object.getClass().getSimpleName());
+            jsonObjectOutput=jsonObjectOutput.replace("[{\"_id","[{\"android_id");
+            jsonObjectOutput=jsonObjectOutput.replace(",{\"_id",",{\"android_id");
+            Log.d(TAG, "serialized : "+jsonObjectOutput);
 
         } catch (JsonProcessingException e) {e.printStackTrace();}
         return jsonObjectOutput.replace("_id","android_id");

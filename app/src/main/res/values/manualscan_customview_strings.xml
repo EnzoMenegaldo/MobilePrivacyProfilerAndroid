@@ -18,6 +18,8 @@
 	<string name="manualscan_customview_scan_wifi_btn_label">Scan wifi </string>
 	<string name="manualscan_customview_scan_bluetooth_btn_label">Scan bluetooth</string>
 	<string name="manualscan_customview_scan_net_activity_btn_label">Scan net activity</string>
+	<string name="manualscan_customview_export_db_btn_label">Export data</string>
+	<string name="manualscan_customview_reset_db_btn_label">Reset DB</string>
 	<!-- End of user code
 	-->
 </resources>

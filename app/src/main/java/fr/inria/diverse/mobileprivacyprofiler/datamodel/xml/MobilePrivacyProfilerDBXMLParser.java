@@ -171,6 +171,8 @@ public class MobilePrivacyProfilerDBXMLParser {
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_USERID = "USERID";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastContactScan = "lastContactScan";
 	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTCONTACTSCAN = "LASTCONTACTSCAN";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_lastWifiScan = "lastWifiScan";
+	public static final String DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTWIFISCAN = "LASTWIFISCAN";
 	public static final String DATAATT_APPLICATIONHISTORY_appName = "appName";
 	public static final String DATAATT_APPLICATIONHISTORY_APPNAME = "APPNAME";
 	public static final String DATAATT_APPLICATIONHISTORY_packageName = "packageName";
@@ -1048,6 +1050,7 @@ public class MobilePrivacyProfilerDBXMLParser {
 		// TODO lastCallScan = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTCALLSCAN);
 		result.setUserId(parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_userId));
 		// TODO lastContactScan = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTCONTACTSCAN);
+		// TODO lastWifiScan = parser.getAttributeValue(null, DATAATT_MOBILEPRIVACYPROFILERDB_METADATA_LASTWIFISCAN);
 		while (parser.next() != XmlPullParser.END_TAG) {
 	        if (parser.getEventType() != XmlPullParser.START_TAG) {
 	            continue;
@@ -1524,8 +1527,18 @@ public class MobilePrivacyProfilerDBXMLParser {
 				//result.getHistory().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
 				refCommands.add(new Cell_addContainedHistory_RefCommand(result,entries));	    
 	        } else
-					// TODO deal with owned ref cdmaposition
-					// TODO deal with owned ref otherPosition
+			if (currentTagName.equals(DATAREF_CELL_cdmaposition)) {
+				List<CdmaCellData> entries = readCdmaCellDatas(parser,DATAREF_CELL_cdmaposition);	
+				cdmaCellDatas.addAll(entries); // add for inclusion in the DB
+				//result.getCdmaposition().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
+				refCommands.add(new Cell_addContainedCdmaposition_RefCommand(result,entries));	    
+	        } else
+			if (currentTagName.equals(DATAREF_CELL_otherPosition)) {
+				List<OtherCellData> entries = readOtherCellDatas(parser,DATAREF_CELL_otherPosition);	
+				otherCellDatas.addAll(entries); // add for inclusion in the DB
+				//result.getOtherPosition().addAll(entries);  //  doesn't work and need to be done in the other way round using the opposite
+				refCommands.add(new Cell_addContainedOtherPosition_RefCommand(result,entries));	    
+	        } else
 	        {
 	            skip(parser);
 	        }
@@ -2083,39 +2096,43 @@ public class MobilePrivacyProfilerDBXMLParser {
 		}
 		
 	}
-	class Cell_setContainedCdmaposition_RefCommand extends RefCommand{
-	Cell container;
-		CdmaCellData containedElement;
+	class Cell_addContainedCdmaposition_RefCommand extends RefCommand{
+		Cell container;
+		List<CdmaCellData> containedElements;
 		
-		public Cell_setContainedCdmaposition_RefCommand(Cell container,
-				CdmaCellData containedElement) {
+		public Cell_addContainedCdmaposition_RefCommand(Cell container,
+				List<CdmaCellData> containedElements) {
 			super();
 			this.container = container;
-			this.containedElement = containedElement;
+			this.containedElements = containedElements;
 		}
 
 		@Override
 		public void run() {
-			containedElement.setIdentity(container);
-			cdmaCellDatasToUpdate.add(containedElement);			
+			for (CdmaCellData element : containedElements) {				
+				element.setIdentity(container);
+				cdmaCellDatasToUpdate.add(element);
+			}
 		}
 		
 	}
-	class Cell_setContainedOtherPosition_RefCommand extends RefCommand{
-	Cell container;
-		OtherCellData containedElement;
+	class Cell_addContainedOtherPosition_RefCommand extends RefCommand{
+		Cell container;
+		List<OtherCellData> containedElements;
 		
-		public Cell_setContainedOtherPosition_RefCommand(Cell container,
-				OtherCellData containedElement) {
+		public Cell_addContainedOtherPosition_RefCommand(Cell container,
+				List<OtherCellData> containedElements) {
 			super();
 			this.container = container;
-			this.containedElement = containedElement;
+			this.containedElements = containedElements;
 		}
 
 		@Override
 		public void run() {
-			containedElement.setIdentity(container);
-			otherCellDatasToUpdate.add(containedElement);			
+			for (OtherCellData element : containedElements) {				
+				element.setIdentity(container);
+				otherCellDatasToUpdate.add(element);
+			}
 		}
 		
 	}

@@ -9,6 +9,7 @@
       <dataAttributes name="lastCallScan" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="lastContactScan" type="//@dataModel/@dataClasses.29"/>
+      <dataAttributes name="lastWifiScan" type="//@dataModel/@dataClasses.29"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationHistory">
       <dataReferences name="usageStats" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.2"/>
@@ -126,8 +127,8 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="Cell">
       <dataReferences name="history" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.3" type="//@dataModel/@dataClasses.19"/>
-      <dataReferences name="cdmaposition" containment="true" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.18"/>
-      <dataReferences name="otherPosition" containment="true" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.17"/>
+      <dataReferences name="cdmaposition" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.1" type="//@dataModel/@dataClasses.18"/>
+      <dataReferences name="otherPosition" upperBound="-1" containment="true" opposite="//@dataModel/@dataAssociations.2" type="//@dataModel/@dataClasses.17"/>
       <dataAttributes name="cellId" type="//@dataModel/@dataClasses.25"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
