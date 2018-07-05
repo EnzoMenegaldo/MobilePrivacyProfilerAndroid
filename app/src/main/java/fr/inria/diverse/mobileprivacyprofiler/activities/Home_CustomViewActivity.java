@@ -146,6 +146,11 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	}
     //Start of user code additional code Home_CustomViewActivity
 
+    public void onClickHelpBtn(View view){
+        Intent intent = new Intent(this,Help_CustomViewActivity.class);
+        startActivity(intent);
+    }
+
     public static Context getContext(){return context;}
 
 	public void onClickBtnApplicationHistory(View view){
