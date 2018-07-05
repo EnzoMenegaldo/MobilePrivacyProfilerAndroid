@@ -11,7 +11,7 @@ public enum JobEnum {
     SCHEDULE_SCAN_BATTERY_USAGE(MobilePrivacyJobManager::scheduleScanBatteryJob,MobilePrivacyJobManager::cancelScanBatteryJob),
     SCHEDULE_RECORD_LOCATION(MobilePrivacyJobManager::scheduleScanGeolocationJob,MobilePrivacyJobManager::cancelScanGeolocationJob),
     SCHEDULE_SCAN_AUTHENTICATORS(MobilePrivacyJobManager::scheduleScanAuthenticatorJob,MobilePrivacyJobManager::cancelScanAuthenticatorJob),
-    //SCHEDULE_NET_ACTIVITY(),
+    SCHEDULE_NET_ACTIVITY(MobilePrivacyJobManager::scheduleScanNetActivityJob,MobilePrivacyJobManager::cancelScanNetActivityJob),
     SCHEDULE_SCAN_CELL_INFO(MobilePrivacyJobManager::scheduleScanCellJob,MobilePrivacyJobManager::cancelScanCellJob),
     SCHEDULE_SCAN_WIFI(MobilePrivacyJobManager::registerWifiBroadcastReceiver,MobilePrivacyJobManager::unregisterWifiBroadcastReceiver),
     SCHEDULE_SCAN_BLUETOOTH(MobilePrivacyJobManager::scheduleScanBluetoothJob,MobilePrivacyJobManager::cancelScanBluetoothJob),

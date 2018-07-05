@@ -37,6 +37,8 @@ public class MobilePrivacyProfilerJobCreator implements JobCreator {
                 return new ScanPhoneCallLogJob();
             case ScanSMSJob.TAG:
                 return new ScanSMSJob();
+            case ScanNetActivityJob.TAG:
+                return new ScanNetActivityJob();
             case ExportDBJob.TAG:
                 return new ExportDBJob();
             default:

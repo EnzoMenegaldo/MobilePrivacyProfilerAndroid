@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
@@ -15,8 +16,10 @@ import fr.inria.diverse.mobileprivacyprofiler.job.ScanCalendarJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanCellJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanContactJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanNetActivityJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 
 import static fr.inria.diverse.mobileprivacyprofiler.activities.AdvancedScanning_CustomViewActivity.getContext;
 
@@ -123,6 +126,15 @@ public class MobilePrivacyJobManager {
     }
     static Void cancelScanAuthenticatorJob() {
         ScanAuthenticatorJob.cancelRequest();
+        return null;
+    }
+
+    static Void scheduleScanNetActivityJob(){
+        ScanNetActivityJob.schedule();
+        return null;
+    }
+    static Void cancelScanNetActivityJob() {
+        ScanNetActivityJob.cancelRequest(Home_CustomViewActivity.getContext());
         return null;
     }
 

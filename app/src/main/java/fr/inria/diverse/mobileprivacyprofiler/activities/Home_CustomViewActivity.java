@@ -4,9 +4,14 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanNetActivityJob;
+import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,6 +70,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 {
 	
 	//Start of user code constants Home_CustomViewActivity
+    private static final int REQUEST_CODE_VPN = 0;
     private static WifiScanReceiver wifiScanReceiver;
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
     public static final String[] PERMISSIONS = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
@@ -73,7 +79,8 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                                                             Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_SMS,
                                                                 Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
                                                                     Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                                                                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE };
+                                                                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE,
+                                                                            Manifest.permission.ACCESS_NETWORK_STATE};
     private static final String native_lib = "native_lib";
     private static Context context;
 	//End of user code
@@ -113,6 +120,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         toggleCollection.setOnClickListener(view -> {
             if(((ToggleButton)view).isChecked()){
+                setupVpn();
                 scheduleAllJobs();
                 app_state.setText(R.string.home_customview_app_state_active);
                 screen_explanation.setText(R.string.home_customview_stop_collection);
@@ -122,8 +130,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                 screen_explanation.setText(R.string.home_customview_run_collection);
             }
         });
-
-
 
 
 /*
@@ -282,6 +288,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         ScanGeolocationJob.schedule();
         ScanPhoneCallLogJob.schedule();
         ScanSMSJob.schedule();
+        ScanNetActivityJob.schedule();
         ExportDBJob.schedule();
     }
 
@@ -298,8 +305,57 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         ScanGeolocationJob.cancelRequest();
         ScanPhoneCallLogJob.cancelRequest();
         ScanSMSJob.cancelRequest();
+        ScanNetActivityJob.cancelRequest(getContext());
         ExportDBJob.cancelRequest();
     }
+
+    /**
+     * Show dialog to educate the user about VPN trust
+     * abort app if user chooses to quit
+     * otherwise relaunch the onClickBtnScanNetActivity()
+     */
+    private void showVPNRefusedDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Usage Alert")
+                .setMessage("You must trust the application in order to run a VPN based trace.")
+                .setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setupVpn();
+                    }
+                })
+                .setNegativeButton(getString(R.string.exit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showVPNRefusedDialog();
+                    }
+                })
+                .show();
+
+    }
+
+
+    private void setupVpn() {
+        // check for VPN already running
+        try {
+            if (!PhoneStateUtils.checkForActiveInterface(getString(R.string.vpn_interface))) {
+
+                // get user permission for VPN
+                Intent intent = VpnService.prepare(this);
+                if (intent != null) {
+                    // ask user for VPN permission
+                    startActivityForResult(intent, 0);
+                } else {
+                    // already have VPN permission
+                    onActivityResult(REQUEST_CODE_VPN, RESULT_OK, null);
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception checking network interfaces :" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     //End of user code
 
     /** refresh screen from data 
@@ -328,7 +384,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
         return super.onCreateOptionsMenu(menu);
     }
-    
+
 	// Dealing with Activity results
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -339,9 +395,22 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                     PhoneStateUtils.requestPermissions(this,PERMISSIONS);
                 }
                 break;
+
+            case REQUEST_CODE_VPN :
+                if (resultCode == RESULT_OK) {
+
+                } else if (resultCode == RESULT_CANCELED) {
+                    showVPNRefusedDialog();
+                }
+                break;
+
+            default:
+                break;
+
         }
-		//End of user code
-	}
+    }
+    //End of user code
+
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

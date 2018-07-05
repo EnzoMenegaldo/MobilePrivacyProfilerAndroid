@@ -563,7 +563,7 @@ public class MobilePrivacyRestClient {
             Log.d(TAG, "serialized : "+object.getClass().getSimpleName());
 
         } catch (JsonProcessingException e) {e.printStackTrace();}
-        return jsonObjectOutput;
+        return jsonObjectOutput.replace("_id","android_id");
     }
 
     /**
