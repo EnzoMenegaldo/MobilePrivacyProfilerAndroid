@@ -90,7 +90,8 @@
 			android:id="@+id/sendMailBtn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="@string/contact_customview_send_mail_btn_label"/>
+			android:onClick="onClickSendMailBtn"
+			android:text="@string/contact_customview_send_mail_btn_label" />
 	</LinearLayout>
 
 

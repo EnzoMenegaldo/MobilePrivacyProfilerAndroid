@@ -339,10 +339,10 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 		sb.append("Table "+getHelper().getNetActivityDao().getDataClass().getSimpleName());
 		sb.append(" count="+ getHelper().getNetActivityDao().countOf()+"\n");
-/*
-        sb.append("Table "+getHelper().getWifiAccessPointDao().getDataClass().getSimpleName());
-        sb.append(" count="+ getHelper().getWifiAccessPointDao().countOf()+"\n");
-*/
+
+        sb.append("Table "+getHelper().getAuthentificationDao().getDataClass().getSimpleName());
+        sb.append(" count="+ getHelper().getAuthentificationDao().countOf()+"\n");
+
 	}
 
 	//End of user code

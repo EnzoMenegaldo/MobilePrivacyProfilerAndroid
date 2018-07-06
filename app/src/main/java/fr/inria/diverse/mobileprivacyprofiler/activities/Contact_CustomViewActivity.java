@@ -26,10 +26,12 @@ import android.view.View;
 
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 //End of user code
 public class Contact_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -62,8 +64,18 @@ public class Contact_CustomViewActivity extends OrmLiteActionBarActivity<OrmLite
 		//End of user code
 	}
     //Start of user code additional code Contact_CustomViewActivity
-	public void onClickBtnSample(View view){
-		showToast("sample button pressed. \nPlease customize ;-)");
+	public void onClickSendMailBtn(View view){
+        final EditText sendMailInput = (EditText) findViewById(R.id.sendMailInput);
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "[Participant Etude Profile]"+ OpenHelperManager.getHelper(this, OrmLiteDBHelper.class).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata().getUserId());
+        i.putExtra(Intent.EXTRA_TEXT   , sendMailInput.getText());
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(Contact_CustomViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 	//End of user code
 
