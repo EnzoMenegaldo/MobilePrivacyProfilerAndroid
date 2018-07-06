@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.nfc.Tag;
@@ -27,6 +28,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -51,9 +53,12 @@ import java.util.Locale;
 
 public class PacketSnifferService extends VpnService implements Handler.Callback,
 		Runnable, IProtectSocket, IReceivePacket{
+
 	public static PackageManager PackageManager ;
-	private static final String TAG = "PacketSniffer";
 	public static final String DIRECTORY_FILE = "/pcap";
+	public static final String STOP_SERVICE_INTENT = "stop_service";
+
+	private static final String TAG = "PacketSniffer";
 	private static final int MAX_PACKET_LEN = 1500;
 
 	private Handler mHandler;
@@ -67,6 +72,28 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	private File traceDir;
 	private PCapFileWriter pcapOutput;
 	private FileOutputStream timeStream;
+
+	private LocalBroadcastManager lbm;
+
+	/**
+	 * receive message to trigger termination of collection
+	 */
+	private BroadcastReceiver stopPacketSniffer = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (STOP_SERVICE_INTENT.equals(intent.getAction())) {
+                stopVpnService();
+                stopSelf();
+			}
+		}
+	};
+
+	@Override
+	public void onCreate(){
+		//Register local receiver
+		lbm = LocalBroadcastManager.getInstance(this);
+		lbm.registerReceiver(stopPacketSniffer, new IntentFilter(STOP_SERVICE_INTENT));
+	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -113,36 +140,12 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	}
 
 
-	private void unregisterAnalyzerCloseCmdReceiver() {
-		Log.d(TAG, "inside unregisterAnalyzerCloseCmdReceiver()");
-		try {
-			if (serviceCloseCmdReceiver != null) {
-				unregisterReceiver(serviceCloseCmdReceiver);
-				serviceCloseCmdReceiver = null;
-				Log.d(TAG, "successfully unregistered serviceCloseCmdReceiver");
-			}
-		} catch (Exception e) {
-			Log.d(TAG, "Ignoring exception in serviceCloseCmdReceiver", e);
-		}
-	}
-
 	@Override
 	public void onRevoke() {
 		Log.i(TAG, "revoked!, user has turned off VPN");
 		super.onRevoke();
 	}
-	/**
-	 * receive message to trigger termination of collection
-	 */
-	private BroadcastReceiver serviceCloseCmdReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context ctx, Intent intent) {
-			Log.d(TAG, "received service close cmd intent at " + System.currentTimeMillis());
-			unregisterAnalyzerCloseCmdReceiver();
-			serviceValid = false;
-			stopSelf();
-		}
-	};
+
 
 	@Override
 	public ComponentName startService(Intent service) {
@@ -205,54 +208,7 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	 */
 	@Override
 	public void onDestroy() {
-
 		Log.i(TAG, "onDestroy()");
-		serviceValid = false;
-
-		unregisterAnalyzerCloseCmdReceiver();
-
-		if (dataService !=  null)
-			dataService.setShutdown(true);
-
-		if (packetbgWriter != null)
-			packetbgWriter.setShuttingDown(true);
-
-		//	closeTraceFiles();
-
-		if(dataServiceThread != null){
-			dataServiceThread.interrupt();
-		}
-		if(packetQueueThread != null){
-			packetQueueThread.interrupt();
-		}
-
-		try {
-			if (mInterface != null) {
-				Log.i(TAG, "mInterface.close()");
-				mInterface.close();
-			}
-		} catch (IOException e) {
-			Log.d(TAG, "mInterface.close():" + e.getMessage());
-			e.printStackTrace();
-		}
-
-		// Stop the previous session by interrupting the thread.
-		if (mThread != null) {
-			mThread.interrupt();
-			int reps = 0;
-			while(mThread.isAlive()){
-				Log.i(TAG, "Waiting to exit " + ++reps);
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				if(reps > 5){
-					break;
-				}
-			}
-			mThread = null;
-		}
 
 	}
 
@@ -465,6 +421,57 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	@Override
 	public void protectSocket(DatagramSocket socket) {
 		this.protect(socket);
+	}
+
+	public void stopVpnService(){
+		serviceValid = false;
+
+		//Always unregister all receivers
+		lbm.unregisterReceiver(stopPacketSniffer);
+
+		if (dataService !=  null)
+			dataService.setShutdown(true);
+
+		if (packetbgWriter != null)
+			packetbgWriter.setShuttingDown(true);
+
+		closeTraceFiles();
+
+		if(dataServiceThread != null){
+			dataServiceThread.interrupt();
+		}
+		if(packetQueueThread != null){
+			packetQueueThread.interrupt();
+		}
+
+		try {
+			if (mInterface != null) {
+				Log.i(TAG, "mInterface.close()");
+				mInterface.close();
+				mInterface = null;
+			}
+		} catch (IOException e) {
+			Log.d(TAG, "mInterface.close():" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		// Stop the previous session by interrupting the thread.
+		if (mThread != null) {
+			mThread.interrupt();
+			int reps = 0;
+			while(mThread.isAlive()){
+				Log.i(TAG, "Waiting to exit " + ++reps);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if(reps > 5){
+					break;
+				}
+			}
+			mThread = null;
+		}
 	}
 
 }

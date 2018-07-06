@@ -46,7 +46,7 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
         //Start of user code onCreate AdvancedScanning_CustomViewActivity
 		JobEnum[] services = JobEnum.values();
 		ListView serviceListView = (ListView)findViewById(R.id.serviceListView);
-		ServiceList_Adapter adapter = new ServiceList_Adapter(getApplicationContext(),services);
+		JobList_Adapter adapter = new JobList_Adapter(getApplicationContext(),services);
 		serviceListView.setAdapter(adapter);
 		context = getApplicationContext();
 		//End of user code

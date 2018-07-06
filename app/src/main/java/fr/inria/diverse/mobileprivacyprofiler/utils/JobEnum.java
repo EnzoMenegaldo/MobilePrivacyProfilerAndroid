@@ -11,7 +11,7 @@ public enum JobEnum {
     SCHEDULE_SCAN_BATTERY_USAGE(MobilePrivacyJobManager::scheduleScanBatteryJob,MobilePrivacyJobManager::cancelScanBatteryJob),
     SCHEDULE_RECORD_LOCATION(MobilePrivacyJobManager::scheduleScanGeolocationJob,MobilePrivacyJobManager::cancelScanGeolocationJob),
     SCHEDULE_SCAN_AUTHENTICATORS(MobilePrivacyJobManager::scheduleScanAuthenticatorJob,MobilePrivacyJobManager::cancelScanAuthenticatorJob),
-    //SCHEDULE_NET_ACTIVITY(),
+    SCHEDULE_NET_ACTIVITY(MobilePrivacyJobManager::scheduleScanNetActivityJob,MobilePrivacyJobManager::cancelScanNetActivityJob),
     SCHEDULE_SCAN_CELL_INFO(MobilePrivacyJobManager::scheduleScanCellJob,MobilePrivacyJobManager::cancelScanCellJob),
     SCHEDULE_SCAN_WIFI(MobilePrivacyJobManager::registerWifiBroadcastReceiver,MobilePrivacyJobManager::unregisterWifiBroadcastReceiver),
     SCHEDULE_SCAN_BLUETOOTH(MobilePrivacyJobManager::scheduleScanBluetoothJob,MobilePrivacyJobManager::cancelScanBluetoothJob),
@@ -23,7 +23,6 @@ public enum JobEnum {
     //We could have used A Consumer instead of Callable but this necessitates an API >= 24
     private Callable<Void> run ;
     private Callable<Void> cancel;
-
 
     private boolean isSelected;
 
@@ -41,7 +40,6 @@ public enum JobEnum {
         try {
 
             this.run.call();
-            this.isSelected=true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +51,6 @@ public enum JobEnum {
     public void cancel(){
         try {
             this.cancel.call();
-            this.isSelected=false;
         } catch (Exception e) {
             e.printStackTrace();
         }
