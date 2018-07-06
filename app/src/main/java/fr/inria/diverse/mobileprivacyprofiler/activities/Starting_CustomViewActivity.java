@@ -42,6 +42,8 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 	//End of user code
 
 	//Start of user code Static initialization  Starting_CustomViewActivity
+	public static Context context;
+	public static String app_state;
 	//End of user code
 
 	/** Called when the activity is first created. */
@@ -54,6 +56,8 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         setContentView(R.layout.starting_customview);
         //Start of user code onCreate Starting_CustomViewActivity
+		context = getApplicationContext();
+		app_state = getApplicationContext().getString(R.string.home_customview_app_state_inactive);
 		//End of user code
     }
     
@@ -69,6 +73,17 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		Intent intent = new Intent(this,Home_CustomViewActivity.class);
 		startActivity(intent);
     }
+
+    public static Context getContext(){
+    	return context;
+	}
+
+	public static boolean isCollectionRunning(){
+		if(app_state.equals(getContext().getString(R.string.home_customview_app_state_inactive)))
+			return false;
+		return true;
+	}
+
 	//End of user code
 
     /** refresh screen from data 

@@ -24,7 +24,6 @@ public enum JobEnum {
     private Callable<Void> run ;
     private Callable<Void> cancel;
 
-
     private boolean isSelected;
 
     JobEnum(Callable<Void> run, Callable<Void> cancel) {
@@ -41,7 +40,6 @@ public enum JobEnum {
         try {
 
             this.run.call();
-            this.isSelected=true;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +51,6 @@ public enum JobEnum {
     public void cancel(){
         try {
             this.cancel.call();
-            this.isSelected=false;
         } catch (Exception e) {
             e.printStackTrace();
         }

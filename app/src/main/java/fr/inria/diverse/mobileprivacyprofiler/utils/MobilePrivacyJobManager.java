@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.AdvancedScanning_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
@@ -19,9 +20,6 @@ import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanNetActivityJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
-import fr.inria.diverse.mobileprivacyprofiler.services.ScanActivityIntentService;
-
-import static fr.inria.diverse.mobileprivacyprofiler.activities.AdvancedScanning_CustomViewActivity.getContext;
 
 public class MobilePrivacyJobManager {
 
@@ -140,18 +138,14 @@ public class MobilePrivacyJobManager {
 
     static Void registerWifiBroadcastReceiver(){
         Log.d(TAG,"RegisterWifiBroadcastReceiver");
-        wifiScanReceiver = WifiScanReceiver.getInstance();
-        //unregisterReceiver(wifiScanReceiver);
-        getContext().registerReceiver(
-                wifiScanReceiver,
-                new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        );
+        wifiScanReceiver = WifiScanReceiver.INSTANCE;
+        Home_CustomViewActivity.getContext().registerReceiver(wifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         return null;
     }
     static Void unregisterWifiBroadcastReceiver() {
         Log.d(TAG,"UnregisterWifiBroadcastReceiver");
-        wifiScanReceiver = WifiScanReceiver.getInstance();
-        getContext().unregisterReceiver(wifiScanReceiver);
+        wifiScanReceiver = WifiScanReceiver.INSTANCE;
+        Home_CustomViewActivity.getContext().unregisterReceiver(wifiScanReceiver);
         return null;
     }
 
