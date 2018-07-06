@@ -53,6 +53,8 @@ public class Contact_CustomViewActivity extends OrmLiteActionBarActivity<OrmLite
 		//End of user code		
         setContentView(R.layout.contact_customview);
         //Start of user code onCreate Contact_CustomViewActivity
+        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
+        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
     }
     
@@ -61,6 +63,8 @@ public class Contact_CustomViewActivity extends OrmLiteActionBarActivity<OrmLite
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume Contact_CustomViewActivity
+        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
+        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
 	}
     //Start of user code additional code Contact_CustomViewActivity

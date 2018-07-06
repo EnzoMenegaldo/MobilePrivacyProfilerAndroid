@@ -51,6 +51,8 @@ public class FAQ_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
 		//End of user code		
         setContentView(R.layout.faq_customview);
         //Start of user code onCreate FAQ_CustomViewActivity
+        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
+        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
     }
     
@@ -59,6 +61,8 @@ public class FAQ_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume FAQ_CustomViewActivity
+        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
+        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
 	}
     //Start of user code additional code FAQ_CustomViewActivity

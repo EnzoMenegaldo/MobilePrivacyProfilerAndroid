@@ -51,6 +51,8 @@ public class CGU_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
 		//End of user code		
         setContentView(R.layout.cgu_customview);
         //Start of user code onCreate CGU_CustomViewActivity
+        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
+        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
     }
     
@@ -59,6 +61,8 @@ public class CGU_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume CGU_CustomViewActivity
+        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
+        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
 	}
     //Start of user code additional code CGU_CustomViewActivity
