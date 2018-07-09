@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Start of user code customView_layout for Home
+<!--Start of user code customView_layout for FAQ
 -->
 <!-- freely adapt here the desired layout for your custom view -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-    android:layout_height="match_parent"
+	android:layout_height="match_parent"
 	android:orientation="vertical">
-
 
 	<LinearLayout
 		android:id="@+id/home_customview_state_layout"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:layout_marginTop="20dp"
+		android:layout_marginTop="10dp"
 		android:orientation="horizontal">
 
 		<TextView
@@ -33,68 +32,72 @@
 			android:textStyle="bold" />
 	</LinearLayout>
 
-
-	<TextView
-		android:id="@+id/home_customview_screen_explanation"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="25dp"
-		android:layout_marginTop="50dp"
-		android:text="@string/home_customview_run_collection"
-		android:gravity="center"/>
-
 	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="0dp"
+		android:id="@+id/help_customview_state_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:layout_weight="1">
+		android:layout_marginTop="0dp"
+		android:orientation="vertical">
 
-		<ToggleButton
-			android:id="@+id/home_customview_toggle_collection"
-			android:layout_width="wrap_content"
+		<TextView
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			style="@style/toggleButton"
-			android:background="@drawable/ic_toggle_bg"/>
+			android:layout_marginLeft="20dp"
+			android:layout_marginStart="20dp"
+			android:layout_marginTop="0dp"
+			android:text="@string/faq_customview_title"
+			android:textSize="40sp"
+			android:textStyle="bold" />
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="20dp"
+			android:layout_marginStart="20dp"
+			android:text="@string/faq_customview_title_comment"
+		/>
+
+		<ScrollView
+			android:id="@+id/text_scrollview_faq"
+			android:layout_width="match_parent"
+			android:layout_height="275dp"
+			android:layout_weight="3"
+			android:background="#efefef">
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+
+				android:layout_marginLeft="20dp"
+				android:layout_marginRight="50dp"
+				android:text="@string/faq_customview_main_text" />
+		</ScrollView>
 
 	</LinearLayout>
 
 
-	<ImageButton
-		android:id="@+id/HelpImageButton"
-		android:layout_width="75dp"
-		android:layout_height="75dp"
-		android:layout_marginBottom="10dip"
-		android:layout_marginLeft="10dip"
-		android:layout_marginRight="10dip"
-		android:layout_marginTop="10dip"
-		android:background="#efefef"
-		android:onClick="onClickHelpBtn"
-		android:scaleType="centerCrop"
-		app:srcCompat="@drawable/iconhelp" />
-
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="65dp"
+		android:layout_height="wrap_content"
 		android:gravity="bottom"
 		android:orientation="horizontal">
 
 		<ImageView
-			android:layout_width="0dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:padding="5dp"
 			android:src="@drawable/univ_rennes_2" />
 
 		<ImageView
-			android:layout_width="0dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:padding="5dp"
 			android:src="@drawable/universite_rennes_1" />
 
 		<ImageView
-			android:layout_width="0dp"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:padding="5dp"

@@ -138,13 +138,13 @@ public class MobilePrivacyJobManager {
 
     static Void registerWifiBroadcastReceiver(){
         Log.d(TAG,"RegisterWifiBroadcastReceiver");
-        wifiScanReceiver = WifiScanReceiver.INSTANCE;
+        wifiScanReceiver = WifiScanReceiver.getInstance();
         Home_CustomViewActivity.getContext().registerReceiver(wifiScanReceiver,new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         return null;
     }
     static Void unregisterWifiBroadcastReceiver() {
         Log.d(TAG,"UnregisterWifiBroadcastReceiver");
-        wifiScanReceiver = WifiScanReceiver.INSTANCE;
+        wifiScanReceiver = WifiScanReceiver.getInstance();
         Home_CustomViewActivity.getContext().unregisterReceiver(wifiScanReceiver);
         return null;
     }

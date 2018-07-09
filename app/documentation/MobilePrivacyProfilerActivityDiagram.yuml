@@ -6,6 +6,13 @@
 (ManualScan)-><ManualScanChoice>
 (AdvancedScanning)-><AdvancedScanningChoice>
 (ApplicationHistoryDetail)-><ApplicationHistoryDetailChoice>
+(Help)-><HelpChoice>
+(CGU)-><CGUChoice>
+(Contact)-><ContactChoice>
+(FAQ)-><FAQChoice>
 <StartingChoice>->(Home)
 <HomeChoice>->(Starting)
 <ApplicationHistoryListChoice>->(ManualScan)
+<HelpChoice>->(CGU)
+<HelpChoice>->(Contact)
+<HelpChoice>->(FAQ)

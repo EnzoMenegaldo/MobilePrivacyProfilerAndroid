@@ -14,19 +14,23 @@ import fr.inria.diverse.mobileprivacyprofiler.services.ScanConnectionIntentServi
 
 public class WifiScanReceiver extends BroadcastReceiver {
 
-    public static final WifiScanReceiver INSTANCE = new WifiScanReceiver();
+    private static WifiScanReceiver mWifiScanReceiver = null;
     private static final String TAG = WifiScanReceiver.class.getSimpleName();
 
     private WifiScanReceiver(){super();}
 
-    /*public synchronized static WifiScanReceiver getInstance() {
+    public static WifiScanReceiver getInstance() { // synchronized 
 
-        if (mWifiScanReceiver == null)
-            mWifiScanReceiver = new WifiScanReceiver();
+        if (WifiScanReceiver.mWifiScanReceiver == null) {
+            synchronized(WifiScanReceiver.class) {
+                if (WifiScanReceiver.mWifiScanReceiver == null) {
+                    WifiScanReceiver.mWifiScanReceiver = new WifiScanReceiver();
+                }
+            }
+        }
+        return WifiScanReceiver.mWifiScanReceiver;
 
-        return mWifiScanReceiver;
-
-    }*/
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

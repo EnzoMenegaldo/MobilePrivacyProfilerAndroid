@@ -4,7 +4,6 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
-import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -15,27 +14,53 @@ import android.view.MenuItem;
 
 
 //Start of user code additional imports Home_CustomViewActivity
+import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.VpnService;
-
+import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
+import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.MobilePrivacyProfilerJobCreator;
-
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanBatteryJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanBluetoothJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanCalendarJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanCellJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanContactJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
+import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
 import android.util.Log;
 import android.Manifest;
 import android.app.Activity;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
+import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 
 import android.content.Context;
 
+import android.view.View;
+
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Set;
 
 //End of user code
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -56,7 +81,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                                                                         Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE,
                                                                             Manifest.permission.ACCESS_NETWORK_STATE};
     private static final String native_lib = "native_lib";
-
 	//End of user code
 
 	//Start of user code Static initialization  Home_CustomViewActivity
@@ -69,7 +93,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 		//Start of user code onCreate Home_CustomViewActivity_1
 		//ThemeUtil.onActivityCreateSetTheme(this);
 		//End of user code		
@@ -122,7 +145,10 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
 	}
     //Start of user code additional code Home_CustomViewActivity
-
+    public void onClickHelpBtn(View view){
+        Intent intent = new Intent(this,Help_CustomViewActivity.class);
+        startActivity(intent);
+    }
 
     public static Context getContext(){return Starting_CustomViewActivity.getContext();}
 

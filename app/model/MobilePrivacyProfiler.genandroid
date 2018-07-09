@@ -211,6 +211,10 @@
     <viewActivities xsi:type="genandroid:CustomViewActivity" name="ManualScan" documentation="Page used to manually launch the vairous scans of the device" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
     <viewActivities xsi:type="genandroid:CustomViewActivity" name="AdvancedScanning" documentation="Page used to run/cancel various jobs" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.1"/>
     <viewActivities xsi:type="genandroid:ElementViewActivity" name="ApplicationHistoryDetail" hasSupportForParentActivity="true" defaultParentActivity="//@presentationModel/@viewActivities.2" element="//@dataModel/@dataClasses.1"/>
+    <viewActivities xsi:type="genandroid:CustomViewActivity" name="Help" documentation="Help view : link to CGU, Contact and FAQ views" accessibleViews="//@presentationModel/@viewActivities.8 //@presentationModel/@viewActivities.9 //@presentationModel/@viewActivities.10"/>
+    <viewActivities xsi:type="genandroid:CustomViewActivity" name="CGU" documentation="read here CGU" defaultParentActivity="//@presentationModel/@viewActivities.7"/>
+    <viewActivities xsi:type="genandroid:CustomViewActivity" name="Contact" defaultParentActivity="//@presentationModel/@viewActivities.7"/>
+    <viewActivities xsi:type="genandroid:CustomViewActivity" name="FAQ" defaultParentActivity="//@presentationModel/@viewActivities.7"/>
     <classDetails mainAttributes="//@dataModel/@dataClasses.1/@dataAttributes.0" name="ApplicationHistoryDetail" secondaryAttributes="//@dataModel/@dataClasses.1/@dataAttributes.1"/>
   </presentationModel>
 </genandroid:AndroidProject>

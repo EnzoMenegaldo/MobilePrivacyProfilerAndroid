@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resource Strings specific to contact Custom View -->
+<resources>	
+	<!-- Start of user code customView_strings contact
+	-->
+	<!-- freely add here the desired resource String for your custom view -->
+	<string name="contact_customview_title">Contact</string>
+	<string name="contact_customview_title_comment">contact comment : \n blabalbla</string>
+	<string name="contact_customview_send_mail_btn_label">Envoyer mail</string>
+	<string name="contact_customview_send_mail_hint">Ecrivez ici votre mail</string>
+
+	<!-- End of user code
+	-->
+</resources>
