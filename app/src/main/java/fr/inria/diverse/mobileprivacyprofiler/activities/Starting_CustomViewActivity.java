@@ -66,6 +66,7 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume Starting_CustomViewActivity
+		context = getApplicationContext();
 		//End of user code
 	}
     //Start of user code additional code Starting_CustomViewActivity
@@ -82,7 +83,8 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 	}
 
 	public static boolean isCollectionRunning(){
-		if(app_state.equals(getContext().getString(R.string.home_customview_app_state_inactive)))
+    	Context context=getContext();
+		if(null!=context&&app_state.equals(context.getString(R.string.home_customview_app_state_inactive)))
 			return false;
 		return true;
 	}

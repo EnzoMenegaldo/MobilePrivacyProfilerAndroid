@@ -2,18 +2,24 @@ package fr.inria.diverse.mobileprivacyprofiler.job;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanSocialIntentService;
+
+import static fr.inria.diverse.mobileprivacyprofiler.activities.Starting_CustomViewActivity.context;
 
 /**
  * Created by gohier on 27/06/18.
@@ -28,11 +34,18 @@ public class ExportDBJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
+        Date now = new Date();
+        Date lastScan = OpenHelperManager.getHelper(context, OrmLiteDBHelper.class).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata().getLastTransmissionDate();
+        if(null==lastScan||now.after(new Date(lastScan.getTime()+10800000))){
+            try {
+                new  MobilePrivacyRestClient().exportDB(getContext());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
-        try {
-            new  MobilePrivacyRestClient().exportDB(getContext());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        else{
+            Log.d(TAG,"Too early for a new Export now : "+now+"("+now.getTime()+") waiting : "+new Date(lastScan.getTime()+10800000).toString());
         }
         return Result.SUCCESS;
     }
