@@ -186,7 +186,7 @@ class SocketDataReaderWorker implements Runnable {
 					session.getTimestampSender(), session.getTimestampReplyto());
 			try {
 				writer.write(data);
-				pData.addData(data);
+				//pData.addData(data);
 			} catch (IOException e) {
 				Log.e(TAG,"Failed to send ACK + Data packet: " + e.getMessage());
 			}
@@ -201,7 +201,7 @@ class SocketDataReaderWorker implements Runnable {
 				session.getTimestampSender(), session.getTimestampReplyto());
 		try {
 			writer.write(data);
-			pData.addData(data);
+			//pData.addData(data);
 		} catch (IOException e) {
 			Log.e(TAG,"Failed to send FIN packet: " + e.getMessage());
 		}
@@ -231,7 +231,7 @@ class SocketDataReaderWorker implements Runnable {
 					//write to client
 					writer.write(packetData);
 					//publish to packet subscriber
-					pData.addData(packetData);
+					//pData.addData(packetData);
 					Log.d(TAG,"SDR: sent " + len + " bytes to UDP client, packetData.length: "
 							+ packetData.length);
 					buffer.clear();

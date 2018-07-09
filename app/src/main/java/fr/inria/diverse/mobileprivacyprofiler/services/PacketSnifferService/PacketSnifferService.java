@@ -104,7 +104,7 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 		Log.d(TAG, "onStartCommand");
 		PackageManager = getApplicationContext().getPackageManager();
 		if (intent != null) {
-			traceDir = new File(Environment.getExternalStorageDirectory().getPath() + DIRECTORY_FILE);
+			traceDir = new File(getExternalFilesDir(null).getPath() + DIRECTORY_FILE);
 		} else {
 			return START_STICKY;
 		}
@@ -266,7 +266,8 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 				Log.e(TAG, "CANNOT make " + traceDir.toString());
 
 		// gen & open pcap file
-		String sFileName = TAG+"_"+new Timestamp(System.currentTimeMillis()).getTime()+".pcapng";
+		//String sFileName = TAG+"_"+new Timestamp(System.currentTimeMillis()).getTime()+".pcapng";
+		String sFileName = TAG+".pcapng";
 		File pcapFile = new File(traceDir, sFileName);
 		pcapOutput = new PCapFileWriter(pcapFile);
 	}
