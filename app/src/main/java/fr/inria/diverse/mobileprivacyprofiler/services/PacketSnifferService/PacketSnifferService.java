@@ -15,6 +15,7 @@
 */
 package fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.VpnService;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -57,8 +59,9 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	public static PackageManager PackageManager ;
 	public static final String DIRECTORY_FILE = "/pcap";
 	public static final String STOP_SERVICE_INTENT = "stop_service";
-
 	private static final String TAG = "PacketSniffer";
+
+	private static final String[] ALLOWED_APPLICATIONS = {"com.android.chrome"};
 	private static final int MAX_PACKET_LEN = 1500;
 
 	private Handler mHandler;
@@ -101,7 +104,7 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 		Log.d(TAG, "onStartCommand");
 		PackageManager = getApplicationContext().getPackageManager();
 		if (intent != null) {
-			traceDir = new File(Environment.getExternalStorageDirectory().getPath() + DIRECTORY_FILE);
+			traceDir = new File(getExternalFilesDir(null).getPath() + DIRECTORY_FILE);
 		} else {
 			return START_STICKY;
 		}
@@ -263,7 +266,8 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 				Log.e(TAG, "CANNOT make " + traceDir.toString());
 
 		// gen & open pcap file
-		String sFileName = TAG+"_"+new Timestamp(System.currentTimeMillis()).getTime()+".pcapng";
+		//String sFileName = TAG+"_"+new Timestamp(System.currentTimeMillis()).getTime()+".pcapng";
+		String sFileName = TAG+".pcapng";
 		File pcapFile = new File(traceDir, sFileName);
 		pcapOutput = new PCapFileWriter(pcapFile);
 	}
@@ -324,6 +328,7 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	 * @return boolean
 	 * @throws IOException
 	 */
+
 	boolean startVpnService() throws IOException{
 		// If the old interface has exactly the same parameters, use it!
 		if (mInterface != null) {
@@ -336,7 +341,19 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 		Builder builder = new Builder()
 				.addAddress("10.120.0.1", 32)
 				.addRoute("0.0.0.0", 0)
-				.setSession("ToyShark");
+				.setSession(PacketSnifferService.TAG);
+
+		//If the mobile has an API higher than LOLLIPOP then only some applications will be allowed to pass through the VPN
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			for(String app : ALLOWED_APPLICATIONS) {
+				try {
+					builder.addAllowedApplication(app);
+				} catch (android.content.pm.PackageManager.NameNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		mInterface = builder.establish();
 
 		if(mInterface != null){

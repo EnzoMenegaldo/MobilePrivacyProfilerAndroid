@@ -91,6 +91,10 @@ class SessionHandler {
 			//3-way handshake + create new session
 			//set windows size and scale, set reply time in options
 			replySynAck(ipHeader,tcpheader);
+
+			//We are only interested by the synchronization packets
+			PacketManager.add( new Packet(ipHeader, tcpheader, clientPacketData.array()), Home_CustomViewActivity.getContext());
+
 		} else if(tcpheader.isACK()) {
 			String key = SessionManager.INSTANCE.createKey(destinationIP, destinationPort, sourceIP, sourcePort);
 			Session session = SessionManager.INSTANCE.getSessionByKey(key);
@@ -175,7 +179,7 @@ class SessionHandler {
 	void handlePacket(@NonNull ByteBuffer stream) throws PacketHeaderException {
 		final byte[] rawPacket = new byte[stream.limit()];
 		stream.get(rawPacket, 0, stream.limit());
-		packetData.addData(rawPacket);
+
 		stream.rewind();
 
 		final IPv4Header ipHeader = IPPacketFactory.createIPv4Header(stream);
@@ -190,11 +194,9 @@ class SessionHandler {
 			return;
 		}
 
-		final Packet packet = new Packet(ipHeader, transportHeader, stream.array());
-
-		PacketManager.add(packet, Home_CustomViewActivity.getContext());
-
 		if (transportHeader instanceof TCPHeader) {
+			if(((TCPHeader) transportHeader).isSYN())
+				packetData.addData(rawPacket);
 			handleTCPPacket(stream, ipHeader, (TCPHeader) transportHeader);
 		} else if (ipHeader.getProtocol() == 17){
 			handleUDPPacket(stream, ipHeader, (UDPHeader) transportHeader);
@@ -205,7 +207,7 @@ class SessionHandler {
 		byte[] data = TCPPacketFactory.createRstData(ip, tcp, dataLength);
 		try {
 			writer.write(data);
-			packetData.addData(data);
+			//packetData.addData(data);
 			Log.d(TAG,"Sent RST Packet to client with dest => " +
 					PacketUtil.intToIPAddress(ip.getDestinationIP()) + ":" +
 					tcp.getDestinationPort());
@@ -218,7 +220,7 @@ class SessionHandler {
 		byte[] data = TCPPacketFactory.createResponseAckData(ip, tcp, tcp.getSequenceNumber()+1);
 		try {
 			writer.write(data);
-			packetData.addData(data);
+			//packetData.addData(data);
 			Log.d(TAG,"Sent last ACK Packet to client with dest => " +
 					PacketUtil.intToIPAddress(ip.getDestinationIP()) + ":" +
 					tcp.getDestinationPort());
@@ -233,7 +235,7 @@ class SessionHandler {
 		byte[] data = TCPPacketFactory.createFinAckData(ip, tcp, ack, seq, true, true);
 		try {
 			writer.write(data);
-			packetData.addData(data);
+			//packetData.addData(data);
 			if(session != null){
 				session.getSelectionKey().cancel();
 				SessionManager.INSTANCE.closeSession(session);
@@ -251,7 +253,7 @@ class SessionHandler {
 		final ByteBuffer stream = ByteBuffer.wrap(data);
 		try {
 			writer.write(data);
-			packetData.addData(data);
+			//packetData.addData(data);
 			Log.d(TAG,"00000000000 FIN-ACK packet data to vpn client 000000000000");
 			IPv4Header vpnip = null;
 			try {
@@ -305,7 +307,7 @@ class SessionHandler {
 		byte[] data = TCPPacketFactory.createResponseAckData(ipheader, tcpheader, acknumber);
 		try {
 			writer.write(data);
-			packetData.addData(data);
+			//packetData.addData(data);
 		} catch (IOException e) {
 			Log.e(TAG,"Failed to send ACK packet: " + e.getMessage());
 		}
@@ -318,7 +320,7 @@ class SessionHandler {
 		byte[] data = TCPPacketFactory.createResponseAckData(ipHeader, tcpheader, ackNumber);
 		try {
 			writer.write(data);
-			packetData.addData(data);
+			//packetData.addData(data);
 		} catch (IOException e) {
 			Log.e(TAG,"Failed to send ACK packet: " + e.getMessage());
 		}
@@ -397,7 +399,7 @@ class SessionHandler {
 
 		try {
 			writer.write(packet.getBuffer());
-			packetData.addData(packet.getBuffer());
+			//packetData.addData(packet.getBuffer());
 			Log.d(TAG,"Send SYN-ACK to client");
 		} catch (IOException e) {
 			Log.e(TAG,"Error sending data to client: "+e.getMessage());
