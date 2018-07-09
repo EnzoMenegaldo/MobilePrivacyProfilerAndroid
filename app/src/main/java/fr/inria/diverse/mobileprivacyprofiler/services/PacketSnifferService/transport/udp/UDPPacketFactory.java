@@ -95,7 +95,8 @@ public class UDPPacketFactory {
 
 		UDPHeader udpHeader = new UDPHeader(srcPort, destPort, udpLen, checksum);
 
-		PacketManager.add(new Packet(ipHeader, udpHeader, buffer), Home_CustomViewActivity.getContext());
+		//We are interested only by the packets coming from the mobile application
+		//PacketManager.add(new Packet(ipHeader, udpHeader, buffer), Home_CustomViewActivity.getContext());
 
 		return buffer;
 	}

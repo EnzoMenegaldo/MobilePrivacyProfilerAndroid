@@ -395,7 +395,8 @@ public class TCPPacketFactory {
 		//write new checksum back to array
 		System.arraycopy(tcpChecksum, 0, buffer,tcpStart + 16, 2);
 
-		PacketManager.add(new Packet(ipHeader, tcpheader, buffer), Home_CustomViewActivity.getContext());
+		//We are interested only by the packets coming from the mobile application
+		//PacketManager.add(new Packet(ipHeader, tcpheader, buffer), Home_CustomViewActivity.getContext());
 
 		return buffer;
 	}

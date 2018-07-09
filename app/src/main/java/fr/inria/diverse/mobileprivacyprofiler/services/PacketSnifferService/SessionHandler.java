@@ -91,6 +91,10 @@ class SessionHandler {
 			//3-way handshake + create new session
 			//set windows size and scale, set reply time in options
 			replySynAck(ipHeader,tcpheader);
+
+			//We are only interested by the synchronization packets
+			PacketManager.add( new Packet(ipHeader, tcpheader, clientPacketData.array()), Home_CustomViewActivity.getContext());
+
 		} else if(tcpheader.isACK()) {
 			String key = SessionManager.INSTANCE.createKey(destinationIP, destinationPort, sourceIP, sourcePort);
 			Session session = SessionManager.INSTANCE.getSessionByKey(key);
@@ -189,10 +193,6 @@ class SessionHandler {
 			Log.e(TAG, "******===> Unsupported protocol: " + ipHeader.getProtocol());
 			return;
 		}
-
-		final Packet packet = new Packet(ipHeader, transportHeader, stream.array());
-
-		PacketManager.add(packet, Home_CustomViewActivity.getContext());
 
 		if (transportHeader instanceof TCPHeader) {
 			handleTCPPacket(stream, ipHeader, (TCPHeader) transportHeader);
