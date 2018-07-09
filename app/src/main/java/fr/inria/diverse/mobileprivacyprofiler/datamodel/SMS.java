@@ -62,7 +62,7 @@ public class SMS {
 	
 
 	@DatabaseField
-	protected java.lang.String date;
+	protected java.util.Date date;
 
 	@DatabaseField
 	protected java.lang.String phoneNumber;
@@ -79,7 +79,7 @@ public class SMS {
 	// End of user code
 	
 	public SMS() {} // needed by ormlite
-	public SMS(java.lang.String date, java.lang.String phoneNumber, java.lang.String type, java.lang.String userId) {
+	public SMS(java.util.Date date, java.lang.String phoneNumber, java.lang.String type, java.lang.String userId) {
 		super();
 		this.date = date;
 		this.phoneNumber = phoneNumber;
@@ -103,11 +103,11 @@ public class SMS {
 		this._contextDB = contextDB;
 	}
 
-	public java.lang.String getDate() {
+	public java.util.Date getDate() {
 		return this.date;
 	}
 	@JsonProperty
-	public void setDate(java.lang.String date) {
+	public void setDate(java.util.Date date) {
 		this.date = date;
 	}
 	public java.lang.String getPhoneNumber() {
@@ -145,7 +145,7 @@ public class SMS {
 		sb.append(" ");
     	sb.append(XML_ATT_DATE);
     	sb.append("=\"");
-		sb.append(StringEscapeUtils.escapeXml(this.date));
+		sb.append(this.date);
     	sb.append("\" ");
 		sb.append(" ");
     	sb.append(XML_ATT_PHONENUMBER);

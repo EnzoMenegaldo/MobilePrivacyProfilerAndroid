@@ -139,7 +139,7 @@ public class ScanSocialIntentService extends IntentService {
                 smsQueryOutput = getContentResolver().query(mSmsQueryUri, columns, null, null, null);
             }
             while (smsQueryOutput.moveToNext()) {
-                String date = smsQueryOutput.getString(3);
+                Date date = new Date( smsQueryOutput.getLong(3));
                 String phoneNumber = smsQueryOutput.getString(1);
                 String type = "";
                 if ("content://sms/inbox" == source) {
@@ -273,15 +273,15 @@ public class ScanSocialIntentService extends IntentService {
             long eventID = 0;
             String eventLabel = null;
             String place = null;
-            String startDate = null;
-            String endDate = null;
+            Date startDate = null;
+            Date endDate = null;
 
             // Get the field values
             eventID = queryEventOutput.getLong(PROJECTION_ID_INDEX);
             eventLabel = queryEventOutput.getString(PROJECTION_TITLE_INDEX);
             place = queryEventOutput.getString(PROJECTION_EVENT_LOCATION_INDEX);
-            startDate = queryEventOutput.getString(PROJECTION_DTSTART_INDEX);
-            endDate = queryEventOutput.getString(PROJECTION_DTEND_INDEX);
+            startDate = new Date( queryEventOutput.getLong(PROJECTION_DTSTART_INDEX));
+            endDate = new Date( queryEventOutput.getLong(PROJECTION_DTEND_INDEX));
 
             // Preparing the gathering on participant's information
             String participants = "";

@@ -71,15 +71,15 @@ public class ApplicationUsageStats {
 	protected long totalTimeInForeground;
 
 	@DatabaseField
-	protected java.lang.String lastTimeUsed;
+	protected java.util.Date lastTimeUsed;
 
 	/** Get the beginning of the time range this UsageStats represents, measured in milliseconds since the epoch. */ 
 	@DatabaseField
-	protected java.lang.String firstTimeStamp;
+	protected java.util.Date firstTimeStamp;
 
 	/** Get the end of the time range this UsageStats represents, measured in milliseconds since the epoch. */ 
 	@DatabaseField
-	protected java.lang.String lastTimeStamp;
+	protected java.util.Date lastTimeStamp;
 
 	/** Daily, weekly, monthly, yearly as defined in https://developer.android.com/reference/android/app/usage/UsageStatsManager.html */ 
 	@DatabaseField
@@ -97,7 +97,7 @@ public class ApplicationUsageStats {
 	// End of user code
 	
 	public ApplicationUsageStats() {} // needed by ormlite
-	public ApplicationUsageStats(long totalTimeInForeground, java.lang.String lastTimeUsed, java.lang.String firstTimeStamp, java.lang.String lastTimeStamp, int requestedInterval, java.lang.String userId) {
+	public ApplicationUsageStats(long totalTimeInForeground, java.util.Date lastTimeUsed, java.util.Date firstTimeStamp, java.util.Date lastTimeStamp, int requestedInterval, java.lang.String userId) {
 		super();
 		this.totalTimeInForeground = totalTimeInForeground;
 		this.lastTimeUsed = lastTimeUsed;
@@ -130,25 +130,25 @@ public class ApplicationUsageStats {
 	public void setTotalTimeInForeground(long totalTimeInForeground) {
 		this.totalTimeInForeground = totalTimeInForeground;
 	}
-	public java.lang.String getLastTimeUsed() {
+	public java.util.Date getLastTimeUsed() {
 		return this.lastTimeUsed;
 	}
 	@JsonProperty
-	public void setLastTimeUsed(java.lang.String lastTimeUsed) {
+	public void setLastTimeUsed(java.util.Date lastTimeUsed) {
 		this.lastTimeUsed = lastTimeUsed;
 	}
-	public java.lang.String getFirstTimeStamp() {
+	public java.util.Date getFirstTimeStamp() {
 		return this.firstTimeStamp;
 	}
 	@JsonProperty
-	public void setFirstTimeStamp(java.lang.String firstTimeStamp) {
+	public void setFirstTimeStamp(java.util.Date firstTimeStamp) {
 		this.firstTimeStamp = firstTimeStamp;
 	}
-	public java.lang.String getLastTimeStamp() {
+	public java.util.Date getLastTimeStamp() {
 		return this.lastTimeStamp;
 	}
 	@JsonProperty
-	public void setLastTimeStamp(java.lang.String lastTimeStamp) {
+	public void setLastTimeStamp(java.util.Date lastTimeStamp) {
 		this.lastTimeStamp = lastTimeStamp;
 	}
 	public int getRequestedInterval() {
@@ -202,17 +202,17 @@ public class ApplicationUsageStats {
 		sb.append(" ");
     	sb.append(XML_ATT_LASTTIMEUSED);
     	sb.append("=\"");
-		sb.append(StringEscapeUtils.escapeXml(this.lastTimeUsed));
+		sb.append(this.lastTimeUsed);
     	sb.append("\" ");
 		sb.append(" ");
     	sb.append(XML_ATT_FIRSTTIMESTAMP);
     	sb.append("=\"");
-		sb.append(StringEscapeUtils.escapeXml(this.firstTimeStamp));
+		sb.append(this.firstTimeStamp);
     	sb.append("\" ");
 		sb.append(" ");
     	sb.append(XML_ATT_LASTTIMESTAMP);
     	sb.append("=\"");
-		sb.append(StringEscapeUtils.escapeXml(this.lastTimeStamp));
+		sb.append(this.lastTimeStamp);
     	sb.append("\" ");
 		sb.append(" ");
     	sb.append(XML_ATT_REQUESTEDINTERVAL);

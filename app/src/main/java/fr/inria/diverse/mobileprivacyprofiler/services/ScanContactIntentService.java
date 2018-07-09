@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -241,8 +243,12 @@ public class ScanContactIntentService extends IntentService {
                             contact.setWebsite(temp);
                             break;
                         case "EVENT":
-                            Log.d(TAG, dataValueList.get(0)+" : "+dataValueList.get(1)+" : "+dataValueList.get(2));
-                            ContactEvent contactEvent = new ContactEvent(dataValueList.get(1),dataValueList.get(2),getDeviceDBMetadata().getUserId());
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                            String dateToCast = dataValueList.get(1);
+                            Date date = null;
+                            try { date = formatter.parse(dateToCast); } catch (ParseException e) { e.printStackTrace(); }
+                            Log.d(TAG, dataValueList.get(0)+" : "+date+" : "+dataValueList.get(2));
+                            ContactEvent contactEvent = new ContactEvent(date,dataValueList.get(2),getDeviceDBMetadata().getUserId());
                             eventList.add(contactEvent);
                             break;
                         case "RELATION_TYPE":

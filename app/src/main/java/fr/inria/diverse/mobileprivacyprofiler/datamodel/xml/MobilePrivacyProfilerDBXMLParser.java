@@ -1099,9 +1099,9 @@ public class MobilePrivacyProfilerDBXMLParser {
     			
     	xmlId2ApplicationUsageStats.put(parser.getAttributeValue(null, ID_STRING),result);		
 		// TODO totalTimeInForeground = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_TOTALTIMEINFOREGROUND);
-		result.setLastTimeUsed(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_lastTimeUsed));
-		result.setFirstTimeStamp(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_firstTimeStamp));
-		result.setLastTimeStamp(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_lastTimeStamp));
+		// TODO lastTimeUsed = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_LASTTIMEUSED);
+		// TODO firstTimeStamp = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_FIRSTTIMESTAMP);
+		// TODO lastTimeStamp = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_LASTTIMESTAMP);
 		// TODO requestedInterval = parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_REQUESTEDINTERVAL);
 		result.setUserId(parser.getAttributeValue(null, DATAATT_APPLICATIONUSAGESTATS_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -1270,7 +1270,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2ContactEvent.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setStartDate(parser.getAttributeValue(null, DATAATT_CONTACTEVENT_startDate));
+		// TODO startDate = parser.getAttributeValue(null, DATAATT_CONTACTEVENT_STARTDATE);
 		result.setType(parser.getAttributeValue(null, DATAATT_CONTACTEVENT_type));
 		result.setUserId(parser.getAttributeValue(null, DATAATT_CONTACTEVENT_userId));
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -1465,8 +1465,8 @@ public class MobilePrivacyProfilerDBXMLParser {
     			
     	xmlId2CalendarEvent.put(parser.getAttributeValue(null, ID_STRING),result);		
 		result.setEventLabel(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_EventLabel));
-		result.setStartDate(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_startDate));
-		result.setEndDate(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_endDate));
+		// TODO startDate = parser.getAttributeValue(null, DATAATT_CALENDAREVENT_STARTDATE);
+		// TODO endDate = parser.getAttributeValue(null, DATAATT_CALENDAREVENT_ENDDATE);
 		result.setPlace(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_place));
 		result.setParticipants(parser.getAttributeValue(null, DATAATT_CALENDAREVENT_participants));
 		// TODO eventId = parser.getAttributeValue(null, DATAATT_CALENDAREVENT_EVENTID);
@@ -1695,7 +1695,7 @@ public class MobilePrivacyProfilerDBXMLParser {
     	String currentTagName = parser.getName();
     			
     	xmlId2SMS.put(parser.getAttributeValue(null, ID_STRING),result);		
-		result.setDate(parser.getAttributeValue(null, DATAATT_SMS_date));
+		// TODO date = parser.getAttributeValue(null, DATAATT_SMS_DATE);
 		result.setPhoneNumber(parser.getAttributeValue(null, DATAATT_SMS_phoneNumber));
 		result.setType(parser.getAttributeValue(null, DATAATT_SMS_type));
 		result.setUserId(parser.getAttributeValue(null, DATAATT_SMS_userId));

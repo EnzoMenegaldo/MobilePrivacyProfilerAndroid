@@ -63,9 +63,9 @@ public class Test {
             //creating an ApplicationUsageHistory related to appHist
             ApplicationUsageStats appUseStatsInitial = new ApplicationUsageStats();
             appUseStatsInitial.setApplication(appHist);
-            appUseStatsInitial.setFirstTimeStamp("firstTimeStamp");
+            /*appUseStatsInitial.setFirstTimeStamp("firstTimeStamp");
             appUseStatsInitial.setLastTimeStamp("lastTimeStamp");
-            appUseStatsInitial.setLastTimeUsed("lastTimeUsed");
+            appUseStatsInitial.setLastTimeUsed("lastTimeUsed");*/
             appUseStatsInitial.setRequestedInterval(0);
             appUseStatsInitial.setTotalTimeInForeground(111111);
             appUseStatsInitial.setUserId(metadata.getUserId());

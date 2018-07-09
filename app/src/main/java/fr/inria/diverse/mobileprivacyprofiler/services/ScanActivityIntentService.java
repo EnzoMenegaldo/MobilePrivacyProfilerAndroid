@@ -251,7 +251,7 @@ public class ScanActivityIntentService extends IntentService {
                         queryApplicationHistoryByPackageName(appUsageStatsentry.getPackageName());
                 if (applicationHistory != null) {
                     // search for equivalent stat to update
-                    String statStartDate = DateUtils.printDate(appUsageStatsentry.getFirstTimeStamp());
+                    Date statStartDate = new Date(appUsageStatsentry.getFirstTimeStamp());
                     Log.d(TAG, "   stats for " + statStartDate +
                             " - " + DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
                     ApplicationUsageStats equivalentExistingStat = null;
@@ -264,8 +264,8 @@ public class ScanActivityIntentService extends IntentService {
                     if (equivalentExistingStat != null) {
                         // update existing
                         Log.d(TAG, "   updating... ");
-                        equivalentExistingStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
-                        equivalentExistingStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
+                        equivalentExistingStat.setLastTimeStamp(new Date(appUsageStatsentry.getLastTimeStamp()));
+                        equivalentExistingStat.setLastTimeUsed(new Date(appUsageStatsentry.getLastTimeUsed()));
                         equivalentExistingStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
                         getDBHelper().getApplicationUsageStatsDao().update(equivalentExistingStat);
                     } else {
@@ -273,8 +273,8 @@ public class ScanActivityIntentService extends IntentService {
                         Log.d(TAG, "   creating new entry... ");
                         ApplicationUsageStats appStat = new ApplicationUsageStats();
                         appStat.setFirstTimeStamp(statStartDate);
-                        appStat.setLastTimeStamp(DateUtils.printDate(appUsageStatsentry.getLastTimeStamp()));
-                        appStat.setLastTimeUsed(DateUtils.printDate(appUsageStatsentry.getLastTimeUsed()));
+                        appStat.setLastTimeStamp(new Date(appUsageStatsentry.getLastTimeStamp()));
+                        appStat.setLastTimeUsed(new Date(appUsageStatsentry.getLastTimeUsed()));
                         appStat.setTotalTimeInForeground(appUsageStatsentry.getTotalTimeInForeground());
                         appStat.setRequestedInterval(periodType);
                         appStat.setApplication(applicationHistory);
