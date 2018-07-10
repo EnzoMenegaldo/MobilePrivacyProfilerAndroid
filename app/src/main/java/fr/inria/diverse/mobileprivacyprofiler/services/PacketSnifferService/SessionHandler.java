@@ -18,11 +18,14 @@ package fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.network.ip.IPPacketFactory;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.network.ip.IPv4Header;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.socket.SocketData;
+import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.tls.ServerNameExtension;
+import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.tls.TLSHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.PacketHeaderException;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPPacketFactory;
@@ -87,13 +90,13 @@ class SessionHandler {
 		int sourcePort = tcpheader.getSourcePort();
 		int destinationPort = tcpheader.getDestinationPort();
 
+		//ByteBuffer.wrap(clientPacketData.array() allows us to work on a copy of the payload
+		checkTLSProtocol(ByteBuffer.wrap(clientPacketData.array()), ipHeader, tcpheader);
+
 		if(tcpheader.isSYN()) {
 			//3-way handshake + create new session
 			//set windows size and scale, set reply time in options
 			replySynAck(ipHeader,tcpheader);
-
-			//We are only interested by the synchronization packets
-			PacketManager.add( new Packet(ipHeader, tcpheader, clientPacketData.array()), Home_CustomViewActivity.getContext());
 
 		} else if(tcpheader.isACK()) {
 			String key = SessionManager.INSTANCE.createKey(destinationIP, destinationPort, sourceIP, sourcePort);
@@ -179,7 +182,7 @@ class SessionHandler {
 	void handlePacket(@NonNull ByteBuffer stream) throws PacketHeaderException {
 		final byte[] rawPacket = new byte[stream.limit()];
 		stream.get(rawPacket, 0, stream.limit());
-
+		//packetData.addData(rawPacket);
 		stream.rewind();
 
 		final IPv4Header ipHeader = IPPacketFactory.createIPv4Header(stream);
@@ -194,9 +197,8 @@ class SessionHandler {
 			return;
 		}
 
+
 		if (transportHeader instanceof TCPHeader) {
-			if(((TCPHeader) transportHeader).isSYN())
-				packetData.addData(rawPacket);
 			handleTCPPacket(stream, ipHeader, (TCPHeader) transportHeader);
 		} else if (ipHeader.getProtocol() == 17){
 			handleUDPPacket(stream, ipHeader, (UDPHeader) transportHeader);
@@ -405,4 +407,33 @@ class SessionHandler {
 			Log.e(TAG,"Error sending data to client: "+e.getMessage());
 		}
 	}
+
+	/**
+	 * We try to create a tlsHeader using the tcp payload.
+	 * If it's actually a TLSPacket then we check if it's the first packet.
+	 * If it is then we can get the server name and finally we save this packet in the database .
+	 * @param stream
+	 */
+	public void checkTLSProtocol(ByteBuffer stream, IPv4Header ipHeader, TCPHeader tcpHeader){
+		if(stream.hasRemaining()) {
+			final byte[] tcpPayload = stream.array();
+			byte type = stream.get();
+			short version = stream.getShort();
+			//We check if it's a SSL protocol
+			if(version == TLSHeader.SSLv3 || version == TLSHeader.TLSv1){
+				TLSHeader tlsHeader = new TLSHeader(stream,type,version);
+				if (tlsHeader.isFirstHandshakePacket()) {
+					ServerNameExtension serverNameExtension = tlsHeader.getHandshakeHeader().getServerNameExtension();
+					// if there is a server name extension,we get the server name and we create a packet with these information then we save it in the DataBase
+					if (serverNameExtension != null){
+						String serverName = new String(serverNameExtension.getServerNameIndicationExtension().getServerName(), Charset.forName("UTF-8"));
+						Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
+						packet.setHostName(serverName);
+						PacketManager.add(packet, Home_CustomViewActivity.getContext() );
+					}
+				}
+			}
+		}
+	}
+
 }//end class
