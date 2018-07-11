@@ -20,9 +20,9 @@
     <dataClasses xsi:type="genandroid:DataClass" name="ApplicationUsageStats">
       <dataReferences name="application" lowerbound="1" opposite="//@dataModel/@dataAssociations.0" type="//@dataModel/@dataClasses.1"/>
       <dataAttributes name="totalTimeInForeground" documentation="Get the total time this package spent in the foreground, measured in milliseconds. " type="//@dataModel/@dataClasses.30"/>
-      <dataAttributes name="lastTimeUsed" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="firstTimeStamp" documentation="Get the beginning of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="lastTimeStamp" documentation="Get the end of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="lastTimeUsed" type="//@dataModel/@dataClasses.29"/>
+      <dataAttributes name="firstTimeStamp" documentation="Get the beginning of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.29"/>
+      <dataAttributes name="lastTimeStamp" documentation="Get the end of the time range this UsageStats represents, measured in milliseconds since the epoch." type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="requestedInterval" documentation="Daily, weekly, monthly, yearly as defined in https://developer.android.com/reference/android/app/usage/UsageStatsManager.html" type="//@dataModel/@dataClasses.25"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
@@ -66,7 +66,7 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="ContactEvent">
       <dataReferences name="contact" lowerbound="1" opposite="//@dataModel/@dataAssociations.10" type="//@dataModel/@dataClasses.4"/>
-      <dataAttributes name="startDate" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="startDate" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="type" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
@@ -111,8 +111,8 @@
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="CalendarEvent">
       <dataAttributes name="EventLabel" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="startDate" type="//@dataModel/@dataClasses.26"/>
-      <dataAttributes name="endDate" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="startDate" type="//@dataModel/@dataClasses.29"/>
+      <dataAttributes name="endDate" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="place" documentation="place where the event is supposed to occur" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="participants" documentation="list of participants (raw string for the moment)" type="//@dataModel/@dataClasses.27"/>
       <dataAttributes name="eventId" type="//@dataModel/@dataClasses.30"/>
@@ -165,7 +165,7 @@
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
     </dataClasses>
     <dataClasses xsi:type="genandroid:DataClass" name="SMS">
-      <dataAttributes name="date" type="//@dataModel/@dataClasses.26"/>
+      <dataAttributes name="date" type="//@dataModel/@dataClasses.29"/>
       <dataAttributes name="phoneNumber" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="type" documentation="incoming, outgoing" type="//@dataModel/@dataClasses.26"/>
       <dataAttributes name="userId" type="//@dataModel/@dataClasses.26"/>
