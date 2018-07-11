@@ -6,7 +6,7 @@ import java.util.List;
 
 public class HandshakeHeader {
 
-    private static final byte CLIENT_HELLO = 1;
+    public static final byte CLIENT_HELLO = 1;
 
     /**
      * uint8

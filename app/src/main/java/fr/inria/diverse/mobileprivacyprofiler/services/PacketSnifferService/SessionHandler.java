@@ -16,9 +16,18 @@
 
 package fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.network.ip.IPPacketFactory;
@@ -26,16 +35,20 @@ import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.netw
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.socket.SocketData;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.tls.ServerNameExtension;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.tls.TLSHeader;
+import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.ITransportHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.PacketHeaderException;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPPacketFactory;
-import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.ITransportHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.udp.UDPHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.udp.UDPPacketFactory;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.util.PacketUtil;
 
-import android.support.annotation.NonNull;
-import android.util.Log;
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpParser;
+
+
+import static org.apache.commons.httpclient.params.HttpMethodParams.HTTP_ELEMENT_CHARSET;
 
 /**
  * handle VPN client request and response. it create a new session for each VPN client.
@@ -44,6 +57,8 @@ import android.util.Log;
  */
 class SessionHandler {
 	private static final String TAG = "SessionHandler";
+	public static final int HTTP_PORT = 80;
+	public static final int HTTPS_PORT = 443;
 
 	private static final SessionHandler handler = new SessionHandler();
 	private IClientPacketWriter writer;
@@ -90,8 +105,13 @@ class SessionHandler {
 		int sourcePort = tcpheader.getSourcePort();
 		int destinationPort = tcpheader.getDestinationPort();
 
-		//ByteBuffer.wrap(clientPacketData.array() allows us to work on a copy of the payload
-		checkTLSProtocol(ByteBuffer.wrap(clientPacketData.array()), ipHeader, tcpheader);
+		//https://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html#duplicate()
+		if(tcpheader.getDestinationPort() == HTTP_PORT)
+			checkHTTPProtocol(clientPacketData.duplicate(),ipHeader,tcpheader);
+		else if(tcpheader.getDestinationPort() == HTTPS_PORT)
+			checkTLSProtocol(clientPacketData.duplicate(), ipHeader, tcpheader);
+
+
 
 		if(tcpheader.isSYN()) {
 			//3-way handshake + create new session
@@ -418,22 +438,87 @@ class SessionHandler {
 		if(stream.hasRemaining()) {
 			final byte[] tcpPayload = stream.array();
 			byte type = stream.get();
-			short version = stream.getShort();
-			//We check if it's a SSL protocol
-			if(version == TLSHeader.SSLv3 || version == TLSHeader.TLSv1){
-				TLSHeader tlsHeader = new TLSHeader(stream,type,version);
-				if (tlsHeader.isFirstHandshakePacket()) {
-					ServerNameExtension serverNameExtension = tlsHeader.getHandshakeHeader().getServerNameExtension();
-					// if there is a server name extension,we get the server name and we create a packet with these information then we save it in the DataBase
-					if (serverNameExtension != null){
-						String serverName = new String(serverNameExtension.getServerNameIndicationExtension().getServerName(), Charset.forName("UTF-8"));
-						Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
-						packet.setHostName(serverName);
-						PacketManager.add(packet, Home_CustomViewActivity.getContext() );
+			if(type == TLSHeader.HANDSHAKE){
+                short version = stream.getShort();
+                //We check if it's a SSL protocol
+                if(version == TLSHeader.SSLv3 || version == TLSHeader.TLSv1) {
+                    TLSHeader tlsHeader = new TLSHeader(stream, type, version);
+                    if (tlsHeader.isFirstHandshakePacket()) {
+                        ServerNameExtension serverNameExtension = tlsHeader.getHandshakeHeader().getServerNameExtension();
+                        // if there is a server name extension,we get the server name and we create a packet with these information then we save it in the DataBase
+                        if (serverNameExtension != null) {
+                            String serverName = new String(serverNameExtension.getServerNameIndicationExtension().getServerName(), Charset.forName("UTF-8"));
+                            Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
+                            packet.setHostName(serverName);
+                            PacketManager.add(packet, Home_CustomViewActivity.getContext());
+                        }
+                    }
+                }
+			}
+		}
+	}
+
+	/**
+	 * We look into each packet to find those containing http protocol
+	 * @param stream
+	 * @param ipHeader
+	 * @param tcpHeader
+	 */
+	public void checkHTTPProtocol(ByteBuffer stream, IPv4Header ipHeader, TCPHeader tcpHeader){
+		//Avoid packet which are destined to another port than 80
+		if(tcpHeader.getDestinationPort() == HTTP_PORT){
+			if(stream.hasRemaining()) {
+				final byte[] tcpPayload = stream.array();
+				try {
+					ByteBuffer tmpBuffer = stream.slice();
+					List<Header> headers = parseHeaders(new ByteArrayInputStream(tmpBuffer.array()),HTTP_ELEMENT_CHARSET);
+					for(Header header : headers){
+						if(header.getName().equals("Host")){
+							//Add the packet to the DataBase
+							Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
+							packet.setHostName(header.getValue());
+							PacketManager.add(packet, Home_CustomViewActivity.getContext());
+							break;
+						}
 					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
+	}
+
+	/**
+	 * Parses headers from the given stream.
+	 * @param is
+	 * @param charset
+	 * @return
+	 * @throws IOException
+	 * @throws HttpException
+	 */
+	public static List<Header> parseHeaders(InputStream is, String charset) throws IOException, HttpException {
+		ArrayList headers = new ArrayList();
+		String name = null;
+		StringBuffer value = null;
+		for (; ;) {
+			String line = HttpParser.readLine(is, charset);
+			if ((line == null) || (line.trim().length() < 1)) {
+				break;
+			}
+			int colon = line.indexOf(":");
+			if(colon > 0){
+				name = line.substring(0, colon).trim();
+				value = new StringBuffer(line.substring(colon + 1).trim());
+			}else{
+				name = "Request";
+				value = new StringBuffer(line.trim());
+			}
+
+			headers.add(new Header(name, value.toString()));
+		}
+
+		return headers;
 	}
 
 }//end class

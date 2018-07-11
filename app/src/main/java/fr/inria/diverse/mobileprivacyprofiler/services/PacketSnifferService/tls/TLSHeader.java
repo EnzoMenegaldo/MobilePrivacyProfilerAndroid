@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 public class TLSHeader {
 
-    private static final byte HANSHAKE = 22;
+    public static final byte HANDSHAKE = 22;
     public static final short TLSv1 = 0x0301;
     public static final short SSLv3 = 0x0300;
 
@@ -71,13 +71,13 @@ public class TLSHeader {
         this.version = version;
         this.length = tcpPayload.getShort();
 
-        if(type == HANSHAKE){
+        if(type == HANDSHAKE){
             handshakeHeader = new HandshakeHeader(tcpPayload);
         }
     }
 
     public boolean isHandshakePacket(){
-        return type == HANSHAKE;
+        return type == HANDSHAKE;
     }
 
     public boolean isFirstHandshakePacket(){
