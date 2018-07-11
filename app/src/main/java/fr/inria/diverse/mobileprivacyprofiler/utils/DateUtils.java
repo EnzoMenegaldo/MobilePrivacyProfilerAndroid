@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dvojtise on 29/01/18.
@@ -110,6 +111,17 @@ public class DateUtils {
         // last milllis of yesterday
         c.add(Calendar.MILLISECOND, -1);
         return c;
+    }
+
+    public static long diff(Date date1, Date date2){
+        if(date1.before(date2))
+            return date2.getTime()-date1.getTime();
+        else
+            return date1.getTime()-date2.getTime();
+    }
+
+    public static int getMinuteFromMillisecond(long millisecond){
+        return (int)TimeUnit.MILLISECONDS.toMinutes(millisecond);
     }
 
 }

@@ -3,6 +3,7 @@ package fr.inria.diverse.mobileprivacyprofiler.datamodel;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
@@ -475,6 +476,21 @@ public class MobilePrivacyProfilerDBHelper {
 			} catch (SQLException e) { e.printStackTrace(); }
 		}
 		return toReturn;
+	}
+
+	public NetActivity getLastNetConnection(String serverName) throws SQLException {
+		QueryBuilder<NetActivity, Integer> queryBuilder = this.netActivityDao.queryBuilder();
+		queryBuilder.where().eq(NetActivity.XML_ATT_HOSTNAME,serverName);
+		queryBuilder.orderBy("date",false);
+
+		try {
+			PreparedQuery<NetActivity> preparedQuery = queryBuilder.prepare();
+			return this.netActivityDao.queryForFirst(preparedQuery);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	public static OrmLiteDBHelper getDBHelper(Context context){

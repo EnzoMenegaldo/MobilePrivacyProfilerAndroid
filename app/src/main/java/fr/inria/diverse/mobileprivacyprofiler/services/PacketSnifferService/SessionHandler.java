@@ -449,7 +449,7 @@ class SessionHandler {
                         // if there is a server name extension,we get the server name and we create a packet with these information then we save it in the DataBase
                         if (serverNameExtension != null) {
                             String serverName = new String(serverNameExtension.getServerNameIndicationExtension().getServerName(), Charset.forName("UTF-8"));
-                            if(PacketUtil.isInterestingServerName(serverName)) {
+                            if(PacketUtil.isInterestingServerName(serverName) && PacketUtil.isNewConnection(serverName)) {
                                 Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
                                 packet.setHostName(serverName);
                                 PacketManager.add(packet, Home_CustomViewActivity.getContext());
@@ -478,7 +478,7 @@ class SessionHandler {
 					for(Header header : headers){
 						if(header.getName().equals("Host")){
 							//Add the packet to the DataBase
-                            if(PacketUtil.isInterestingServerName(header.getValue())){
+                            if(PacketUtil.isInterestingServerName(header.getValue()) && PacketUtil.isNewConnection(header.getValue())){
                                 Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
                                 packet.setHostName(header.getValue());
                                 PacketManager.add(packet, Home_CustomViewActivity.getContext());
