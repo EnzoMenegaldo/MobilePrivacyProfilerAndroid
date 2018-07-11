@@ -41,6 +41,7 @@ import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.tran
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPPacketFactory;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.udp.UDPHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.udp.UDPPacketFactory;
+import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.util.HTTPUtil;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.util.PacketUtil;
 
 import org.apache.commons.httpclient.Header;
@@ -448,9 +449,11 @@ class SessionHandler {
                         // if there is a server name extension,we get the server name and we create a packet with these information then we save it in the DataBase
                         if (serverNameExtension != null) {
                             String serverName = new String(serverNameExtension.getServerNameIndicationExtension().getServerName(), Charset.forName("UTF-8"));
-                            Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
-                            packet.setHostName(serverName);
-                            PacketManager.add(packet, Home_CustomViewActivity.getContext());
+                            if(PacketUtil.isInterestingServerName(serverName)) {
+                                Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
+                                packet.setHostName(serverName);
+                                PacketManager.add(packet, Home_CustomViewActivity.getContext());
+                            }
                         }
                     }
                 }
@@ -471,14 +474,16 @@ class SessionHandler {
 				final byte[] tcpPayload = stream.array();
 				try {
 					ByteBuffer tmpBuffer = stream.slice();
-					List<Header> headers = parseHeaders(new ByteArrayInputStream(tmpBuffer.array()),HTTP_ELEMENT_CHARSET);
+					List<Header> headers = HTTPUtil.parseHeaders(new ByteArrayInputStream(tmpBuffer.array()),HTTP_ELEMENT_CHARSET);
 					for(Header header : headers){
 						if(header.getName().equals("Host")){
 							//Add the packet to the DataBase
-							Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
-							packet.setHostName(header.getValue());
-							PacketManager.add(packet, Home_CustomViewActivity.getContext());
-							break;
+                            if(PacketUtil.isInterestingServerName(header.getValue())){
+                                Packet packet = new Packet(ipHeader, tcpHeader, tcpPayload);
+                                packet.setHostName(header.getValue());
+                                PacketManager.add(packet, Home_CustomViewActivity.getContext());
+                            }
+                            break;
 						}
 					}
 
@@ -489,36 +494,8 @@ class SessionHandler {
 		}
 	}
 
-	/**
-	 * Parses headers from the given stream.
-	 * @param is
-	 * @param charset
-	 * @return
-	 * @throws IOException
-	 * @throws HttpException
-	 */
-	public static List<Header> parseHeaders(InputStream is, String charset) throws IOException, HttpException {
-		ArrayList headers = new ArrayList();
-		String name = null;
-		StringBuffer value = null;
-		for (; ;) {
-			String line = HttpParser.readLine(is, charset);
-			if ((line == null) || (line.trim().length() < 1)) {
-				break;
-			}
-			int colon = line.indexOf(":");
-			if(colon > 0){
-				name = line.substring(0, colon).trim();
-				value = new StringBuffer(line.substring(colon + 1).trim());
-			}else{
-				name = "Request";
-				value = new StringBuffer(line.trim());
-			}
 
-			headers.add(new Header(name, value.toString()));
-		}
 
-		return headers;
-	}
+
 
 }//end class

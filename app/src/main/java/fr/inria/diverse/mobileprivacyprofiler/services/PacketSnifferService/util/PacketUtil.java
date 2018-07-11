@@ -452,4 +452,10 @@ public class PacketUtil {
 		return str.toString();
 	}
 
+	public static boolean isInterestingServerName(String serverName){
+		if(serverName.startsWith("www."))
+			return true;
+		return false;
+	}
+
 }
