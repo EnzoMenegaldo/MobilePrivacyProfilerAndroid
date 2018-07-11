@@ -107,11 +107,25 @@ public class HandshakeHeader {
                 extensionsLength = stream.getShort();
 
             while (stream.hasRemaining()) {
-                short type = stream.getShort();
-                if (type == Extension.SERVER_NAME_EXTENSION)
-                    extensions.add(new ServerNameExtension(stream, type));
-                else
-                    extensions.add(new Extension(stream, type));
+                //We check if we have at least 4 bytes : 2 for the type and 2 for the length of the extension
+                if(stream.remaining() > 4){
+                    short type = stream.getShort();
+                    short length = stream.getShort();
+                    //A packet may have too many extension and so it might be fragmented
+                    //Before creating a new extension, we check the number of byte remaining in the buffer to be sure the whole extension is in the buffer.
+                    if(length <= stream.remaining()){
+                        if (type == Extension.SERVER_NAME_EXTENSION)
+                            extensions.add(new ServerNameExtension(stream, type, length));
+                        else
+                            extensions.add(new Extension(stream, type, length));
+                    }else{
+                        //We discard the rest of the data
+                        stream.position(stream.limit());
+                    }
+                }else{
+                    //We discard the rest of the data
+                    stream.position(stream.limit());
+                }
             }
         }
 

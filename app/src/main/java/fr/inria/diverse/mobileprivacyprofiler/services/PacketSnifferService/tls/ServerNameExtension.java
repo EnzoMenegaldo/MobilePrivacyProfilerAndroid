@@ -6,9 +6,10 @@ public class ServerNameExtension extends Extension {
 
     private ServerNameIndicationExtension serverNameIndicationExtension;
 
-    public ServerNameExtension(ByteBuffer stream, short type){
-        super(stream,type);
+    public ServerNameExtension(ByteBuffer stream, short type, short length){
+        super(stream,type,length);
         serverNameIndicationExtension = new ServerNameIndicationExtension(ByteBuffer.wrap(dataExtension));
+
     }
 
     public ServerNameIndicationExtension getServerNameIndicationExtension() {

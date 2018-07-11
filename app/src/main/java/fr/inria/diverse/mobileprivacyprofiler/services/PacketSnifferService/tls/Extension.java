@@ -42,9 +42,9 @@ public class Extension {
     }
 
 
-    public Extension(ByteBuffer stream, short type) {
+    public Extension(ByteBuffer stream, short type, short length) {
         this.type = type;
-        length = stream.getShort();
+        this.length = length;
         dataExtension = new byte[length];
         stream.get(dataExtension,0,length);
     }
