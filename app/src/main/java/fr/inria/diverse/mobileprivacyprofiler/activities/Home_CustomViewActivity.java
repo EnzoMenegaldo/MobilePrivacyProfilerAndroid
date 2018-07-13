@@ -105,11 +105,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             PhoneStateUtils.requestPermissions(this,PERMISSIONS);
         }
 
-        //The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
-        //If the user use a device whose api is older than 20, he won't be able to use SSLSocket
-        updateAndroidSecurityProvider(this);
-
-
         JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
 
 
@@ -163,22 +158,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         outState.putString(BUNDLE_IS_RUNNING_TAG, Starting_CustomViewActivity.app_state);
     }
 
-    /**
-     * Install a newer security provider using Google Play Services to allow the application to use SSLSocket.
-     * If the devise has an API lower than 20, by default, he won't be able to use SSLSocket.
-     * https://stackoverflow.com/questions/29916962/javax-net-ssl-sslhandshakeexception-javax-net-ssl-sslprotocolexception-ssl-han/36892715#36892715
-     */
-    private void updateAndroidSecurityProvider(Activity callingActivity) {
-        try {
-            ProviderInstaller.installIfNeeded(this);
-        } catch (GooglePlayServicesRepairableException e) {
-            // Thrown when Google Play Services is not installed, up-to-date, or enabled
-            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
-            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Log.e("SecurityException", "Google Play Services not available.");
-        }
-    }
+
 
     /**
      * Schedule all selected jobs

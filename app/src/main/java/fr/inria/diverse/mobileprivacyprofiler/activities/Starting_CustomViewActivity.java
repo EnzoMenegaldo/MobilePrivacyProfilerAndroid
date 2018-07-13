@@ -4,35 +4,33 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.rest.HttpPostAsyncTask;
+import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
-
 import android.preference.PreferenceManager;
+
 //Start of user code additional imports Starting_CustomViewActivity
-
-import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-
-import android.app.Activity;
+import android.os.Handler;
 import android.content.Context;
-
-import android.util.Log;
-
 import android.view.View;
-
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 //End of user code
+
 public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Starting_CustomViewActivity
 //End of user code
@@ -44,10 +42,11 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 	//Start of user code Static initialization  Starting_CustomViewActivity
 	public static Context context;
 	public static String app_state;
+	public static MyHandler handler;
 	//End of user code
 
 	/** Called when the activity is first created. */
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		//Start of user code onCreate Starting_CustomViewActivity_1
@@ -58,6 +57,13 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
         //Start of user code onCreate Starting_CustomViewActivity
 		context = getApplicationContext();
 		app_state = getApplicationContext().getString(R.string.home_customview_app_state_inactive);
+
+		//The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
+		//If the user use a device whose api is older than 20, he won't be able to use SSLSocket
+		updateAndroidSecurityProvider(this);
+
+
+		handler = new MyHandler(Starting_CustomViewActivity.this);
 		//End of user code
     }
     
@@ -70,9 +76,13 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		//End of user code
 	}
     //Start of user code additional code Starting_CustomViewActivity
-	public void onClickBtnSample(View view){
-		Intent intent = new Intent(this,Home_CustomViewActivity.class);
-		startActivity(intent);
+	public void onClickValidate(View view){
+		String username = ((EditText)findViewById(R.id.starting_customview_username)).getText().toString();
+		String password = ((EditText)findViewById(R.id.starting_customview_password)).getText().toString();
+		if(!username.isEmpty() && !password.isEmpty())
+			MobilePrivacyRestClient.getMobilePrivacyRestClient().authenticate(username,password,handler);
+		else
+			Toast.makeText(this,R.string.starting_customview_null_credentials,Toast.LENGTH_LONG).show();
     }
     public void onClickHelpBtn(View view){
         Intent intent = new Intent(this,Help_CustomViewActivity.class);
@@ -87,6 +97,46 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		if(null!=context&&app_state.equals(context.getString(R.string.home_customview_app_state_inactive)))
 			return false;
 		return true;
+	}
+
+	private static class MyHandler extends Handler{
+
+		private Context context;
+
+		public MyHandler(Context context){
+			super();
+			this.context = context;
+		}
+
+		@Override
+		public void handleMessage(Message msg){
+			//We use that to get the authentication response from the server
+			if(msg.what == HttpPostAsyncTask.HTT_STATUS_CODE){
+				if((Integer) msg.obj == 200){
+					Intent intent = new Intent(context,Home_CustomViewActivity.class);
+					context.startActivity(intent);
+				}else{
+					Toast.makeText(context,R.string.starting_customview_invalid_credentials,Toast.LENGTH_LONG).show();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Install a newer security provider using Google Play Services to allow the application to use SSLSocket.
+	 * If the devise has an API lower than 20, by default, he won't be able to use SSLSocket.
+	 * https://stackoverflow.com/questions/29916962/javax-net-ssl-sslhandshakeexception-javax-net-ssl-sslprotocolexception-ssl-han/36892715#36892715
+	 */
+	private void updateAndroidSecurityProvider(Activity callingActivity) {
+		try {
+			ProviderInstaller.installIfNeeded(this);
+		} catch (GooglePlayServicesRepairableException e) {
+			// Thrown when Google Play Services is not installed, up-to-date, or enabled
+			// Show dialog to allow users to install, update, or otherwise enable Google Play services.
+			GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
+		} catch (GooglePlayServicesNotAvailableException e) {
+			Log.e("SecurityException", "Google Play Services not available.");
+		}
 	}
 	//End of user code
 

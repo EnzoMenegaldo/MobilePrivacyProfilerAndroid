@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationUsageStats;
@@ -41,6 +42,7 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
 
 // Start of user code additional import for MobilePrivacyRestClient
+import android.os.Handler;
 // End of user code
 
 /** 
@@ -70,6 +72,15 @@ public class MobilePrivacyRestClient {
         if(null==mobilePrivacyRestClient){mobilePrivacyRestClient = new MobilePrivacyRestClient();return mobilePrivacyRestClient;}
         return mobilePrivacyRestClient;
 	}
+
+    /**
+     * Send an authentication request to the server
+     * @param username
+     * @param password
+     */
+	public void authenticate(String username, String password, Handler handler){
+        executePostRequest(this.serverUrl,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\"}",handler);
+    }
 
 	/**
      * Export the local DB to the server
@@ -125,7 +136,7 @@ public class MobilePrivacyRestClient {
             //translation of the collection into Json
             String postData = serialize(toExport);
             //execute the export to the server
-            executePostRequest(this.serverUrl, "/Metadata", postData);
+            executePostRequest(this.serverUrl, "/Metadata", postData, null);
         }
     }
 
@@ -142,7 +153,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ApplicationHistory",postData);
+            executePostRequest(this.serverUrl,"/ApplicationHistory",postData, null);
         }
     }
 
@@ -159,7 +170,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ApplicationUsageStats",postData);
+            executePostRequest(this.serverUrl,"/ApplicationUsageStats",postData, null);
         }
     }
 
@@ -176,7 +187,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/Authentification",postData);
+            executePostRequest(this.serverUrl,"/Authentification",postData, null);
         }
     }
 
@@ -193,7 +204,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/Contact",postData);
+            executePostRequest(this.serverUrl,"/Contact",postData, null);
         }
     }
 
@@ -210,7 +221,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactOrganisation",postData);
+            executePostRequest(this.serverUrl,"/ContactOrganisation",postData, null);
         }
     }
 
@@ -227,7 +238,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactIM",postData);
+            executePostRequest(this.serverUrl,"/ContactIM",postData, null);
         }
     }
 
@@ -244,7 +255,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactEvent",postData);
+            executePostRequest(this.serverUrl,"/ContactEvent",postData, null);
         }
     }
 
@@ -261,7 +272,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactPhoneNumber",postData);
+            executePostRequest(this.serverUrl,"/ContactPhoneNumber",postData, null);
         }
     }
 
@@ -278,7 +289,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactPhysicalAddress",postData);
+            executePostRequest(this.serverUrl,"/ContactPhysicalAddress",postData, null);
         }
     }
 
@@ -295,7 +306,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactEmail",postData);
+            executePostRequest(this.serverUrl,"/ContactEmail",postData, null);
         }
     }
 
@@ -312,7 +323,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/KnownWifi",postData);
+            executePostRequest(this.serverUrl,"/KnownWifi",postData, null);
         }
     }
 
@@ -329,7 +340,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/LogsWifi",postData);
+            executePostRequest(this.serverUrl,"/LogsWifi",postData, null);
         }
     }
 
@@ -346,7 +357,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/Geolocation",postData);
+            executePostRequest(this.serverUrl,"/Geolocation",postData, null);
         }
     }
 
@@ -363,7 +374,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/CalendarEvent",postData);
+            executePostRequest(this.serverUrl,"/CalendarEvent",postData, null);
         }
     }
 
@@ -380,7 +391,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/PhoneCallLog",postData);
+            executePostRequest(this.serverUrl,"/PhoneCallLog",postData, null);
         }
     }
 
@@ -397,7 +408,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/Cell",postData);
+            executePostRequest(this.serverUrl,"/Cell",postData, null);
         }
     }
 
@@ -414,7 +425,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/OtherCellData",postData);
+            executePostRequest(this.serverUrl,"/OtherCellData",postData, null);
         }
     }
 
@@ -431,7 +442,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/CdmaCellData",postData);
+            executePostRequest(this.serverUrl,"/CdmaCellData",postData, null);
         }
     }
 
@@ -448,7 +459,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/NeighboringCellHistory",postData);
+            executePostRequest(this.serverUrl,"/NeighboringCellHistory",postData, null);
         }
     }
 
@@ -465,7 +476,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/BluetoothDevice",postData);
+            executePostRequest(this.serverUrl,"/BluetoothDevice",postData, null);
         }
     }
 
@@ -482,7 +493,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/BluetoothLog",postData);
+            executePostRequest(this.serverUrl,"/BluetoothLog",postData, null);
         }
     }
 
@@ -499,7 +510,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/SMS",postData);
+            executePostRequest(this.serverUrl,"/SMS",postData, null);
         }
     }
 
@@ -516,7 +527,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/BatteryUsage",postData);
+            executePostRequest(this.serverUrl,"/BatteryUsage",postData, null);
         }
     }
 
@@ -533,7 +544,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/NetActivity",postData);
+            executePostRequest(this.serverUrl,"/NetActivity",postData,null);
         }
     }
 
@@ -543,9 +554,9 @@ public class MobilePrivacyRestClient {
      * @param apiPath
      * @param postData
      */
-    private void executePostRequest(String serverUrl,String apiPath,String postData){
+    private void executePostRequest(String serverUrl,String apiPath,String postData, Handler handler){
         try {
-            HttpPostAsyncTask task = new HttpPostAsyncTask(postData);
+            HttpPostAsyncTask task = new HttpPostAsyncTask(postData,handler);
             task.execute( serverUrl+ apiPath);
         } catch (Exception e) { e.printStackTrace(); }
     }

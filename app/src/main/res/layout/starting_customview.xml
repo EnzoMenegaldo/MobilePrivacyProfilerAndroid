@@ -19,42 +19,71 @@
 		android:layout_marginStart="20dp" />
 
 	<TextView
-		android:layout_width="213dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="50dp"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="50dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="20dp"
+		android:text="@string/intro_txt" />
+
+
+	<TextView
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="20dp"
 		android:layout_marginRight="50dp"
 		android:layout_marginTop="20dp"
-		android:text="@string/intro_txt"
+		android:text="@string/starting_customview_username_label"
 		android:layout_marginStart="20dp"
 		android:layout_marginEnd="50dp" />
 
-	<LinearLayout
+	<EditText
+		android:id="@+id/starting_customview_username"
+		android:layout_width="137dp"
+		android:layout_height="wrap_content"
+		android:background="@drawable/border"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="50dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="50dp"
+		android:inputType="text" />
+
+	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginLeft="20dp"
-		android:layout_marginTop="20dp"
-		android:orientation="horizontal"
+		android:layout_marginRight="50dp"
+		android:layout_marginTop="10dp"
+		android:text="@string/starting_customview_password_label"
 		android:layout_marginStart="20dp"
-		android:layout_weight="1">
+		android:layout_marginEnd="50dp" />
 
-		<EditText
-			android:id="@+id/edt_code_starting_screen"
-			android:layout_width="137dp"
-			android:layout_height="wrap_content"
-			android:background="@drawable/border"
-			android:inputType="text" />
+	<EditText
+		android:id="@+id/starting_customview_password"
+		android:layout_width="137dp"
+		android:layout_height="wrap_content"
+		android:background="@drawable/border"
+		android:inputType="textPassword"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="50dp"
+		android:layout_marginTop="5dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginEnd="50dp"/>
 
 
-		<Button
-			android:id="@+id/btnSampleStarting"
-			android:layout_width="57dp"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="20dp"
-			android:onClick="onClickBtnSample"
-			android:text="@string/btnOK"
-			android:layout_marginStart="20dp" />
+	<Button
+		android:id="@+id/starting_customview_validate_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="20dp"
+		android:onClick="onClickValidate"
+		android:text="@string/starting_customview_validate_btn_text"
+		android:layout_marginStart="20dp" />
 
-	</LinearLayout>
+
 
 	<ImageButton
 		android:id="@+id/HelpImageButton"

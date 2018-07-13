@@ -1,6 +1,8 @@
 package fr.inria.diverse.mobileprivacyprofiler.rest;
 
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 
@@ -23,18 +25,20 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
-public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
+public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
 
+    public static final int HTT_STATUS_CODE = 404;
     private static final String TAG = HttpPostAsyncTask.class.getSimpleName();
     private String authString ="someAuthString";
     // This is the JSON body of the post
-    String postData;
+    private String postData;
+    private Handler handler;
 
     // This is a constructor that allows you to pass in the JSON body
-    public HttpPostAsyncTask(String postData) {
+    public HttpPostAsyncTask(String postData, Handler handler) {
         if (postData != null) {
             this.postData = postData;
-
+            this.handler = handler;
             //We need that because for now the server use a self-signed certificate.
             ignoreCertificate();
         }
@@ -42,7 +46,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
 
     // This is a function that we are overriding from AsyncTask. It takes Strings as parameters because that is what we defined for the parameters of our async task
     @Override
-    protected Void doInBackground(String... params) {
+    protected Integer doInBackground(String... params) {
 
         try {
             // This is getting the url from the string we passed in
@@ -71,26 +75,33 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
 
             int statusCode = urlConnection.getResponseCode();
 
-            if (statusCode ==  201) {
+            if (statusCode ==  201 || statusCode == 200) {
 
                 InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
 
                 String response = convertInputStreamToString(inputStream);
                 Log.d(TAG, response);
-                // From here you can convert the string to JSON with whatever JSON parser you like to use
-
-                // After converting the string to JSON, I call my custom callback. You can follow this process too, or you can implement the onPostExecute(Result) method
-                //TODO
             } else {
                 // Status code is not 200
                 // Do something to handle the error
                 Log.d(TAG, "Error while exporting data to server : check server statue and device connection");
             }
+            return statusCode;
 
         } catch (Exception e) {
             Log.d(TAG, e.getLocalizedMessage());
         }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(Integer result) {
+        if (handler != null) {
+            Message message = new Message();
+            message.what = HTT_STATUS_CODE;
+            message.obj = result;
+            handler.sendMessage(message);
+        }
     }
 
 
