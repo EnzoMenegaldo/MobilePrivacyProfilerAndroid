@@ -10,6 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +58,8 @@ public class MobilePrivacyRestClient {
     
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
-    private String serverUrl = "https://131.254.18.200:4567";
+    private static final String serverUrl = "https://131.254.18.200:4567";
+    private static final String AUTHENTICATION_SERVER_URL = "https://131.254.18.200:8000";
 // End of user code
 	
 	/**
@@ -79,7 +82,7 @@ public class MobilePrivacyRestClient {
      * @param password
      */
 	public void authenticate(String username, String password, Handler handler){
-        executePostRequest(this.serverUrl,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\"}",handler);
+        executePostRequest(AUTHENTICATION_SERVER_URL,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\"}",handler);
     }
 
 	/**

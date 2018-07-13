@@ -39,8 +39,6 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
         if (postData != null) {
             this.postData = postData;
             this.handler = handler;
-            //We need that because for now the server use a self-signed certificate.
-            ignoreCertificate();
         }
     }
 
@@ -49,6 +47,8 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
     protected Integer doInBackground(String... params) {
 
         try {
+            //We need that because for now the server use a self-signed certificate.
+            ignoreCertificate();
             // This is getting the url from the string we passed in
             URL url = new URL(params[0]);
             // Create the urlConnection
@@ -84,7 +84,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
             } else {
                 // Status code is not 200
                 // Do something to handle the error
-                Log.d(TAG, "Error while exporting data to server : check server statue and device connection");
+                Log.d(TAG, "Request failed");
             }
             return statusCode;
 
