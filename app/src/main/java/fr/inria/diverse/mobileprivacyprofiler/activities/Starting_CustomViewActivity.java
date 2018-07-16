@@ -93,10 +93,7 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		else
 			Toast.makeText(this,R.string.starting_customview_null_credentials,Toast.LENGTH_LONG).show();
     }
-    public void onClickHelpBtn(View view){
-        Intent intent = new Intent(this,Help_CustomViewActivity.class);
-        startActivity(intent);
-    }
+
     public static Context getContext(){
     	return context;
 	}
@@ -183,11 +180,10 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.starting_customview_action_preference:
-	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
 			//Start of user code additional menu action Starting_CustomViewActivity
-	
+			case R.id.starting_customview_to_help_customview:
+				startActivity(new Intent(this, Help_CustomViewActivity.class));
+				return true;
 			//End of user code
 			default:
                 return super.onOptionsItemSelected(item);

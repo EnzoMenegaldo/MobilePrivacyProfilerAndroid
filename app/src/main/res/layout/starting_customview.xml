@@ -2,129 +2,96 @@
 <!--Start of user code customView_layout for Starting
 -->
 <!-- freely adapt here the desired layout for your custom view -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
 	<TextView
+		android:id="@+id/starting_customview_welcome"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="20dp"
-		android:layout_marginTop="20dp"
+		android:layout_marginLeft="15dp"
+		android:layout_marginStart="15dp"
+		android:layout_marginTop="30dp"
 		android:text="@string/welcome_txt"
 		android:textSize="40sp"
-		android:textStyle="bold"
-		android:layout_marginStart="20dp" />
+		android:textStyle="bold" />
 
 	<TextView
+		android:id="@+id/starting_customview_introduction_text"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginEnd="50dp"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="50dp"
-		android:layout_marginStart="20dp"
+		android:layout_below="@+id/starting_customview_welcome"
+		android:text="@string/intro_txt"
 		android:layout_marginTop="20dp"
-		android:text="@string/intro_txt" />
+		android:layout_alignStart="@+id/starting_customview_welcome"
+		android:layout_alignLeft="@+id/starting_customview_welcome"
+		android:layout_marginRight="40dp"/>
 
 
 	<TextView
+		android:id="@+id/starting_customview_username_textview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="50dp"
-		android:layout_marginTop="20dp"
+		android:layout_below="@+id/starting_customview_introduction_text"
 		android:text="@string/starting_customview_username_label"
-		android:layout_marginStart="20dp"
-		android:layout_marginEnd="50dp" />
+		android:layout_marginTop="20dp"
+		android:layout_alignStart="@+id/starting_customview_welcome"
+		android:layout_alignLeft="@+id/starting_customview_welcome"/>
 
 	<EditText
 		android:id="@+id/starting_customview_username"
 		android:layout_width="137dp"
 		android:layout_height="wrap_content"
+		android:layout_below="@+id/starting_customview_username_textview"
 		android:background="@drawable/border"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="50dp"
+		android:inputType="text"
 		android:layout_marginTop="5dp"
-		android:layout_marginStart="20dp"
-		android:layout_marginEnd="50dp"
-		android:inputType="text" />
+		android:layout_alignStart="@+id/starting_customview_welcome"
+		android:layout_alignLeft="@+id/starting_customview_welcome"/>
 
 	<TextView
+		android:id="@+id/starting_customview_password_textview"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="50dp"
-		android:layout_marginTop="10dp"
+		android:layout_below="@+id/starting_customview_username"
 		android:text="@string/starting_customview_password_label"
-		android:layout_marginStart="20dp"
-		android:layout_marginEnd="50dp" />
+		android:layout_marginTop="20dp"
+		android:layout_alignStart="@+id/starting_customview_welcome"
+		android:layout_alignLeft="@+id/starting_customview_welcome"/>
 
 	<EditText
 		android:id="@+id/starting_customview_password"
 		android:layout_width="137dp"
 		android:layout_height="wrap_content"
+		android:layout_below="@+id/starting_customview_password_textview"
 		android:background="@drawable/border"
 		android:inputType="textPassword"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="50dp"
 		android:layout_marginTop="5dp"
-		android:layout_marginStart="20dp"
-		android:layout_marginEnd="50dp"/>
+		android:layout_alignStart="@+id/starting_customview_welcome"
+		android:layout_alignLeft="@+id/starting_customview_welcome"/>
 
 
 	<Button
 		android:id="@+id/starting_customview_validate_btn"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginLeft="20dp"
+		android:layout_marginTop="15dp"
+		android:layout_alignStart="@+id/starting_customview_welcome"
+		android:layout_alignLeft="@+id/starting_customview_welcome"
+		android:layout_below="@+id/starting_customview_password"
 		android:onClick="onClickValidate"
-		android:text="@string/starting_customview_validate_btn_text"
-		android:layout_marginStart="20dp" />
+		android:text="@string/starting_customview_validate_btn_text" />
+
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="61dp"
+		android:layout_alignParentBottom="true"
+		android:src="@drawable/logos_profilerxcf" />
 
 
 
-	<ImageButton
-		android:id="@+id/HelpImageButton"
-		android:layout_width="75dp"
-		android:layout_height="75dp"
-		android:layout_marginBottom="10dip"
-		android:layout_marginLeft="10dip"
-		android:layout_marginRight="10dip"
-		android:layout_marginTop="10dip"
-		android:onClick="onClickHelpBtn"
-		android:scaleType="centerCrop"
-		app:srcCompat="@drawable/iconhelp" />
-
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="65dp"
-		android:gravity="bottom"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/univ_rennes_2" />
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/universite_rennes_1" />
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/irisa" />
-	</LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
 <!--End of user code
 -->

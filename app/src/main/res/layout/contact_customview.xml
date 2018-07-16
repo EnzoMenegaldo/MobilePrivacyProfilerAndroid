@@ -95,33 +95,10 @@
 	</LinearLayout>
 
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="bottom"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/univ_rennes_2" />
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/universite_rennes_1" />
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/irisa" />
-	</LinearLayout>
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="61dp"
+		android:src="@drawable/logos_profilerxcf" />
 
 </LinearLayout>
 <!--End of user code
