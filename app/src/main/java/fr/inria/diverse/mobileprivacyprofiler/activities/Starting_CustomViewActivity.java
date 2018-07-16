@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.exception.NotConnectedToInternetException;
 import fr.inria.diverse.mobileprivacyprofiler.rest.HttpPostAsyncTask;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
@@ -79,8 +80,13 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 	public void onClickValidate(View view){
 		String username = ((EditText)findViewById(R.id.starting_customview_username)).getText().toString();
 		String password = ((EditText)findViewById(R.id.starting_customview_password)).getText().toString();
-		if(!username.isEmpty() && !password.isEmpty())
-			MobilePrivacyRestClient.getMobilePrivacyRestClient().authenticate(username,password,handler);
+		if(!username.isEmpty() && !password.isEmpty()) {
+			try {
+				MobilePrivacyRestClient.getMobilePrivacyRestClient().authenticate(username,password,handler,getContext());
+			} catch (NotConnectedToInternetException e) {
+				Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+			}
+		}
 		else
 			Toast.makeText(this,R.string.starting_customview_null_credentials,Toast.LENGTH_LONG).show();
     }
@@ -112,11 +118,15 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		public void handleMessage(Message msg){
 			//We use that to get the authentication response from the server
 			if(msg.what == HttpPostAsyncTask.HTT_STATUS_CODE){
-				if((Integer) msg.obj == 200){
-					Intent intent = new Intent(context,Home_CustomViewActivity.class);
-					context.startActivity(intent);
+				if(msg.obj != null) {
+					if ((Integer) msg.obj == 200) {
+						Intent intent = new Intent(context, Home_CustomViewActivity.class);
+						context.startActivity(intent);
+					} else {
+						Toast.makeText(context, R.string.starting_customview_invalid_credentials, Toast.LENGTH_LONG).show();
+					}
 				}else{
-					Toast.makeText(context,R.string.starting_customview_invalid_credentials,Toast.LENGTH_LONG).show();
+					Toast.makeText(context, NotConnectedToInternetException.Message, Toast.LENGTH_LONG).show();
 				}
 			}
 		}

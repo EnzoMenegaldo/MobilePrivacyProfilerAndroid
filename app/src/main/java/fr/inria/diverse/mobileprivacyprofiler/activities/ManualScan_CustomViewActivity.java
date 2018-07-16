@@ -4,6 +4,7 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.exception.NotConnectedToInternetException;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
@@ -35,6 +36,7 @@ import fr.inria.diverse.mobileprivacyprofiler.test.Test;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
@@ -200,7 +202,11 @@ public class ManualScan_CustomViewActivity extends OrmLiteActionBarActivity<OrmL
 
 	public void onClickBtnExportDB (View view) throws SQLException {
 		showToast( this.getString(R.string.export_db_launch_toast));
-		MobilePrivacyRestClient.getMobilePrivacyRestClient().exportDB(this);
+		try {
+			MobilePrivacyRestClient.getMobilePrivacyRestClient().exportDB(this);
+		} catch (NotConnectedToInternetException e) {
+			Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+		}
 	}
 
 	public void onClickBtnResetDB (View view){
