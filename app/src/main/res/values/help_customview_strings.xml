@@ -5,7 +5,7 @@
 	-->
 	<!-- freely add here the desired resource String for your custom view -->
 	<string name="help_customview_title">Aide</string>
-	<string name="help_customview_text">bla bla bla bla bla</string>
+	<string name="help_customview_text">Pour toutes questions ou problèmes rencontrés lors de l\'utilisation, n\'hésitez pas à faire un tour dans la section \"Questions fréquentes\"ou bien contactez-nous directement.</string>
 	<string name="help_customview_faq_btn_label">Questions Fréquentes</string>
 	<string name="help_customview_contact_btn_label">Contacter les chercheurs</string>
 	<string name="help_customview_cgu_btn_label">Relire les CGU</string>

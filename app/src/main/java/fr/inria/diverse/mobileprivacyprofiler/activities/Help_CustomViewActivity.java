@@ -8,6 +8,7 @@ import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -110,9 +111,6 @@ public class Help_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.help_customview_action_preference:
-	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
 			//Start of user code additional menu action Help_CustomViewActivity
 	
 			//End of user code

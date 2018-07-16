@@ -8,6 +8,7 @@ import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -113,23 +114,24 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         app_state_text_view.setText(Starting_CustomViewActivity.app_state);
         TextView screen_explanation = (TextView)findViewById(R.id.home_customview_screen_explanation);
 
-        toggleCollection.setChecked(Starting_CustomViewActivity.isCollectionRunning());
-
         toggleCollection.setOnClickListener(view -> {
             if(((ToggleButton)view).isChecked()){
                 setupVpn();
                 runSelectedJob();
-                Starting_CustomViewActivity.app_state = getString(R.string.home_customview_app_state_active);
+                Starting_CustomViewActivity.app_state = Html.fromHtml(getString(R.string.home_customview_app_state_active));
                 app_state_text_view.setText(Starting_CustomViewActivity.app_state);
                 screen_explanation.setText(R.string.home_customview_stop_collection);
             }else{
                 cancelSelectedJob();
-                Starting_CustomViewActivity.app_state =getString(R.string.home_customview_app_state_inactive);
+                Starting_CustomViewActivity.app_state = Html.fromHtml(getString(R.string.home_customview_app_state_inactive));
                 app_state_text_view.setText(Starting_CustomViewActivity.app_state);
                 screen_explanation.setText(R.string.home_customview_run_collection);
             }
         });
-		//End of user code
+
+        toggleCollection.setChecked(Starting_CustomViewActivity.isCollectionRunning());
+
+        //End of user code
     }
     
     @Override
@@ -155,7 +157,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(BUNDLE_IS_RUNNING_TAG, Starting_CustomViewActivity.app_state);
+        outState.putString(BUNDLE_IS_RUNNING_TAG, Starting_CustomViewActivity.app_state.toString());
     }
 
 
