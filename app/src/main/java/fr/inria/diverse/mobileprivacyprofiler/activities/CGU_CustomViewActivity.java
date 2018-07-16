@@ -8,6 +8,7 @@ import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 //End of user code
 public class CGU_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements CGU_CustomViewActivity
@@ -53,6 +62,9 @@ public class CGU_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
         //Start of user code onCreate CGU_CustomViewActivity
         TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
         textElement.setText(Starting_CustomViewActivity.app_state);
+        TextView gcu_text = (TextView)findViewById(R.id.cgu_customview_cgu_text);
+        gcu_text.setText(readCGUFile());
+        gcu_text.setMovementMethod(new ScrollingMovementMethod());
 		//End of user code
     }
     
@@ -68,6 +80,23 @@ public class CGU_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
     //Start of user code additional code CGU_CustomViewActivity
 	public void onClickBtnSample(View view){
 		showToast("sample button pressed. \nPlease customize ;-)");
+    }
+
+    public String readCGUFile()
+    {
+        BufferedReader br;
+        StringBuilder sb = new StringBuilder();
+        String tmp;
+        try {
+            br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.cgu_profile)));
+            while((tmp = br.readLine()) != null)
+                sb.append(tmp).append("\n");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 	//End of user code
 
@@ -101,11 +130,7 @@ public class CGU_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.cgu_customview_action_preference:
-	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
 			//Start of user code additional menu action CGU_CustomViewActivity
-	
 			//End of user code
 			default:
                 return super.onOptionsItemSelected(item);

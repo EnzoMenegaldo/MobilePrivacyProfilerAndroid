@@ -6,10 +6,6 @@
 	<!-- freely adapt here the desired layout for your menu -->
 	<!--End of user code
 	-->
-	<item android:id="@+id/cgu_customview_action_preference"
-	      android:icon="@android:drawable/ic_menu_preferences"
-	      android:title="@string/preferences_menu_title"
-	      mobileprivacyprofiler:showAsAction="never"  />
 </menu>
 
 
