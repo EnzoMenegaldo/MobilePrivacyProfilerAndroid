@@ -7,6 +7,7 @@ import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +41,7 @@ public class Contact_CustomViewActivity extends OrmLiteActionBarActivity<OrmLite
 {
 	
 	//Start of user code constants Contact_CustomViewActivity
+    public static final String Contact_EMAIl = "mobileprofiler_ur1@gmail.com";
 	//End of user code
 
 	//Start of user code Static initialization  Contact_CustomViewActivity
@@ -72,8 +74,8 @@ public class Contact_CustomViewActivity extends OrmLiteActionBarActivity<OrmLite
         final EditText sendMailInput = (EditText) findViewById(R.id.sendMailInput);
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "[Participant Etude Profile]"+ OpenHelperManager.getHelper(this, OrmLiteDBHelper.class).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata().getUserId());
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{Contact_EMAIl});
+        i.putExtra(Intent.EXTRA_SUBJECT, "[Participant Etude Profile]");
         i.putExtra(Intent.EXTRA_TEXT   , sendMailInput.getText());
         try {
             startActivity(Intent.createChooser(i, "Send mail..."));

@@ -11,6 +11,7 @@ import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
@@ -25,6 +26,7 @@ import android.os.Handler;
 import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -39,6 +41,9 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 {
 	
 	//Start of user code constants Starting_CustomViewActivity
+	public static final String Login_Information = "login_information";
+	public static final String SHARED_PREF_USERNAME_TAG = "username";
+	public static final String SHARED_PREF_PASSWORD_TAG = "password";
 	//End of user code
 
 	//Start of user code Static initialization  Starting_CustomViewActivity
@@ -64,7 +69,8 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		//If the user use a device whose api is older than 20, he won't be able to use SSLSocket
 		updateAndroidSecurityProvider(this);
 
-
+		((EditText)findViewById(R.id.starting_customview_username)).setText(getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_USERNAME_TAG,""));
+		((EditText)findViewById(R.id.starting_customview_password)).setText(getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_PASSWORD_TAG,""));
 		handler = new MyHandler(Starting_CustomViewActivity.this);
 		//End of user code
     }
@@ -86,6 +92,10 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 			view.getContext().startActivity(intent);
 		}else if(!username.isEmpty() && !password.isEmpty()) {
 			try {
+				SharedPreferences.Editor editor = context.getSharedPreferences(Login_Information, MODE_PRIVATE).edit();
+				editor.putString(SHARED_PREF_USERNAME_TAG, username);
+				editor.putString(SHARED_PREF_PASSWORD_TAG, password);
+				editor.apply();
 				MobilePrivacyRestClient.getMobilePrivacyRestClient().authenticate(username,password,handler,getContext());
 			} catch (NotConnectedToInternetException e) {
 				Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
