@@ -7,7 +7,7 @@
 	<string name="contact_customview_title">Contact</string>
 	<string name="contact_customview_title_comment">L\'équipe Profile est à votre écoute pour toutes questions ou si vous rencontrez des problèmes lors de l\'utilisation de l\'application. Nous tacherons de vous répondre dans les meilleurs délais.</string>
 	<string name="contact_customview_send_mail_btn_label">Envoyer mail</string>
-	<string name="contact_customview_send_mail_hint">Ecrivez ici votre mail</string>
+	<string name="contact_customview_send_mail_hint">Ecrivez ici votre message</string>
 
 	<!-- End of user code
 	-->
