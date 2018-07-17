@@ -286,6 +286,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             case R.id.home_customview_action_manualscan:
                 startActivity(new Intent(this, ManualScan_CustomViewActivity.class));
                 return true;
+            case R.id.home_customview_to_help_customview:
+                startActivity(new Intent(this, Help_CustomViewActivity.class));
+                return true;
 			//End of user code
 			default:
                 return super.onOptionsItemSelected(item);

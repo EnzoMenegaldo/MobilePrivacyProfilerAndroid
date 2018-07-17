@@ -44,20 +44,30 @@
 		android:textSize="35sp"
 		android:textStyle="bold" />
 
-
-	<TextView
-		android:id="@+id/cgu_customview_cgu_text"
-		android:layout_width="match_parent"
+	<ScrollView
+		android:layout_width="wrap_content"
 		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:background="@drawable/border"
 		android:layout_marginBottom="10dp"
 		android:layout_marginEnd="50dp"
 		android:layout_marginLeft="20dp"
 		android:layout_marginRight="20dp"
 		android:layout_marginStart="20dp"
 		android:layout_marginTop="10dp"
-		android:layout_weight="1"
-		android:background="@drawable/border"
-		android:scrollbars="vertical" />
+		android:fadeScrollbars="false">
+
+		<TextView
+			android:id="@+id/cgu_customview_cgu_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scrollbars="vertical"
+			android:fadeScrollbars="false"
+			android:paddingRight="10dp"
+			android:paddingEnd="10dp" />
+
+	</ScrollView>
+
 
 
 

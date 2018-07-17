@@ -4,6 +4,11 @@
 	<!--Start of user code customView_menu for Home
 	-->
 	<!-- freely adapt here the desired layout for your menu -->
+	<item android:id="@+id/home_customview_to_help_customview"
+		android:icon="@android:drawable/ic_menu_help"
+		android:title="@string/action_go_to_help_customview"
+		mobileprivacyprofiler:showAsAction="ifRoom" />
+
 	<item android:id="@+id/home_customview_action_manualscan"
 		android:icon="?attr/ic_action_manualscan"
 		android:title="@string/action_manualscan_text"

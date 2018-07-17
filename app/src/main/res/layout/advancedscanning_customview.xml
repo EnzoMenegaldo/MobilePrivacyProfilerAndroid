@@ -7,18 +7,58 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-	<TextView
+	<LinearLayout
+		android:id="@+id/advancedscanning_customview_state_layout"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/title_advancedscanning_activity"/>
+		android:layout_gravity="center"
+		android:layout_marginTop="20dp"
+		android:orientation="horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="0dp"
+			android:text="@string/home_customview_txt_before_app_state" />
+
+		<TextView
+			android:id="@+id/advancedscanning_customview_app_state"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/home_customview_app_state_inactive"
+			android:textStyle="bold" />
+	</LinearLayout>
+
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="20dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="10dp"
+		android:text="@string/title_advancedscanning_activity"
+		android:textSize="35sp"
+		android:textStyle="bold" />
 
 	<ListView
 		android:id="@+id/serviceListView"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="0dp"
+		android:layout_marginBottom="5dp"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="20dp"
+		android:layout_marginTop="5dp"
+		android:layout_weight="1"
+		android:divider="@null"
+		android:dividerHeight="0dp"
+		android:fadeScrollbars="false">
 
 	</ListView>
 
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="61dp"
+		android:src="@drawable/logos_profilerxcf" />
 </LinearLayout>
 <!--End of user code
 -->
