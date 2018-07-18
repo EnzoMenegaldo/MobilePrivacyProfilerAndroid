@@ -1,5 +1,6 @@
 package fr.vojtisek.genandroid.genandroidlib.activities;
 
+import com.crashlytics.android.Crashlytics;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.logger.Logger;
@@ -10,6 +11,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import io.fabric.sdk.android.Fabric;
 
 public class OrmLiteActionBarActivity<H extends OrmLiteSqliteOpenHelper> extends AppCompatActivity {
 
@@ -50,6 +53,7 @@ public class OrmLiteActionBarActivity<H extends OrmLiteSqliteOpenHelper> extends
 			helper = getHelperInternal(this);
 			created = true;
 		}
+		Fabric.with(this, new Crashlytics());
 		super.onCreate(savedInstanceState);
 	}
 

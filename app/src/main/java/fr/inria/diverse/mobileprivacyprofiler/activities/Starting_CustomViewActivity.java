@@ -32,6 +32,12 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
+
+import com.crashlytics.android.Crashlytics;
+
+import java.io.IOException;
+
+import io.fabric.sdk.android.Fabric;
 //End of user code
 
 public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -55,7 +61,6 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		//Start of user code onCreate Starting_CustomViewActivity_1
-
 		//End of user code		
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         setContentView(R.layout.starting_customview);
@@ -81,6 +86,8 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		//End of user code
 	}
     //Start of user code additional code Starting_CustomViewActivity
+
+
 	public void onClickValidate(View view){
 		String username = ((EditText)findViewById(R.id.starting_customview_username)).getText().toString();
 		String password = ((EditText)findViewById(R.id.starting_customview_password)).getText().toString();

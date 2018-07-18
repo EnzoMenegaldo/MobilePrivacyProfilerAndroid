@@ -36,6 +36,8 @@ import android.widget.ToggleButton;
 
 import com.evernote.android.job.JobManager;
 
+import java.io.IOException;
+
 //End of user code
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements Home_CustomViewActivity
@@ -248,5 +250,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 }
