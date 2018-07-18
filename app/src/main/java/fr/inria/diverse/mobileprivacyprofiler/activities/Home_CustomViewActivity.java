@@ -230,16 +230,16 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.home_customview_action_preference:
+			/*case R.id.home_customview_action_preference:
 	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
+	            return true;*/
 			//Start of user code additional menu action Home_CustomViewActivity
             case R.id.home_customview_action_advancedscanning:
                 startActivity(new Intent(this, AdvancedScanning_CustomViewActivity.class));
                 return true;
-            case R.id.home_customview_action_manualscan:
+           /* case R.id.home_customview_action_manualscan:
                 startActivity(new Intent(this, ManualScan_CustomViewActivity.class));
-                return true;
+                return true;*/
             case R.id.home_customview_to_help_customview:
                 startActivity(new Intent(this, Help_CustomViewActivity.class));
                 return true;

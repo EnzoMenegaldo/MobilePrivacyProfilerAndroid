@@ -7,8 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/MyActionBar</item>
+
         <item name="ic_action_search">@drawable/ic_action_search</item>
         <item name="ic_action_manualscan">@drawable/ic_track_changes_white_24dp</item>
+        <item name="ic_action_advancedscanning">@drawable/ic_track_changes_white_24dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -31,6 +35,15 @@
         <item name="android:buttonStyleToggle">@style/Widget.Button.Toggle</item>
         <item name="android:textOn"></item>
         <item name="android:textOff"></item>
+    </style>
+
+
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+
+        <item name="android:background">@android:color/holo_green_dark</item>
+        <item name="background">@android:color/holo_green_dark</item>
+
     </style>
 
 
