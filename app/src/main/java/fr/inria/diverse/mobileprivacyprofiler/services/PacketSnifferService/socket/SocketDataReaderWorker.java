@@ -186,7 +186,7 @@ class SocketDataReaderWorker implements Runnable {
 					session.getTimestampSender(), session.getTimestampReplyto());
 			try {
 				writer.write(data);
-				//pData.addData(data);
+				pData.addData(data);
 			} catch (IOException e) {
 				Log.e(TAG,"Failed to send ACK + Data packet: " + e.getMessage());
 			}

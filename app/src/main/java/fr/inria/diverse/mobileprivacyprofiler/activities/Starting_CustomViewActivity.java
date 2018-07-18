@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.content.Context;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -48,7 +47,6 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 
 	//Start of user code Static initialization  Starting_CustomViewActivity
 	public static Context context;
-	public static CharSequence app_state;
 	public static MyHandler handler;
 	//End of user code
 
@@ -63,7 +61,6 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
         setContentView(R.layout.starting_customview);
         //Start of user code onCreate Starting_CustomViewActivity
 		context = getApplicationContext();
-		app_state = Html.fromHtml(getApplicationContext().getString(R.string.home_customview_app_state_inactive));
 
 		//The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
 		//If the user use a device whose api is older than 20, he won't be able to use SSLSocket
@@ -107,13 +104,6 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 
     public static Context getContext(){
     	return context;
-	}
-
-	public static boolean isCollectionRunning(){
-    	Context context=getContext();
-		if(app_state.toString().equals((Html.fromHtml(context.getString(R.string.home_customview_app_state_inactive))).toString()))
-			return false;
-		return true;
 	}
 
 	private static class MyHandler extends Handler{

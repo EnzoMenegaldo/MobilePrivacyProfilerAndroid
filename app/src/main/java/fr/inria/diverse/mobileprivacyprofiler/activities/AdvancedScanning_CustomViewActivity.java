@@ -46,9 +46,6 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Start of user code onCreate AdvancedScanning_CustomViewActivity
-		TextView textElement = (TextView) findViewById(R.id.advancedscanning_customview_app_state);
-		textElement.setText(Starting_CustomViewActivity.app_state);
-
 		JobEnum[] services = JobEnum.values();
 		ListView serviceListView = (ListView)findViewById(R.id.serviceListView);
 		JobList_Adapter adapter = new JobList_Adapter(getApplicationContext(),services);

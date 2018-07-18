@@ -5,12 +5,6 @@
 	-->
 	<!-- freely add here the desired resource String for your custom view -->
 	<string name="home_customview_applicationhistorylist_btn_label">Historique des Applications</string>
-	<string name="home_customview_txt_before_app_state">L\'application PROFILE est actuellement :\ </string>
-
-	<!--https://developer.android.com/guide/topics/resources/string-resource#StylingWithHTML-->
-	<string name="home_customview_app_state_active">&lt;b>&lt;font color="green">ACTIVE&lt;/font>&lt;/b></string>
-	<string name="home_customview_app_state_inactive">&lt;b>&lt;font color="red">INACTIVE&lt;/font>&lt;/b></string>
-
 	<string name="home_customview_run_collection">Vous pouvez reprendre la collecte de données à tout moment en utilisant le bouton play ci dessous :</string>
 	<string name="home_customview_stop_collection">Vous pouvez interrompre la collecte de données à tout moment en utilisant le bouton pause ci dessous :</string>
 	<!-- End of user code

@@ -203,7 +203,7 @@ class SessionHandler {
 	void handlePacket(@NonNull ByteBuffer stream) throws PacketHeaderException {
 		final byte[] rawPacket = new byte[stream.limit()];
 		stream.get(rawPacket, 0, stream.limit());
-		packetData.addData(rawPacket);
+		//packetData.addData(rawPacket);
 		stream.rewind();
 
 		final IPv4Header ipHeader = IPPacketFactory.createIPv4Header(stream);

@@ -52,8 +52,6 @@ public class Help_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code		
         setContentView(R.layout.help_customview);
         //Start of user code onCreate Help_CustomViewActivity
-        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
-        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
     }
     
@@ -62,8 +60,6 @@ public class Help_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume Help_CustomViewActivity
-        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
-        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
 	}
     //Start of user code additional code Help_CustomViewActivity

@@ -10,6 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.utils.AppStateViewModel;
 import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 
 public class JobList_Adapter extends BaseAdapter {
@@ -62,11 +63,11 @@ public class JobList_Adapter extends BaseAdapter {
                     JobEnum job = (JobEnum)viewHolder.jobSwitchId.getTag();
                     if (bChecked) {
                         job.setSelected(bChecked);
-                        if(Starting_CustomViewActivity.isCollectionRunning())
+                        if(AppStateViewModel.isCollectionRunning(context))
                             job.run();
                     } else {
                         job.setSelected(bChecked);
-                        if(Starting_CustomViewActivity.isCollectionRunning())
+                        if(AppStateViewModel.isCollectionRunning(context))
                             job.cancel();
                     }
                 }
