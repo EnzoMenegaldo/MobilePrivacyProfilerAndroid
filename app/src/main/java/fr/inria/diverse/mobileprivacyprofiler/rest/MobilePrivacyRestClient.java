@@ -82,10 +82,11 @@ public class MobilePrivacyRestClient {
      * Send an authentication request to the server
      * @param username
      * @param password
+     * @param device
      */
-	public void authenticate(String username, String password, Handler handler, Context context) throws NotConnectedToInternetException {
+	public void authenticate(String username, String password, String device, Handler handler, Context context) throws NotConnectedToInternetException {
 	    if(PhoneStateUtils.isConnectedToInternet(context))
-            executePostRequest(AUTHENTICATION_SERVER_URL,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\"}",handler);
+            executePostRequest(AUTHENTICATION_SERVER_URL,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\",\"device\":\""+device+"\"}",handler);
 	    else
 	        throw new NotConnectedToInternetException();
     }

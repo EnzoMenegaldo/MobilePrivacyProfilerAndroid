@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import fr.inria.diverse.mobileprivacyprofiler.activities.Starting_CustomViewActivity;
+
+import static android.content.Context.MODE_PRIVATE;
 //End of user code
 /**
  * Context class used to simplify the access to the different DAOs of the application
@@ -275,8 +279,9 @@ public class MobilePrivacyProfilerDBHelper {
 			metadata = it.get(0);
 		} else {
 			metadata = new MobilePrivacyProfilerDB_metadata();
-			metadata.setUserId(UUID.randomUUID().toString());
-				this.mobilePrivacyProfilerDB_metadataDao.create(metadata);
+			//metadata.setUserId(UUID.randomUUID().toString());
+			metadata.setUserId(Starting_CustomViewActivity.context.getSharedPreferences(Starting_CustomViewActivity.Login_Information,MODE_PRIVATE).getString(Starting_CustomViewActivity.SHARED_PREF_USERNAME_TAG,""));
+			this.mobilePrivacyProfilerDB_metadataDao.create(metadata);
 		}
         } catch (SQLException e) { Log.e(TAG,"error while getting MobilePrivacyProfilerDB_metadata", e);}
 

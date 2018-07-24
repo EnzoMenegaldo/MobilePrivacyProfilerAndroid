@@ -36,6 +36,7 @@ import com.google.android.gms.security.ProviderInstaller;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import io.fabric.sdk.android.Fabric;
 //End of user code
@@ -49,11 +50,15 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 	public static final String Login_Information = "login_information";
 	public static final String SHARED_PREF_USERNAME_TAG = "username";
 	public static final String SHARED_PREF_PASSWORD_TAG = "password";
+	public static final String SHARED_PREF_DEVICE_TAG = "device";
 	//End of user code
 
 	//Start of user code Static initialization  Starting_CustomViewActivity
 	public static Context context;
 	public static MyHandler handler;
+	//This value is used to associate an installed application to a certain value.
+	//If someone tries to log in the app with another login information, then it won't work.
+	public static String device;
 	//End of user code
 
 	/** Called when the activity is first created. */
@@ -70,6 +75,15 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		//The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
 		//If the user use a device whose api is older than 20, he won't be able to use SSLSocket
 		updateAndroidSecurityProvider(this);
+
+		//If it's the first time the app is used then we will create a random UUI for the device
+		device = getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_DEVICE_TAG, null);
+		if(device == null){
+			device = UUID.randomUUID().toString();
+			SharedPreferences.Editor editor = context.getSharedPreferences(Login_Information, MODE_PRIVATE).edit();
+			editor.putString(SHARED_PREF_DEVICE_TAG, device);
+			editor.apply();
+		}
 
 		((EditText)findViewById(R.id.starting_customview_username)).setText(getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_USERNAME_TAG,""));
 		((EditText)findViewById(R.id.starting_customview_password)).setText(getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_PASSWORD_TAG,""));
@@ -100,7 +114,7 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 				editor.putString(SHARED_PREF_USERNAME_TAG, username);
 				editor.putString(SHARED_PREF_PASSWORD_TAG, password);
 				editor.apply();
-				MobilePrivacyRestClient.getMobilePrivacyRestClient().authenticate(username,password,handler,getContext());
+				MobilePrivacyRestClient.getMobilePrivacyRestClient().authenticate(username,password,device,handler,getContext());
 			} catch (NotConnectedToInternetException e) {
 				Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
 			}
@@ -126,12 +140,13 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 		public void handleMessage(Message msg){
 			//We use that to get the authentication response from the server
 			if(msg.what == HttpPostAsyncTask.HTT_STATUS_CODE){
-				if(msg.obj != null) {
-					if ((Integer) msg.obj == 200) {
+				Message httpResponse = (Message)msg.obj;
+				if(httpResponse != null) {
+					if (httpResponse.what == 200) {
 						Intent intent = new Intent(context, Home_CustomViewActivity.class);
 						context.startActivity(intent);
 					} else {
-						Toast.makeText(context, R.string.starting_customview_invalid_credentials, Toast.LENGTH_LONG).show();
+						Toast.makeText(context, (String)httpResponse.obj, Toast.LENGTH_LONG).show();
 					}
 				}else{
 					Toast.makeText(context, NotConnectedToInternetException.Message, Toast.LENGTH_LONG).show();

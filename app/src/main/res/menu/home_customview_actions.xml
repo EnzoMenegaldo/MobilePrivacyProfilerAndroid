@@ -4,10 +4,10 @@
 	<!--Start of user code customView_menu for Home
 	-->
 	<!-- freely adapt here the desired layout for your menu -->
-	<!--	<item android:id="@+id/home_customview_action_manualscan"
+		<item android:id="@+id/home_customview_action_manualscan"
             android:icon="?attr/ic_action_manualscan"
             android:title="@string/action_manualscan_text"
-            mobileprivacyprofiler:showAsAction="ifRoom" />-->
+            mobileprivacyprofiler:showAsAction="ifRoom" />
 
         <item android:id="@+id/home_customview_action_advancedscanning"
             android:icon="?attr/ic_action_advancedscanning"

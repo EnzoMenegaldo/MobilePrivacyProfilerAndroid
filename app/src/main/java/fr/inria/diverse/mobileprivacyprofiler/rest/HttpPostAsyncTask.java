@@ -3,7 +3,6 @@ package fr.inria.diverse.mobileprivacyprofiler.rest;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 
 import java.io.BufferedInputStream;
@@ -27,11 +26,10 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
-public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
+public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
 
     public static final int HTT_STATUS_CODE = 404;
     private static final String TAG = HttpPostAsyncTask.class.getSimpleName();
-    private String authString ="someAuthString";
     // This is the JSON body of the post
     private String postData;
     private Handler handler;
@@ -46,7 +44,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
 
     // This is a function that we are overriding from AsyncTask. It takes Strings as parameters because that is what we defined for the parameters of our async task
     @Override
-    protected Integer doInBackground(String... params) {
+    protected Message doInBackground(String... params) {
 
         try {
             //We need that because for now the server use a self-signed certificate.
@@ -64,10 +62,6 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
 
             urlConnection.setRequestMethod("POST");
 
-
-            // Sets an authorization header
-            urlConnection.setRequestProperty("Authorization", authString);
-
             // Send the post body
             if (this.postData != null) {
                 OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
@@ -77,18 +71,23 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
 
             int statusCode = urlConnection.getResponseCode();
 
-            if (statusCode ==  201 || statusCode == 200) {
+            Message handlerMessage = new Message();
+            Message bodyMessage = new Message();
 
-                InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+            handlerMessage.what = HTT_STATUS_CODE;
+            bodyMessage.what = statusCode;
 
-                String response = convertInputStreamToString(inputStream);
-                Log.d(TAG, response);
-            } else {
-                // Status code is not 200
-                // Do something to handle the error
-                Log.d(TAG, "Request failed");
-            }
-            return statusCode;
+            InputStream inputStream;
+            if(statusCode == 200 || statusCode == 201)
+                inputStream = new BufferedInputStream(urlConnection.getInputStream());
+            else
+                inputStream = new BufferedInputStream(urlConnection.getErrorStream());
+
+
+            bodyMessage.obj = convertInputStreamToString(inputStream);
+            handlerMessage.obj = bodyMessage;
+
+            return handlerMessage;
 
         } catch (ProtocolException e) {
             e.printStackTrace();
@@ -101,17 +100,13 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
     }
 
     @Override
-    protected void onPostExecute(Integer result) {
-        if (handler != null) {
-            Message message = new Message();
-            message.what = HTT_STATUS_CODE;
-            message.obj = result;
+    protected void onPostExecute(Message message) {
+        if (handler != null && message != null) {
             handler.sendMessage(message);
         }
     }
 
-
-    private static String convertInputStreamToString(InputStream is) {
+    public static String convertInputStreamToString(InputStream is) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
@@ -140,7 +135,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
 
     }
 
-    private void ignoreCertificate(){
+    public static void ignoreCertificate(){
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -175,6 +170,5 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Integer > {
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
-
 
 }
