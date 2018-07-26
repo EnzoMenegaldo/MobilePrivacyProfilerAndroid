@@ -46,6 +46,9 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
     @Override
     protected Message doInBackground(String... params) {
 
+        Message handlerMessage = new Message();
+        handlerMessage.what = HTT_STATUS_CODE;
+
         try {
             //We need that because for now the server use a self-signed certificate.
             ignoreCertificate();
@@ -71,11 +74,8 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
 
             int statusCode = urlConnection.getResponseCode();
 
-            Message handlerMessage = new Message();
-            Message bodyMessage = new Message();
-
-            handlerMessage.what = HTT_STATUS_CODE;
-            bodyMessage.what = statusCode;
+            Message httpResponse = new Message();
+            httpResponse.what = statusCode;
 
             InputStream inputStream;
             if(statusCode == 200 || statusCode == 201)
@@ -84,19 +84,16 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
                 inputStream = new BufferedInputStream(urlConnection.getErrorStream());
 
 
-            bodyMessage.obj = convertInputStreamToString(inputStream);
-            handlerMessage.obj = bodyMessage;
+            httpResponse.obj = convertInputStreamToString(inputStream);
+            handlerMessage.obj = httpResponse;
 
             return handlerMessage;
 
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            handlerMessage.obj = null;
+            return handlerMessage;
         }
-        return null;
     }
 
     @Override
