@@ -366,7 +366,7 @@ public class ScanConnectionIntentService extends IntentService {
 
                     mac = bluetoothDevice.getAddress();
                     name = bluetoothDevice.getName();
-                    type = bluetoothDevice.getType();
+                    type = bluetoothDevice.getBluetoothClass().getDeviceClass();
 
                     if (!getDBHelper().getMobilePrivacyProfilerDBHelper().isRecordedBluetoothDevice(mac)) {
                         fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice newBluetoothDevice = new fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice();
