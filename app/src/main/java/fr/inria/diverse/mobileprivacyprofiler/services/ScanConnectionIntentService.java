@@ -13,7 +13,9 @@ import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
@@ -111,11 +113,15 @@ public class ScanConnectionIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_SCAN_CELL_INFO.equals(action)) {
-                handleActionScanCellInfo();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    handleActionScanCellInfo();
+                }
             }else if (ACTION_SCAN_WIFI.equals(action)) {
                 handleActionScanWifi();
             }else if (ACTION_SCAN_BLUETOOTH.equals(action)) {
-                handleActionScanBluetooth();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    handleActionScanBluetooth();
+                }
             }
         }
     }
@@ -124,7 +130,7 @@ public class ScanConnectionIntentService extends IntentService {
      * Handle action ScanCellInfo in the provided background thread with the provided
      * parameters.
      */
-    @SuppressLint("NewApi")
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void handleActionScanCellInfo() {
         //set up the manager
         Log.d(TAG, "Requesting CellInfo");
@@ -342,7 +348,7 @@ public class ScanConnectionIntentService extends IntentService {
      * Handle action ScanBluetooth in the provided background thread with the provided
      * parameters.
      */
-    @SuppressLint("NewApi")
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void handleActionScanBluetooth() {
         if(PhoneStateUtils.isBluetoothActive()) {
             BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
