@@ -7,11 +7,17 @@ import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.inria.diverse.mobileprivacyprofiler.exception.NotConnectedToInternetException;
 import fr.inria.diverse.mobileprivacyprofiler.rest.HttpPostAsyncTask;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
+import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.PacketManager;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Html;
@@ -33,12 +39,10 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
 
-import com.crashlytics.android.Crashlytics;
-
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-import io.fabric.sdk.android.Fabric;
 //End of user code
 
 public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -85,6 +89,7 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 			editor.apply();
 		}
 
+		//If someone has already logged in, then we load the log in information
 		((EditText)findViewById(R.id.starting_customview_username)).setText(getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_USERNAME_TAG,""));
 		((EditText)findViewById(R.id.starting_customview_password)).setText(getSharedPreferences(Login_Information,MODE_PRIVATE).getString(SHARED_PREF_PASSWORD_TAG,""));
 		handler = new MyHandler(Starting_CustomViewActivity.this);
