@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_state_fragment_txt_before_app_state">L\'application PROFILE est actuellement :\ </string>
+
+    <!--https://developer.android.com/guide/topics/resources/string-resource#StylingWithHTML-->
+    <string name="app_state_fragment_active">&lt;b>&lt;font color="green">ACTIVE&lt;/font>&lt;/b></string>
+    <string name="app_state_fragment_inactive">&lt;b>&lt;font color="red">INACTIVE&lt;/font>&lt;/b></string>
+</resources>

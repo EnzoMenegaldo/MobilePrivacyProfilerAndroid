@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import android.widget.ListView;
 import android.content.Context;
+import android.widget.TextView;
+
 //End of user code
 public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements AdvancedScanning_CustomViewActivity
@@ -97,9 +99,6 @@ public class AdvancedScanning_CustomViewActivity extends OrmLiteActionBarActivit
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.advancedscanning_customview_action_preference:
-	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
 			//Start of user code additional menu action AdvancedScanning_CustomViewActivity
 	
 			//End of user code

@@ -9,92 +9,41 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<LinearLayout
-		android:id="@+id/home_customview_state_layout"
+	<fragment android:name="fr.inria.diverse.mobileprivacyprofiler.activities.AppStateFragment"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:id="@+id/cgu_customview_app_state_fragment"
 		android:layout_gravity="center"
-		android:layout_marginTop="10dp"
-		android:orientation="horizontal">
+		android:layout_marginTop="20dp"/>
+
+	<ScrollView
+		android:layout_width="wrap_content"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:background="@drawable/border"
+		android:layout_marginBottom="10dp"
+		android:layout_marginEnd="50dp"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="20dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="20dp"
+		android:fadeScrollbars="false">
 
 		<TextView
-			android:id="@+id/home_customview_txt_before_app_state"
+			android:id="@+id/cgu_customview_cgu_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="0dp"
-			android:text="@string/home_customview_txt_before_app_state" />
+			android:scrollbars="vertical"
+			android:fadeScrollbars="false"
+			android:paddingRight="10dp"
+			android:paddingEnd="10dp" />
 
-		<TextView
-			android:id="@+id/home_customview_app_state"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/home_customview_app_state_inactive"
-			android:textStyle="bold" />
-	</LinearLayout>
+	</ScrollView>
 
-	<LinearLayout
-		android:id="@+id/help_customview_state_layout"
+	<fragment android:name="fr.inria.diverse.mobileprivacyprofiler.activities.LogoFragment"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center"
-		android:layout_marginTop="0dp"
-		android:orientation="vertical">
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="20dp"
-			android:layout_marginStart="20dp"
-			android:layout_marginTop="0dp"
-			android:text="@string/cgu_customview_title"
-			android:textSize="40sp"
-			android:textStyle="bold" />
-
-		<ScrollView
-			android:id="@+id/text_scrollview_cgu"
-			android:layout_width="match_parent"
-			android:layout_height="300dp"
-			android:layout_weight="3"
-			android:background="#efefef">
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="20dp"
-				android:layout_marginRight="50dp"
-				android:text="@string/cgu_customview_text" />
-		</ScrollView>
-
-	</LinearLayout>
-
-
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="bottom"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/univ_rennes_2" />
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/universite_rennes_1" />
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/irisa" />
-	</LinearLayout>
+		android:id="@+id/logo_fragment" />
 
 </LinearLayout>
 <!--End of user code

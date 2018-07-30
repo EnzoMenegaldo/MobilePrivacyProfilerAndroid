@@ -23,14 +23,20 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.Enumeration;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDBHelper;
+import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.network.ip.IPv4Header;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.tcp.TCPHeader;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.transport.udp.UDPHeader;
+import fr.inria.diverse.mobileprivacyprofiler.utils.DateUtils;
 
 
 /**
@@ -451,4 +457,26 @@ public class PacketUtil {
 
 		return str.toString();
 	}
+
+	public static boolean isInterestingServerName(String serverName){
+		if(serverName.startsWith("www."))
+			return true;
+		return false;
+	}
+
+	public static boolean isNewConnection(String serverName){
+		try {
+			NetActivity lastConnection = MobilePrivacyProfilerDBHelper.getDBHelper(Home_CustomViewActivity.getContext()).getMobilePrivacyProfilerDBHelper().getLastNetConnection(serverName);
+			if(lastConnection == null)
+				return true;
+			Date currentDate = new Date();
+			if(DateUtils.getMinuteFromMillisecond(DateUtils.diff(currentDate,lastConnection.getDate())) > 5)
+				return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }

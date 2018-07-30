@@ -10,9 +10,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.ApplicationHistory;
@@ -39,8 +42,11 @@ import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.SMS;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BatteryUsage;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.NetActivity;
+import fr.inria.diverse.mobileprivacyprofiler.exception.NotConnectedToInternetException;
+import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
 
 // Start of user code additional import for MobilePrivacyRestClient
+import android.os.Handler;
 // End of user code
 
 /** 
@@ -54,7 +60,8 @@ public class MobilePrivacyRestClient {
     
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
-    private String serverUrl = "https://131.254.18.200:4567";
+    private static final String serverUrl = "https://131.254.18.200:4567";
+    private static final String AUTHENTICATION_SERVER_URL = "https://131.254.18.200:8000";
 // End of user code
 	
 	/**
@@ -71,11 +78,24 @@ public class MobilePrivacyRestClient {
         return mobilePrivacyRestClient;
 	}
 
+    /**
+     * Send an authentication request to the server
+     * @param username
+     * @param password
+     * @param device
+     */
+	public void authenticate(String username, String password, String device, Handler handler, Context context) throws NotConnectedToInternetException {
+	    if(PhoneStateUtils.isConnectedToInternet(context))
+            executePostRequest(AUTHENTICATION_SERVER_URL,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\",\"device\":\""+device+"\"}",handler);
+	    else
+	        throw new NotConnectedToInternetException();
+    }
+
 	/**
      * Export the local DB to the server
      * @return
      */
-    public void exportDB(Context context) throws SQLException {
+    public void exportDB(Context context) throws SQLException, NotConnectedToInternetException {
 
         MobilePrivacyProfilerDB_metadata metadata = getDBHelper(context).getMobilePrivacyProfilerDBHelper().getDeviceDBMetadata();
         metadata.setLastTransmissionDate(new Date());
@@ -117,16 +137,20 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportMetadata(Context context) {
-        //query all entries
-        List<MobilePrivacyProfilerDB_metadata> toExport= getDBHelper(context).getMobilePrivacyProfilerDB_metadataDao().queryForAll();
+    private void exportMetadata(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<MobilePrivacyProfilerDB_metadata> toExport = getDBHelper(context).getMobilePrivacyProfilerDB_metadataDao().queryForAll();
 
-        if(null!=toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            //execute the export to the server
-            executePostRequest(this.serverUrl, "/Metadata", postData);
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/Metadata", postData, null);
+            }
         }
+        else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -134,16 +158,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportApplicationHistory(Context context) {
-        //query all entries
-        List<ApplicationHistory> toExport= getDBHelper(context).getApplicationHistoryDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ApplicationHistory",postData);
-        }
+    private void exportApplicationHistory(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ApplicationHistory> toExport = getDBHelper(context).getApplicationHistoryDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ApplicationHistory", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -151,16 +178,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportApplicationUsageStats(Context context) {
-        //query all entries
-        List<ApplicationUsageStats> toExport= getDBHelper(context).getApplicationUsageStatsDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ApplicationUsageStats",postData);
-        }
+    private void exportApplicationUsageStats(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ApplicationUsageStats> toExport = getDBHelper(context).getApplicationUsageStatsDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ApplicationUsageStats", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -168,16 +198,21 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportAuthentification(Context context) {
-        //query all entries
-        List<Authentification> toExport= getDBHelper(context).getAuthentificationDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/Authentification",postData);
-        }
+    private void exportAuthentification(Context context) throws NotConnectedToInternetException {
+        if (PhoneStateUtils.isConnectedToInternet(context)) {
+
+            //query all entries
+            List<Authentification> toExport = getDBHelper(context).getAuthentificationDao().queryForAll();
+
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/Authentification", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -185,16 +220,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContact(Context context) {
-        //query all entries
-        List<Contact> toExport= getDBHelper(context).getContactDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/Contact",postData);
-        }
+    private void exportContact(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<Contact> toExport = getDBHelper(context).getContactDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/Contact", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -202,16 +240,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContactOrganisation(Context context) {
-        //query all entries
-        List<ContactOrganisation> toExport= getDBHelper(context).getContactOrganisationDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactOrganisation",postData);
-        }
+    private void exportContactOrganisation(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ContactOrganisation> toExport = getDBHelper(context).getContactOrganisationDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ContactOrganisation", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -219,16 +260,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContactIM(Context context) {
-        //query all entries
-        List<ContactIM> toExport= getDBHelper(context).getContactIMDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactIM",postData);
-        }
+    private void exportContactIM(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ContactIM> toExport = getDBHelper(context).getContactIMDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ContactIM", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -236,16 +280,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContactEvent(Context context) {
-        //query all entries
-        List<ContactEvent> toExport= getDBHelper(context).getContactEventDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactEvent",postData);
-        }
+    private void exportContactEvent(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ContactEvent> toExport = getDBHelper(context).getContactEventDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ContactEvent", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -253,16 +300,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContactPhoneNumber(Context context) {
-        //query all entries
-        List<ContactPhoneNumber> toExport= getDBHelper(context).getContactPhoneNumberDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactPhoneNumber",postData);
-        }
+    private void exportContactPhoneNumber(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ContactPhoneNumber> toExport = getDBHelper(context).getContactPhoneNumberDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ContactPhoneNumber", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -270,16 +320,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContactPhysicalAddress(Context context) {
-        //query all entries
-        List<ContactPhysicalAddress> toExport= getDBHelper(context).getContactPhysicalAddressDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactPhysicalAddress",postData);
-        }
+    private void exportContactPhysicalAddress(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ContactPhysicalAddress> toExport = getDBHelper(context).getContactPhysicalAddressDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ContactPhysicalAddress", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -287,16 +340,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportContactEmail(Context context) {
-        //query all entries
-        List<ContactEmail> toExport= getDBHelper(context).getContactEmailDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/ContactEmail",postData);
-        }
+    private void exportContactEmail(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<ContactEmail> toExport = getDBHelper(context).getContactEmailDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/ContactEmail", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -304,16 +360,20 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportKnownWifi(Context context) {
-        //query all entries
-        List<KnownWifi> toExport= getDBHelper(context).getKnownWifiDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/KnownWifi",postData);
-        }
+    private void exportKnownWifi(Context context) throws NotConnectedToInternetException {
+        if (PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<KnownWifi> toExport= getDBHelper(context).getKnownWifiDao().queryForAll();
+            if(null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG,postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl,"/KnownWifi",postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
+
     }
 
 	/**
@@ -321,16 +381,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportLogsWifi(Context context) {
-        //query all entries
-        List<LogsWifi> toExport= getDBHelper(context).getLogsWifiDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/LogsWifi",postData);
-        }
+    private void exportLogsWifi(Context context) throws NotConnectedToInternetException {
+        if (PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<LogsWifi> toExport= getDBHelper(context).getLogsWifiDao().queryForAll();
+            if(null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG,postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl,"/LogsWifi",postData, null);
+            }
+        }else
+                throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -338,16 +401,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportGeolocation(Context context) {
-        //query all entries
-        List<Geolocation> toExport= getDBHelper(context).getGeolocationDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/Geolocation",postData);
-        }
+    private void exportGeolocation(Context context) throws NotConnectedToInternetException {
+        if (PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<Geolocation> toExport= getDBHelper(context).getGeolocationDao().queryForAll();
+            if(null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG,postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl,"/Geolocation",postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -355,16 +421,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportCalendarEvent(Context context) {
-        //query all entries
-        List<CalendarEvent> toExport= getDBHelper(context).getCalendarEventDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/CalendarEvent",postData);
-        }
+    private void exportCalendarEvent(Context context) throws NotConnectedToInternetException {
+        if (PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<CalendarEvent> toExport= getDBHelper(context).getCalendarEventDao().queryForAll();
+            if(null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG,postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl,"/CalendarEvent",postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -372,16 +441,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportPhoneCallLog(Context context) {
-        //query all entries
-        List<PhoneCallLog> toExport= getDBHelper(context).getPhoneCallLogDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/PhoneCallLog",postData);
-        }
+    private void exportPhoneCallLog(Context context) throws NotConnectedToInternetException {
+        if (PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<PhoneCallLog> toExport = getDBHelper(context).getPhoneCallLogDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/PhoneCallLog", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -389,16 +461,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportCell(Context context) {
-        //query all entries
-        List<Cell> toExport= getDBHelper(context).getCellDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/Cell",postData);
-        }
+    private void exportCell(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)){
+            //query all entries
+            List<Cell> toExport= getDBHelper(context).getCellDao().queryForAll();
+            if(null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG,postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl,"/Cell",postData, null);
+            }
+        }else
+                throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -406,16 +481,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportOtherCellData(Context context) {
-        //query all entries
-        List<OtherCellData> toExport= getDBHelper(context).getOtherCellDataDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/OtherCellData",postData);
-        }
+    private void exportOtherCellData(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)){
+            //query all entries
+            List<OtherCellData> toExport= getDBHelper(context).getOtherCellDataDao().queryForAll();
+            if(null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG,postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl,"/OtherCellData",postData, null);
+            }
+        }else
+                throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -423,16 +501,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportCdmaCellData(Context context) {
-        //query all entries
-        List<CdmaCellData> toExport= getDBHelper(context).getCdmaCellDataDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/CdmaCellData",postData);
-        }
+    private void exportCdmaCellData(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<CdmaCellData> toExport = getDBHelper(context).getCdmaCellDataDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/CdmaCellData", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -440,16 +521,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportNeighboringCellHistory(Context context) {
-        //query all entries
-        List<NeighboringCellHistory> toExport= getDBHelper(context).getNeighboringCellHistoryDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/NeighboringCellHistory",postData);
-        }
+    private void exportNeighboringCellHistory(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<NeighboringCellHistory> toExport = getDBHelper(context).getNeighboringCellHistoryDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/NeighboringCellHistory", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -457,16 +541,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportBluetoothDevice(Context context) {
-        //query all entries
-        List<BluetoothDevice> toExport= getDBHelper(context).getBluetoothDeviceDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/BluetoothDevice",postData);
-        }
+    private void exportBluetoothDevice(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<BluetoothDevice> toExport = getDBHelper(context).getBluetoothDeviceDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/BluetoothDevice", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -474,16 +561,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportBluetoothLog(Context context) {
-        //query all entries
-        List<BluetoothLog> toExport= getDBHelper(context).getBluetoothLogDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/BluetoothLog",postData);
-        }
+    private void exportBluetoothLog(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<BluetoothLog> toExport = getDBHelper(context).getBluetoothLogDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/BluetoothLog", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -491,16 +581,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportSMS(Context context) {
-        //query all entries
-        List<SMS> toExport= getDBHelper(context).getSMSDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/SMS",postData);
-        }
+    private void exportSMS(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<SMS> toExport = getDBHelper(context).getSMSDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/SMS", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -508,16 +601,19 @@ public class MobilePrivacyRestClient {
      * @param context
      * @throws SQLException
      */
-    private void exportBatteryUsage(Context context) {
-        //query all entries
-        List<BatteryUsage> toExport= getDBHelper(context).getBatteryUsageDao().queryForAll();
-        if(null != toExport && !toExport.isEmpty()) {
-            //translation of the collection into Json
-            String postData = serialize(toExport);
-            Log.d(TAG,postData);
-            //execute the export to the server
-            executePostRequest(this.serverUrl,"/BatteryUsage",postData);
-        }
+    private void exportBatteryUsage(Context context) throws NotConnectedToInternetException {
+        if(PhoneStateUtils.isConnectedToInternet(context)) {
+            //query all entries
+            List<BatteryUsage> toExport = getDBHelper(context).getBatteryUsageDao().queryForAll();
+            if (null != toExport && !toExport.isEmpty()) {
+                //translation of the collection into Json
+                String postData = serialize(toExport);
+                Log.d(TAG, postData);
+                //execute the export to the server
+                executePostRequest(this.serverUrl, "/BatteryUsage", postData, null);
+            }
+        }else
+            throw new NotConnectedToInternetException();
     }
 
 	/**
@@ -533,7 +629,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/NetActivity",postData);
+            executePostRequest(this.serverUrl,"/NetActivity",postData,null);
         }
     }
 
@@ -543,9 +639,9 @@ public class MobilePrivacyRestClient {
      * @param apiPath
      * @param postData
      */
-    private void executePostRequest(String serverUrl,String apiPath,String postData){
+    private void executePostRequest(String serverUrl,String apiPath,String postData, Handler handler){
         try {
-            HttpPostAsyncTask task = new HttpPostAsyncTask(postData);
+            HttpPostAsyncTask task = new HttpPostAsyncTask(postData,handler);
             task.execute( serverUrl+ apiPath);
         } catch (Exception e) { e.printStackTrace(); }
     }

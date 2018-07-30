@@ -9,71 +9,39 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<LinearLayout
-		android:id="@+id/home_customview_state_layout"
+	<fragment android:name="fr.inria.diverse.mobileprivacyprofiler.activities.AppStateFragment"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:id="@+id/help_customview_app_state_fragment"
 		android:layout_gravity="center"
-		android:layout_marginTop="10dp"
-		android:orientation="horizontal">
+		android:layout_marginTop="20dp"/>
 
-		<TextView
-			android:id="@+id/home_customview_txt_before_app_state"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="0dp"
-			android:text="@string/home_customview_txt_before_app_state" />
 
-		<TextView
-			android:id="@+id/home_customview_app_state"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/home_customview_app_state_inactive"
-			android:textStyle="bold" />
-	</LinearLayout>
 
-	<LinearLayout
-		android:id="@+id/help_customview_state_layout"
+	<TextView
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center"
-		android:layout_marginTop="10dp"
-		android:orientation="vertical">
+		android:layout_marginEnd="50dp"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="20dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="20dp"
+		android:text="@string/help_customview_text" />
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="20dp"
-			android:layout_marginStart="20dp"
-			android:layout_marginTop="10dp"
-			android:text="@string/help_customview_title"
-			android:textSize="40sp"
-			android:textStyle="bold" />
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginEnd="50dp"
-			android:layout_marginLeft="20dp"
-			android:layout_marginRight="50dp"
-			android:layout_marginStart="20dp"
-			android:layout_marginTop="10dp"
-			android:text="@string/help_customview_text" />
-	</LinearLayout>
 
 
 	<LinearLayout
-		android:layout_width="271dp"
-		android:layout_height="195dp"
-		android:layout_gravity="center"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
 		android:layout_weight="1"
+		android:layout_gravity="center"
+		android:layout_margin="10dp"
 		android:orientation="vertical">
 
 		<Button
 			android:id="@+id/FAQbtn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:onClick="onClickFAQBtn"
 			android:text="@string/help_customview_faq_btn_label" />
 
@@ -81,7 +49,6 @@
 			android:id="@+id/Contactbtn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:onClick="onClickContactBtn"
 			android:text="@string/help_customview_contact_btn_label" />
 
@@ -89,40 +56,18 @@
 			android:id="@+id/CGUbtn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_weight="1"
 			android:onClick="onClickCGUBtn"
 			android:text="@string/help_customview_cgu_btn_label" />
+
+
 	</LinearLayout>
 
 
 
-	<LinearLayout
+	<fragment android:name="fr.inria.diverse.mobileprivacyprofiler.activities.LogoFragment"
 		android:layout_width="match_parent"
-		android:layout_height="65dp"
-		android:gravity="bottom"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/univ_rennes_2" />
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/universite_rennes_1" />
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/irisa" />
-	</LinearLayout>
+		android:layout_height="wrap_content"
+		android:id="@+id/logo_fragment" />
 
 </LinearLayout>
 <!--End of user code

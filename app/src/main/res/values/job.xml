@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="job_export_data">Exporter les données</string>
+    <string name="job_scan_app_usage">Usage des applications</string>
+    <string name="job_scan_battery_usage">Usage de la batterie</string>
+    <string name="job_record_location">Géolocalisation</string>
+    <string name="job_scan_authenticators">Comptes utilisateurs </string>
+    <string name="job_scan_net_activity">Activité sur le web</string>
+    <string name="job_scan_cell_info">Antennes relais</string>
+    <string name="job_scan_wifi">WIFI</string>
+    <string name="job_scan_bluetooth">Bluetooth</string>
+    <string name="job_scan_contacts">Contact</string>
+    <string name="job_scan_sms">SMS</string>
+    <string name="job_scan_call_history">Historique des appels</string>
+    <string name="job_scan_calendar_event">Évènement du calendrier</string>
+</resources>

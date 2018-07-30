@@ -10,6 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.utils.AppStateViewModel;
 import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 
 public class JobList_Adapter extends BaseAdapter {
@@ -62,11 +63,11 @@ public class JobList_Adapter extends BaseAdapter {
                     JobEnum job = (JobEnum)viewHolder.jobSwitchId.getTag();
                     if (bChecked) {
                         job.setSelected(bChecked);
-                        if(Starting_CustomViewActivity.isCollectionRunning())
+                        if(AppStateViewModel.isCollectionRunning(context))
                             job.run();
                     } else {
                         job.setSelected(bChecked);
-                        if(Starting_CustomViewActivity.isCollectionRunning())
+                        if(AppStateViewModel.isCollectionRunning(context))
                             job.cancel();
                     }
                 }
@@ -77,12 +78,12 @@ public class JobList_Adapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        JobEnum currentService = (JobEnum)getItem(position);
-        viewHolder.jobTextView.setText(currentService.toString());
+        JobEnum currentJob = (JobEnum)getItem(position);
+        viewHolder.jobTextView.setText(currentJob.getName());
 
-        viewHolder.jobSwitchId.setTag(currentService);
+        viewHolder.jobSwitchId.setTag(currentJob);
 
-        viewHolder.jobSwitchId.setChecked(currentService.isSelected());
+        viewHolder.jobSwitchId.setChecked(currentJob.isSelected());
 
         return convertView;
 

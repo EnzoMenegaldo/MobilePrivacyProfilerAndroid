@@ -47,7 +47,8 @@ public class Packet {
 	@NonNull private final byte[] buffer;
 	private int applicationID;
 	private final String applicationName;
-	@NonNull private final String hostName;
+
+	@NonNull private String hostName;
 	@NonNull private final Date time;
 
 	private OrmLiteDBHelper dbHelper;
@@ -72,8 +73,6 @@ public class Packet {
 			applicationName = PacketSnifferService.PackageManager.getNameForUid(applicationID);
 		else
 			applicationName = "unknown";
-
-		hostName = PacketUtil.intToHostname(ipHeader.getDestinationIP());
 
 		time = new Date();
 
@@ -129,6 +128,10 @@ public class Packet {
 
 	@NonNull
 	public String getHostName(){return  hostName;}
+
+	public void setHostName(@NonNull String hostName) {
+		this.hostName = hostName;
+	}
 
 	/**
 	 * the whole packet data as an array of byte

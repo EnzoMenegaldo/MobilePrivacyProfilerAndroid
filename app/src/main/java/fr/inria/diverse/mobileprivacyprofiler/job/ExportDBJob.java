@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
+import fr.inria.diverse.mobileprivacyprofiler.exception.NotConnectedToInternetException;
 import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanSocialIntentService;
 
@@ -40,6 +41,8 @@ public class ExportDBJob extends Job {
             try {
                 new  MobilePrivacyRestClient().exportDB(getContext());
             } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (NotConnectedToInternetException e) {
                 e.printStackTrace();
             }
 

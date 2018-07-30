@@ -4,12 +4,12 @@
 	<!--Start of user code customView_menu for Starting
 	-->
 	<!-- freely adapt here the desired layout for your menu -->
+	<item android:id="@+id/starting_customview_to_help_customview"
+		android:icon="@android:drawable/ic_menu_help"
+		android:title="@string/action_go_to_help_customview"
+		mobileprivacyprofiler:showAsAction="ifRoom" />
 	<!--End of user code
 	-->
-	<item android:id="@+id/starting_customview_action_preference"
-	      android:icon="@android:drawable/ic_menu_preferences"
-	      android:title="@string/preferences_menu_title"
-	      mobileprivacyprofiler:showAsAction="never"  />
 </menu>
 
 

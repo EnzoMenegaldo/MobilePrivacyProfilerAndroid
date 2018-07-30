@@ -4,10 +4,12 @@ package fr.inria.diverse.mobileprivacyprofiler.activities;
 
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 import fr.inria.diverse.mobileprivacyprofiler.R;
+import fr.inria.diverse.mobileprivacyprofiler.utils.AppStateViewModel;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,49 +20,23 @@ import fr.inria.diverse.mobileprivacyprofiler.utils.JobEnum;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.VpnService;
-import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.WifiScanReceiver;
+
 import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
-import fr.inria.diverse.mobileprivacyprofiler.job.ExportDBJob;
 import fr.inria.diverse.mobileprivacyprofiler.job.MobilePrivacyProfilerJobCreator;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanAppUsageJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanBatteryJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanBluetoothJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanCalendarJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanCellJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanContactJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanGeolocationJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanPhoneCallLogJob;
-import fr.inria.diverse.mobileprivacyprofiler.job.ScanSMSJob;
+
 import android.util.Log;
 import android.Manifest;
-import android.app.Activity;
-import fr.inria.diverse.mobileprivacyprofiler.utils.PhoneStateUtils;
-import fr.inria.diverse.mobileprivacyprofiler.rest.MobilePrivacyRestClient;
-import fr.inria.diverse.mobileprivacyprofiler.services.OperationDBService;
-import fr.inria.diverse.mobileprivacyprofiler.datamodel.MobilePrivacyProfilerDB_metadata;
-import fr.inria.diverse.mobileprivacyprofiler.utils.ParametersUtils;
 
 import android.content.Context;
 
 import android.view.View;
 
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.security.ProviderInstaller;
 
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Set;
+import java.io.IOException;
 
 //End of user code
 public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
@@ -98,43 +74,33 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code		
         setContentView(R.layout.home_customview);
         //Start of user code onCreate Home_CustomViewActivity
-        if(savedInstanceState != null)
-            Starting_CustomViewActivity.app_state = savedInstanceState.getString(BUNDLE_IS_RUNNING_TAG);
 
         if (!PhoneStateUtils.hasPermission(this,PERMISSIONS)){
             PhoneStateUtils.requestPermissions(this,PERMISSIONS);
         }
 
-        //The Android API docs correctly state that TLSv1.2 is only supported for SSLEngine in API Level 20 or later (Lollipop) while SSLSocket supports it since level 16.
-        //If the user use a device whose api is older than 20, he won't be able to use SSLSocket
-        updateAndroidSecurityProvider(this);
-
-
         JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
 
 
         ToggleButton toggleCollection = (ToggleButton)findViewById(R.id.home_customview_toggle_collection);
-        TextView app_state_text_view = (TextView)findViewById(R.id.home_customview_app_state);
-        app_state_text_view.setText(Starting_CustomViewActivity.app_state);
         TextView screen_explanation = (TextView)findViewById(R.id.home_customview_screen_explanation);
-
-        toggleCollection.setChecked(Starting_CustomViewActivity.isCollectionRunning());
 
         toggleCollection.setOnClickListener(view -> {
             if(((ToggleButton)view).isChecked()){
                 setupVpn();
                 runSelectedJob();
-                Starting_CustomViewActivity.app_state = getString(R.string.home_customview_app_state_active);
-                app_state_text_view.setText(Starting_CustomViewActivity.app_state);
+                AppStateViewModel.getCurrentState(getContext()).setValue(Html.fromHtml(getString(R.string.app_state_fragment_active)));
                 screen_explanation.setText(R.string.home_customview_stop_collection);
             }else{
                 cancelSelectedJob();
-                Starting_CustomViewActivity.app_state =getString(R.string.home_customview_app_state_inactive);
-                app_state_text_view.setText(Starting_CustomViewActivity.app_state);
+                AppStateViewModel.getCurrentState(getContext()).setValue(Html.fromHtml(getString(R.string.app_state_fragment_inactive)));
                 screen_explanation.setText(R.string.home_customview_run_collection);
             }
         });
-		//End of user code
+
+        toggleCollection.setChecked(AppStateViewModel.isCollectionRunning(getContext()));
+
+        //End of user code
     }
     
     @Override
@@ -151,34 +117,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     }
 
     public static Context getContext(){return Starting_CustomViewActivity.getContext();}
-
-
-    /**
-     * Save the activity state when it stops.
-     * @param outState
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(BUNDLE_IS_RUNNING_TAG, Starting_CustomViewActivity.app_state);
-    }
-
-    /**
-     * Install a newer security provider using Google Play Services to allow the application to use SSLSocket.
-     * If the devise has an API lower than 20, by default, he won't be able to use SSLSocket.
-     * https://stackoverflow.com/questions/29916962/javax-net-ssl-sslhandshakeexception-javax-net-ssl-sslprotocolexception-ssl-han/36892715#36892715
-     */
-    private void updateAndroidSecurityProvider(Activity callingActivity) {
-        try {
-            ProviderInstaller.installIfNeeded(this);
-        } catch (GooglePlayServicesRepairableException e) {
-            // Thrown when Google Play Services is not installed, up-to-date, or enabled
-            // Show dialog to allow users to install, update, or otherwise enable Google Play services.
-            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
-        } catch (GooglePlayServicesNotAvailableException e) {
-            Log.e("SecurityException", "Google Play Services not available.");
-        }
-    }
 
     /**
      * Schedule all selected jobs
@@ -294,9 +232,9 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.home_customview_action_preference:
+			/*case R.id.home_customview_action_preference:
 	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
+	            return true;*/
 			//Start of user code additional menu action Home_CustomViewActivity
             case R.id.home_customview_action_advancedscanning:
                 startActivity(new Intent(this, AdvancedScanning_CustomViewActivity.class));
@@ -304,10 +242,14 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             case R.id.home_customview_action_manualscan:
                 startActivity(new Intent(this, ManualScan_CustomViewActivity.class));
                 return true;
+            case R.id.home_customview_to_help_customview:
+                startActivity(new Intent(this, Help_CustomViewActivity.class));
+                return true;
 			//End of user code
 			default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 }

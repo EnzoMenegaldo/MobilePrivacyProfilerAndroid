@@ -15,22 +15,26 @@ import android.view.MenuItem;
 
 //Start of user code additional imports FAQ_CustomViewActivity
 
-import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
-
-import android.app.Activity;
-import android.content.Context;
-
-import android.util.Log;
-
 import android.view.View;
 
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 //End of user code
 public class FAQ_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
 //Start of user code additional implements FAQ_CustomViewActivity
@@ -51,8 +55,9 @@ public class FAQ_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
 		//End of user code		
         setContentView(R.layout.faq_customview);
         //Start of user code onCreate FAQ_CustomViewActivity
-        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
-        textElement.setText(Starting_CustomViewActivity.app_state);
+        ListView serviceListView = (ListView)findViewById(R.id.faq_customview_questions_list);
+        FAQList_Adapter adapter = new FAQList_Adapter(getApplicationContext(),parseFAQFile());
+        serviceListView.setAdapter(adapter);
 		//End of user code
     }
     
@@ -61,13 +66,29 @@ public class FAQ_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
 		super.onResume();
 		refreshScreenData();
 		//Start of user code onResume FAQ_CustomViewActivity
-        TextView textElement = (TextView) findViewById(R.id.home_customview_app_state);
-        textElement.setText(Starting_CustomViewActivity.app_state);
 		//End of user code
 	}
     //Start of user code additional code FAQ_CustomViewActivity
 	public void onClickBtnSample(View view){
 		showToast("sample button pressed. \nPlease customize ;-)");
+    }
+
+    /**
+     * Parse the faq file to return a JsonNode[] whose each JsonNode contains a question and its answer.
+     * @return
+     */
+    public JsonNode[] parseFAQFile(){
+        try {
+            JsonNode root = new ObjectMapper().readTree(new BufferedInputStream(getResources().openRawResource(R.raw.faq_profile)));
+            List<JsonNode> faq_list = new ArrayList<>();
+            Iterator<JsonNode> iterator = root.elements();
+            while(iterator.hasNext())
+                faq_list.add(iterator.next());
+            return faq_list.toArray(new JsonNode[faq_list.size()]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 	//End of user code
 
@@ -101,9 +122,6 @@ public class FAQ_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHe
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			case R.id.faq_customview_action_preference:
-	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;
 			//Start of user code additional menu action FAQ_CustomViewActivity
 	
 			//End of user code

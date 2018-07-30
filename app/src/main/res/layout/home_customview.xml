@@ -10,28 +10,12 @@
 	android:orientation="vertical">
 
 
-	<LinearLayout
-		android:id="@+id/home_customview_state_layout"
+	<fragment android:name="fr.inria.diverse.mobileprivacyprofiler.activities.AppStateFragment"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:id="@+id/home_customview_app_state_fragment"
 		android:layout_gravity="center"
-		android:layout_marginTop="20dp"
-		android:orientation="horizontal">
-
-		<TextView
-			android:id="@+id/home_customview_txt_before_app_state"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="0dp"
-			android:text="@string/home_customview_txt_before_app_state" />
-
-		<TextView
-			android:id="@+id/home_customview_app_state"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/home_customview_app_state_inactive"
-			android:textStyle="bold" />
-	</LinearLayout>
+		android:layout_marginTop="20dp"/>
 
 
 	<TextView
@@ -60,46 +44,10 @@
 	</LinearLayout>
 
 
-	<ImageButton
-		android:id="@+id/HelpImageButton"
-		android:layout_width="75dp"
-		android:layout_height="75dp"
-		android:layout_marginBottom="10dip"
-		android:layout_marginLeft="10dip"
-		android:layout_marginRight="10dip"
-		android:layout_marginTop="10dip"
-		android:background="#efefef"
-		android:onClick="onClickHelpBtn"
-		android:scaleType="centerCrop"
-		app:srcCompat="@drawable/iconhelp" />
-
-	<LinearLayout
+	<fragment android:name="fr.inria.diverse.mobileprivacyprofiler.activities.LogoFragment"
 		android:layout_width="match_parent"
-		android:layout_height="65dp"
-		android:gravity="bottom"
-		android:orientation="horizontal">
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/univ_rennes_2" />
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/universite_rennes_1" />
-
-		<ImageView
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:padding="5dp"
-			android:src="@drawable/irisa" />
-	</LinearLayout>
+		android:layout_height="wrap_content"
+		android:id="@+id/logo_fragment" />
 
 </LinearLayout>
 <!--End of user code

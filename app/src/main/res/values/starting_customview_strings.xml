@@ -6,8 +6,12 @@
 	<!-- freely add here the desired resource String for your custom view -->
 	<string name="starting_customview_sample_btn_label">SampleButton</string>
 	<string name="welcome_txt">Bienvenue</string>
-	<string name="intro_txt">L\'application PROFILE est réservée à un usage scientifique. Si vous avez un code foruni par les chercheurs entrez le ci-dessous.</string>
-	<string name="btnOK">OK</string>
+	<string name="intro_txt">L\'application PROFILE est réservée à un usage scientifique. Entrez ci-dessous les informations que nous vous avons transmises.</string>
+	<string name="starting_customview_validate_btn_text">Valider</string>
+	<string name="starting_customview_username_label">Nom d\'utilisateur</string>
+	<string name="starting_customview_password_label">Mot de passe</string>
+	<string name="starting_customview_invalid_credentials">Les informations que vous avez rentrées sont erronées</string>
+	<string name="starting_customview_null_credentials">Vous devez rentrer les informations demandées pour utiliser l\'application</string>
 	<!-- End of user code
 	-->
 </resources>

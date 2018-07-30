@@ -1,7 +1,8 @@
 package fr.inria.diverse.mobileprivacyprofiler.rest;
 
 import android.os.AsyncTask;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 
 
 import java.io.BufferedInputStream;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -23,28 +26,32 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
-public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
+public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
 
+    public static final int HTT_STATUS_CODE = 404;
     private static final String TAG = HttpPostAsyncTask.class.getSimpleName();
-    private String authString ="someAuthString";
     // This is the JSON body of the post
-    String postData;
+    private String postData;
+    private Handler handler;
 
     // This is a constructor that allows you to pass in the JSON body
-    public HttpPostAsyncTask(String postData) {
+    public HttpPostAsyncTask(String postData, Handler handler) {
         if (postData != null) {
             this.postData = postData;
-
-            //We need that because for now the server use a self-signed certificate.
-            ignoreCertificate();
+            this.handler = handler;
         }
     }
 
     // This is a function that we are overriding from AsyncTask. It takes Strings as parameters because that is what we defined for the parameters of our async task
     @Override
-    protected Void doInBackground(String... params) {
+    protected Message doInBackground(String... params) {
+
+        Message handlerMessage = new Message();
+        handlerMessage.what = HTT_STATUS_CODE;
 
         try {
+            //We need that because for now the server use a self-signed certificate.
+            ignoreCertificate();
             // This is getting the url from the string we passed in
             URL url = new URL(params[0]);
             // Create the urlConnection
@@ -58,10 +65,6 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
 
             urlConnection.setRequestMethod("POST");
 
-
-            // Sets an authorization header
-            urlConnection.setRequestProperty("Authorization", authString);
-
             // Send the post body
             if (this.postData != null) {
                 OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
@@ -71,30 +74,36 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
 
             int statusCode = urlConnection.getResponseCode();
 
-            if (statusCode ==  201) {
+            Message httpResponse = new Message();
+            httpResponse.what = statusCode;
 
-                InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+            InputStream inputStream;
+            if(statusCode == 200 || statusCode == 201)
+                inputStream = new BufferedInputStream(urlConnection.getInputStream());
+            else
+                inputStream = new BufferedInputStream(urlConnection.getErrorStream());
 
-                String response = convertInputStreamToString(inputStream);
-                Log.d(TAG, response);
-                // From here you can convert the string to JSON with whatever JSON parser you like to use
 
-                // After converting the string to JSON, I call my custom callback. You can follow this process too, or you can implement the onPostExecute(Result) method
-                //TODO
-            } else {
-                // Status code is not 200
-                // Do something to handle the error
-                Log.d(TAG, "Error while exporting data to server : check server statue and device connection");
-            }
+            httpResponse.obj = convertInputStreamToString(inputStream);
+            handlerMessage.obj = httpResponse;
 
-        } catch (Exception e) {
-            Log.d(TAG, e.getLocalizedMessage());
+            return handlerMessage;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            handlerMessage.obj = null;
+            return handlerMessage;
         }
-        return null;
     }
 
+    @Override
+    protected void onPostExecute(Message message) {
+        if (handler != null && message != null) {
+            handler.sendMessage(message);
+        }
+    }
 
-    private static String convertInputStreamToString(InputStream is) {
+    public static String convertInputStreamToString(InputStream is) {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
@@ -123,7 +132,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
 
     }
 
-    private void ignoreCertificate(){
+    public static void ignoreCertificate(){
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -158,6 +167,5 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void, Void> {
         // Install the all-trusting host verifier
         HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
     }
-
 
 }

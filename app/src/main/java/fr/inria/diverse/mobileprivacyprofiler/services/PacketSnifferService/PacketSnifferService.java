@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.net.VpnService;
 import android.nfc.Tag;
 import android.os.Build;
@@ -33,6 +35,8 @@ import android.os.SystemClock;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.packetRebuild.PCapFileWriter;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.socket.IProtectSocket;
@@ -50,7 +54,9 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class PacketSnifferService extends VpnService implements Handler.Callback,
@@ -61,7 +67,6 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	public static final String STOP_SERVICE_INTENT = "stop_service";
 	private static final String TAG = "PacketSniffer";
 
-	private static final String[] ALLOWED_APPLICATIONS = {"com.android.chrome"};
 	private static final int MAX_PACKET_LEN = 1500;
 
 	private Handler mHandler;
@@ -345,9 +350,9 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 
 		//If the mobile has an API higher than LOLLIPOP then only some applications will be allowed to pass through the VPN
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			for(String app : ALLOWED_APPLICATIONS) {
+			for(String browser : getBrowserApplication()) {
 				try {
-					builder.addAllowedApplication(app);
+					builder.addAllowedApplication(browser);
 				} catch (android.content.pm.PackageManager.NameNotFoundException e) {
 					e.printStackTrace();
 				}
@@ -491,4 +496,23 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 		}
 	}
 
+
+	/**
+	 * Ask the package manager to retrieve all the app browser.
+	 * @return the list of all browser package names
+	 */
+	private List<String> getBrowserApplication(){
+		List<String> browserList = new ArrayList<>();
+
+		Intent example =  new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_BROWSER);
+
+		List<ResolveInfo> resolveInfos = getPackageManager().queryIntentActivities(example,0);
+
+		for(ResolveInfo info : resolveInfos)
+			browserList.add(info.activityInfo.packageName);
+
+		return browserList;
+	}
+
 }
+
