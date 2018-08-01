@@ -34,11 +34,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.security.ProviderInstaller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +58,7 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 	public static final String SHARED_PREF_USERNAME_TAG = "username";
 	public static final String SHARED_PREF_PASSWORD_TAG = "password";
 	public static final String SHARED_PREF_DEVICE_TAG = "device";
+	public static final String SHARED_PREF_TOKEN_TAG = "token";
 	//End of user code
 
 	//Start of user code Static initialization  Starting_CustomViewActivity
@@ -148,6 +152,7 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 				Message httpResponse = (Message)msg.obj;
 				if(httpResponse != null) {
 					if (httpResponse.what == 200) {
+						updateToken((String)httpResponse.obj);
 						Intent intent = new Intent(context, Home_CustomViewActivity.class);
 						context.startActivity(intent);
 					} else {
@@ -174,6 +179,27 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 			GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), callingActivity, 0);
 		} catch (GooglePlayServicesNotAvailableException e) {
 			Log.e("SecurityException", "Google Play Services not available.");
+		}
+	}
+
+	/**
+	 * Update the token associated to the session in the shared preference file
+	 * @param httpBody body response when the authentication successes
+	 */
+	public static void updateToken(String httpBody){
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNodeRoot;
+		String token;
+		try {
+			jsonNodeRoot = objectMapper.readTree(httpBody);
+			token = jsonNodeRoot.get("access_token").asText();
+
+			SharedPreferences.Editor editor = context.getSharedPreferences(Login_Information, MODE_PRIVATE).edit();
+			editor.putString(SHARED_PREF_TOKEN_TAG, token);
+			editor.apply();
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	//End of user code

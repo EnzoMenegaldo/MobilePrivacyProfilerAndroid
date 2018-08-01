@@ -1,9 +1,12 @@
 /*  */
 package fr.inria.diverse.mobileprivacyprofiler.rest;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
+import fr.inria.diverse.mobileprivacyprofiler.activities.Starting_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.OrmLiteDBHelper;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -60,8 +63,7 @@ public class MobilePrivacyRestClient {
     
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
-    private static final String serverUrl = "https://131.254.18.200:4567";
-    private static final String AUTHENTICATION_SERVER_URL = "https://131.254.18.200:8000";
+    private static final String serverUrl = "http://131.254.18.200:4567";
 // End of user code
 	
 	/**
@@ -86,7 +88,7 @@ public class MobilePrivacyRestClient {
      */
 	public void authenticate(String username, String password, String device, Handler handler, Context context) throws NotConnectedToInternetException {
 	    if(PhoneStateUtils.isConnectedToInternet(context))
-            executePostRequest(AUTHENTICATION_SERVER_URL,"/Authenticate","{\"username\":\""+username+"\",\"password\":\""+password+"\",\"device\":\""+device+"\"}",handler);
+            executePostRequest(serverUrl,"/Authentication","{\"username\":\""+username+"\",\"password\":\""+password+"\",\"device\":\""+device+"\"}",handler);
 	    else
 	        throw new NotConnectedToInternetException();
     }
@@ -648,7 +650,7 @@ public class MobilePrivacyRestClient {
 
 	/**
      * @param object
-     * @return a json String from your object
+     * @return a json String containing a token field and a field from your object
      */
     private String serialize (Object object) {
         //translation of object into Json
@@ -661,7 +663,12 @@ public class MobilePrivacyRestClient {
             Log.d(TAG, "serialized : "+jsonObjectOutput);
 
         } catch (JsonProcessingException e) {e.printStackTrace();}
-        return jsonObjectOutput;
+        return addTokenToPostData(jsonObjectOutput);
+    }
+    
+    private String addTokenToPostData(String data){
+        String token = Starting_CustomViewActivity.getContext().getSharedPreferences(Starting_CustomViewActivity.Login_Information,Context.MODE_PRIVATE).getString(Starting_CustomViewActivity.SHARED_PREF_TOKEN_TAG,"");
+        return "{\"token\":\""+token+"\",\"data\":"+data+"}";
     }
 
     /**
