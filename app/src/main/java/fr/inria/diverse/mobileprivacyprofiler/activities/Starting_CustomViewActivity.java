@@ -147,16 +147,24 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 
 		@Override
 		public void handleMessage(Message msg){
-			//We use that to get the authentication response from the server
-			if(msg.what == HttpPostAsyncTask.HTT_STATUS_CODE){
+			//Handle authentication response from the server
+			if(msg.what == MobilePrivacyRestClient.LOGIN_REQUEST_CODE){
 				Message httpResponse = (Message)msg.obj;
 				if(httpResponse != null) {
+					ObjectMapper objectMapper = new ObjectMapper();
+					JsonNode jsonNodeRoot = null;
+					try {
+						jsonNodeRoot = objectMapper.readTree((String)httpResponse.obj);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
 					if (httpResponse.what == 200) {
-						updateToken((String)httpResponse.obj);
+						updateToken(jsonNodeRoot.get("access_token").asText());
 						Intent intent = new Intent(context, Home_CustomViewActivity.class);
 						context.startActivity(intent);
 					} else {
-						Toast.makeText(context, (String)httpResponse.obj, Toast.LENGTH_LONG).show();
+						Toast.makeText(context, jsonNodeRoot.get("result").asText(), Toast.LENGTH_LONG).show();
 					}
 				}else{
 					Toast.makeText(context, NotConnectedToInternetException.Message, Toast.LENGTH_LONG).show();
@@ -184,23 +192,12 @@ public class Starting_CustomViewActivity extends OrmLiteActionBarActivity<OrmLit
 
 	/**
 	 * Update the token associated to the session in the shared preference file
-	 * @param httpBody body response when the authentication successes
+	 * @param token
 	 */
-	public static void updateToken(String httpBody){
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode jsonNodeRoot;
-		String token;
-		try {
-			jsonNodeRoot = objectMapper.readTree(httpBody);
-			token = jsonNodeRoot.get("access_token").asText();
-
-			SharedPreferences.Editor editor = context.getSharedPreferences(Login_Information, MODE_PRIVATE).edit();
-			editor.putString(SHARED_PREF_TOKEN_TAG, token);
-			editor.apply();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void updateToken(String token){
+		SharedPreferences.Editor editor = context.getSharedPreferences(Login_Information, MODE_PRIVATE).edit();
+		editor.putString(SHARED_PREF_TOKEN_TAG, token);
+		editor.apply();
 	}
 	//End of user code
 

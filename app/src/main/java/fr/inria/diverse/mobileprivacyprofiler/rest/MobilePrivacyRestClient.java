@@ -64,6 +64,8 @@ public class MobilePrivacyRestClient {
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
     private static final String serverUrl = "https://userprivacydataserver.diverse-team.fr";
+    public static final int LOGIN_REQUEST_CODE = 100;
+    public static final int DEFAULT_REQUEST_CODE = 0;
 // End of user code
 	
 	/**
@@ -88,7 +90,7 @@ public class MobilePrivacyRestClient {
      */
 	public void authenticate(String username, String password, String device, Handler handler, Context context) throws NotConnectedToInternetException {
 	    if(PhoneStateUtils.isConnectedToInternet(context))
-            executePostRequest(serverUrl,"/Login","{\"username\":\""+username+"\",\"password\":\""+password+"\",\"device\":\""+device+"\"}",handler);
+            executePostRequest(serverUrl,"/Login","{\"username\":\""+username+"\",\"password\":\""+password+"\",\"device\":\""+device+"\"}",handler,LOGIN_REQUEST_CODE);
 	    else
 	        throw new NotConnectedToInternetException();
     }
@@ -148,7 +150,7 @@ public class MobilePrivacyRestClient {
                 //translation of the collection into Json
                 String postData = serialize(toExport);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/Metadata", postData, null);
+                executePostRequest(this.serverUrl, "/Metadata", postData, null,DEFAULT_REQUEST_CODE);
             }
         }
         else
@@ -169,7 +171,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ApplicationHistory", postData, null);
+                executePostRequest(this.serverUrl, "/ApplicationHistory", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -189,7 +191,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ApplicationUsageStats", postData, null);
+                executePostRequest(this.serverUrl, "/ApplicationUsageStats", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -211,7 +213,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/Authentification", postData, null);
+                executePostRequest(this.serverUrl, "/Authentification", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -231,7 +233,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/Contact", postData, null);
+                executePostRequest(this.serverUrl, "/Contact", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -251,7 +253,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ContactOrganisation", postData, null);
+                executePostRequest(this.serverUrl, "/ContactOrganisation", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -271,7 +273,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ContactIM", postData, null);
+                executePostRequest(this.serverUrl, "/ContactIM", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -291,7 +293,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ContactEvent", postData, null);
+                executePostRequest(this.serverUrl, "/ContactEvent", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -311,7 +313,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ContactPhoneNumber", postData, null);
+                executePostRequest(this.serverUrl, "/ContactPhoneNumber", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -331,7 +333,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ContactPhysicalAddress", postData, null);
+                executePostRequest(this.serverUrl, "/ContactPhysicalAddress", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -351,7 +353,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/ContactEmail", postData, null);
+                executePostRequest(this.serverUrl, "/ContactEmail", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -371,7 +373,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG,postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl,"/KnownWifi",postData, null);
+                executePostRequest(this.serverUrl,"/KnownWifi",postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -392,7 +394,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG,postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl,"/LogsWifi",postData, null);
+                executePostRequest(this.serverUrl,"/LogsWifi",postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
                 throw new NotConnectedToInternetException();
@@ -412,7 +414,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG,postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl,"/Geolocation",postData, null);
+                executePostRequest(this.serverUrl,"/Geolocation",postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -432,7 +434,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG,postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl,"/CalendarEvent",postData, null);
+                executePostRequest(this.serverUrl,"/CalendarEvent",postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -452,7 +454,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/PhoneCallLog", postData, null);
+                executePostRequest(this.serverUrl, "/PhoneCallLog", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -472,7 +474,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG,postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl,"/Cell",postData, null);
+                executePostRequest(this.serverUrl,"/Cell",postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
                 throw new NotConnectedToInternetException();
@@ -492,7 +494,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG,postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl,"/OtherCellData",postData, null);
+                executePostRequest(this.serverUrl,"/OtherCellData",postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
                 throw new NotConnectedToInternetException();
@@ -512,7 +514,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/CdmaCellData", postData, null);
+                executePostRequest(this.serverUrl, "/CdmaCellData", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -532,7 +534,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/NeighboringCellHistory", postData, null);
+                executePostRequest(this.serverUrl, "/NeighboringCellHistory", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -552,7 +554,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/BluetoothDevice", postData, null);
+                executePostRequest(this.serverUrl, "/BluetoothDevice", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -572,7 +574,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/BluetoothLog", postData, null);
+                executePostRequest(this.serverUrl, "/BluetoothLog", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -592,7 +594,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/SMS", postData, null);
+                executePostRequest(this.serverUrl, "/SMS", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -612,7 +614,7 @@ public class MobilePrivacyRestClient {
                 String postData = serialize(toExport);
                 Log.d(TAG, postData);
                 //execute the export to the server
-                executePostRequest(this.serverUrl, "/BatteryUsage", postData, null);
+                executePostRequest(this.serverUrl, "/BatteryUsage", postData, null,DEFAULT_REQUEST_CODE);
             }
         }else
             throw new NotConnectedToInternetException();
@@ -631,7 +633,7 @@ public class MobilePrivacyRestClient {
             String postData = serialize(toExport);
             Log.d(TAG,postData);
             //execute the export to the server
-            executePostRequest(this.serverUrl,"/NetActivity",postData,null);
+            executePostRequest(this.serverUrl,"/NetActivity",postData,null,DEFAULT_REQUEST_CODE);
         }
     }
 
@@ -641,9 +643,9 @@ public class MobilePrivacyRestClient {
      * @param apiPath
      * @param postData
      */
-    private void executePostRequest(String serverUrl,String apiPath,String postData, Handler handler){
+    private void executePostRequest(String serverUrl,String apiPath,String postData, Handler handler, int requestCode){
         try {
-            HttpPostAsyncTask task = new HttpPostAsyncTask(postData,handler);
+            HttpPostAsyncTask task = new HttpPostAsyncTask(postData,handler,requestCode);
             task.execute( serverUrl+ apiPath);
         } catch (Exception e) { e.printStackTrace(); }
     }

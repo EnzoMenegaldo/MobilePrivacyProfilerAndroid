@@ -19,17 +19,18 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
 
-    public static final int HTT_STATUS_CODE = 404;
     private static final String TAG = HttpPostAsyncTask.class.getSimpleName();
     // This is the JSON body of the post
     private String postData;
     private Handler handler;
+    private int requestCode;
 
     // This is a constructor that allows you to pass in the JSON body
-    public HttpPostAsyncTask(String postData, Handler handler) {
+    public HttpPostAsyncTask(String postData, Handler handler, int requestCode) {
         if (postData != null) {
             this.postData = postData;
             this.handler = handler;
+            this.requestCode = requestCode;
         }
     }
 
@@ -38,7 +39,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
     protected Message doInBackground(String... params) {
 
         Message handlerMessage = new Message();
-        handlerMessage.what = HTT_STATUS_CODE;
+        handlerMessage.what = requestCode;
 
         try {
             // This is getting the url from the string we passed in
