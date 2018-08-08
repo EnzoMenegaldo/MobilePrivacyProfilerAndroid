@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Intent;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
+import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.BluetoothScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothLog;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.CdmaCellData;
 import fr.inria.diverse.mobileprivacyprofiler.datamodel.Cell;
@@ -387,22 +389,6 @@ public class ScanConnectionIntentService extends IntentService {
                                 //        +", UserId : "+knownWifi.getUserId()
                         );
                     }
-                    //TODO manage the recording of bluetooth paired device activity
-                /*
-                fr.inria.diverse.mobileprivacyprofiler.datamodel.BluetoothDevice dbBluetoothDevice;
-                dbBluetoothDevice = getDBHelper().getMobilePrivacyProfilerDBHelper().getBluetoothDeviceFromMac(mac);
-
-                if(bluetoothDevice.getBondState()) {// device connected?
-                    Log.d(TAG, "Create new BluetoothLog : date : " + date.toString() +
-                                    ", Name : " + name +
-                                    ", MAC : " + mac
-                            //        +", UserId : user
-                    );
-                    BluetoothLog newBluetoothLog = new BluetoothLog();
-                    newBluetoothLog.setDevice(dbBluetoothDevice);
-                    newBluetoothLog.setDate(date);
-                    newBluetoothLog.setUserId(userId);
-                }*/
                 }
             }//end if not null
         }//end if bluetooth active

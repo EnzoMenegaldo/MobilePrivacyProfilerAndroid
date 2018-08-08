@@ -1,5 +1,7 @@
 package fr.inria.diverse.mobileprivacyprofiler.job;
 
+import android.bluetooth.BluetoothDevice;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 
 import com.evernote.android.job.Job;
@@ -10,6 +12,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import fr.inria.diverse.mobileprivacyprofiler.BuildConfig;
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
+import fr.inria.diverse.mobileprivacyprofiler.broadcastReceiver.BluetoothScanReceiver;
 import fr.inria.diverse.mobileprivacyprofiler.services.ScanConnectionIntentService;
 
 /**
@@ -25,7 +29,7 @@ public class ScanBluetoothJob extends Job {
     @Override
     @NonNull
     protected Result onRunJob(@NonNull final Params params) {
-
+        Home_CustomViewActivity.getContext().registerReceiver(BluetoothScanReceiver.INSTANCE,new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED));
         ScanConnectionIntentService.startActionScanBluetooth();
 
         return Result.SUCCESS;
@@ -36,17 +40,9 @@ public class ScanBluetoothJob extends Job {
         if (!jobRequests.isEmpty()) {
             return jobRequests.iterator().next().getJobId();
         }
-        // adapt the triggering of the update
-        long interval = TimeUnit.HOURS.toMillis(12); // every 12 h
-        long flex = TimeUnit.HOURS.toMillis(1); // -+ 1h to execute
-
-        if (DEBUG) {
-            interval = JobRequest.MIN_INTERVAL;
-            flex = JobRequest.MIN_FLEX;
-        }
 
         return new JobRequest.Builder(TAG)
-                .setPeriodic(interval, flex)
+                .startNow()
                 //.setUpdateCurrent(true)
                 //.setRequiresBatteryNotLow(true)
                 //.setRequiresStorageNotLow(true)
@@ -57,6 +53,8 @@ public class ScanBluetoothJob extends Job {
                 .schedule();
     }
     public static void cancelRequest() {
+        Home_CustomViewActivity.getContext().unregisterReceiver(BluetoothScanReceiver.INSTANCE);
+
         Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(TAG);
         if (!jobRequests.isEmpty()) {
             JobManager.instance().cancel(jobRequests.iterator().next().getJobId());
