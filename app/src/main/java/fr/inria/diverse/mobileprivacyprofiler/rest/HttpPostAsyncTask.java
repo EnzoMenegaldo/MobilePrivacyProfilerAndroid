@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
 
 
 public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
@@ -43,7 +44,7 @@ public class HttpPostAsyncTask extends AsyncTask<String, Void , Message > {
             // This is getting the url from the string we passed in
             URL url = new URL(params[0]);
             // Create the urlConnection
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
 
 
             urlConnection.setDoInput(true);

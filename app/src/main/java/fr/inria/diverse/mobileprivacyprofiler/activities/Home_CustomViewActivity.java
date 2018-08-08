@@ -7,8 +7,12 @@ import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.inria.diverse.mobileprivacyprofiler.utils.AppStateViewModel;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,25 +41,25 @@ import android.widget.ToggleButton;
 import com.evernote.android.job.JobManager;
 
 import java.io.IOException;
+import java.security.Permission;
+import java.util.Arrays;
+import java.util.List;
 
 //End of user code
-public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper>
+public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBHelper> implements ActivityCompat.OnRequestPermissionsResultCallback
 //Start of user code additional implements Home_CustomViewActivity
 //End of user code
 {
 	
 	//Start of user code constants Home_CustomViewActivity
-    public static final String BUNDLE_IS_RUNNING_TAG = "isCollectionRunning";
-    private static final int REQUEST_CODE_VPN = 0;
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
-    public static final String[] PERMISSIONS = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
-                                                    Manifest.permission.GET_ACCOUNTS, Manifest.permission.INTERNET,
+    public static List<String> PERMISSIONS = Arrays.asList(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
+                                                    Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE,
                                                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CALENDAR,
                                                             Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_SMS,
                                                                 Manifest.permission.READ_CONTACTS, Manifest.permission.READ_EXTERNAL_STORAGE,
                                                                     Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,
-                                                                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE,
-                                                                            Manifest.permission.ACCESS_NETWORK_STATE};
+                                                                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE);
     private static final String native_lib = "native_lib";
 	//End of user code
 
@@ -75,9 +79,12 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         setContentView(R.layout.home_customview);
         //Start of user code onCreate Home_CustomViewActivity
 
-        if (!PhoneStateUtils.hasPermission(this,PERMISSIONS)){
-            PhoneStateUtils.requestPermissions(this,PERMISSIONS);
-        }
+        //With an api level lower than 23, we have to ask for this permission
+        // https://developer.android.com/reference/android/Manifest.permission#GET_ACCOUNTS
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1)
+            PERMISSIONS.add(Manifest.permission.GET_ACCOUNTS);
+
+        PhoneStateUtils.checkAllPermissions(PERMISSIONS,this);
 
         JobManager.create(this).addJobCreator(new MobilePrivacyProfilerJobCreator());
 
@@ -87,7 +94,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 
         toggleCollection.setOnClickListener(view -> {
             if(((ToggleButton)view).isChecked()){
-                setupVpn();
                 runSelectedJob();
                 AppStateViewModel.getCurrentState(getContext()).setValue(Html.fromHtml(getString(R.string.app_state_fragment_active)));
                 screen_explanation.setText(R.string.home_customview_stop_collection);
@@ -111,11 +117,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//End of user code
 	}
     //Start of user code additional code Home_CustomViewActivity
-    public void onClickHelpBtn(View view){
-        Intent intent = new Intent(this,Help_CustomViewActivity.class);
-        startActivity(intent);
-    }
-
     public static Context getContext(){return Starting_CustomViewActivity.getContext();}
 
     /**
@@ -136,50 +137,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                 job.cancel();
     }
 
-    /**
-     * Show dialog to educate the user about VPN trust
-     * abort app if user chooses to quit
-     * otherwise relaunch the onClickBtnScanNetActivity()
-     */
-    private void showVPNRefusedDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Usage Alert")
-                .setMessage("You must trust the application in order to run a VPN based trace.")
-                .setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setupVpn();
-                    }
-                })
-                .setNegativeButton(getString(R.string.exit), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        showVPNRefusedDialog();
-                    }
-                })
-                .show();
-
-    }
-
-    private void setupVpn() {
-        // check for VPN already running
-        try {
-            if (!PhoneStateUtils.checkForActiveInterface(getString(R.string.vpn_interface))) {
-                // get user permission for VPN
-                Intent intent = VpnService.prepare(this);
-                if (intent != null) {
-                    // ask user for VPN permission
-                    startActivityForResult(intent, 0);
-                } else {
-                    // already have VPN permission
-                    onActivityResult(REQUEST_CODE_VPN, RESULT_OK, null);
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Exception checking network interfaces :" + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
     //End of user code
 
@@ -208,16 +165,16 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 		//Start of user code onActivityResult Home_CustomViewActivity
         switch (requestCode){
             case PhoneStateUtils.MY_PERMISSIONS_REQUEST:
-                if (!PhoneStateUtils.hasPermission(this,PERMISSIONS)){
-                    PhoneStateUtils.requestPermissions(this,PERMISSIONS);
+                if (!PhoneStateUtils.hasAppOpPermissions(this)){
+                    PhoneStateUtils.requestAppOpsPermissions(this);
+                }else{
+                    PhoneStateUtils.setupVpn(this);
                 }
                 break;
 
-            case REQUEST_CODE_VPN :
-                if (resultCode == RESULT_OK) {
-
-                } else if (resultCode == RESULT_CANCELED) {
-                    showVPNRefusedDialog();
+            case PhoneStateUtils.REQUEST_CODE_VPN:
+                if (resultCode == RESULT_CANCELED) {
+                    PhoneStateUtils.setupVpn(this);
                 }
                 break;
 
@@ -232,9 +189,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
     public boolean onOptionsItemSelected(MenuItem item) {
     	// behavior of option menu
         switch (item.getItemId()) {
-			/*case R.id.home_customview_action_preference:
-	        	startActivity(new Intent(this, Preferences_PreferenceViewActivity.class));
-	            return true;*/
 			//Start of user code additional menu action Home_CustomViewActivity
             case R.id.home_customview_action_advancedscanning:
                 startActivity(new Intent(this, AdvancedScanning_CustomViewActivity.class));
@@ -251,5 +205,16 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
         }
     }
 
+    //Get results of ActivityCompat.requestPermissions
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        String[] array = PERMISSIONS.toArray(new String[PERMISSIONS.size()]);
+        if(!PhoneStateUtils.hasBasicPermissions(this,array)){
+            PhoneStateUtils.requestBasicPermissions(this,array);
+        }else if(!PhoneStateUtils.hasAppOpPermissions(this)){
+                PhoneStateUtils.requestAppOpsPermissions(this);
+        }else{
+            PhoneStateUtils.setupVpn(this);
+        }
+    }
 
 }

@@ -163,7 +163,7 @@ public class ScanActivityIntentService extends IntentService {
                 handleActionRecordLocation(intent);
             } else if (ACTION_SCAN_AUTHENTICATORS.equals(action)) {
                 handleActionScanAuthenticators(intent);
-            }else if(ACTION_NET_ACTIVITY.equals(action)){
+            } else if (ACTION_NET_ACTIVITY.equals(action)) {
                 handleActionNetActivity();
             }
         }
@@ -244,7 +244,7 @@ public class ScanActivityIntentService extends IntentService {
             Log.d(TAG, " Stat period required " + DateUtils.printDate(start) +
                     " - " + DateUtils.printDate(end));
             List<UsageStats> stats = usageStatsManager.queryUsageStats(periodType, start, end);
-            Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + PhoneStateUtils.hasPermission(this,Home_CustomViewActivity.PERMISSIONS));
+            //    Log.d(TAG, " usageStatsManager query returned " + stats.size() + " elements; hasPermission= " + PhoneStateUtils.hasPermission(this,Home_CustomViewActivity.PERMISSIONS));
             for (UsageStats appUsageStatsentry : stats) {
                 Log.d(TAG, "stats for " + appUsageStatsentry.getPackageName());
                 ApplicationHistory applicationHistory = getDBHelper().getMobilePrivacyProfilerDBHelper().
@@ -348,22 +348,20 @@ public class ScanActivityIntentService extends IntentService {
          * Reference:
          * https://github.com/googlemaps/android-samples/blob/master/tutorials/CurrentPlaceDetailsOnMap
          */
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
 
             Location location = null;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if(null!=location) {
                 double latitude;

@@ -63,7 +63,7 @@ public class MobilePrivacyRestClient {
     
 	static MobilePrivacyRestClient mobilePrivacyRestClient = null;
 // Start of user code SetUp serverUrl here :
-    private static final String serverUrl = "http://131.254.18.200:4567";
+    private static final String serverUrl = "https://userprivacydataserver.diverse-team.fr";
 // End of user code
 	
 	/**
