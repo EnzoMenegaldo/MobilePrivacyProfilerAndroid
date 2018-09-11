@@ -149,7 +149,6 @@ public class ScanConnectionIntentService extends IntentService {
         }
         TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();// get a collection of the cells of the neighborhood
-        Log.d(TAG, "Finding " + cellInfos.size() + " cells");
         //setting up args to fill DAOs
         String cellType = "";
         Date date = new Date();
@@ -163,94 +162,96 @@ public class ScanConnectionIntentService extends IntentService {
 
         boolean isCell = false;
         //dealing with datas to add
-        for (CellInfo cellInfo : cellInfos) { // fetching info regarding of the cell type
-            if (cellInfo instanceof CellInfoCdma) {
-                isCell = true;
-                CellInfoCdma cell = (CellInfoCdma) cellInfo;
-                cellType = "Cdma";
-                cellId = cell.getCellIdentity().getBasestationId();
-                longitude = cell.getCellIdentity().getLongitude();
-                latitude = cell.getCellIdentity().getLatitude();
-                strength = cell.getCellSignalStrength().getDbm();
-            } else if (cellInfo instanceof CellInfoGsm) {
-                isCell = true;
-                CellInfoGsm cell = (CellInfoGsm) cellInfo;
-                cellType = "Gsm";
-                cellId = cell.getCellIdentity().getCid();
-                lacTac = cell.getCellIdentity().getLac();
-                mcc = "" + cell.getCellIdentity().getMcc();
-                mnc = "" + cell.getCellIdentity().getMnc();
-                strength = cell.getCellSignalStrength().getDbm();
-            } else if (cellInfo instanceof CellInfoLte) {
-                isCell = true;
-                CellInfoLte cell = (CellInfoLte) cellInfo;
-                cellType = "Lte";
-                cellId = cell.getCellIdentity().getCi();
-                lacTac = cell.getCellIdentity().getTac();
-                mcc = "" + cell.getCellIdentity().getMcc();
-                mnc = "" + cell.getCellIdentity().getMnc();
-                strength = cell.getCellSignalStrength().getDbm();
-            } else if (cellInfo instanceof CellInfoWcdma) {
-                isCell = true;
-                CellInfoWcdma cell = (CellInfoWcdma) cellInfo;
-                cellType = "Wcdma";
-                cellId = cell.getCellIdentity().getCid();
-                lacTac = cell.getCellIdentity().getLac();
-                mcc = "" + cell.getCellIdentity().getMcc();
-                mnc = "" + cell.getCellIdentity().getMnc();
-                strength = cell.getCellSignalStrength().getDbm();
-                Log.d(TAG, cellType + " : Cid " + cellId + " : Lac " + lacTac + " : Mcc " + cell.getCellIdentity().getMcc() + " : Mnc " + cell.getCellIdentity().getMnc());
-            }
-            if (2147483647 == cellId) {
-                isCell = false;
-                Log.d(TAG, "Cell's data not available : Ignoring this row");
-            }
-            if (isCell) {//isCell true if the cell as been recognised and data are available (!=2147483647)
-                //Log.d(TAG,"--------> looking for cell with "+cellId+" as CellId");
-                Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
-                if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
-                    Log.d(TAG, "Adding a new " + cellType + " Cell");
-                    Cell newCell = new Cell(cellId, getDeviceDBMetadata().getUserId());
-                    getDBHelper().getCellDao().create(newCell);
-                    cell = newCell;
-                    if ("Cdma" == cellType) {
-                        CdmaCellData cdmaCellData = new CdmaCellData();
-                        cdmaCellData.setLongitude(longitude);
-                        cdmaCellData.setLatitude(latitude);
-                        cdmaCellData.setIdentity(newCell);
-                        cdmaCellData.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
-                    } else {
-                        OtherCellData otherCell = new OtherCellData();
-                        otherCell.setLacTac(lacTac);
-                        otherCell.setType(cellType);
-                        otherCell.setIdentity(newCell);
-                        otherCell.setMcc(mcc);
-                        otherCell.setMnc(mnc);
-                        otherCell.setUserId(getDeviceDBMetadata().getUserId());
-                        getDBHelper().getOtherCellDataDao().create(otherCell);
-                    }
+        if(cellInfos != null) {
+            for (CellInfo cellInfo : cellInfos) { // fetching info regarding of the cell type
+                if (cellInfo instanceof CellInfoCdma) {
+                    isCell = true;
+                    CellInfoCdma cell = (CellInfoCdma) cellInfo;
+                    cellType = "Cdma";
+                    cellId = cell.getCellIdentity().getBasestationId();
+                    longitude = cell.getCellIdentity().getLongitude();
+                    latitude = cell.getCellIdentity().getLatitude();
+                    strength = cell.getCellSignalStrength().getDbm();
+                } else if (cellInfo instanceof CellInfoGsm) {
+                    isCell = true;
+                    CellInfoGsm cell = (CellInfoGsm) cellInfo;
+                    cellType = "Gsm";
+                    cellId = cell.getCellIdentity().getCid();
+                    lacTac = cell.getCellIdentity().getLac();
+                    mcc = "" + cell.getCellIdentity().getMcc();
+                    mnc = "" + cell.getCellIdentity().getMnc();
+                    strength = cell.getCellSignalStrength().getDbm();
+                } else if (cellInfo instanceof CellInfoLte) {
+                    isCell = true;
+                    CellInfoLte cell = (CellInfoLte) cellInfo;
+                    cellType = "Lte";
+                    cellId = cell.getCellIdentity().getCi();
+                    lacTac = cell.getCellIdentity().getTac();
+                    mcc = "" + cell.getCellIdentity().getMcc();
+                    mnc = "" + cell.getCellIdentity().getMnc();
+                    strength = cell.getCellSignalStrength().getDbm();
+                } else if (cellInfo instanceof CellInfoWcdma) {
+                    isCell = true;
+                    CellInfoWcdma cell = (CellInfoWcdma) cellInfo;
+                    cellType = "Wcdma";
+                    cellId = cell.getCellIdentity().getCid();
+                    lacTac = cell.getCellIdentity().getLac();
+                    mcc = "" + cell.getCellIdentity().getMcc();
+                    mnc = "" + cell.getCellIdentity().getMnc();
+                    strength = cell.getCellSignalStrength().getDbm();
+                    Log.d(TAG, cellType + " : Cid " + cellId + " : Lac " + lacTac + " : Mcc " + cell.getCellIdentity().getMcc() + " : Mnc " + cell.getCellIdentity().getMnc());
                 }
-                //then add the history log
-                Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString() + ", LAC/TAC : " + lacTac);
-                NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
-                neighboringCellHistory.setStrength(strength);
-                neighboringCellHistory.setDate(date);
-                neighboringCellHistory.setCells(cell);
-                neighboringCellHistory.setUserId(getDeviceDBMetadata().getUserId());
-                getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
-            }
-            //reinitializing parameters :
-            cellType = "";
-            date = new Date();
-            cellId = null;
-            longitude = null;
-            latitude = null;
-            lacTac = null;
-            strength = 0;
+                if (2147483647 == cellId) {
+                    isCell = false;
+                    Log.d(TAG, "Cell's data not available : Ignoring this row");
+                }
+                if (isCell) {//isCell true if the cell as been recognised and data are available (!=2147483647)
+                    //Log.d(TAG,"--------> looking for cell with "+cellId+" as CellId");
+                    Cell cell = getDBHelper().getMobilePrivacyProfilerDBHelper().queryCellByCellId(cellId);
+                    if (null == cell) {// new cell if the cell is not in DB (Cell and ( CdmaCellData or OtherCellData) )
+                        Log.d(TAG, "Adding a new " + cellType + " Cell");
+                        Cell newCell = new Cell(cellId, getDeviceDBMetadata().getUserId());
+                        getDBHelper().getCellDao().create(newCell);
+                        cell = newCell;
+                        if ("Cdma" == cellType) {
+                            CdmaCellData cdmaCellData = new CdmaCellData();
+                            cdmaCellData.setLongitude(longitude);
+                            cdmaCellData.setLatitude(latitude);
+                            cdmaCellData.setIdentity(newCell);
+                            cdmaCellData.setUserId(getDeviceDBMetadata().getUserId());
+                            getDBHelper().getCdmaCellDataDao().create(cdmaCellData);
+                        } else {
+                            OtherCellData otherCell = new OtherCellData();
+                            otherCell.setLacTac(lacTac);
+                            otherCell.setType(cellType);
+                            otherCell.setIdentity(newCell);
+                            otherCell.setMcc(mcc);
+                            otherCell.setMnc(mnc);
+                            otherCell.setUserId(getDeviceDBMetadata().getUserId());
+                            getDBHelper().getOtherCellDataDao().create(otherCell);
+                        }
+                    }
+                    //then add the history log
+                    Log.d(TAG, "New Cell history :" + strength + " dBm, " + date.toString() + ", LAC/TAC : " + lacTac);
+                    NeighboringCellHistory neighboringCellHistory = new NeighboringCellHistory();
+                    neighboringCellHistory.setStrength(strength);
+                    neighboringCellHistory.setDate(date);
+                    neighboringCellHistory.setCells(cell);
+                    neighboringCellHistory.setUserId(getDeviceDBMetadata().getUserId());
+                    getDBHelper().getNeighboringCellHistoryDao().create(neighboringCellHistory);
+                }
+                //reinitializing parameters :
+                cellType = "";
+                date = new Date();
+                cellId = null;
+                longitude = null;
+                latitude = null;
+                lacTac = null;
+                strength = 0;
 
-            isCell = false;
-        }//end for (processing the cells in neighbouring)
+                isCell = false;
+            }//end for (processing the cells in neighbouring)
+        }
     }
 
     /**

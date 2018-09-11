@@ -61,15 +61,7 @@ public class JobList_Adapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
                     JobEnum job = (JobEnum)viewHolder.jobSwitchId.getTag();
-                    if (bChecked) {
-                        job.setSelected(bChecked);
-                        if(AppStateViewModel.isCollectionRunning(context))
-                            job.run();
-                    } else {
-                        job.setSelected(bChecked);
-                        if(AppStateViewModel.isCollectionRunning(context))
-                            job.cancel();
-                    }
+                    job.setSelected(bChecked);
                 }
             });
 

@@ -16,6 +16,7 @@
 package fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,12 +33,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import fr.inria.diverse.mobileprivacyprofiler.activities.Home_CustomViewActivity;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.packetRebuild.PCapFileWriter;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.socket.IProtectSocket;
 import fr.inria.diverse.mobileprivacyprofiler.services.PacketSnifferService.socket.IReceivePacket;
@@ -66,6 +69,7 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 	public static final String DIRECTORY_FILE = "/pcap";
 	public static final String STOP_SERVICE_INTENT = "stop_service";
 	private static final String TAG = "PacketSniffer";
+	public static final int VPN_FOREGROUND_ID = 666;
 
 	private static final int MAX_PACKET_LEN = 1500;
 
@@ -363,6 +367,7 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 
 		if(mInterface != null){
 			Log.i(TAG, "VPN Established:interface = " + mInterface.getFileDescriptor().toString());
+			startForeground(VPN_FOREGROUND_ID, buildForegroundNotification());
 			return true;
 		} else {
 			Log.d(TAG,"mInterface is null");
@@ -512,6 +517,16 @@ public class PacketSnifferService extends VpnService implements Handler.Callback
 			browserList.add(info.activityInfo.packageName);
 
 		return browserList;
+	}
+
+	private Notification buildForegroundNotification() {
+		NotificationCompat.Builder b= new NotificationCompat.Builder(this, Home_CustomViewActivity.CHANNEL_ID);
+
+		b.setOngoing(true)
+				.setContentTitle("VPN service")
+				.setContentText("start vpn");
+
+		return(b.build());
 	}
 
 }

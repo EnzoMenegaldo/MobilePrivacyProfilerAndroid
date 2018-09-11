@@ -7,6 +7,8 @@ import fr.inria.diverse.mobileprivacyprofiler.R;
 import fr.inria.diverse.mobileprivacyprofiler.utils.AppStateViewModel;
 import fr.vojtisek.genandroid.genandroidlib.activities.OrmLiteActionBarActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
@@ -53,6 +55,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
 	
 	//Start of user code constants Home_CustomViewActivity
     private static final String TAG = Home_CustomViewActivity.class.getSimpleName();
+    public static final String CHANNEL_ID = "101";
     public static List<String> PERMISSIONS = Arrays.asList(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
                                                     Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE,
                                                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_CALENDAR,
@@ -104,6 +107,7 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
             }
         });
 
+        createNotificationChannel();
         toggleCollection.setChecked(AppStateViewModel.isCollectionRunning(getContext()));
 
         //End of user code
@@ -133,7 +137,6 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
      */
     public void cancelSelectedJob(){
         for(JobEnum job : JobEnum.values())
-            if(job.isSelected())
                 job.cancel();
     }
 
@@ -214,6 +217,22 @@ public class Home_CustomViewActivity extends OrmLiteActionBarActivity<OrmLiteDBH
                 PhoneStateUtils.requestAppOpsPermissions(this);
         }else{
             PhoneStateUtils.setupVpn(this);
+        }
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.home_customview_channel_name);
+            String description = getString(R.string.home_customview_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 

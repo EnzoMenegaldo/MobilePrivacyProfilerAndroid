@@ -7,6 +7,9 @@
 	<string name="home_customview_applicationhistorylist_btn_label">Historique des Applications</string>
 	<string name="home_customview_run_collection">Vous pouvez reprendre la collecte de données à tout moment en utilisant le bouton play ci dessous :</string>
 	<string name="home_customview_stop_collection">Vous pouvez interrompre la collecte de données à tout moment en utilisant le bouton pause ci dessous :</string>
+
+	<string name="home_customview_channel_name">home_activity_channel</string>
+	<string name="home_customview_channel_description">home activity channel to handle notification</string>
 	<!-- End of user code
 	-->
 </resources>
